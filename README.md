@@ -1,92 +1,132 @@
-# BucketList
+## 🦁멋쟁이 사자처럼 백엔드 스쿨 2기 팀 프로젝트🦁
 
 
+### 프로젝트 주제 및 목표
+- 멋쟁이 사자처럼 백엔드 스쿨 2기에서 배웠던 내용을 토대로 팀 프로젝트를 진행한다.
+- SpringBoot, JPA, JWT, API를 사용하여 '버킷리스트 멤버를 모집'하는 서비스를 만든다.
 
-## Getting started
+### 멤버 및 역할
+- 최수정(PM)
+- 정재성(CTO)
+- 고관운
+- 박은빈
+- 배지원
+- 변지환
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+### 일정
+2023년 1월 13일 : 아이디어 회의 및 발표
+2023년 1월 17일, 18일 : 서류 작성
+2023년 1월 19일 ~ 2월 : ??
+2023년 2월 17일 : 데모데이
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+### 프로젝트 과정(완성되면 편집 불가로 설정하여 url 공유 예정)
 
-## Add your files
+[📄 노션 프로젝트 페이지](https://ringed-suggestion-46f.notion.site/56e1241b82724ce18640168d351920bb)
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+[🎞 스토리 보드](url 복붙)
 
-```
-cd existing_repo
-git remote add origin https://gitlab.com/S2uJeong1/bucketlist.git
-git branch -M main
-git push -uf origin main
-```
+[🕹 기능 정의서](url 복붙)
 
-## Integrate with your tools
+[🖥 서비스 UI](url 복붙)
 
-- [ ] [Set up project integrations](https://gitlab.com/S2uJeong1/bucketlist/-/settings/integrations)
+### 프로젝트 요구사항 분석 및 체크리스트
 
-## Collaborate with your team
+#### 프로젝트 기술스택
+- 에디터 : Intellij Ultimate
+- 개발 툴 : SpringBoot 3.0.1
+- 자바 : JAVA 17
+- 빌드 : Gradle 6.8
+- 서버 : AWS EC2
+- 데이터베이스 : MySql 8.0
+- 라이브러리 : Lombok, Spring Configuration Processor, Spring Web, Spring Data JPA, MySQL Driver, Thymeleaf
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+#### 기능명세서
 
-## Test and Deploy
+![api1](/uploads/1d99611370959d2fc529d22cf005d218/api1.jpg)
+![api2](/uploads/853c95e256d8adf587904e8235aad901/api2.jpg)
 
-Use the built-in continuous integration in GitLab.
+#### ERD ([erdcloud](https://www.erdcloud.com/d/Y9ZeR96ohN2erCebh))
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+![버킷리스트](/uploads/9d2297cc18d99b5c6a25a34ec57c3f14/버킷리스트.png)
 
-***
+#### ERROR CODE (수정 필요)
+| 에러 코드 | 설명                                                                           | HTTP status |
+| --- |------------------------------------------------------------------------------|-------------|
+| DUPLICATED_USER_NAME | 중복된 아이디로 가입을 요청한 경우                                                          | 409         |
+| USERNAME_NOT_FOUND | 가입되지 않은 아이디로 요청한 경우                                                          | 404         |
+| INVALID_PASSWORD | 비밀번호가 틀린 경우                                                                  | 401         |
+| INVALID_TOKEN | 유효하지 않은 토큰으로 요청한 경우                                                          | 401         |
+| INVALID_PERMISSION | 해당 API에 대한 요청 권한이 없는 경우,<br> 올바르지 않은 헤더로 요청한 경우,<br> 게시글에 대한 수정/삭제 권한이 없는 경우 | 401         |
+| POST_NOT_FOUND | 존재하지 않는 게시물을 요청한 경우                                                          | 404         |
+| COMMENT_NOT_FOUND | 존재하지 않는 댓글을 요청한 경우                                                           | 404         |
+| DATABASE_ERROR | DB와의 연결 이상인 경우                                                               | 500         |
+| INTERNAL_SERVER_ERROR | 서버에서 요청 처리 중 오류가 발생한 경우                                                      | 500         |
+| INVALID_VALUE | 지원하지 않는 포맷 입력                                                                | 400         |
+| INVALID_REQUEST | 올바르지 않은 방법으로 요청한 경우, <br>좋아요를 2회이상 요청한 경우 | 409         |
 
-# Editing this README
+#### 기능 개발
+회원가입
+- [] 회원가입 페이지 이동
+- [] 아이디, 비밀번호, 이메일, 생년월일(8자리) 입력
+- [] 이메일 인증
+- [] 회원가입 완료
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
+로그인
+- [] 로그인 페이지 이동
+- [] 로그인 완료
 
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+로그아웃
+- [] 로그아웃 완료
 
-## Name
-Choose a self-explaining name for your project.
+프로필
+- [] 해당 회원의 프로필 페이지 이동
+- [] 작성한 게시글 띄우기
+- [] 프로필 수정(뭘 수정할지는 미정)
+- [] delete... 할거야?
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+유저평가 .. ? 이거 좀 뭐지?
+- [] 특정 유저의 평가 리스트
+- [] 특정 유저의 평가 받기 받기
+- [] 특정 유저에 대한 평가
+- [] 특정 유저에 대한 평가 작성
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+멤버십
+- [] 멤버십 조회
+- [] 멤버십 결제(api)
+- [] 멤버십 변경
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+채팅 .. 미정
+- [] 
+- [] 
+- [] 
+- [] 
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+게시글
+- [] 게시글 리스트 출력
+- [] 특정 게시글 출력
+- [] 게시글 작성
+- [] 본인 게시글 수정
+- [] 본인 게시글 삭제
+- [] 게시글 리뷰 리스트 출력
+- [] 게시글 리뷰 작성
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+댓글
+- [] 댓글 출력
+- [] 댓글 작성
+- [] 댓글 수정
+- [] 댓글 삭제
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+신청서 작성
+- [] 해당 게시물에 대한 신청서 리스트 출력
+- [] 해당 게시물에 신청서 작성
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+좋아요
+- [] 좋아요 누르기
+- [] 좋아요 취소
+- [] 좋아요 개수
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+검색
+- [] 검색을 통해 해당 단어를 가진 게시물 출력
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+#### 👾UI 개발
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
