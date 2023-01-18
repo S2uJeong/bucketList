@@ -45,7 +45,7 @@
 
 #### ERD ([erdcloud](https://www.erdcloud.com/d/Y9ZeR96ohN2erCebh))
 
-![버킷리스트__1_](/uploads/deec3b0f8904a217f09540dbd80e86a6/버킷리스트__1_.png)
+![버킷리스트__2_](/uploads/1a6e5ed871b003186364e12243f615b9/버킷리스트__2_.png)
 
 #### ERROR CODE(미완)
 | 에러 코드 | 설명                                                                           | HTTP status |
