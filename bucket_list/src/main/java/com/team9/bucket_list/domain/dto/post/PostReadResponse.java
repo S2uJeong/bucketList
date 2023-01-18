@@ -32,7 +32,7 @@ public class PostReadResponse {
     private List<Comment> commentList; // 버킷리스트의 댓글들
 
 
-    // 글 하나 상세볼 때 사용하는 생성자
+    // 글 하나 상세볼 때 사용하는 메서드
     public static PostReadResponse detailOf(Post post) {
         return PostReadResponse.builder()
                 .postId(post.getId())
@@ -53,7 +53,7 @@ public class PostReadResponse {
                 .build();
     }
 
-    // list로 볼 때 사용하는 생성자
+    // list로 볼 때 사용하는 메서드
     public static Page<PostReadResponse> listOf(Page<Post> posts) {
         return posts.map(post -> PostReadResponse.builder()
                 .postId(post.getId())

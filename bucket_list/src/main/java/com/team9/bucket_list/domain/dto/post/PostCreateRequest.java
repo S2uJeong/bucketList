@@ -1,4 +1,6 @@
 package com.team9.bucket_list.domain.dto.post;
+import com.team9.bucket_list.domain.entity.Member;
+import com.team9.bucket_list.domain.entity.Post;
 import com.team9.bucket_list.domain.enumerate.PostCategory;
 import com.team9.bucket_list.domain.enumerate.PostStatus;
 import lombok.AllArgsConstructor;
@@ -22,6 +24,23 @@ public class PostCreateRequest {
     private String eventEnd; //버킷 종료일
     private PostStatus status; //defalt = 모집중
     private PostCategory category; //카테고리
+
+    // ========= toEntity ===============
+    // Post savePost = postCreateRequest.toEntity();
+    // Post post = postRepository.save(savePost);
+    public Post toEntity(Member member) {
+        return Post.builder()
+                .title(title)
+                .content(content)
+                .cost(cost)
+                .location(location)
+                .untilRecruit(untilRecruit)
+                .entrantNum(entrantNum)
+                .eventEnd(eventEnd)
+                .status(status)
+                .category(category)
+                .build();
+    }
 
 
 }

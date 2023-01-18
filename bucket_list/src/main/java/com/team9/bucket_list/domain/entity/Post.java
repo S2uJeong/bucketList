@@ -1,5 +1,6 @@
 package com.team9.bucket_list.domain.entity;
 
+import com.team9.bucket_list.domain.dto.post.PostUpdateResponse;
 import com.team9.bucket_list.domain.enumerate.PostCategory;
 import com.team9.bucket_list.domain.enumerate.PostStatus;
 import jakarta.persistence.*;
@@ -51,4 +52,13 @@ public class Post {
 
     @OneToMany(mappedBy = "post")
     private List<Comment> commentList = new ArrayList<>();
+
+    // === 속성 값 setting하는 메서드 ======
+    public void setCategory(PostCategory category) {
+        this.category = category;
+    }
+    public void setStatus(PostStatus status) {
+        this.status = status;
+    }
+
 }
