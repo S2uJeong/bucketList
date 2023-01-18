@@ -3,11 +3,21 @@ package com.team9.bucket_list.domain.entity;
 import com.team9.bucket_list.domain.enumerate.PostCategory;
 import com.team9.bucket_list.domain.enumerate.PostStatus;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Builder
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+
+
 public class Post {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,6 +26,7 @@ public class Post {
 
     private String title;
     private String content;
+    private String location;
     private int cost;
     private String untilRecruit;
     private String entrantNum;
