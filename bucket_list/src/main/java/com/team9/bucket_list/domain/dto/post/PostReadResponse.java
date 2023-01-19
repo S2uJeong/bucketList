@@ -54,6 +54,7 @@ public class PostReadResponse {
     }
 
     // list로 볼 때 사용하는 메서드
+    // builder로 구성된 것은 조회 시, 제목처럼 한 줄에 나와있을 내용을 나열한 것이다.
     public static Page<PostReadResponse> listOf(Page<Post> posts) {
         return posts.map(post -> PostReadResponse.builder()
                 .postId(post.getId())

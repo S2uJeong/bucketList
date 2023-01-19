@@ -7,7 +7,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,12 +19,14 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Where(clause = "deleted_at is NULL")
+@SQLDelete(sql = "UPDATE post SET deleted_at = current_timestamp WHERE id = ?")
 public class Post {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_id")
     private Long id;
-
+    private LocalDateTime deletedAt;
     private String title;
     private String content;
     private String location;
@@ -61,5 +66,6 @@ public class Post {
     public void modifiedContent(String content) {
         this.content = content;
     }
+
 
 }

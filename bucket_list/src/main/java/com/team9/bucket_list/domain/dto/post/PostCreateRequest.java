@@ -25,20 +25,19 @@ public class PostCreateRequest {
     private PostStatus status; //defalt = 모집중
     private PostCategory category; //카테고리
 
-    // ========= toEntity ===============
-    // Post savePost = postCreateRequest.toEntity();
-    // Post post = postRepository.save(savePost);
+
     public Post toEntity(Member member) {
         return Post.builder()
-                .title(title)
-                .content(content)
-                .cost(cost)
-                .location(location)
-                .untilRecruit(untilRecruit)
-                .entrantNum(entrantNum)
-                .eventEnd(eventEnd)
-                .status(status)
-                .category(category)
+                .title(this.title)
+                .content(this.content)
+                .cost(this.cost)
+                .location(this.location)
+                .untilRecruit(this.untilRecruit)
+                .entrantNum(this.entrantNum)
+                .eventEnd(this.eventEnd)
+                .status(this.status)
+                .category(this.category)
+                .member(member)
                 .build();
     }
 

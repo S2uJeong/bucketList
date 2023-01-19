@@ -27,7 +27,7 @@ public class PostUpdateRequest {
     private PostCategory category; //카테고리
 
     // ========= toEntity ===============
-    public Post toEntity(Member member) {
+    public Post toEntity() {
         return Post.builder()
                 .title(title)
                 .content(content)
