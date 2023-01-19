@@ -28,14 +28,15 @@
         // var markerMaxWidth	= 300;				// 마커를 클릭했을때 나타나는 말풍선의 최대 크기
 
         var lat = [[${lat}]];
-        var lng = [[${lat}]];
+        var lng = [[${lng}]];
+        var location = [[${location}]];
         console.log(lat);
         console.log(lng);
 
-        var Y_point			= $('input[name=lat]').val();		// Y 좌표
-        var X_point			= $('input[name=lng]').val();		// X 좌표
+        var Y_point			= lat;		// Y 좌표
+        var X_point			= lng;		// X 좌표
         var zoomLevel		= 18;				// 지도의 확대 레벨 : 숫자가 클수록 확대정도가 큼
-        var markerTitle		= "Seoul, South Korea";		// 현재 위치 마커에 마우스를 오버을때 나타나는 정보
+        var markerTitle		= location;		// 현재 위치 마커에 마우스를 오버을때 나타나는 정보
         var markerMaxWidth	= 300;				// 마커를 클릭했을때 나타나는 말풍선의 최대 크기
 
 // 말풍선 내용
