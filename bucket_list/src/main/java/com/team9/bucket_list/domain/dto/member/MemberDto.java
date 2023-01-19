@@ -2,8 +2,9 @@ package com.team9.bucket_list.domain.dto.member;
 
 import com.team9.bucket_list.domain.entity.*;
 import com.team9.bucket_list.domain.enumerate.Gender;
+import com.team9.bucket_list.domain.enumerate.MemberRole;
 import com.team9.bucket_list.domain.enumerate.Membership;
-import com.team9.bucket_list.domain.enumerate.UserRole;
+
 import lombok.*;
 
 import java.util.List;
@@ -17,12 +18,12 @@ public class MemberDto {
     private Long id;
     private String email;
     private String password;
-    private String username;
+    private String userName;
     private int age;
     private int postRemain;
 
     private Gender gender;
-    private UserRole userRole;
+    private MemberRole memberRole;
     private Membership membership;
 
     private List<Post> postList;
