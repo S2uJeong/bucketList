@@ -17,10 +17,10 @@ public class ChatConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        //메시지를 받을때
-        registry.enableSimpleBroker("/topic");
+        //sub하는 클라이언트에게 메시지 전달
+        registry.enableSimpleBroker("/sub");
 
-        //메시지를 보낼때
-        registry.setApplicationDestinationPrefixes("/app");
+        //클라이언트의 send요청 처리
+        registry.setApplicationDestinationPrefixes("/pub");
     }
 }
