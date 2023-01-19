@@ -1,8 +1,13 @@
 package com.team9.bucket_list.domain.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
+@Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class BucketlistReview {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "bucketlist_review_id")

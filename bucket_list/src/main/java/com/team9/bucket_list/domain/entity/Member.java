@@ -4,11 +4,13 @@ import com.team9.bucket_list.domain.enumerate.Gender;
 import com.team9.bucket_list.domain.enumerate.Membership;
 import com.team9.bucket_list.domain.enumerate.UserRole;
 import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Getter
 public class Member {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
