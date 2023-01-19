@@ -1,6 +1,6 @@
 package com.team9.bucket_list.controller;
 
-import com.team9.bucket_list.domain.BucketlistReviewRequest;
+import com.team9.bucket_list.domain.dto.bucketlistReview.BucketlistReviewRequest;
 import com.team9.bucket_list.domain.dto.bucketlistReview.BucketlistReviewDto;
 import com.team9.bucket_list.service.BucketlistReviewService;
 import lombok.RequiredArgsConstructor;
