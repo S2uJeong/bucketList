@@ -1,5 +1,5 @@
 package com.team9.bucket_list.domain.enumerate;
 
-public enum UserRole {
+public enum MemberRole {
     USER, ADMIN
 }
