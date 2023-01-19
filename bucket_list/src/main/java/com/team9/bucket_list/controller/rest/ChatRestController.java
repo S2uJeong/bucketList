@@ -1,5 +1,6 @@
 package com.team9.bucket_list.controller.rest;
 
+import com.team9.bucket_list.domain.dto.chat.ChatInviteRequest;
 import com.team9.bucket_list.domain.dto.chat.ChatRoomRequest;
 import com.team9.bucket_list.service.ChatService;
 import lombok.RequiredArgsConstructor;
@@ -8,10 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("chat")
@@ -32,10 +30,15 @@ public class ChatRestController {
     }
 
     //채팅방 생성
-    @PostMapping("/")
-    public String createChatRoom(ChatRoomRequest chatRoomRequest) {
+    @PostMapping("/{bucketlistId}")
+    public String createChatRoom(@PathVariable Long bucketlistId, ChatRoomRequest chatRoomRequest) {
+        chatService.createChatRoom(bucketlistId, chatRoomRequest);
         return "";
     }
 
     //유저 초대
+    @PostMapping("/{roomId}")
+    public String inviteMember(@PathVariable Long roomId, ChatInviteRequest chatInviteRequest) {
+        return "";
+    }
 }

@@ -1,6 +1,8 @@
 package com.team9.bucket_list.service;
 
+import com.team9.bucket_list.domain.dto.chat.ChatRoomRequest;
 import com.team9.bucket_list.domain.dto.chat.ChatRoomResponse;
+import com.team9.bucket_list.domain.entity.Bucketlist;
 import com.team9.bucket_list.domain.entity.Chat;
 import com.team9.bucket_list.domain.entity.ChatParticipant;
 import com.team9.bucket_list.domain.entity.ChatRoom;
@@ -29,4 +31,9 @@ public class ChatService {
         return null;
     }
 
+    public void createChatRoom(Long bucketlistId, ChatRoomRequest chatRoomRequest) {
+        /*bucketlist repository 나중에 생성*/
+        Bucketlist bucketlist = null;
+        chatRoomRepository.save(ChatRoom.save(chatRoomRequest,bucketlist));
+    }
 }
