@@ -7,5 +7,5 @@ import java.util.List;
 import java.util.Set;
 
 public interface ChatParticipantRepository extends JpaRepository<ChatParticipant, Long> {
-    Set<ChatParticipant> findAllByMember_Id(Long memberId);
+    List<ChatParticipant> findAllByMember_Id(Long memberId);
 }
