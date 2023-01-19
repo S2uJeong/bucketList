@@ -11,7 +11,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Chat {
     public enum MessageType{
-        ENTER, TALK, LEAVE;
+        CHAT,
+        JOIN,
+        LEAVE
     }
 
     private MessageType type; // 메시지 타입
