@@ -1,5 +1,6 @@
 package com.team9.bucket_list.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.team9.bucket_list.domain.dto.chat.ChatRoomRequest;
 import jakarta.persistence.*;
 import lombok.*;
@@ -23,9 +24,11 @@ public class ChatRoom {
     @JoinColumn(name = "bucketlist_id")
     private Bucketlist bucketlist;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "chatRoom")
     private List<Chat> chatList = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "chatRoom")
     private List<ChatParticipant> chatParticipants = new ArrayList<>();
 
