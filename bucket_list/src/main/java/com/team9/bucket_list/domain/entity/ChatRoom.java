@@ -17,10 +17,14 @@ public class ChatRoom {
     @Column(name = "chat_room_id")
     private Long id;
     private String roomName;
+    private int totalNum;
     @OneToOne
     @JoinColumn(name = "bucketlist_id")
     private Bucketlist bucketlist;
 
     @OneToMany(mappedBy = "chatRoom")
     private List<Chat> chatList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "chatRoom")
+    private List<ChatParticipant> chatParticipants = new ArrayList<>();
 }
