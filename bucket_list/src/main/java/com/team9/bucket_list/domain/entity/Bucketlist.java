@@ -1,11 +1,19 @@
 package com.team9.bucket_list.domain.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Builder
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Bucketlist {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "bucketlist_id")
