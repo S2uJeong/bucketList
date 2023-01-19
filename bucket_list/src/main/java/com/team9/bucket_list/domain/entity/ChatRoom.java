@@ -1,5 +1,6 @@
 package com.team9.bucket_list.domain.entity;
 
+import com.team9.bucket_list.domain.dto.chat.ChatRoomRequest;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -27,4 +28,13 @@ public class ChatRoom {
 
     @OneToMany(mappedBy = "chatRoom")
     private List<ChatParticipant> chatParticipants = new ArrayList<>();
+
+
+    public static ChatRoom save(ChatRoomRequest chatRoomRequest, Bucketlist bucketlist) {
+        return ChatRoom.builder()
+                .roomName(chatRoomRequest.getRoomName())
+                .bucketlist(bucketlist)
+                .totalNum(chatRoomRequest.getTotalNum())
+                .build();
+    }
 }
