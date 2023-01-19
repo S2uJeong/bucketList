@@ -1,5 +1,6 @@
 package com.team9.bucket_list.domain.entity;
 
+import com.team9.bucket_list.domain.dto.bucketlistReview.BucketlistReviewRequest;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -27,7 +28,6 @@ public class Bucketlist {
     private List<BucketlistReview> bucketlistReviewList = new ArrayList<>();
 
     public void update(String content) {
-        // setter를 안쓰는 방법은 없을까?
-        this.post.setContent(content);
+        post.modifiedContent(content);
     }
 }

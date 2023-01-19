@@ -19,15 +19,25 @@ public class BucketlistReviewController {
 
     private final BucketlistReviewService bucketlistReviewService;
 
-    @GetMapping("/{userId}")
-    public Page<BucketlistReviewDto> ratingList(@PathVariable Long userId, @PageableDefault(sort = "createdAt", size = 20, direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<BucketlistReviewDto> ratingDtoPage =  bucketlistReviewService.ratingList(userId, pageable);
+    // post에 대한 평가 확인
+    @GetMapping("/{postId}")
+    public Page<BucketlistReviewDto> ratingList(@PathVariable Long postId, @PageableDefault(sort = "createdAt", size = 20, direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<BucketlistReviewDto> ratingDtoPage =  bucketlistReviewService.ratingList(postId, pageable);
         return ratingDtoPage;
     }
 
-    @PostMapping("/{userId}")
-    public void ratingCreate(@PathVariable Long userId, BucketlistReviewRequest bucketlistReviewRequest) {
-        bucketlistReviewService.create(userId, bucketlistReviewRequest);
+    // post에 대한 평가 작성
+    @PostMapping("/{postId}")
+    public String ratingCreate(@PathVariable Long postId, BucketlistReviewRequest bucketlistReviewRequest) {
+        return bucketlistReviewService.create(postId, bucketlistReviewRequest);
+    }
+
+    // post에 대한 평가 수정 - 근데 평가 수정이 필요한가?
+
+    // post에 대한 평가 삭제
+    @DeleteMapping("{postId}/{ratingId}")
+    public String ratingUpdate(@PathVariable Long postId, @PathVariable Long ratingId) {
+        return bucketlistReviewService.delete(postId, ratingId);
     }
 
 

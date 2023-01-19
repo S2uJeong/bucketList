@@ -10,7 +10,6 @@ import com.team9.bucket_list.domain.dto.bucketlistReview.BucketlistReviewDto;
 import com.team9.bucket_list.execption.AppException;
 import com.team9.bucket_list.repository.BucketlistRepository;
 import com.team9.bucket_list.repository.BucketlistReviewRepository;
-import com.team9.bucket_list.repository.MemberRepository;
 import com.team9.bucket_list.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -49,16 +48,18 @@ public class BucketlistReviewService {
                 .build();
     }
 
-    public BucketlistReviewDto create(Long postId, BucketlistReviewRequest bucketlistReviewRequest) {
+    public String create(Long postId, BucketlistReviewRequest bucketlistReviewRequest) {
 
         Bucketlist bucketlist = bucketlistRepository.findById(postId)
                 .orElseThrow();
 
         BucketlistReview bucketlistReview = bucketlistReviewRepository.save(bucketlistReviewRequest.toEntity(bucketlist));
-        return BucketlistReviewDto.builder()
-                .writerId(bucketlistReview.getWriterId())
-                .content(bucketlistReview.getContent())
-                .build();
+//        return BucketlistReviewDto.builder()
+//                .writerId(bucketlistReview.getWriterId())
+//                .content(bucketlistReview.getContent())
+//                .build();
+
+        return "글 작성이 완료 되었습니다.";
     }
 
     @Transactional
