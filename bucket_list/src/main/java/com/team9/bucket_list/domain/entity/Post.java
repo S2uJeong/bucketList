@@ -58,5 +58,9 @@ public class Post {
     public void setStatus(PostStatus status) {
         this.status = status;
     }
+    // ====== 지환님 필요 부분 ========
+    public void modifiedContent(String content) {
+        this.content = content;
+    }
 
 }
