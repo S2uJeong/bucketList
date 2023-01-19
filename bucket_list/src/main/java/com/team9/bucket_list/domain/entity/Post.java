@@ -1,6 +1,5 @@
 package com.team9.bucket_list.domain.entity;
 
-import com.team9.bucket_list.domain.dto.post.PostUpdateResponse;
 import com.team9.bucket_list.domain.enumerate.PostCategory;
 import com.team9.bucket_list.domain.enumerate.PostStatus;
 import jakarta.persistence.*;
