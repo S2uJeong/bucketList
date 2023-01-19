@@ -1,6 +1,5 @@
 package com.team9.bucket_list.domain.entity;
 
-import com.team9.bucket_list.domain.enumerate.ChatType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,12 +9,11 @@ import lombok.*;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Chat {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "chat_id")
+public class ChatParticipant {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "chat_participant_id")
     private Long id;
-    private String message;
-    private ChatType chatType;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chat_room_id")
