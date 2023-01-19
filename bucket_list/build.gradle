@@ -27,6 +27,9 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
+    //SNS로그인을 위한 의존성
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client:3.0.1'
+
     //== 이메일 인증을 위한 의존성 시작 ==//
     implementation 'org.springframework.boot:spring-boot-starter-mail:3.0.1'
     //== 이메일 인증을 위한 의존성 끝 ==//
@@ -38,7 +41,6 @@ dependencies {
     implementation 'org.webjars:stomp-websocket:2.3.4'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.14.1'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf:3.0.1'
-
 }
 
 tasks.named('test') {
