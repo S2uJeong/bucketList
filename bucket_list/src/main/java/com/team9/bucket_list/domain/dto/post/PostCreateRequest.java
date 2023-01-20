@@ -41,5 +41,15 @@ public class PostCreateRequest {
                 .build();
     }
 
+    // stream -> 나중에 하자
+
+    // post-map 생성자
+    public PostCreateRequest test(String location) {
+        this.location = location;
+        return PostCreateRequest.builder()
+                .location(location)
+                .build();
+    }
+
 
 }

@@ -20,6 +20,8 @@ public class PostReadResponse {
     private String content; //내용
     private int cost; //비용
     private String location; //장소
+    private Double lat;
+    private Double lng; // 위경도
     private String untilRecruit; //모집종료날짜
     private String entrantNum; //모집인원제한
     private String eventStart; //버킷 시작일
@@ -33,13 +35,15 @@ public class PostReadResponse {
 
 
     // 글 하나 상세볼 때 사용하는 메서드
-    public static PostReadResponse detailOf(Post post) {
+    public static PostReadResponse detailOf(Post post, Double lat, Double lng) {  // 위경도는 DB에 저장하지 않으므로 매개변수로 받아서 DTO화 시킨다.
         return PostReadResponse.builder()
                 .postId(post.getId())
                 .title(post.getTitle())
                 .content(post.getContent())
                 .cost(post.getCost())
                 .location(post.getLocation())
+                .lat(lat)
+                .lng(lng)
                 .untilRecruit(post.getUntilRecruit())
                 .entrantNum(post.getEntrantNum())
                 .eventStart(post.getEventStart())
