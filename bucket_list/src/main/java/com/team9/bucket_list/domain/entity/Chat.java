@@ -1,5 +1,6 @@
 package com.team9.bucket_list.domain.entity;
 
+import com.team9.bucket_list.domain.dto.chat.ChatRequest;
 import com.team9.bucket_list.domain.enumerate.ChatType;
 import jakarta.persistence.*;
 import lombok.*;
@@ -24,4 +25,13 @@ public class Chat {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    public static Chat save(ChatRequest chatRequest, ChatRoom chatRoom, Member member) {
+        return Chat.builder()
+                .message(chatRequest.getMessage())
+                .chatType(chatRequest.getChatType())
+                .chatRoom(chatRoom)
+                .member(member)
+                .build();
+    }
 }
