@@ -1,6 +1,7 @@
 package com.team9.bucket_list.controller.rest;
 
 import com.team9.bucket_list.domain.dto.chat.ChatInviteRequest;
+import com.team9.bucket_list.domain.dto.chat.ChatMessageResponse;
 import com.team9.bucket_list.domain.dto.chat.ChatRoomRequest;
 import com.team9.bucket_list.domain.dto.chat.ChatRoomResponse;
 import com.team9.bucket_list.domain.entity.ChatRoom;
@@ -44,5 +45,13 @@ public class ChatRestController {
     public String inviteMember(@PathVariable Long roomId, ChatInviteRequest chatInviteRequest) {
         chatService.inviteMember(roomId, chatInviteRequest);
         return "";
+    }
+
+    //메시지 내용 불러오기
+    //메시지와 로그인된 유저를 불러온다
+    @GetMapping("/messages/{roomId}")
+    public ChatMessageResponse messages(@PathVariable Long roomId, @PageableDefault(size = 20) Pageable pageable) {
+        String userName = "test1";
+        return ChatMessageResponse.success(chatService.messages(roomId, pageable), userName);
     }
 }
