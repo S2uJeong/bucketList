@@ -5,6 +5,7 @@ import com.team9.bucket_list.domain.dto.chat.ChatRoomRequest;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +21,7 @@ public class ChatRoom {
     private Long id;
     private String roomName;
     private int totalNum;
+    private LocalDateTime lastMessageTime;
     @OneToOne
     @JoinColumn(name = "bucketlist_id")
     private Bucketlist bucketlist;
@@ -38,6 +40,13 @@ public class ChatRoom {
                 .roomName(chatRoomRequest.getRoomName())
                 .bucketlist(bucketlist)
                 .totalNum(chatRoomRequest.getTotalNum())
+                .lastMessageTime(LocalDateTime.now())
+                .build();
+    }
+
+    public static ChatRoom messageTimeUpdate(ChatRoom chatRoom) {
+        return chatRoom.builder()
+                .lastMessageTime(LocalDateTime.now())
                 .build();
     }
 }
