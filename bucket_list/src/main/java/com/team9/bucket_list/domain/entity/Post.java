@@ -1,5 +1,7 @@
 package com.team9.bucket_list.domain.entity;
 
+import com.team9.bucket_list.domain.dto.member.MemberDto;
+import com.team9.bucket_list.domain.dto.post.PostUpdateRequest;
 import com.team9.bucket_list.domain.enumerate.PostCategory;
 import com.team9.bucket_list.domain.enumerate.PostStatus;
 import jakarta.annotation.Nullable;
@@ -58,13 +60,22 @@ public class Post {
     @OneToMany(mappedBy = "post")
     private List<Comment> commentList = new ArrayList<>();
 
-     //=== 속성 값 setting하는 메서드 ======
-//    public void setCategory(PostCategory category) {
-//        this.category = category;
-//    }
-    public void setStatus(PostStatus status) {
-        this.status = status;
+    //==== post 수정시 사용 되는 메서드 ===//
+    public void change(Post post, PostUpdateRequest postUpdateRequest) {
+        post.title = postUpdateRequest.getTitle();
+        post.content = postUpdateRequest.getContent();
+        post.cost = postUpdateRequest.getCost();
+        post.location = postUpdateRequest.getLocation();
+        post.untilRecruit = postUpdateRequest.getUntilRecruit();
+        post.entrantNum = postUpdateRequest.getEntrantNum();
+        post.eventStart = postUpdateRequest.getEventStart();
+        post.eventEnd = postUpdateRequest.getEventEnd();
+        post.status = postUpdateRequest.getStatus();
+        post.category = postUpdateRequest.getCategory();
+
     }
+
+
     // ====== 지환님 필요 부분 ========
     public void modifiedContent(String content) {
         this.content = content;
