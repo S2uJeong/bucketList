@@ -2,6 +2,7 @@ package com.team9.bucket_list.domain.entity;
 
 import com.team9.bucket_list.domain.enumerate.PostCategory;
 import com.team9.bucket_list.domain.enumerate.PostStatus;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,18 +30,20 @@ public class Post {
     private LocalDateTime deletedAt;
     private String title;
     private String content;
+    @Column(nullable = false)               // not null
     private String location;
     private int cost;
     private String untilRecruit;
-    private String entrantNum;
+    private int entrantNum;
     private String eventStart;
     private String eventEnd;
+    private String category;
 
     @Enumerated(value = EnumType.STRING)
     private PostStatus status;
 
-    @Enumerated(value = EnumType.STRING)
-    private PostCategory category;
+//    @Enumerated(value = EnumType.STRING)
+//    private PostCategory category;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -55,10 +58,10 @@ public class Post {
     @OneToMany(mappedBy = "post")
     private List<Comment> commentList = new ArrayList<>();
 
-    // === 속성 값 setting하는 메서드 ======
-    public void setCategory(PostCategory category) {
-        this.category = category;
-    }
+     //=== 속성 값 setting하는 메서드 ======
+//    public void setCategory(PostCategory category) {
+//        this.category = category;
+//    }
     public void setStatus(PostStatus status) {
         this.status = status;
     }
