@@ -50,6 +50,9 @@ public class Post {
     @OneToMany(mappedBy = "post")
     private List<Comment> commentList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "post")
+    private List<BucketlistReview> bucketlistReviewList = new ArrayList<>();
+
     // === 속성 값 setting하는 메서드 ======
     public void setCategory(PostCategory category) {
         this.category = category;
@@ -57,6 +60,7 @@ public class Post {
     public void setStatus(PostStatus status) {
         this.status = status;
     }
+
     // ====== 지환님 필요 부분 ========
     public void modifiedContent(String content) {
         this.content = content;
