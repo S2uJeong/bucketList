@@ -2,6 +2,7 @@ package com.team9.bucket_list.controller.rest;
 
 import com.team9.bucket_list.domain.Response;
 import com.team9.bucket_list.domain.dto.post.*;
+import com.team9.bucket_list.domain.entity.Post;
 import com.team9.bucket_list.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,16 +27,17 @@ public class PostController {
     private Object API_KEY;// 실제 서버에서 구동할때는 무조건 환경변수에 숨겨야함 절대 노출되면 안됨!!!
 
 
+    //=== 작성 ====//
     private final PostService postService;
 
-    // 게시글 작성 폼 페이지 이동
-    @GetMapping("/createform")
+      // 게시글 작성 폼 페이지 이동
+    @GetMapping("/createForm")
     public String movePostForm(){
         return "Post/PostCreate";
     }
 
 
-    // 게시글 폼에서 데이터 받아오기(Ajax 사용하여 받아옴)
+      // 게시글 폼에서 데이터 받아오기(Ajax 사용하여 받아옴)
     @PostMapping(value = "/detailpost" ,produces = "application/json")
     @ResponseBody
     public Long getData(@RequestBody PostCreateRequest request) throws UnsupportedEncodingException {
@@ -91,10 +93,21 @@ public class PostController {
     }
 
 
-    //== 수정 ==//  ---> 진행중 fetchMapping 사용 고려
-    @PutMapping("/{postId}/{memberId}")
-    public Response<PostUpdateResponse> updatePost() {
-        return null;
+    //== 수정 ==//
+    // form 으로 활용해보기 도전해 볼까?
+    /*@GetMapping("/updateForm/")
+    public String updatePostForm(Long postId, Model model){
+        Post post = postService.checkPost(postId);
+        PostUpdateRequest request = new PostUpdateRequest();
+
+        return "Post/PostUpdate";
+    }*/
+
+    @PutMapping("/{postId}")
+    public Response<PostUpdateResponse> updatePost( @RequestBody PostUpdateRequest request, @PathVariable("postId") Long postId)  {
+        PostUpdateResponse postUpdateResponse =  postService.update(request,postId);
+        log.info("Post 수정 성공");
+        return Response.success(postUpdateResponse);
     }
 
     //== 삭제 ==//
