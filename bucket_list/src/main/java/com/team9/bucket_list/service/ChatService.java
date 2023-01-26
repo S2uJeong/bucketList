@@ -17,9 +17,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,20 +37,25 @@ public class ChatService {
         return ChatRoomResponse.pageList(chatRoomRepository.findAllByChatParticipantsIn(chatParticipantList,pageable));
     }
 
-    public void createChatRoom(Long bucketlistId, ChatRoomRequest chatRoomRequest) {
+    public ChatRoom createChatRoom(Long bucketlistId, ChatRoomRequest chatRoomRequest) {
         /*bucketlist repository 나중에 생성*/
         Bucketlist bucketlist = null;
-        chatRoomRepository.save(ChatRoom.save(chatRoomRequest,bucketlist));
+
+        ChatRoom chatRoom = chatRoomRepository.save(ChatRoom.save(chatRoomRequest,bucketlist));
 
         //성공 리턴
+        return chatRoom;
     }
 
-    public void inviteMember(Long roomId, ChatInviteRequest chatInviteRequest) {
+    public List<ChatParticipant> inviteMember(Long roomId, ChatInviteRequest chatInviteRequest) {
         //멤버 아이디로 멤버 리스트 찾기
-        //List<Member> members = memberRepository.findAllbyMemberIdIn(chatInviteRequest.getMemberId());
-        List<Member> members = null;
+        List<Member> members = memberRepository.findAllMemberIdIn(chatInviteRequest.getMembersId());
 
         //이미 방에 들어와있는지 확인
+        for(Member member : members) {
+            Optional<ChatParticipant> findMember = chatParticipantRepository.findByChatRoom_IdAndMember_Id(roomId,member.getId());
+            if(findMember.isPresent()) members.remove(member);
+        }
 
         //roomId로 방 찾기
         ChatRoom chatRoom = chatRoomRepository.findById(roomId).orElseThrow(() -> new RuntimeException());
@@ -65,6 +68,7 @@ public class ChatService {
         chatParticipantRepository.saveAll(chatParticipantList);
 
         //성공 리턴
+        return chatParticipantList;
     }
 
     public Page<ChatParticipant> messages(Long roomId, Pageable pageable) {
