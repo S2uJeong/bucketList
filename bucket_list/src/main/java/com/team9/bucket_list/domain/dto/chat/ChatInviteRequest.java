@@ -10,5 +10,5 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ChatInviteRequest {
-    private List<Long> memberId;
+    private List<Long> membersId;
 }
