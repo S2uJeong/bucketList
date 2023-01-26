@@ -1,19 +1,21 @@
 package com.team9.bucket_list.controller.rest;
 
+import com.team9.bucket_list.domain.Response;
 import com.team9.bucket_list.domain.dto.chat.ChatInviteRequest;
 import com.team9.bucket_list.domain.dto.chat.ChatMessageResponse;
 import com.team9.bucket_list.domain.dto.chat.ChatRoomRequest;
 import com.team9.bucket_list.domain.dto.chat.ChatRoomResponse;
+import com.team9.bucket_list.domain.entity.ChatParticipant;
 import com.team9.bucket_list.domain.entity.ChatRoom;
 import com.team9.bucket_list.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.data.web.SortDefault;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/chat")
@@ -35,16 +37,14 @@ public class ChatRestController {
 
     //채팅방 생성
     @PostMapping("/{bucketlistId}")
-    public String createChatRoom(@PathVariable Long bucketlistId, ChatRoomRequest chatRoomRequest) {
-        chatService.createChatRoom(bucketlistId, chatRoomRequest);
-        return "";
+    public Response<ChatRoom> createChatRoom(@PathVariable Long bucketlistId, ChatRoomRequest chatRoomRequest) {
+        return Response.success(chatService.createChatRoom(bucketlistId, chatRoomRequest));
     }
 
     //유저 초대
     @PostMapping("/{roomId}")
-    public String inviteMember(@PathVariable Long roomId, ChatInviteRequest chatInviteRequest) {
-        chatService.inviteMember(roomId, chatInviteRequest);
-        return "";
+    public Response<List<ChatParticipant>> inviteMember(@PathVariable Long roomId, ChatInviteRequest chatInviteRequest) {
+        return Response.success(chatService.inviteMember(roomId, chatInviteRequest));
     }
 
     //메시지 내용 불러오기
