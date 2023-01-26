@@ -18,6 +18,9 @@ public class Application {
 
     private String content;
 
+    //신청 상태 (선택안함 : 0, 승낙 : 1, 거절 : 2)
+    private byte status;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
