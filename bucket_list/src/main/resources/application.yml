@@ -41,3 +41,7 @@ spring:
 google:
   map:
     key: test   # 가짜 키(진짜는 환경변수에 숨겨둠)
+
+jwt:
+  secret:
+    key: 비밀키
