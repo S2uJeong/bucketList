@@ -29,4 +29,5 @@ public class Alarm {
     private Member member;
 
     private Long postId;
+    private String senderName;
 }
