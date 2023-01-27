@@ -26,13 +26,13 @@ public class PostController {
     @Value("${google.map.key}")
     private Object API_KEY;// 실제 서버에서 구동할때는 무조건 환경변수에 숨겨야함 절대 노출되면 안됨!!!
 
-
-    //=== 작성 ====//
     private final PostService postService;
 
+    //=== 작성 ====//
+
       // 게시글 작성 폼 페이지 이동
-    @GetMapping("/createForm")
-    public String movePostForm(){
+    @GetMapping("/new")
+    public String createForm(){
         return "Post/PostCreate";
     }
 
@@ -46,7 +46,6 @@ public class PostController {
         PostCreateResponse response = postService.create(request,userName);       // DB에 데이터 저장
         return response.getPostId();
     }
-
 
 
     //== 전체조회 ==//
@@ -93,21 +92,26 @@ public class PostController {
     }
 
 
-    //== 수정 ==//
-    // form 으로 활용해보기 도전해 볼까?
-    /*@GetMapping("/updateForm/")
-    public String updatePostForm(Long postId, Model model){
+    //== 수정 ==// ==> (리팩토링) rest 형식 또 만들 예정
+     // 게시글 수정 폼 페이지 이동
+    @GetMapping("{postId}/edit")
+    public String updateForm(@PathVariable("postId") Long postId, Model model){
+        // 수정을 요청한 postId의 post가 유효한지 검사
         Post post = postService.checkPost(postId);
-        PostUpdateRequest request = new PostUpdateRequest();
+        // 이전 게시글을 불러온다.
+        PostUpdateResponse postUpdateResponse = PostUpdateResponse.prePost(post);
+        // model 파라미터를 통해 이전에 작성된 post의 내용을 뷰로 전달한다.
+        model.addAttribute("prePost", postUpdateResponse);
+        return "Post/PostUpdateForm";
+    }
 
-        return "Post/PostUpdate";
-    }*/
-
-    @PutMapping("/{postId}")
-    public Response<PostUpdateResponse> updatePost( @RequestBody PostUpdateRequest request, @PathVariable("postId") Long postId)  {
-        PostUpdateResponse postUpdateResponse =  postService.update(request,postId);
-        log.info("Post 수정 성공");
-        return Response.success(postUpdateResponse);
+     // 클라이언트에서 데이터 받아와서 수정
+    @PostMapping("/{postId}/edit")
+    public String updatePost( @PathVariable Long postId, @ModelAttribute("updateDto") PostUpdateRequest request)  {
+        // update 메서드를 통해 request 내용대로 수정해준다. 반환값 : post Entity
+        postService.update(request,postId);
+        log.info("🔵 Post 수정 성공");
+        return "Post/success"; // post 상세 조회 화면으로 연결할 예정. 임시 html 연결함.
     }
 
     //== 삭제 ==//

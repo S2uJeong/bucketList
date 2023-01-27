@@ -92,19 +92,19 @@ public class PostService {
 
     // 수정
     @Transactional
-    public PostUpdateResponse update(PostUpdateRequest request, Long postId) {
+    public void update(PostUpdateRequest request, Long postId) {
 //        로그인 되어있는지 확인하고 아니면 에러던짐
 //        Member member = checkMember(memberId);
-
-        // postid에 해당하는 post가 DB에 없으면 에러던짐 - entity
-        Post post = checkPost(postId);
-        // 수정 사항을 반영하여 변경한다.
-        post.change(post, request);
-
 //        post를 쓴 멤버와 로그인 되어 있는 member가 같은 멤버가 아니면 에러던짐
 //        checkPostMember(memberId, post.getId());
 
-        return null;
+        // postid에 해당하는 post가 DB에 없으면 에러던짐 - entity
+        Post post = checkPost(postId);
+
+        log.info("🔴 post : {}", post.toString());
+        log.info("🔴 post : {}", request.toString());
+        // 수정 사항을 반영하여 변경한다.
+        postRepository.save(Post.update(post, request));
     }
 
 
