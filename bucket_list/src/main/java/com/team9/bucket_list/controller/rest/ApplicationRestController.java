@@ -29,15 +29,15 @@ public class ApplicationRestController {
     }
 
     //특정 포스트의 신청서 리스트 (승낙, 거절 제외), 글쓴이만 확인 가능
-    @GetMapping("/{postId}")
-    public Page<ApplicationListResponse> applicationList(@PathVariable Long postId) {
+    @PostMapping("/{postId}/{statusCode}")
+    public Page<ApplicationListResponse> applicationList(@PathVariable Long postId, @PathVariable byte statusCode) {
         //memberId는 jwt에서 가져옴
         Long memberId = 1L;
-        return applicationService.applicationList(postId, memberId, (byte) 0);
+        return applicationService.applicationList(postId, memberId, statusCode);
     }
 
     //특정 포스트의 승낙된 신청서 리스트, 글쓴이만 확인 가능
-    @GetMapping("/{postId}/accept")
+    @PostMapping("/{postId}/accept")
     public Page<ApplicationListResponse> applicationAcceptList(@PathVariable Long postId) {
         //memberId는 jwt에서 가져옴
         Long memberId = 1L;
