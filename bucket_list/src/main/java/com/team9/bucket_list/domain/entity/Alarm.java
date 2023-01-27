@@ -18,7 +18,15 @@ public class Alarm {
 
     private String content;
 
+    //0 : 안읽음, 1 : 읽음
+    private byte readStatus;
+
+    //0 : 댓글, 1 : 좋아요, 2 : 참가자가 신청서 작성, 3 : 신청서 승낙, 4 : 기타
+    private byte category;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    private Long postId;
 }
