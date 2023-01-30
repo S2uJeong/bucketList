@@ -72,7 +72,7 @@ public class MemberReviewService {
 
         MemberReview memberReview = memberReviewRepository.save(memberReviewRequest.toEntity(targetMember, fromMember));
 
-        alarmRepository.save(Alarm.of(targetMember, targetMember.getUserName()+"에 대한 리뷰가 작성 되었습니다."));
+        // alarmRepository.save(Alarm.of(targetMember, targetMember.getUserName()+"에 대한 리뷰가 작성 되었습니다."));
 
 
         return "true";
@@ -90,7 +90,7 @@ public class MemberReviewService {
 
         memberReviewRepository.save(memberReviewRequest.update(memberReviewRequest));
 
-        alarmRepository.save(Alarm.of(targetMember, targetMember.getUserName()+"에 대한 리뷰가 수정 되었습니다."));
+        // alarmRepository.save(Alarm.of(targetMember, targetMember.getUserName()+"에 대한 리뷰가 수정 되었습니다."));
 
         return "true";
     }
@@ -105,7 +105,7 @@ public class MemberReviewService {
             throw new ApplicationException(ErrorCode.INVALID_PERMISSION);
         }
 
-        alarmRepository.save(Alarm.of(targetMember, targetMember.getUserName()+"에 대한 리뷰가 삭제 되었습니다."));
+        // alarmRepository.save(Alarm.of(targetMember, targetMember.getUserName()+"에 대한 리뷰가 삭제 되었습니다."));
 
         memberReviewRepository.deleteById(memberReview.getId());
 
