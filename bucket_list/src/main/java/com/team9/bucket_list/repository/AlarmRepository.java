@@ -8,4 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface AlarmRepository extends JpaRepository<Alarm, Long> {
 
     Page<Alarm> findAllByMember_IdAndReadStatusContains(Long memberId, Pageable pageable, byte readStatus);
+
+    int countByMember_Id(Long memberId);
 }
