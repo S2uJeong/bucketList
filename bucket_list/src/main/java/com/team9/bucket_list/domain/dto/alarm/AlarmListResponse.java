@@ -11,7 +11,6 @@ import org.springframework.data.domain.Page;
 @AllArgsConstructor
 public class AlarmListResponse {
     private Long id;
-    private String comment;
     private String userName;
     private Long postId;
     private byte category;
@@ -20,7 +19,6 @@ public class AlarmListResponse {
     public static Page<AlarmListResponse> toList(Page<Alarm> alarms) {
         return alarms.map(alarm -> AlarmListResponse.builder()
                 .id(alarm.getId())
-                .comment(alarm.getContent())
                 .userName(alarm.getMember().getUserName())
                 .postId(alarm.getPostId())
                 .senderName(alarm.getSenderName())
