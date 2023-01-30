@@ -92,9 +92,9 @@ public class PostController {
 
 
     //== 수정 ==//  ---> 진행중 fetchMapping 사용 고려
-    @PutMapping("/{postId}/{memberId}")
-    public Response<PostUpdateResponse> updatePost() {
-        return null;
+    @PutMapping("/update")
+    public String updatePost() {
+        return "Post/PostUpdate";
     }
 
     //== 삭제 ==//
