@@ -35,7 +35,7 @@ public class JwtFilter extends OncePerRequestFilter {
         try {
             String path = request.getServletPath();
 
-            if (path.startsWith("/login/reissue")) {
+            if (path.startsWith("/reissue")) {
                 filterChain.doFilter(request, response);
             } else {
                 //헤더에서 토큰 꺼내기
@@ -43,6 +43,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
                 //헤더 형식 확인
                 if (authorizationHeader == null) {
+                    log.info("header가 없는 요청입니다.");
                     SecurityContextHolder.getContext().setAuthentication(null);
                     filterChain.doFilter(request, response);
                     return;

@@ -30,6 +30,12 @@ public class MemberService {
     private final BCryptPasswordEncoder encoder;
     private final JwtUtil jwtUtil;
 
+    public MemberDto findByEmail(String email) {
+        return memberRepository.findByEmail(email).orElseThrow(() -> {
+            throw new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED);
+        }).toDto();
+    }
+
     @Transactional
     public MemberDto join(MemberJoinRequest request) {
         //회원가입 요청을 받을 때 이메일 인증을 했는지 안했는지 여부를 받아야하지 않을까..?
@@ -70,7 +76,7 @@ public class MemberService {
         }
 
         //정상 로그인 실행 - 토큰 발급
-        TokenDto token = jwtUtil.createToken(member.getId(), member.getMemberRole());
+        TokenDto token = jwtUtil.createToken(member.getId(), member.getUserName(), member.getMemberRole());
 
         //Refresh Token 업데이트
         if (refreshTokenRepository.findByMemberId(member.getId()).isEmpty()) {
@@ -90,15 +96,9 @@ public class MemberService {
 
     @Transactional
     public TokenDto reissue(HttpServletRequest request) throws JsonProcessingException {
-        final String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 
-        //token 분리
-        String token = "";
-        if (authorizationHeader.startsWith("Bearer ")) {
-            token = authorizationHeader.replace("Bearer ", "");
-        } else {
-            log.error("Authorization 헤더 형식이 틀립니다. : {}", authorizationHeader);
-        }
+        final String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+        String token = authorizationHeader.replace("Bearer ", "");
 
         Long memberId = JwtUtil.getMemberId(token);
         Member member = memberRepository.findById(memberId).orElseThrow(() -> {
@@ -113,10 +113,10 @@ public class MemberService {
         boolean isTokenValid = jwtUtil.validateToken(refreshToken.getToken());
         if (isTokenValid) {
             //토큰 재발급
-            return jwtUtil.createToken(memberId, member.getMemberRole());
+            return jwtUtil.createToken(member.getId(), member.getUserName(), member.getMemberRole());
         } else {
             // 로그인 요청
-            throw new ApplicationException(ErrorCode.INVALID_TOKEN);
+            throw new ApplicationException(ErrorCode.INVALID_REFRESH_TOKEN);
         }
     }
 }

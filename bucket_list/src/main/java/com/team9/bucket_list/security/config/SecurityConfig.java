@@ -40,14 +40,13 @@ public class SecurityConfig {
                 .authenticationEntryPoint(new CustomAuthenticationEntryPoint()).and()
 
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.GET, "/click").authenticated()
                         .anyRequest().permitAll())
-//                .oauth2Login()
-//                .authorizationEndpoint().baseUri("/login").and()
-//                .userInfoEndpoint().userService(oAuthService).and()
+                .oauth2Login()
+                .authorizationEndpoint().baseUri("/login").and()
+                .userInfoEndpoint().userService(oAuthService).and()
 //                .successHandler(OAuth2AuthenticationSuccessHandler)      //OAuth2 로그인 성공 시 호출한 handler
 //                .failureHandler(authenticationFailureHandelr).and()
-//                .and()
+                .and()
                 .addFilterBefore(new JwtFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class) //UserNamePasswordAuthenticationFilter적용하기 전에 JWTTokenFilter를 적용 하라는 뜻 입니다.
                 .build();
     }

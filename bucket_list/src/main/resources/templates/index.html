@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-  
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
   <head>
 
     <!-- SITE TITTLE -->
@@ -44,7 +44,14 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
   </head>
-
+  <style>
+    #login_li{
+      display: none;
+    }
+    #user_li{
+      display: none;
+    }
+  </style>
   <script>
     let check = false;
     function showSearch() {
@@ -132,12 +139,12 @@
               </ul>
             </li>
 
-            <li class="">
+            <li class="" id="login_li">
               <a class="" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#login">로그인</a>
             </li>
 
-            <li class="">
-              <a class="" href="javascript:void(0)">유저명</a>
+            <li class="" id="user_li">
+              <a class="" href="javascript:void(0)" id="userName">유저명</a>
               <ul class="dropdown drop-up">
                 <li class=" active ">
                   <a href="/createform">버킷리스트 작성</a>
@@ -156,7 +163,7 @@
                 </li>
 
                 <li class="">
-                  <a href="/logout">로그아웃</a>
+                  <a href="#" onclick="logout(); return false;">로그아웃</a>
                 </li>
               </ul>
             </li>
@@ -645,7 +652,6 @@
              <div class="d-grid">
               <button class="btn btn-primary text-uppercase" onclick="login(); return false;">Login</button>
              </div>
-              <button onclick="req(); return false;">GET</button>
               <div class="text-uppercase text-center py-3">Or</div>
 
               <div style="display: flex;">
@@ -716,9 +722,6 @@
     <script src="/assets/plugins/lazyestload/lazyestload.js"></script>
     <script src='/assets/plugins/dzsparallaxer/dzsparallaxer.js'></script>
 
-
-    
-    
     
     <script src='/assets/plugins/revolution/js/jquery.themepunch.tools.min.js'></script>
     <script src='/assets/plugins/revolution/js/jquery.themepunch.revolution.min.js'></script>
@@ -730,10 +733,28 @@
 
   </body>
 
-  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script>
+    window.onload = function () {
+      const accessToken = localStorage.getItem("accessToken");
 
-    function req() {
+      if (accessToken === null) {
+        $("#login_li").show();
+        $("#user_li").hide();
+      } else {
+        $("#login_li").hide();
+        $("#user_li").show();
+
+        const payload = accessToken.split('.')[1];
+        let userName = JSON.parse(atob(payload)).userName;
+        document.getElementById("userName").innerText = userName;
+      }
+
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    function click() {
+      console.log('click');
       axios.get('/click')
               .then((res) => {
                 console.log(res.data);
@@ -742,7 +763,15 @@
                 console.log(err);
               })
     }
-
+    function logout() {
+      localStorage.clear();
+      window.location.href = '/';
+      // return axios.post('/logout')
+      //         .then((res) => {
+      //           localStorage.clear();
+      //           window.location.href = '/';
+      //         })
+    }
     function login() {
 
       let email = document.getElementById('email').value;
@@ -764,6 +793,7 @@
               })
               .then(json => {
                 localStorage.setItem("accessToken", json.result.accessToken);
+                window.location.href = '/';
               })
               .catch(err => {
                 console.log(err);
@@ -787,14 +817,17 @@
               if(status === 401) {
                 const originRequest = error.config
 
-                await axios.post('/login/reissue')
+                await axios.post('/reissue')
                         .then(response => {
                           console.log(response.data);
                           localStorage.setItem("accessToken", response.data);
+                          originRequest.headers.authorization = 'Bearer ' + response.data;
+                          return axios(originRequest);
                         })
                         .catch(error => {
-                          console.log('fail');
+                          console.log('재발급 실패, refresh token 만료');
                           localStorage.removeItem('accessToken')
+                          window.location.href = '/';
                         })
                 return Promise.reject(error)
               }

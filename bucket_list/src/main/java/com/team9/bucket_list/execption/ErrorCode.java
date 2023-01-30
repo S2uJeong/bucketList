@@ -13,6 +13,7 @@ public enum ErrorCode {
     USERNAME_NOT_FOUNDED(HttpStatus.NOT_FOUND, "해당 사용자는 없습니다."),
     REFRESH_TOKEN_NOT_FOUNDED(HttpStatus.NOT_FOUND, "해당 사용자에 대한 리프레시 토큰이 없습니다."),
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "잘못된 토큰입니다."),
+    INVALID_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "refresh token 만료"),
     INVALID_PERMISSION(HttpStatus.UNAUTHORIZED, "사용자가 권한이 없습니다."),
     POST_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 포스트가 없습니다."),
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 댓글이 없습니다."),

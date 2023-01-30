@@ -20,8 +20,8 @@ public class JwtUtil {
     @Value("${jwt.secret.key}")
     private String secretKey;
 
-    private final long accessTokenValidTime = 1000L * 5;
-    private final long refreshTokenValidTime = accessTokenValidTime * 10;
+    private final long accessTokenValidTime = 1000L * 60 * 60 * 2;
+    private final long refreshTokenValidTime = accessTokenValidTime * 12;
 
     @PostConstruct
     protected void init() {
@@ -70,9 +70,10 @@ public class JwtUtil {
     /**
      * 토큰 생성
      */
-    public TokenDto createToken(Long memberPk, MemberRole role) {
+    public TokenDto createToken(Long memberPk, String userName, MemberRole role) {
         Claims claims = Jwts.claims();
         claims.put("memberId", memberPk);
+        claims.put("userName", userName);
         claims.put("role", role);
 
         String accessToken = Jwts.builder()
