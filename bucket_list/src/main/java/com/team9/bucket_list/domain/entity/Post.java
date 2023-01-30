@@ -2,7 +2,6 @@ package com.team9.bucket_list.domain.entity;
 
 import com.team9.bucket_list.domain.enumerate.PostCategory;
 import com.team9.bucket_list.domain.enumerate.PostStatus;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,7 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +22,8 @@ import java.util.List;
 @SQLDelete(sql = "UPDATE post SET deleted_at = current_timestamp WHERE id = ?")
 public class Post {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_id")
     private Long id;
     private LocalDateTime deletedAt;
@@ -55,8 +54,12 @@ public class Post {
     @OneToMany(mappedBy = "post")
     private List<Likes> likesList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post" , cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> commentList = new ArrayList<>();
+
+    public void addComment(Comment comment){        // CascadeType.ALL를 통해 CommentRepository에서 save를 안해주고 Post.commentList에 데이터를 넘겨줘 PostRepository에서 save해도 Comment Table에 자동 저장됨
+        this.commentList.add(comment);
+    }
 
      //=== 속성 값 setting하는 메서드 ======
 //    public void setCategory(PostCategory category) {
