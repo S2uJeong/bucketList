@@ -41,8 +41,6 @@ public class Post {
     @Enumerated(value = EnumType.STRING)
     private PostStatus status;
 
-//    @Enumerated(value = EnumType.STRING)
-//    private PostCategory category;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -61,13 +59,17 @@ public class Post {
         this.commentList.add(comment);
     }
 
-     //=== 속성 값 setting하는 메서드 ======
+    @OneToMany(mappedBy = "post")
+    private List<BucketlistReview> bucketlistReviewList = new ArrayList<>();
+
+//    // === 속성 값 setting하는 메서드 ======
 //    public void setCategory(PostCategory category) {
 //        this.category = category;
 //    }
     public void setStatus(PostStatus status) {
         this.status = status;
     }
+
     // ====== 지환님 필요 부분 ========
     public void modifiedContent(String content) {
         this.content = content;

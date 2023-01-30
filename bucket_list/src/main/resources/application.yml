@@ -25,12 +25,12 @@ spring:
         registration:
           google:
             client-id: 784534608821-4arov6mqr5uf6rbt1p0mm5fo9rpl4s2r.apps.googleusercontent.com
-            client-secret: aaa
+            client-secret: 비밀키
             scope: profile,email
           # 네이버는 spring security가 기본적을 제공해주지 않기 때문에 github, google과 달리 많은 정보를 적어줘야한다.
           naver:
             client-id: p9eywB6xBBrwCAglysCB
-            client-secret: aaa
+            client-secret: 비밀키
             redirect-uri: "{baseUrl}/{action}/oauth2/code/{registrationId}"
             authorization_grant_type: authorization_code
             scope: name,email
