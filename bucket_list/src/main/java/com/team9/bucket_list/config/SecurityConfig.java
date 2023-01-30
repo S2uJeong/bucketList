@@ -28,7 +28,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeHttpRequests(authorize -> authorize
                         .shouldFilterAllDispatcherTypes(false)
-                        .requestMatchers("/","/post/**")
+                        .requestMatchers("/","/post/**","/comment/**")
                         .permitAll()
                         .anyRequest()
                         .authenticated())
