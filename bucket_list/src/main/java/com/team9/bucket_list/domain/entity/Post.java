@@ -55,7 +55,7 @@ public class Post {
     @OneToMany(mappedBy = "post")
     private List<Likes> likesList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "post" , cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> commentList = new ArrayList<>();
 
     @OneToMany(mappedBy = "post")
@@ -84,23 +84,17 @@ public class Post {
                 .status(postStatus)
                 .category(request.getCategory())
                 .build();
-    public void addComment(Comment comment){        // CascadeType.ALL를 통해 CommentRepository에서 save를 안해주고 Post.commentList에 데이터를 넘겨줘 PostRepository에서 save해도 Comment Table에 자동 저장됨
-        this.commentList.add(comment);
+
     }
 
-
-
-//    // === 속성 값 setting하는 메서드 ======
-//    public void setCategory(PostCategory category) {
-//        this.category = category;
-//    }
-    public void setStatus(PostStatus status) {
-        this.status = status;
-    }
     // ====== 지환님 필요 부분 ========
-    public void modifiedContent(String content) {
+    public void modifiedContent (String content){
         this.content = content;
     }
 
+    public void addComment(Comment comment) {        // CascadeType.ALL를 통해 CommentRepository에서 save를 안해주고 Post.commentList에 데이터를 넘겨줘 PostRepository에서 save해도 Comment Table에 자동 저장됨
+        this.commentList.add(comment);
+
+    }
 
 }
