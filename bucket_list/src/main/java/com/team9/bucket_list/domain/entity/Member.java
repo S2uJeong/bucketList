@@ -1,15 +1,16 @@
 package com.team9.bucket_list.domain.entity;
 
 import com.team9.bucket_list.domain.dto. member.MemberDto;
+import com.team9.bucket_list.domain.dto.member.MemberProfile;
 import com.team9.bucket_list.domain.enumerate.Gender;
 import com.team9.bucket_list.domain.enumerate.MemberRole;
 import com.team9.bucket_list.domain.enumerate.Membership;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,9 +38,17 @@ public class Member {
     /**OAuth2 적용**/
     private String oauthId;
 
-    public Member update(String email){
+    public Member updateGoogle(String email){
         this.userName = email.split("@")[0];
         this.email = email;
+        return this;
+    }
+
+    public Member updateNaver(String email, String gender, String birthYear){
+        this.userName = email.split("@")[0];
+        this.email = email;
+        this.gender = MemberProfile.getGender(gender);
+        this.age = MemberProfile.getAge(birthYear);
         return this;
     }
 

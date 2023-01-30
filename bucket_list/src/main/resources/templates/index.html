@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en">
+
   <head>
 
     <!-- SITE TITTLE -->
@@ -565,7 +565,7 @@
       </script>
     </footer>
 
-  
+
     <!-- ====================================
     ——— MODAL SECTION
     ===================================== -->
@@ -632,26 +632,27 @@
           </div>
 
           <div class="modal-body">
-            <form class="" th:action="@{/login}" method="post">
+            <form class="" action="index.html" method="post">
               <div class="mb-3">
-                <input id="email" type="email" class="form-control bg-smoke" name="email" required="" placeholder="이메일">
+                <input type="email" class="form-control bg-smoke" required="" placeholder="이메일">
               </div>
 
               <div class="mb-3">
-                <input id="password" type="password" class="form-control bg-smoke" name="password" required="" placeholder="비밀번호">
+                <input type="password" class="form-control bg-smoke" required="" placeholder="비밀번호">
               </div>
 
-              <div class="mb-3 form-check mb-0">
-                <input type="checkbox" class="form-check-input" id="exampleCheck5">
-                <label class="form-check-label text-gray-color mb-3" for="exampleCheck5">
-                  Remember me
-                </label>
-                <a class="pull-right" href="javascript:void(0)">Forgot Password?</a>
-             </div>
+<!--              <div class="mb-3 form-check mb-0">-->
+<!--                <input type="checkbox" class="form-check-input" id="exampleCheck5">-->
+<!--                <label class="form-check-label text-gray-color mb-3" for="exampleCheck5">-->
+<!--                  Remember me-->
+<!--                </label>-->
+<!--                <a class="pull-right" href="javascript:void(0)">Fogot Password?</a>-->
+<!--             </div>-->
 
              <div class="d-grid">
-              <button class="btn btn-primary text-uppercase" onclick="login(); return false;">Login</button>
+              <button type="submit" class="btn btn-primary text-uppercase">Login</button>
              </div>
+
               <div class="text-uppercase text-center py-3">Or</div>
 
               <div style="display: flex;">
@@ -666,7 +667,7 @@
           </div>
 
           <div class="modal-footer justify-content-center">
-            <p class="mb-1">Don’t have an Account? <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#signup">Sign up</a></p>
+            <p class="mb-1">Don’t have an Account? <a href="javascript:void(0)" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#signup">Sign up</a></p>
           </div>
         </div>
       </div>
@@ -722,6 +723,15 @@
     <script src="/assets/plugins/lazyestload/lazyestload.js"></script>
     <script src='/assets/plugins/dzsparallaxer/dzsparallaxer.js'></script>
 
+    <script>
+      const url = new URL(window.location.href)
+      const accessToken = url.searchParams.get('accessToken')
+
+      if(accessToken != null) {
+        localStorage.setItem('accessToken', accessToken)
+        window.location.href = '/';
+      }
+    </script>
     
     <script src='/assets/plugins/revolution/js/jquery.themepunch.tools.min.js'></script>
     <script src='/assets/plugins/revolution/js/jquery.themepunch.revolution.min.js'></script>
