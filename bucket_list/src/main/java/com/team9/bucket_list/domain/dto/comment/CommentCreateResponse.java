@@ -7,7 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ToString(of = {"id","comment","userName","postId","createdAt"})
+@ToString(of = {"id","comment","userName", "postId","createdAt"})
 public class CommentCreateResponse {
     private Long id;            // 댓글 id
     private String comment;     // 댓글 내용
