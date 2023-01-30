@@ -16,8 +16,6 @@ public class Alarm {
     @Column(name = "alarm_id")
     private Long id;
 
-    private String content;
-
     //0 : 안읽음, 1 : 읽음
     private byte readStatus;
 
@@ -30,4 +28,14 @@ public class Alarm {
 
     private Long postId;
     private String senderName;
+
+    public static Alarm save(byte category, Member member, Long postId, String senderName) {
+        return Alarm.builder()
+                .readStatus((byte) 0)
+                .category(category)
+                .member(member)
+                .postId(postId)
+                .senderName(senderName)
+                .build();
+    }
 }
