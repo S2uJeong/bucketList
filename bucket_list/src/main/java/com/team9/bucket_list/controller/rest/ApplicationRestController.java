@@ -8,6 +8,7 @@ import com.team9.bucket_list.service.ApplicationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -30,19 +31,19 @@ public class ApplicationRestController {
 
     //특정 포스트의 신청서 리스트 (승낙, 거절 제외), 글쓴이만 확인 가능
     @GetMapping("/{postId}/{statusCode}")
-    public Page<ApplicationListResponse> applicationList(@PathVariable Long postId, @PathVariable byte statusCode) {
+    public Page<ApplicationListResponse> applicationList(@PathVariable Long postId, @PathVariable byte statusCode, Pageable pageable) {
         //memberId는 jwt에서 가져옴
         Long memberId = 1L;
-        return applicationService.applicationList(postId, memberId, statusCode);
+        return applicationService.applicationList(postId, memberId, statusCode, pageable);
     }
 
     //특정 포스트의 승낙된 신청서 리스트, 글쓴이만 확인 가능
-    @GetMapping("/{postId}/accept")
+/*    @GetMapping("/{postId}/accept")
     public Page<ApplicationListResponse> applicationAcceptList(@PathVariable Long postId) {
         //memberId는 jwt에서 가져옴
         Long memberId = 1L;
         return applicationService.applicationList(postId, memberId, (byte) 1);
-    }
+    }*/
 
     //특정포스트의 신청서 수락 or 거절하기
     @PutMapping("/{postId}")
