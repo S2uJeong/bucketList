@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CommentCreateRequest {
 
-    private String content;         // 댓글 내용            comment
+    private String content;         //  댓글 내용            comment
 
     private Long parentId;
 
