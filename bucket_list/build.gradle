@@ -61,6 +61,10 @@ dependencies {
 
     // 캐싱 사용하기 위한 의존성
     implementation 'org.springframework.boot:spring-boot-starter-cache'
+
+    // post Image 추가를 위한 스프링 클라우드 의존성 추가
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
 }
 
 tasks.named('test') {
