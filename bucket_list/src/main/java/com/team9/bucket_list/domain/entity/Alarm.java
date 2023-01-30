@@ -21,4 +21,11 @@ public class Alarm {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    public static Alarm of(Member member, String content) {
+        return Alarm.builder()
+                .member(member)
+                .content(content)
+                .build();
+    }
 }

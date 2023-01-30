@@ -12,8 +12,10 @@ import java.util.Optional;
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findByEmail(String email);
-    
+
     Optional<Member> findByOauthId(String oAuthId);
+
+    Optional<Member> findByUserName(String userName);
 
     @Query("select m from Member m where m.id in :memberId")
     List<Member> findAllMemberIdIn(List<Long> memberId);

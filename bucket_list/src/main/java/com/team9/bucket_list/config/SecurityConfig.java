@@ -33,8 +33,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .shouldFilterAllDispatcherTypes(false)
                         .requestMatchers("/**")
-                        .permitAll())
-
+                        .permitAll()
+                        .requestMatchers("/","/post/**","/comment/**")
+                        .permitAll()
+                        .anyRequest()
+                        .authenticated())
 //                .anyRequest().hasRole("ADMIN")
 //                .exceptionHandling().accessDeniedHandler(customAccessDeniedHandler)
 //                .and()
