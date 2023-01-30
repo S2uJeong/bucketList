@@ -19,10 +19,10 @@ public class MemberJoinRequest {
     private String gender;
     private int age;
 
-    public Member toEntity() {
+    public Member toEntity(String enCodedPassword) {
         return Member.builder()
                 .email(this.email)
-                .password(this.password)
+                .password(enCodedPassword)
                 .userName(this.userName)
                 .age(this.age)
                 .gender(Gender.valueOf(this.gender))
