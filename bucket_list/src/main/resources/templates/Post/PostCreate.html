@@ -68,8 +68,15 @@
     </tr>
     <tr>
       <th>카테고리</th>
-      <td><input type="text" name="post" placeholder="category"/></td>
-
+      <td><input type="text" name="post" list="dl" placeholder="category"/></td>
+      <datalist id = "dl">
+        <option value="TRAVEL">여행</option>
+        <option value="SPORTS">레저스포츠</option>
+        <option value="STUDY">공부</option>
+        <option value="DELIGHT">행복</option>
+        <option value="EXPERIENCE">도전</option>
+        <option value="ETC">기타</option>
+      </datalist>
     </tr>
     <tr>
       <th>주소</th>
@@ -109,7 +116,15 @@
     </tr>
     <tr>
       <th>카테고리</th>
-      <td><input type="text" id="cartegory" name="post" placeholder="category"/></td>
+      <td><input type="text" name="post" list="dl2" placeholder="category"/></td>
+      <datalist id = "dl2">
+        <option value="TRAVEL">여행</option>
+        <option value="SPORTS">레저스포츠</option>
+        <option value="STUDY">공부</option>
+        <option value="DELIGHT">행복</option>
+        <option value="EXPERIENCE">도전</option>
+        <option value="ETC">기타</option>
+      </datalist>
     </tr>
     <tr>
       <th>영문 주소</th>
@@ -222,7 +237,7 @@
           async : false,
           success     :   function(data){
             console.log(data);
-            let url = '/map?postId=${data}';
+            let url = "/post/"+data;
             window.location.replace(url);
           }
         });
