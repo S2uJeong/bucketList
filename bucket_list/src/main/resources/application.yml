@@ -1,4 +1,3 @@
-
 server:
   servlet:
     encoding:
@@ -9,9 +8,13 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
     database: mysql
     database-platform: org.hibernate.dialect.MySQL8Dialect
+    properties:
+      hibernate:
+        show-sql: true
+        format_sql: true
+
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
@@ -42,3 +45,6 @@ spring:
 google:
   map:
     key: test   # 가짜 키(진짜는 환경변수에 숨겨둠)
+
+logging.level:
+    org.hibernate.SQL : debug
