@@ -26,6 +26,7 @@ public class MemberProfile implements OAuth2User {      //Resource Server마다 
                 .userName(((String) this.attributes.get("email")).split("@")[0])
                 .email((String) this.attributes.get("email"))
                 .memberRole(MemberRole.USER)
+                .postRemain(3)
                 .build();
     }
 
@@ -35,6 +36,7 @@ public class MemberProfile implements OAuth2User {      //Resource Server마다 
                 .userName(((String) this.attributes.get("email")).split("@")[0])
                 .email((String) this.attributes.get("email"))
                 .memberRole(MemberRole.USER)
+                .postRemain(3)
                 .gender(getGender((String) this.attributes.get("gender")))
                 .age(getAge((String) this.attributes.get("birthYear")))
                 .build();

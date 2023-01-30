@@ -56,7 +56,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         });
 
         MemberRole role = MemberRole.USER; //일단 다 user로 설정
-        TokenDto token = jwtUtil.createToken(member.getId(), role);
+        TokenDto token = jwtUtil.createToken(member.getId(), member.getUserName(), role);
 
         // 리프레시 토큰 저장 로직 추가 예정
         //Refresh Token 업데이트
