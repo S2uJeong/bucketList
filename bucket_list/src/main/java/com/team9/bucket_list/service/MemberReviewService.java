@@ -1,19 +1,18 @@
 package com.team9.bucket_list.service;
 
 import com.team9.bucket_list.domain.dto.memberReview.MemberReviewRequest;
-import com.team9.bucket_list.domain.dto.memberReview.MemberReviewResponse;
+import com.team9.bucket_list.domain.entity.Alarm;
 import com.team9.bucket_list.domain.entity.Member;
 import com.team9.bucket_list.domain.entity.MemberReview;
 import com.team9.bucket_list.execption.ApplicationException;
 import com.team9.bucket_list.execption.ErrorCode;
+import com.team9.bucket_list.repository.AlarmRepository;
 import com.team9.bucket_list.repository.MemberRepository;
 import com.team9.bucket_list.repository.MemberReviewRepository;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.support.AbstractPlatformTransactionManager;
 
 import java.util.List;
 
@@ -23,6 +22,7 @@ public class MemberReviewService {
 
     private final MemberRepository memberRepository;
     private final MemberReviewRepository memberReviewRepository;
+    private final AlarmRepository alarmRepository;
 
     public Member checkMemberId(Long targetUserId) {
         return memberRepository.findById(targetUserId)
@@ -72,6 +72,9 @@ public class MemberReviewService {
 
         MemberReview memberReview = memberReviewRepository.save(memberReviewRequest.toEntity(targetMember, fromMember));
 
+        alarmRepository.save(Alarm.of(targetMember, targetMember.getUserName()+"에 대한 리뷰가 작성 되었습니다."));
+
+
         return "true";
     }
 
@@ -87,6 +90,8 @@ public class MemberReviewService {
 
         memberReviewRepository.save(memberReviewRequest.update(memberReviewRequest));
 
+        alarmRepository.save(Alarm.of(targetMember, targetMember.getUserName()+"에 대한 리뷰가 수정 되었습니다."));
+
         return "true";
     }
 
@@ -99,6 +104,8 @@ public class MemberReviewService {
         if (memberReview.getWriterId() != fromMember.getId()) {
             throw new ApplicationException(ErrorCode.INVALID_PERMISSION);
         }
+
+        alarmRepository.save(Alarm.of(targetMember, targetMember.getUserName()+"에 대한 리뷰가 삭제 되었습니다."));
 
         memberReviewRepository.deleteById(memberReview.getId());
 
