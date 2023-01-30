@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script>
+<!--유저가 속해있는 채팅방 목록을 api로 호출시킨다 헤더에 jwt를 넣어 jwt로 검사를 한 후 jwt안에서 user의 정보를 추출해 채팅방 리스트를 확인하고 응답한다-->
+    $(document).ready(function (){
+        $.ajax({
+            type:"GET",
+            url:"/chat",
+            data:{},
+            dataType:"json",
+            async:false,
+            success: function (result) {
+                let data = "", html, i;
+                for(i in result.content) {
+                    data = `<a href=\"/chat/room/${result.content[i].roomId}\">${result.content[i].roomName}</a></br>`;
+                    html += data;
+                }
+                $('#chat-list').append(html.replace("undefined",""));
+            },
+            error: function (req,status,error) {
+                console.log(error);
+            }
+        })
+    })
+
+
+/*fetch('/chat')
+    .then(
+        (res) => {
+            let chatList = document.getElementById("chat-list");
+
+            let data = `<p></p>`;
+            ;
+        }
+    );*/
+
+</script>
+
+<body >
+    <div id="chat-list">
+
+    </div>
+</body>
+</html>

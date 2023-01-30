@@ -1,16 +1,11 @@
 package com.team9.bucket_list.eventlistener;
 
-import com.team9.bucket_list.domain.dto.chat.Chat;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
-import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionConnectedEvent;
-
-import java.util.logging.Logger;
 
 @Component
 @RequiredArgsConstructor
