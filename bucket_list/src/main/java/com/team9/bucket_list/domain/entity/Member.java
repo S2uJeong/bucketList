@@ -1,6 +1,7 @@
 package com.team9.bucket_list.domain.entity;
 
 import com.team9.bucket_list.domain.dto. member.MemberDto;
+import com.team9.bucket_list.domain.dto.member.MemberProfile;
 import com.team9.bucket_list.domain.enumerate.Gender;
 import com.team9.bucket_list.domain.enumerate.MemberRole;
 import com.team9.bucket_list.domain.enumerate.Membership;
@@ -20,7 +21,8 @@ import java.util.List;
 @NoArgsConstructor
 public class Member {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
     private Long id;
 
@@ -30,13 +32,28 @@ public class Member {
     private int age;
     private int postRemain;
 
+    // profile에 이미지 넣는 거 구현중
+    private String image;
+
     /**OAuth2 적용**/
     private String oauthId;
 
-    public Member update(String email){
+    public Member updateGoogle(String email){
         this.userName = email.split("@")[0];
         this.email = email;
         return this;
+    }
+
+    public Member updateNaver(String email, String gender, String birthYear){
+        this.userName = email.split("@")[0];
+        this.email = email;
+        this.gender = MemberProfile.getGender(gender);
+        this.age = MemberProfile.getAge(birthYear);
+        return this;
+    }
+
+    public void updateProfileImage(String image) {
+        this.image = image;
     }
 
     @Enumerated(value = EnumType.STRING)

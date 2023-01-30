@@ -26,13 +26,12 @@ public class PostController {
     @Value("${google.map.key}")
     private Object API_KEY;// 실제 서버에서 구동할때는 무조건 환경변수에 숨겨야함 절대 노출되면 안됨!!!
 
+
     private final PostService postService;
 
-    //=== 작성 ====//
-
-      // 게시글 작성 폼 페이지 이동
-    @GetMapping("/new")
-    public String createForm(){
+    // 게시글 작성 폼 페이지 이동
+    @GetMapping("/createform")
+    public String movePostForm(){
         return "Post/PostCreate";
     }
 
