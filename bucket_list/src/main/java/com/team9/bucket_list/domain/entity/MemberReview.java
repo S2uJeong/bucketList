@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Entity
 @Builder
 @NoArgsConstructor
@@ -16,6 +18,10 @@ public class MemberReview {
     @Column(name = "review_id")
     private Long id;
 
+    @Column(length = 10)
+    private String title;
+
+    @Column(length = 500)
     private String content;
     private Long writerId;
     private int rate;

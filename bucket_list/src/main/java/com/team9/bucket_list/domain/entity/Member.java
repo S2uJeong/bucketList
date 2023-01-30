@@ -31,6 +31,9 @@ public class Member {
     private int age;
     private int postRemain;
 
+    // profile에 이미지 넣는 거 구현중
+    private String image;
+
     /**OAuth2 적용**/
     private String oauthId;
 
@@ -38,6 +41,10 @@ public class Member {
         this.userName = email.split("@")[0];
         this.email = email;
         return this;
+    }
+
+    public void updateProfileImage(String image) {
+        this.image = image;
     }
 
     @Enumerated(value = EnumType.STRING)
