@@ -60,7 +60,7 @@ public class PostController {
     //== 세부조회 ==//
 
     @GetMapping("{postId}")
-    public String showMap2(@PathVariable(value = "postId") Long postId, Model model){
+    public String readPost(@PathVariable(value = "postId") Long postId, Model model){
         PostReadResponse postReadResponse = postService.read(postId);
 
         String title = postReadResponse.getTitle();
