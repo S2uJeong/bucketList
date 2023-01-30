@@ -16,10 +16,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 @EnableAsync
+@Transactional(readOnly = true)
 @Slf4j
 public class AlarmService {
 
@@ -32,6 +34,7 @@ public class AlarmService {
     }
 
     @Async
+    @Transactional
     public void sendAlarm(Long senderId, Long postId, byte category) {
         Member sender = memberRepository.findById(senderId).orElseThrow( () -> new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED));
 
@@ -45,5 +48,13 @@ public class AlarmService {
 
     public int alarmCount(Long memberId) {
         return alarmRepository.countByMember_Id(memberId);
+    }
+
+    @Async
+    @Transactional
+    public int alarmRead(Long memberId, Long alarmId) {
+        Alarm alarm = alarmRepository.findById(alarmId).orElseThrow(() -> new ApplicationException(ErrorCode.ALARM_NOT_FOUND));
+        if(memberId != alarm.getMember().getId()) throw new ApplicationException(ErrorCode.INVALID_PERMISSION);
+        return alarmRepository.updateAlarm(alarmId);
     }
 }

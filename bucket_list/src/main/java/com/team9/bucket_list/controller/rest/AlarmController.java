@@ -6,10 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -37,4 +34,12 @@ public class AlarmController {
         return Response.success(alarmService.alarmCount(memberId));
     }
 
+    //알람을 읽었을대
+    @GetMapping("/{alarmId}")
+    public Response alarmRead(@PathVariable Long alarmId) {
+        //로그인된 아이디의 알람 리스트
+        Long memberId = 1L;
+
+        return Response.success(alarmService.alarmRead(memberId, alarmId));
+    }
 }
