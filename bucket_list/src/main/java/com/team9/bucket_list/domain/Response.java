@@ -1,14 +1,12 @@
 package com.team9.bucket_list.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 public class Response<T> {
     private String resultCode;
     private T result;

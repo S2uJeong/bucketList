@@ -32,7 +32,9 @@ public class SecurityConfig {
                 .httpBasic().disable()
                 .csrf().disable()
                 .cors().and()
-
+                .headers()
+                .frameOptions().sameOrigin()
+                .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 
@@ -40,7 +42,18 @@ public class SecurityConfig {
                 .authenticationEntryPoint(new CustomAuthenticationEntryPoint()).and()
 
                 .authorizeHttpRequests(authorize -> authorize
-                        .anyRequest().permitAll())
+                        .shouldFilterAllDispatcherTypes(false)
+                        .requestMatchers("/**")
+                        .permitAll()
+                        .requestMatchers("/","/post/**","/comment/**")
+                        .permitAll()
+                        .anyRequest()
+                        .authenticated())
+//                .anyRequest().hasRole("ADMIN")
+//                .exceptionHandling().accessDeniedHandler(customAccessDeniedHandler)
+//                .and()
+//                .exceptionHandling().authenticationEntryPoint(customAuthenticationEntryPoint)
+//                .and()
                 .oauth2Login()
                 .authorizationEndpoint().baseUri("/login").and()
                 .userInfoEndpoint().userService(oAuthService).and()
