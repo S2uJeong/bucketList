@@ -59,23 +59,23 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<Post> postList = new ArrayList<>();
 
-//    @OneToMany(mappedBy = "member")
-//    private List<Application> applicationList = new ArrayList<>();
-//
-//    @OneToMany(mappedBy = "member")
-//    private List<Likes> likesList = new ArrayList<>();
-//
-//    @OneToMany(mappedBy = "member")
-//    private List<MemberReview> memberReviewList = new ArrayList<>();
-//
-//    @OneToMany(mappedBy = "member")
-//    private List<Alarm> alarmList = new ArrayList<>();
-//
-//    @OneToMany(mappedBy = "member")
-//    private List<MemberBucketlist> memberBucketlistList = new ArrayList<>();
-//
-//    @OneToMany(mappedBy = "member")
-//    private List<ChatParticipant> chatParticipants = new ArrayList<>();
+    @OneToMany(mappedBy = "member")
+    private List<Application> applicationList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    private List<Likes> likesList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    private List<MemberReview> memberReviewList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    private List<Alarm> alarmList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    private List<MemberBucketlist> memberBucketlistList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    private List<ChatParticipant> chatParticipants = new ArrayList<>();
 
     public MemberDto toDto() {
         return MemberDto.builder()
@@ -89,11 +89,11 @@ public class Member {
                 .memberRole(memberRole)
                 .membership(membership)
                 .postList(postList)
-//                .applicationList(applicationList)
-//                .likesList(likesList)
-//                .memberReviewList(memberReviewList)
-//                .alarmList(alarmList)
-//                .memberBucketlistList(memberBucketlistList)
+                .applicationList(applicationList)
+                .likesList(likesList)
+                .memberReviewList(memberReviewList)
+                .alarmList(alarmList)
+                .memberBucketlistList(memberBucketlistList)
                 .build();
     }
 }
