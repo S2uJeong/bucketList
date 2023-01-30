@@ -1,7 +1,6 @@
 package com.team9.bucket_list.service;
 
 import com.team9.bucket_list.domain.dto.post.*;
-import com.team9.bucket_list.domain.entity.Member;
 import com.team9.bucket_list.domain.entity.Post;
 import com.team9.bucket_list.execption.ApplicationException;
 import com.team9.bucket_list.execption.ErrorCode;
