@@ -16,9 +16,26 @@ public class Alarm {
     @Column(name = "alarm_id")
     private Long id;
 
-    private String content;
+    //0 : 안읽음, 1 : 읽음
+    private byte readStatus;
+
+    //0 : 댓글, 1 : 좋아요, 2 : 참가자가 신청서 작성, 3 : 신청서 승낙, 4 : 기타
+    private byte category;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    private Long postId;
+    private String senderName;
+
+    public static Alarm save(byte category, Member member, Long postId, String senderName) {
+        return Alarm.builder()
+                .readStatus((byte) 0)
+                .category(category)
+                .member(member)
+                .postId(postId)
+                .senderName(senderName)
+                .build();
+    }
 }

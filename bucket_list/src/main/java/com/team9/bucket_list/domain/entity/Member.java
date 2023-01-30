@@ -21,7 +21,8 @@ import java.util.List;
 @NoArgsConstructor
 public class Member {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
     private Long id;
 
@@ -30,6 +31,9 @@ public class Member {
     private String userName;
     private int age;
     private int postRemain;
+
+    // profile에 이미지 넣는 거 구현중
+    private String image;
 
     /**OAuth2 적용**/
     private String oauthId;
@@ -46,6 +50,10 @@ public class Member {
         this.gender = MemberProfile.getGender(gender);
         this.age = MemberProfile.getAge(birthYear);
         return this;
+    }
+
+    public void updateProfileImage(String image) {
+        this.image = image;
     }
 
     @Enumerated(value = EnumType.STRING)
