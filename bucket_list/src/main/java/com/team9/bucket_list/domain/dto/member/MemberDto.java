@@ -27,9 +27,9 @@ public class MemberDto {
     private Membership membership;
 
     private List<Post> postList;
-    private List<Application> applicationList;
-    private List<Likes> likesList;
-    private List<MemberReview> memberReviewList;
-    private List<Alarm> alarmList;
-    private List<MemberBucketlist> memberBucketlistList;
+//    private List<Application> applicationList;
+//    private List<Likes> likesList;
+//    private List<MemberReview> memberReviewList;
+//    private List<Alarm> alarmList;
+//    private List<MemberBucketlist> memberBucketlistList;
 }
