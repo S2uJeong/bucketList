@@ -16,6 +16,7 @@ public class Profile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // 프로필 사진
     @OneToOne
     @JoinColumn(name = "post_image_url")
     private Member postImageUrl;

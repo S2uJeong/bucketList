@@ -35,6 +35,7 @@ public class Member {
 //    // profile에 이미지 넣는 거 구현중
 //    private String image;
 
+    // 프로필 사진
     // 사진을 서버의 특정 폴더에 저장
     @Column(name = "post_image_url")
     private String postImageUrl;
