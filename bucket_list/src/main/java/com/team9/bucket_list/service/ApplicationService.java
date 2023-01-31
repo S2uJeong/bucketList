@@ -15,6 +15,7 @@ import com.team9.bucket_list.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -31,14 +32,14 @@ public class ApplicationService {
         applicationRepository.save(Application.save(applicationRequest,post,member));
     }
 
-    public Page<ApplicationListResponse> applicationList(Long postId, Long memberId, byte status) {
+    public Page<ApplicationListResponse> applicationList(Long postId, Long memberId, byte status, Pageable pageable) {
         //해당 게시글의 작성자 아이디와 로그인된 아이디를 비교 아닐경우 예외 발생
         checkMemberIdInPost(memberId);
 
         //post존재 확인
         findPostById(postId);
 
-        return ApplicationListResponse.pageList(applicationRepository.findAllByPost_IdAndStatusContains(postId, status));
+        return ApplicationListResponse.pageList(applicationRepository.findAllByPost_IdAndStatusContains(postId, status,pageable));
     }
 
     public int applicationDecision(Long postId, Long memberId, ApplicationDecisionRequest applicationDecisionRequest) {
@@ -47,10 +48,11 @@ public class ApplicationService {
         //post존재 확인
         findPostById(postId);
         //신청서 존재 확인
-        applicationRepository.findById(applicationDecisionRequest.getId()).orElseThrow(() -> new ApplicationException(ErrorCode.APPLICATION_NOT_FOUND));
+        Application application = applicationRepository.findById(applicationDecisionRequest.getId()).orElseThrow(() -> new ApplicationException(ErrorCode.APPLICATION_NOT_FOUND));
 
         //업데이트
-        return applicationRepository.updateApplicationStatus(applicationDecisionRequest.getId(),applicationDecisionRequest.getStatus());
+        applicationRepository.save(Application.updateStatus(application,applicationDecisionRequest));
+        return 1;
     }
 
     public ApplicationAcceptCountResponse applicationAcceptCount(Long postId) {

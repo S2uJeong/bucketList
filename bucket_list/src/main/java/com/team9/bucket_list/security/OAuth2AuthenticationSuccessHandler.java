@@ -9,7 +9,7 @@ import com.team9.bucket_list.execption.ApplicationException;
 import com.team9.bucket_list.execption.ErrorCode;
 import com.team9.bucket_list.repository.MemberRepository;
 import com.team9.bucket_list.repository.RefreshTokenRepository;
-import com.team9.bucket_list.utils.JwtUtil;
+import com.team9.bucket_list.security.utils.JwtUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

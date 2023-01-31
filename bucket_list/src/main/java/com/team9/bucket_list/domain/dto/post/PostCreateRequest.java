@@ -37,7 +37,7 @@ public class PostCreateRequest {
                 .entrantNum(this.entrantNum)
                 .eventStart(this.eventStart)
                 .eventEnd(this.eventEnd)
-                .status(PostStatus.PROCESS)             // enum에서 값 대입
+                .status(PostStatus.JOIN)             // enum에서 값 대입
                 .category(this.category)
                 .build();
     }

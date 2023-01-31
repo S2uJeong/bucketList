@@ -26,7 +26,7 @@ public class AlarmController {
     }
 
     //알람 카운트 받아오기
-    @GetMapping
+    @GetMapping("count")
     public Response alarmCount() {
         //로그인된 아이디의 알람 리스트
         Long memberId = 1L;

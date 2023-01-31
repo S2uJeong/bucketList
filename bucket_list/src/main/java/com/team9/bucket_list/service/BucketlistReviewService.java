@@ -61,7 +61,7 @@ public class BucketlistReviewService {
 //        BucketlistReview bucketlistReview = bucketlistReviewRepository.save(bucketlistReviewRequest.toEntity(member, bucketlist));
         bucketlistReviewRepository.save(bucketlistReviewRequest.toEntity(member, bucketlist));
 
-        alarmRepository.save(Alarm.of(member, post.getTitle()+"에 대한 리뷰가 작성 되었습니다."));
+        // alarmRepository.save(Alarm.of(member, post.getTitle()+"에 대한 리뷰가 작성 되었습니다."));
 
         return "true";
     }
@@ -80,7 +80,7 @@ public class BucketlistReviewService {
         bucketlistReview.update(bucketlistReviewRequest.getContent());
         bucketlistReviewRepository.save(bucketlistReview);
 
-        alarmRepository.save(Alarm.of(member, member.getUserName()+"에 대한 리뷰가 수정 되었습니다."));
+        // alarmRepository.save(Alarm.of(member, member.getUserName()+"에 대한 리뷰가 수정 되었습니다."));
 
         return "true";
     }
@@ -99,7 +99,7 @@ public class BucketlistReviewService {
 //        bucketlistRepository.deleteById(postId);
         bucketlistReviewRepository.deleteById(postId);
 
-        alarmRepository.save(Alarm.of(member, member.getUserName()+"에 대한 리뷰가 삭제 되었습니다."));
+       // alarmRepository.save(Alarm.of(member, member.getUserName()+"에 대한 리뷰가 삭제 되었습니다."));
 
         return "true";
     }

@@ -99,16 +99,19 @@ public class PostService {
 
     // 수정
     @Transactional
-    public PostUpdateResponse update(PostUpdateRequest request, Long memberId, Long postId) {
-        // 로그인 되어있는지 확인하고 아니면 에러던짐
+    public void update(PostUpdateRequest request, Long postId) {
+//        로그인 되어있는지 확인하고 아니면 에러던짐
 //        Member member = checkMember(memberId);
-        // postid에 해당하는 post가 DB에 없으면 에러던짐
-        Post post = checkPost(postId);
-        // post를 쓴 멤버와 로그인 되어 있는 member가 같은 멤버가 아니면 에러던짐
+//        post를 쓴 멤버와 로그인 되어 있는 member가 같은 멤버가 아니면 에러던짐
 //        checkPostMember(memberId, post.getId());
-        /*post.setTitle(request.getTitle());
-        request로 들어온 내용으로 post 안의 속성들을 set해줌으로써 DB에 저장시키고, Dto로 반환하고 시픙데,, 어떻게 하지*/
-        return null;
+
+        // postid에 해당하는 post가 DB에 없으면 에러던짐 - entity
+        Post post = checkPost(postId);
+
+        log.info("🔴 post : {}", post.toString());
+        log.info("🔴 post : {}", request.toString());
+        // 수정 사항을 반영하여 변경한다.
+        postRepository.save(Post.update(post, request));
     }
 
     // 삭제

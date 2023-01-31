@@ -1,6 +1,5 @@
 package com.team9.bucket_list.security.config;
 
-import com.team9.bucket_list.security.JwtFilter;
 import com.team9.bucket_list.security.OAuth2AuthenticationSuccessHandler;
 
 import com.team9.bucket_list.repository.RefreshTokenRepository;

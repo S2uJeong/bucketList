@@ -13,7 +13,7 @@ public interface AlarmRepository extends JpaRepository<Alarm, Long> {
 
     int countByMember_Id(Long memberId);
 
-    @Modifying(clearAutomatically = true)
+    /*@Modifying(clearAutomatically = true)
     @Query("update Alarm a set a.readStatus = 1 where a.id = :alarmId")
-    int updateAlarm(Long alarmId);
+    int updateAlarm(Long alarmId);*/
 }
