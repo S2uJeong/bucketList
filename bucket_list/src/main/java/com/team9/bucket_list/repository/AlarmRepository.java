@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.Optional;
+
 public interface AlarmRepository extends JpaRepository<Alarm, Long> {
 
     Page<Alarm> findAllByMember_IdAndReadStatusContains(Long memberId, Pageable pageable, byte readStatus);
@@ -16,4 +18,6 @@ public interface AlarmRepository extends JpaRepository<Alarm, Long> {
     /*@Modifying(clearAutomatically = true)
     @Query("update Alarm a set a.readStatus = 1 where a.id = :alarmId")
     int updateAlarm(Long alarmId);*/
+
+    Optional<Alarm> findBySenderNameAndPostIdAndCategory(String senderName, Long postId, byte category);
 }

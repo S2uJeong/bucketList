@@ -18,6 +18,8 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @EnableAsync
@@ -45,7 +47,9 @@ public class AlarmService {
 
         Member member = memberRepository.findById(post.getMember().getId()).orElseThrow( () -> new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED));
 
-        alarmRepository.save(Alarm.save(category,member,postId, sender.getUserName()));
+        Optional<Alarm> alarm = alarmRepository.findBySenderNameAndPostIdAndCategory(sender.getUserName(),postId,category);
+
+        if(alarm.isEmpty()) alarmRepository.save(Alarm.save(category,member,postId, sender.getUserName()));
     }
 
 
