@@ -51,3 +51,7 @@ google:
 
 logging.level:
     org.hibernate.SQL : debug
+
+# ProfileService에서 사용 할 image file path
+file:
+  path: C:/User/c/git/bucketlist/image/
