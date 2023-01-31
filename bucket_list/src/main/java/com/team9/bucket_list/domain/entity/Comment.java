@@ -40,14 +40,16 @@ public class Comment extends BaseTimeEntity{
     @JoinColumn(name = "post_id")
     private Post post;              // 해당 postId        bno
 
-    private Long writerId;          // 작성자 아이디      commenter
+    @ManyToOne
+    @JoinColumn(name="member_id")
+    private Member member;          // 작성자 아이디      commenter
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
     private Comment parent;         // 부모 댓글 id         pcno
 
     @Builder.Default                // @Builder를 사용할때 값을 초기화 하지만 @Builder.Default를 미리 선언해주면 @Builder할때 값을 초기화 안해줘도 default값 정의
-    @OneToMany(mappedBy = "parent", orphanRemoval = true)
+    @OneToMany(mappedBy = "parent")
     private List<Comment> children = new ArrayList<>();
 
 
