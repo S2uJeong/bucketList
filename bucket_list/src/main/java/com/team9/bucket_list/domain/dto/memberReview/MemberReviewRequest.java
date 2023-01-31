@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Getter
 public class MemberReviewRequest {
 
+    private String title;
     private String message;
     private Integer score;
 
@@ -18,8 +19,9 @@ public class MemberReviewRequest {
         return MemberReview.builder()
                 .member(targetMember)
                 .writerId(fromMember.getId())
-                .content(message)
-                .rate(score)
+                .content(this.message)
+                .rate(this.score)
+                .title(this.title)
                 .build();
     }
 
@@ -27,6 +29,7 @@ public class MemberReviewRequest {
         return MemberReview.builder()
                 .content(memberReviewRequest.message)
                 .rate(memberReviewRequest.score)
+                .title(memberReviewRequest.title)
                 .build();
     }
 }

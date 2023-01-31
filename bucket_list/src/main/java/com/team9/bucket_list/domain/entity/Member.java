@@ -1,6 +1,7 @@
 package com.team9.bucket_list.domain.entity;
 
 import com.team9.bucket_list.domain.dto. member.MemberDto;
+import com.team9.bucket_list.domain.dto.member.MemberProfile;
 import com.team9.bucket_list.domain.enumerate.Gender;
 import com.team9.bucket_list.domain.enumerate.MemberRole;
 import com.team9.bucket_list.domain.enumerate.Membership;
@@ -31,12 +32,35 @@ public class Member {
     private int age;
     private int postRemain;
 
-    /**OAuth2 적용**/
+//    // profile에 이미지 넣는 거 구현중
+//    private String image;
+
+    // 프로필 사진
+    // 사진을 서버의 특정 폴더에 저장
+    @Column(name = "post_image_url")
+    private String postImageUrl;
+
+    public void updateProfileImage(String postImageUrl) {
+        this.postImageUrl = postImageUrl;
+    }
+
+
+    /**
+     * OAuth2 적용
+     **/
     private String oauthId;
 
-    public Member update(String email){
+    public Member updateGoogle(String email){
         this.userName = email.split("@")[0];
         this.email = email;
+        return this;
+    }
+
+    public Member updateNaver(String email, String gender, String birthYear){
+        this.userName = email.split("@")[0];
+        this.email = email;
+        this.gender = MemberProfile.getGender(gender);
+        this.age = MemberProfile.getAge(birthYear);
         return this;
     }
 
@@ -55,7 +79,7 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<Application> applicationList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Likes> likesList = new ArrayList<>();
 
     @OneToMany(mappedBy = "member")

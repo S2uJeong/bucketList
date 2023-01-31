@@ -2,16 +2,10 @@ package com.team9.bucket_list.service;
 
 import com.team9.bucket_list.domain.dto.bucketlistReview.BucketlistReviewDto;
 import com.team9.bucket_list.domain.dto.bucketlistReview.BucketlistReviewRequest;
-import com.team9.bucket_list.domain.entity.Bucketlist;
-import com.team9.bucket_list.domain.entity.BucketlistReview;
-import com.team9.bucket_list.domain.entity.Member;
-import com.team9.bucket_list.domain.entity.Post;
+import com.team9.bucket_list.domain.entity.*;
 import com.team9.bucket_list.execption.ApplicationException;
 import com.team9.bucket_list.execption.ErrorCode;
-import com.team9.bucket_list.repository.BucketlistRepository;
-import com.team9.bucket_list.repository.BucketlistReviewRepository;
-import com.team9.bucket_list.repository.MemberRepository;
-import com.team9.bucket_list.repository.PostRepository;
+import com.team9.bucket_list.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +20,7 @@ public class BucketlistReviewService {
     private final BucketlistRepository bucketlistRepository;
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
+    private final AlarmRepository alarmRepository;
 
     // 유효성 검사
     public Post checkPost(Long postId) {
@@ -66,6 +61,8 @@ public class BucketlistReviewService {
 //        BucketlistReview bucketlistReview = bucketlistReviewRepository.save(bucketlistReviewRequest.toEntity(member, bucketlist));
         bucketlistReviewRepository.save(bucketlistReviewRequest.toEntity(member, bucketlist));
 
+        // alarmRepository.save(Alarm.of(member, post.getTitle()+"에 대한 리뷰가 작성 되었습니다."));
+
         return "true";
     }
 
@@ -83,6 +80,8 @@ public class BucketlistReviewService {
         bucketlistReview.update(bucketlistReviewRequest.getContent());
         bucketlistReviewRepository.save(bucketlistReview);
 
+        // alarmRepository.save(Alarm.of(member, member.getUserName()+"에 대한 리뷰가 수정 되었습니다."));
+
         return "true";
     }
 
@@ -99,6 +98,8 @@ public class BucketlistReviewService {
 
 //        bucketlistRepository.deleteById(postId);
         bucketlistReviewRepository.deleteById(postId);
+
+       // alarmRepository.save(Alarm.of(member, member.getUserName()+"에 대한 리뷰가 삭제 되었습니다."));
 
         return "true";
     }

@@ -31,7 +31,9 @@ public enum OAuthAttributes {       //OAuth 서비스에 따라 얻어온 유저
                 .attributes(
                         Map.of(
                                 "oauthId", attributes.get("id"),
-                                "email", attributes.get("email")
+                                "email", attributes.get("email"),
+                                "gender", attributes.get("gender"),
+                                "birthYear", attributes.get("birthyear")
                         )
                 )
                 .build();
