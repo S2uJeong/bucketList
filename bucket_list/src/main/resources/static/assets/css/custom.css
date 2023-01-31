@@ -5,8 +5,10 @@ a{
     display: flex;
     align-items: center;
     justify-content: center;
-    width: calc(100vw * (45 / 1920));
-    height: calc(100vw * (45 / 1920));
+    /*width: calc(100vw * (45 / 1920));*/
+    /*height: calc(100vw * (45 / 1920));*/
+    width: 26px;
+    height: 26px;
 
     border-radius: 50%;
     border: solid 2px #eaeaea;
@@ -14,8 +16,10 @@ a{
 }
 
 .icon.heart img{
-    width: calc(100vw * (24 / 1920));
-    height: calc(100vw * (24 / 1920));
+    /*width: calc(100vw * (24 / 1920));*/
+    /*height: calc(100vw * (24 / 1920));*/
+    width: 15px;
+    height: 15px;
 }
 
 .icon.heart.fas{
