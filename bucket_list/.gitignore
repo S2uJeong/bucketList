@@ -170,3 +170,4 @@ Temporary Items
 /gradle/wrapper/gradle-wrapper.jar
 /gradle/wrapper/gradle-wrapper.properties
 /HELP.md
+/src/main/generated/
