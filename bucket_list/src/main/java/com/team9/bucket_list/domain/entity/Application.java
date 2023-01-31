@@ -1,5 +1,6 @@
 package com.team9.bucket_list.domain.entity;
 
+import com.team9.bucket_list.domain.dto.application.ApplicationDecisionRequest;
 import com.team9.bucket_list.domain.dto.application.ApplicationRequest;
 import com.team9.bucket_list.domain.dto.application.ApplicationResponse;
 import jakarta.persistence.*;
@@ -37,6 +38,16 @@ public class Application {
                 .status((byte)0)
                 .member(member)
                 .post(post)
+                .build();
+    }
+
+    public static Application updateStatus(Application application, ApplicationDecisionRequest applicationDecisionRequest) {
+        return Application.builder()
+                .id(application.getId())
+                .content(application.getContent())
+                .status(applicationDecisionRequest.getStatus())
+                .member(application.getMember())
+                .post(application.getPost())
                 .build();
     }
 }

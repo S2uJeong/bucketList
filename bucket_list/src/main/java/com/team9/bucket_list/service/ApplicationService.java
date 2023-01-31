@@ -48,10 +48,11 @@ public class ApplicationService {
         //post존재 확인
         findPostById(postId);
         //신청서 존재 확인
-        applicationRepository.findById(applicationDecisionRequest.getId()).orElseThrow(() -> new ApplicationException(ErrorCode.APPLICATION_NOT_FOUND));
+        Application application = applicationRepository.findById(applicationDecisionRequest.getId()).orElseThrow(() -> new ApplicationException(ErrorCode.APPLICATION_NOT_FOUND));
 
         //업데이트
-        return applicationRepository.updateApplicationStatus(applicationDecisionRequest.getId(),applicationDecisionRequest.getStatus());
+        applicationRepository.save(Application.updateStatus(application,applicationDecisionRequest));
+        return 1;
     }
 
     public ApplicationAcceptCountResponse applicationAcceptCount(Long postId) {

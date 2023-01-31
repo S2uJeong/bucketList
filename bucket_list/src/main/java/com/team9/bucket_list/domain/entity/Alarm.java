@@ -38,4 +38,15 @@ public class Alarm {
                 .senderName(senderName)
                 .build();
     }
+
+    public static Alarm updateRead(Alarm alarm, byte readStatus) {
+        return Alarm.builder()
+                .id(alarm.getId())
+                .readStatus(readStatus)
+                .senderName(alarm.getSenderName())
+                .member(alarm.getMember())
+                .category(alarm.getCategory())
+                .postId(alarm.getPostId())
+                .build();
+    }
 }

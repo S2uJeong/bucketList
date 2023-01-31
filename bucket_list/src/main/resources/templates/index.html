@@ -118,7 +118,7 @@
                 </li>
 
                 <li class="">
-                  <a href="/post/sports">Extreme</a>
+                  <a href="/post">Extreme</a>
                 </li>
 
                 <li class="">
@@ -723,15 +723,6 @@
     <script src="/assets/plugins/lazyestload/lazyestload.js"></script>
     <script src='/assets/plugins/dzsparallaxer/dzsparallaxer.js'></script>
 
-    <script>
-      const url = new URL(window.location.href)
-      const accessToken = url.searchParams.get('accessToken')
-
-      if(accessToken != null) {
-        localStorage.setItem('accessToken', accessToken)
-        window.location.href = '/';
-      }
-    </script>
     
     <script src='/assets/plugins/revolution/js/jquery.themepunch.tools.min.js'></script>
     <script src='/assets/plugins/revolution/js/jquery.themepunch.revolution.min.js'></script>

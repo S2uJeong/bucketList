@@ -28,11 +28,11 @@ public class ChatRoom {
 
     @JsonIgnore
     @OneToMany(mappedBy = "chatRoom")
-    private List<Chat> chatList = new ArrayList<>();
+    private final List<Chat> chatList = new ArrayList<>();
 
     @JsonIgnore
     @OneToMany(mappedBy = "chatRoom")
-    private List<ChatParticipant> chatParticipants = new ArrayList<>();
+    private final List<ChatParticipant> chatParticipants = new ArrayList<>();
 
 
     public static ChatRoom save(ChatRoomRequest chatRoomRequest, Bucketlist bucketlist) {

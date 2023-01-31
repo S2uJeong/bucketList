@@ -8,11 +8,17 @@ import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.team9.bucket_list.domain.dto.post.*;
+import com.team9.bucket_list.domain.entity.Application;
+import com.team9.bucket_list.domain.entity.Likes;
+import com.team9.bucket_list.domain.entity.Member;
 import com.team9.bucket_list.domain.entity.File;
 import com.team9.bucket_list.domain.entity.Post;
 import com.team9.bucket_list.exception.AppException;
 import com.team9.bucket_list.execption.ApplicationException;
 import com.team9.bucket_list.execption.ErrorCode;
+import com.team9.bucket_list.repository.ApplicationRepository;
+import com.team9.bucket_list.repository.LikesRepository;
+import com.team9.bucket_list.repository.MemberRepository;
 import com.team9.bucket_list.repository.FileRepository;
 import com.team9.bucket_list.repository.PostRepository;
 import com.team9.bucket_list.utils.map.dto.GoogleMapResponse;
@@ -29,12 +35,14 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.*;
+import java.util.stream.Collectors;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+// import java.util.Arrays;
+// import java.util.HashMap;
+// import java.util.Map;
+// import java.util.UUID;
 
 @Service
 @Transactional(readOnly = true)
@@ -43,21 +51,27 @@ import java.util.UUID;
 public class PostService {
 
     private final PostRepository postRepository;
+    //
+    private final LikesRepository likesRepository;
+    private final ApplicationRepository applicationRepository;
+    private final AlarmService alarmService;
+    private final MemberRepository memberRepository;
     // post에 파일 첨부하는 기능을 위한 의존성 주입
     private final FileRepository fileRepository;
     private final AmazonS3Client amazonS3Client;
+
     // map
     @Value("${google.map.key}")
     private Object API_KEY;// 실제 서버에서 구동할때는 무조건 환경변수에 숨겨야함 절대 노출되면 안됨!!!
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;  // post에 파일 첨부하는 기능을 위한 버킷
 
-//    // ========= 유효성검사 ===========
-//    // 1. findByMemberId : memberId로 member 찾아 로그인 되어있는지 확인 ->  error : 권한이 없습니다.
-//    public Member checkMember(Long memberId) {
-//        return memberRepository.findById(memberId)
-//                .orElseThrow(() -> new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED));
-//    }
+    // ========= 유효성검사 ===========
+    // 1. findByMemberId : memberId로 member 찾아 로그인 되어있는지 확인 ->  error : 권한이 없습니다.
+    public Member checkMember(String userName) {
+        return memberRepository.findByUserName(userName)
+                .orElseThrow(() -> new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED));
+    }
 //    // 2. checkPostMember : post를 작성한 mem과 현재 로그인 된 mem 비교 -> INVALID_PERMISSION
 //    public void checkPostMember(Long memberId, Long postMemberId) {
 //        Member loginMember = checkMember(memberId);
@@ -126,7 +140,6 @@ public class PostService {
         postRepository.save(Post.update(post, request));
     }
 
-
     // 삭제
     @Transactional
     public PostDeleteResponse delete(Long postId, Long memberId) {
@@ -166,10 +179,90 @@ public class PostService {
         return locationNum;
     }
 
+    //== 좋아요 ==//
+    // 좋아요 개수
+    public Long countLike(Long postId) {
+        // postid에 해당하는 post가 DB에 없으면 에러던짐 - entity
+        checkPost(postId);
+
+        return likesRepository.countByPostId(postId);
+    }
+
+    // 좋아요 누르기
+    @Transactional
+    public int clickLike(long postId, String userName) {
+        //        로그인 되어있는지 확인하고 아니면 에러던짐 -> userName인지 memberId인지 확인하여 수정
+        Member member = checkMember(userName);
+
+        // postid에 해당하는 post가 DB에 없으면 에러던짐 - entity
+        Post post = checkPost(postId);
+
+        Optional<Likes> savedLike = likesRepository.findByPost_IdAndMember_Id(postId, member.getId());
+
+        if (savedLike.isEmpty()){
+            Likes likes = Likes.builder()
+                    .member(member)
+                    .post(post)
+                    .build();
+            likesRepository.save(likes);
+
+            // 좋아요 됐을 경우, 알람 DB에 추가
+            alarmService.sendAlarm(member.getId(), post.getId(), (byte) 1);
+            return 1;
+        }else {
+            likesRepository.deleteByPost_IdAndMember_Id(postId, member.getId());
+            return 0;
+        }
+    }
+
+    //== 마이피드 ==//
+    // 작성한 포스트 리턴
+    public Page<PostReadResponse> myFeedCreate(Pageable pageable, String userName) {
+        //        로그인 되어있는지 확인하고 아니면 에러던짐 -> userName인지 memberId인지 확인하여 수정
+        Member member = checkMember(userName);
+
+        // Entity
+        Page<Post> createPosts = postRepository.findByMember_Id(member.getId(), pageable);
+        // Dto
+        Page<PostReadResponse> createPostReadResponses = PostReadResponse.listOf(createPosts);
+
+        return createPostReadResponses;
+    }
+
+    // 신청한 포스트 리턴
+    public Page<PostReadResponse> myFeedApply(Pageable pageable, String userName) {
+        //        로그인 되어있는지 확인하고 아니면 에러던짐 -> userName인지 memberId인지 확인하여 수정
+        Member member = checkMember(userName);
+
+        // Entity
+        Set<Application> applications = applicationRepository.findByMember_Id(member.getId());
+        Set<Long> postIds = applications.stream().map(Application::getPost).map(Post::getId).collect(Collectors.toSet());
+        Page<Post> applyPosts = postRepository.findByIdIn(postIds, pageable);
+        // Dto
+        Page<PostReadResponse> applyPostReadResponses = PostReadResponse.listOf(applyPosts);
+
+        return applyPostReadResponses;
+    }
+
+    // 좋아요한 포스트 리턴
+    public Page<PostReadResponse> myFeedLike(Pageable pageable, String userName) {
+        //        로그인 되어있는지 확인하고 아니면 에러던짐 -> userName인지 memberId인지 확인하여 수정
+        Member member = checkMember(userName);
+
+        // Entity
+        Set<Likes> likes = likesRepository.findByMember_Id(member.getId());
+        Set<Long> postIds = likes.stream().map(Likes::getPost).map(Post::getId).collect(Collectors.toSet());
+        Page<Post> likePosts = postRepository.findByIdIn(postIds, pageable);
+        // Dto
+        Page<PostReadResponse> likePostReadResponses = PostReadResponse.listOf(likePosts);
+
+        return likePostReadResponses;
+    }
+
     // post에 파일 업로드
     @Transactional
     public UploadFileResponse UploadFile(MultipartFile multipartFile) throws IOException {
-    // 1. 유효성검사
+        // 1. 유효성검사
         // 1-1. 빈 파일인지 확인
         if (multipartFile.isEmpty()) {
             throw new ApplicationException(ErrorCode.FILE_NOT_EXISTS);

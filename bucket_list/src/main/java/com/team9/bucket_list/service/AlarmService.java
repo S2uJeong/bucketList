@@ -58,6 +58,7 @@ public class AlarmService {
     public int alarmRead(Long memberId, Long alarmId) {
         Alarm alarm = alarmRepository.findById(alarmId).orElseThrow(() -> new ApplicationException(ErrorCode.ALARM_NOT_FOUND));
         if(memberId != alarm.getMember().getId()) throw new ApplicationException(ErrorCode.INVALID_PERMISSION);
-        return alarmRepository.updateAlarm(alarmId);
+        alarmRepository.save(Alarm.updateRead(alarm,(byte)1));
+        return 1;
     }
 }
