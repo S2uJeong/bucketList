@@ -13,9 +13,9 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
 
     Page<Application> findAllByPost_IdAndStatusContains(Long postId, byte status, Pageable pageable);
 
-    @Modifying(clearAutomatically = true)
+    /*@Modifying(clearAutomatically = true)
     @Query("update Application a set a.status = :status where a.id = :id")
-    int updateApplicationStatus(Long postId, byte status);
+    int updateApplicationStatus(Long postId, byte status);*/
 
     int countByPost_IdAndStatusContains(Long postId, byte status);
 
