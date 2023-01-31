@@ -84,7 +84,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private void setAuthentication(HttpServletRequest request) {
         //문 열어주기, Role 바인딩
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken("Test", null, List.of(new SimpleGrantedAuthority(MemberRole.USER.name())));
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(memberId, null, List.of(new SimpleGrantedAuthority(MemberRole.USER.name())));
         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
