@@ -19,7 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Where(clause = "deleted_at is NULL")
-@SQLDelete(sql = "UPDATE post SET deleted_at = current_timestamp WHERE id = ?")
+@SQLDelete(sql = "UPDATE post SET deleted_at = current_timestamp WHERE post_id = ?")
 public class Post {
 
     @Id
@@ -49,7 +49,7 @@ public class Post {
     @OneToMany(mappedBy = "post")
     private List<Application> applicationList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Likes> likesList = new ArrayList<>();
 
     @OneToMany(mappedBy = "post" , cascade = CascadeType.ALL, orphanRemoval = true)

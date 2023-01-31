@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.Set;
+
 public interface ApplicationRepository extends JpaRepository<Application, Long> {
 
     Page<Application> findAllByPost_IdAndStatusContains(Long postId, byte status);
@@ -15,4 +17,6 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
     int updateApplicationStatus(Long postId, byte status);
 
     int countByPost_IdAndStatusContains(Long postId, byte status);
+
+    Set<Application> findByMember_Id(Long memberId);
 }
