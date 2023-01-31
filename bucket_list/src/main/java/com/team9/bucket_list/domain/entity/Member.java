@@ -71,7 +71,7 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<Application> applicationList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Likes> likesList = new ArrayList<>();
 
     @OneToMany(mappedBy = "member")

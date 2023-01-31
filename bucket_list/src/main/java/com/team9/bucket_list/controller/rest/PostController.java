@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -120,6 +121,30 @@ public class PostController {
         PostDeleteResponse postDeleteResponse = postService.delete(postId, memberId);
         log.info("Post 삭제 성공");
         return Response.success(postDeleteResponse);
+    }
+
+    //== 좋아요 개수 ==//
+    @GetMapping("/{postId}/likes")
+    public Response<Long> countLike(@PathVariable Long postId) {
+        Long cntLike = postService.countLike(postId);
+        return Response.success(cntLike);
+    }
+
+    //== 좋아요 누르기 ==//
+    @PostMapping("/{postId}/likes")
+    public Response<Integer> clickLike(@PathVariable("postId") long postId, Authentication authentication) {
+        int result = postService.clickLike(postId, authentication.getName());
+        return Response.success(result);
+    }
+
+    //== 마이피드 ==//
+    @GetMapping("/my")
+    public Response<MyFeedResponse> myFeed(@PageableDefault(size = 15, sort = {"id"}, direction = Sort.Direction.DESC)
+                                           Pageable pageable, Authentication authentication) {
+        Page<PostReadResponse> createPosts = postService.myFeedCreate(pageable, authentication.getName());
+        Page<PostReadResponse> applyPosts = postService.myFeedApply(pageable, authentication.getName());
+        Page<PostReadResponse> likePosts = postService.myFeedLike(pageable, authentication.getName());
+        return Response.success(new MyFeedResponse(createPosts, applyPosts, likePosts));
     }
 }
 
