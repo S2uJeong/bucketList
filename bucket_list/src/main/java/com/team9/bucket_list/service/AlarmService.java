@@ -1,36 +1,64 @@
 package com.team9.bucket_list.service;
 
-import com.team9.bucket_list.domain.dto.AlarmResponse;
+import com.team9.bucket_list.domain.dto.alarm.AlarmListResponse;
 import com.team9.bucket_list.domain.entity.Alarm;
 import com.team9.bucket_list.domain.entity.Member;
+import com.team9.bucket_list.domain.entity.Post;
 import com.team9.bucket_list.execption.ApplicationException;
 import com.team9.bucket_list.execption.ErrorCode;
 import com.team9.bucket_list.repository.AlarmRepository;
 import com.team9.bucket_list.repository.MemberRepository;
+import com.team9.bucket_list.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@EnableAsync
+@Transactional(readOnly = true)
+@Slf4j
 public class AlarmService {
 
-    private MemberRepository memberRepository;
-    private AlarmRepository alarmRepository;
+    private final AlarmRepository alarmRepository;
+    private final MemberRepository memberRepository;
+    private final PostRepository postRepository;
 
-    public Page<AlarmResponse> list(Long targetMemberId, String userName, Pageable pageable) {
+    public Page<AlarmListResponse> alarmList(Pageable pageable, Long memberId) {
+        return AlarmListResponse.toList(alarmRepository.findAllByMember_IdAndReadStatusContains(memberId,pageable, (byte)0));
+    }
 
-        Member member = memberRepository.findById(targetMemberId)
-                .orElseThrow(() -> new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED));
+    //sender : 댓글이나 좋아요, 신청서를 작성한 사람, 알람을 보내는 사람의 아이디
+    //postId : 해당 포스트
+    //카테고리 :  0:댓글, 1:좋아요, 2:참가자가 신청서 작성, 3:신청서 승낙, 4:기타
+    @Async
+    @Transactional
+    public void sendAlarm(Long senderId, Long postId, byte category) {
+        Member sender = memberRepository.findById(senderId).orElseThrow( () -> new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED));
 
-        if (!member.getUserName().equals(userName)) {
-            throw new ApplicationException(ErrorCode.INVALID_PERMISSION);
-        }
+        Post post = postRepository.findById(postId).orElseThrow( () -> new ApplicationException(ErrorCode.POST_NOT_FOUND));
 
-        Page<Alarm> alarms = alarmRepository.findByMemberId(member.getId(), pageable);
-        Page<AlarmResponse> alarmResponses = AlarmResponse.response(alarms);
+        Member member = memberRepository.findById(post.getMember().getId()).orElseThrow( () -> new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED));
 
-        return alarmResponses;
+        alarmRepository.save(Alarm.save(category,member,postId, sender.getUserName()));
+    }
+
+
+    public int alarmCount(Long memberId) {
+        return alarmRepository.countByMember_Id(memberId);
+    }
+
+    @Async
+    @Transactional
+    public int alarmRead(Long memberId, Long alarmId) {
+        Alarm alarm = alarmRepository.findById(alarmId).orElseThrow(() -> new ApplicationException(ErrorCode.ALARM_NOT_FOUND));
+        if(memberId != alarm.getMember().getId()) throw new ApplicationException(ErrorCode.INVALID_PERMISSION);
+        alarmRepository.save(Alarm.updateRead(alarm,(byte)1));
+        return 1;
     }
 }

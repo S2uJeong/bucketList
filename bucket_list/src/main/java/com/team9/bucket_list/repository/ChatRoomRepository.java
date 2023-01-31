@@ -11,5 +11,5 @@ import java.util.Set;
 
 public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
 
-    Page<ChatRoom> findAllByChatParticipantsIn(Set<ChatParticipant> chatParticipants, Pageable pageable);
+    Page<ChatRoom> findAllByChatParticipantsIn(List<ChatParticipant> chatParticipants, Pageable pageable);
 }

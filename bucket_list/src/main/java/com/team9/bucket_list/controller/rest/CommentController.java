@@ -1,18 +1,11 @@
 package com.team9.bucket_list.controller.rest;
 
-import com.team9.bucket_list.domain.Response;
-import com.team9.bucket_list.domain.dto.comment.Create.CommentCreateRequest;
-import com.team9.bucket_list.domain.dto.comment.Create.CommentCreateResponse;
-import com.team9.bucket_list.domain.dto.comment.Create.CommentListResponse;
+import com.team9.bucket_list.domain.dto.comment.CommentCreateRequest;
+import com.team9.bucket_list.domain.dto.comment.CommentCreateResponse;
+import com.team9.bucket_list.domain.dto.comment.CommentListResponse;
 import com.team9.bucket_list.service.CommentService;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
