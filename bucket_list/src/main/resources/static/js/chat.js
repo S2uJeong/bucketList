@@ -25,7 +25,9 @@ userName = "test1";
 let socket = new SockJS('/ws');
 stompClient = Stomp.over(socket);
 
-stompClient.connect({},onConnected,onError);
+const header = {Authorization: 'Bearer '+localStorage.getItem('accessToken')};
+
+stompClient.connect(header,onConnected,onError);
 
 function onConnected() {
     stompClient.subscribe('/sub/chat/room/'+roomId, onMessageReceived);
