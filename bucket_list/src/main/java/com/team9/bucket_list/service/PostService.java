@@ -36,6 +36,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final LikesRepository likesRepository;
     private final ApplicationRepository applicationRepository;
+    private final AlarmService alarmService;
     // map
     @Value("${google.map.key}")
     private Object API_KEY;// 실제 서버에서 구동할때는 무조건 환경변수에 숨겨야함 절대 노출되면 안됨!!!
@@ -179,6 +180,9 @@ public class PostService {
                     .post(post)
                     .build();
             likesRepository.save(likes);
+
+            // 좋아요 됐을 경우, 알람 DB에 추가
+            alarmService.sendAlarm(member.getId(), post.getId(), (byte) 1);
             return 1;
         }else {
             likesRepository.deleteByPost_IdAndMember_Id(postId, member.getId());
