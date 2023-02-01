@@ -69,3 +69,87 @@ a{
     color: #60a662;
     background-color: transparent;
 }
+
+.btn-outline-info-comment-button {
+    color: #1ab3e8;
+    border-color: #1ab3e8;
+}
+
+.btn-outline-info-comment-button:hover {
+    color: #FFF;
+    background-color: #1ab3e8;
+    border-color: #1ab3e8;
+}
+
+.btn-check:focus + .btn-outline-info-comment-button, .btn-outline-info-comment-button:focus {
+    box-shadow: 0 0 0 0.25rem rgba(26, 179, 232, 0.5);
+}
+
+.btn-check:checked + .btn-outline-info-comment-button,
+.btn-check:active + .btn-outline-info-comment-button, .btn-outline-info-comment-button:active, .btn-outline-info-comment-button.active, .btn-outline-info-comment-button.dropdown-toggle.show {
+    color: #FFF;
+    background-color: #1ab3e8;
+    border-color: #1ab3e8;
+}
+
+.btn-check:checked + .btn-outline-info-comment-button:focus,
+.btn-check:active + .btn-outline-info-comment-button:focus, .btn-outline-info-comment-button:active:focus, .btn-outline-info-comment-button.active:focus, .btn-outline-info-comment-button.dropdown-toggle.show:focus {
+    box-shadow: 0 0 0 0.25rem rgba(26, 179, 232, 0.5);
+}
+
+.btn-outline-info-comment-button:disabled, .btn-outline-info-comment-button.disabled {
+    color: #1ab3e8;
+    background-color: transparent;
+}
+
+.comment-box {
+    border: 1px solid #ebecef;
+    border-radius: 6px;
+    padding: 29px 29px 0px 29px;
+}
+
+.comment-list{
+    list-style:none;
+    padding-left:0px;
+}
+
+.comment-item{
+    border-top: 1px solid #ebecef;
+    padding: 12px 23px 10px 0px;
+}
+
+.comment-tool{
+    float: right;
+    font-weight: 600
+}
+
+.comment-username{
+    margin-bottom: 2px;
+    font-weight: 600;
+    color: black;
+    font-size: 13px;
+}
+
+.comment-content{
+    margin-bottom: 3px;
+    color: black;
+    font-size: 13px;
+}
+
+.comment-date{
+    margin-bottom: 0px;
+    font-size: 10px;
+    color: #979797;
+    display:inline-block;
+    margin-right: 8px;
+}
+
+.comment-reply{
+    border-top: 1px solid #ebecef;
+    padding: 12px 23px 10px 46px;
+}
+
+.comment-reply-form{
+    border-top: 1px solid #ebecef;
+    padding: 12px 23px 0px 46px;
+}

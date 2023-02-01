@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  
+
   <head>
 
     <!-- SITE TITTLE -->
@@ -10,36 +10,36 @@
     <title>BucketList</title>
 
     <!-- Plugins css Style -->
-    <link href='/assets/plugins/fontawesome-5.15.2/css/all.min.css' rel='stylesheet'>
-    <link href='/assets/plugins/fontawesome-5.15.2/css/fontawesome.min.css' rel='stylesheet'>
-    <link href="/assets/plugins/animate/animate.css" rel="stylesheet">
-    <link href="/assets/plugins/menuzord/css/menuzord.css" rel="stylesheet">
-    <link href="/assets/plugins/menuzord/css/menuzord-animations.css" rel="stylesheet">
-
-    
-    <link href='/assets/plugins/fancybox/jquery.fancybox.min.css' rel='stylesheet'>
-    
-    <link href='/assets/plugins/selectric/selectric.css' rel='stylesheet'>
-    <link href='/assets/plugins/daterangepicker/css/daterangepicker.css' rel='stylesheet'>
-    <link href='/assets/plugins/rateyo/jquery.rateyo.min.css' rel='stylesheet'>
-    
-    <link href='/assets/plugins/no-ui-slider/nouislider.min.css' rel='stylesheet'>
+    <link href='assets/plugins/fontawesome-5.15.2/css/all.min.css' rel='stylesheet'>
+    <link href='assets/plugins/fontawesome-5.15.2/css/fontawesome.min.css' rel='stylesheet'>
+    <link href="assets/plugins/animate/animate.css" rel="stylesheet">
+    <link href="assets/plugins/menuzord/css/menuzord.css" rel="stylesheet">
+    <link href="assets/plugins/menuzord/css/menuzord-animations.css" rel="stylesheet">
 
 
-    
-    
-    
+    <link href='assets/plugins/fancybox/jquery.fancybox.min.css' rel='stylesheet'>
+
+
+
+    <link href='assets/plugins/rateyo/jquery.rateyo.min.css' rel='stylesheet'>
+
+
+
+
+    <link href='assets/plugins/owl-carousel/owl.carousel.min.css' rel='stylesheet' media='screen'>
+    <link href='assets/plugins/owl-carousel/owl.theme.default.min.css' rel='stylesheet' media='screen'>
+
 
     <!-- GOOGLE FONT -->
     <link href='https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700' rel='stylesheet'>
 
     <!-- CUSTOM CSS -->
-    <link href="/assets/css/star.css" id="option_style" rel="stylesheet">
-    <link href="/assets/css/custom.css" id="custom_style" rel="stylesheet">
+    <link href="assets/css/star.css" id="option_style" rel="stylesheet">
+    <link href="assets/css/custom.css" id="custom_style" rel="stylesheet">
 
 
     <!-- FAVICON -->
-    <link rel="shortcut icon" type="image/png" href="/assets/img/favicon.png"/>
+    <link rel="shortcut icon" type="image/png" href="assets/img/favicon.png"/>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -48,7 +48,7 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-  </head>     
+  </head>
 
 <body id="body" class="up-scroll">
 
@@ -139,15 +139,20 @@
 ———	PAGE TITLE
 ===================================== -->
 <section class="page-title">
-  <div class="page-title-img bg-img bg-overlay-darken" style="background-image: url(/assets/img/pages/page-title-bg6.jpg);">
+  <div class="page-title-img bg-img bg-overlay-darken" style="background-image: url(/assets/img/pages/page-title-bg13.jpg);">
     <div class="container">
       <div class="row align-items-center justify-content-center" style="height: 200px;">
         <div class="col-lg-6">
           <div class="page-title-content">
             <div class="title-border">
-              <h2 class="text-uppercase text-white font-weight-bold">버킷리스트 작성</h2>
+              <h2 class="text-uppercase text-white font-weight-bold">모집중</h2>
             </div>
-            <p class="text-white mb-0"></p>
+            <p class="text-white mb-0">현재 인원 : (3 / 5)</p>
+            <div class="right_area pt-2" style="display: flex; justify-content: center">
+              <a href="javascript:void(0);" class="icon heart">
+                <img src="/assets/img/like/blank-heart.png" alt="찜하기">
+              </a>
+            </div>
           </div>
         </div>
       </div>
@@ -157,166 +162,233 @@
 
 
 <!-- ====================================
-———	BOOKING SECTION
+———	PACKAGES SECTION
 ===================================== -->
-<section class="py-8 py-md-8">
+<section class="py-8">
   <div class="container">
-    <div class="mb-0">
-      <ul class="nav nav-tabs nav-justified blog-tabs" id="myTab" role="tablist">
-        <li class="nav-item">
-          <a class="nav-link active" id="recent-tab" data-bs-toggle="tab" href="#koreaBox" role="tab" aria-controls="recent"
-             aria-selected="true">Korea</a>
-        </li>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="mt-n7" style="float: right">
+          <button type="button" class="btn btn-outline-dark mb-2" style="padding: 8px 18px">수정</button>
+          <button type="button" class="btn btn-outline-dark mb-2" style="padding: 8px 18px">삭제</button>
+        </div>
+        <div>
+          <h2 class="text-uppercase mb-2">버킷리스트명</h2>
+          <h4 class="text-uppercase mb-5">주최자 (+ 점수는 작게 붙이기)</h4>
 
-        <li class="nav-item">
-          <a class="nav-link" id="popular-tab" data-bs-toggle="tab" href="#worldBox" role="tab" aria-controls="popular"
-             aria-selected="false">World</a>
-        </li>
-      </ul>
-
-      <div class="tab-content bg-smoke border border-light-gray border-top-0 rounded-bottom px-3 py-5" id="myTabContent">
-        <div id="koreaBox" class="tab-pane fade show active" role="tabpanel" aria-labelledby="recent-tab">
-          <form action="" method="post" target="_blank">
+          <div class="mb-5">
             <div class="row">
-              <div class="form-group mb-5">
-                <label>제목</label>
-                <input type="text" name="post" class="form-control border-0" placeholder="title">
-              </div>
+              <div class="col-md-12">
+                <ul class="list-unstyled mb-0">
+                  <li class="media">
+                    <div class="text-gray-color me-2">
+                      <i class="far fa-dot-circle" aria-hidden="true"></i>
+                    </div>
+                    <div class="media-body">
+                      <p>모집 기간 : ~ 2023.02.01</p>
+                    </div>
+                  </li>
 
-              <div class="col-lg-4">
-                <div class="form-group">
-                  <label>모집종료일</label>
-                  <input type="text" name="post" class="form-control border-0" placeholder="2023.01.25">
-                </div>
-              </div>
+                  <li class="media">
+                    <div class="text-gray-color me-2">
+                      <i class="far fa-dot-circle" aria-hidden="true"></i>
+                    </div>
+                    <div class="media-body">
+                      <p>일정 : 2023.01.16 ~ 2023.02.20</p>
+                    </div>
+                  </li>
 
-              <div class="col-lg-4">
-                <div class="form-group">
-                  <label>버킷 시작일</label>
-                  <input type="text" name="post" class="form-control border-0" placeholder="2023.02.01">
-                </div>
-              </div>
+                  <li class="media">
+                    <div class="text-gray-color me-2">
+                      <i class="far fa-dot-circle" aria-hidden="true"></i>
+                    </div>
+                    <div class="media-body">
+                      <p>비용 : 1,500,000</p>
+                    </div>
+                  </li>
 
-              <div class="col-lg-4">
-                <div class="form-group">
-                  <label>버킷 종료일</label>
-                  <input type="text" name="post" class="form-control border-0" placeholder="2023.02.08">
-                </div>
-              </div>
-
-              <div class="col-lg-4">
-                <div class="form-group">
-                  <label>카테고리 드롭박스</label>
-                  <input type="text" name="post" class="form-control border-0">
-                </div>
-              </div>
-
-              <div class="col-lg-4">
-                <div class="form-group">
-                  <label>모집인원</label>
-                  <input type="number" class="form-control border-0" placeholder="3">
-                </div>
-              </div>
-
-              <div class="col-lg-4">
-                <div class="form-group">
-                  <label>비용</label>
-                  <input type="text" name="post" class="form-control border-0" placeholder="3000000">
-                </div>
-              </div>
-
-              <div class="form-group mb-5">
-                <label>주소</label>
-                <input type="text" name="post" id="address_kakao" class="form-control border-0">
+                  <li class="media">
+                    <div class="text-gray-color me-2">
+                      <i class="far fa-dot-circle" aria-hidden="true"></i>
+                    </div>
+                    <div class="media-body">
+                      <p>장소 : 주소</p>
+                    </div>
+                  </li>
+                </ul>
               </div>
             </div>
-
-            <div class="form-group mb-5">
-              <label>내용</label>
-              <textarea class="form-control border-0" rows="7"></textarea>
-            </div>
-
-            <div class="text-center text-md-start text-lg-end">
-              <button type="button" onclick="location.href='booking-step-2.html';" class="btn btn-primary text-uppercase">
-                Next
-              </button>
-            </div>
-          </form>
+          </div>
         </div>
 
-        <div id="worldBox" class="tab-pane fade show" role="tabpanel" aria-labelledby="recent-tab">
-          <form action="" method="post" target="_blank">
-            <div class="row">
-              <div class="form-group mb-5">
-                <label>제목</label>
-                <input type="text" name="post" class="form-control border-0" placeholder="title">
+        <div class="mb-6">
+          <div class="row">
+            <div id="map" style="width:50%;"></div>
+            <div id="package-slider" class="owl-carousel owl-theme package-slider col-md-6">
+              <div class="item">
+                <img class="lazyestload" data-src="assets/img/packages/package-slider-03.jpg" src="assets/img/packages/package-slider-03.jpg" alt="image">
               </div>
 
-              <div class="col-lg-4">
-                <div class="form-group">
-                  <label>모집종료일</label>
-                  <input type="text" name="post" class="form-control border-0" placeholder="2023.01.25">
-                </div>
+              <div class="item">
+                <img class="lazyestload" data-src="assets/img/packages/package-slider-04.jpg" src="assets/img/packages/package-slider-04.jpg" alt="image">
               </div>
 
-              <div class="col-lg-4">
-                <div class="form-group">
-                  <label>버킷 시작일</label>
-                  <input type="text" name="post" class="form-control border-0" placeholder="2023.02.01">
-                </div>
-              </div>
-
-              <div class="col-lg-4">
-                <div class="form-group">
-                  <label>버킷 종료일</label>
-                  <input type="text" name="post" class="form-control border-0" placeholder="2023.02.08">
-                </div>
-              </div>
-
-              <div class="col-lg-4">
-                <div class="form-group">
-                  <label>카테고리 드롭박스</label>
-                  <input type="text" name="post" class="form-control border-0">
-                </div>
-              </div>
-
-              <div class="col-lg-4">
-                <div class="form-group">
-                  <label>모집인원</label>
-                  <input type="number" class="form-control border-0" placeholder="3">
-                </div>
-              </div>
-
-              <div class="col-lg-4">
-                <div class="form-group">
-                  <label>비용</label>
-                  <input type="text" name="post" class="form-control border-0" placeholder="3000000">
-                </div>
-              </div>
-
-              <div class="form-group mb-5">
-                <label>영문 주소</label>
-                <input type="text" name="post" id="address" class="form-control border-0" placeholder="5 Avenue Anatole France, 75007 Paris, France">
+              <div class="item">
+                <img class="lazyestload" data-src="assets/img/packages/package-slider-05.jpg" src="assets/img/packages/package-slider-05.jpg" alt="image">
               </div>
             </div>
+          </div>
 
-            <div class="form-group mb-5">
-              <label>내용</label>
-              <textarea class="form-control border-0" rows="7"></textarea>
+          <p class="my-6">설명 내용</p>
+        </div>
+
+        <div class="mb-5" style="display: flex; justify-content: center">
+          <button type="button" class="btn btn-primary mb-2">참가하기</button>
+        </div>
+
+        <div class="comment-box">
+          <form class="">
+            <h3 class="text-uppercase mb-6">댓글 (댓글 수?)</h3>
+
+            <div class="form-group mb-2">
+              <textarea class="form-control border-0 bg-smoke" placeholder="Comment" rows="3"></textarea>
             </div>
 
-            <div class="text-center text-md-start text-lg-end">
-              <button type="button" onclick="location.href='booking-step-2.html';" class="btn btn-primary text-uppercase">
-                Next
+            <div style="display: flex; justify-content: right">
+              <button type="button" class="btn btn-outline-info-comment-button mb-2" style="padding: 8px 18px">
+                등록
               </button>
             </div>
           </form>
+
+          <ul class="comment-list">
+            <li class="comment-item" id="comment1">
+              <a class="me-n4 comment-tool" id="navbarDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">. . .</a>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="#">수정</a></li>
+                <li><a class="dropdown-item" href="#">삭제</a></li>
+              </ul>
+              <div>
+                <div>
+                  <p class="comment-username">닉네임</p>
+                </div>
+                <div>
+                  <p class="comment-content">이름 : 댓글</p>
+                </div>
+                <div>
+                  <p class="comment-date">작성일자</p>
+                  <a class="comment-date" onclick="showCommentReply('comment1-1')">댓글쓰기</a>
+                  <form class="comment-reply-form" id="comment1-1" style="display: none;">
+                    <div class="form-group mb-2">
+                      <textarea class="form-control border-0 bg-smoke" placeholder="Comment" rows="2"></textarea>
+                    </div>
+
+                    <div style="display: flex; justify-content: right">
+                      <button type="button" class="btn btn-outline-info-comment-button mb-2" style="padding: 8px 18px">
+                        등록
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </li>
+            <li class="comment-reply" id="comment2">
+              <a class="me-n4 comment-tool" id="navbarDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">. . .</a>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="#">수정</a></li>
+                <li><a class="dropdown-item" href="#">삭제</a></li>
+              </ul>
+              <div>
+                <div>
+                  <p class="comment-username">닉네임</p>
+                </div>
+                <div>
+                  <p class="comment-content">이름 : 댓글</p>
+                </div>
+                <div>
+                  <p class="comment-date">작성일자</p>
+                  <a class="comment-date" onclick="showCommentReply('comment2-1')">댓글쓰기</a>
+                  <form class="comment-reply-form" id="comment2-1" style="display: none;">
+                    <div class="form-group mb-2">
+                      <textarea class="form-control border-0 bg-smoke" placeholder="Comment" rows="2"></textarea>
+                    </div>
+
+                    <div style="display: flex; justify-content: right">
+                      <button type="button" class="btn btn-outline-info-comment-button mb-2" style="padding: 8px 18px">
+                        등록
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </li>
+            <li class="comment-item" id="comment3">
+              <a class="me-n4 comment-tool" id="navbarDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">. . .</a>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="#">수정</a></li>
+                <li><a class="dropdown-item" href="#">삭제</a></li>
+              </ul>
+              <div>
+                <div>
+                  <p class="comment-username">닉네임</p>
+                </div>
+                <div>
+                  <p class="comment-content">이름 : 댓글</p>
+                </div>
+                <div>
+                  <p class="comment-date">작성일자</p>
+                  <a class="comment-date" onclick="showCommentReply('comment3-1')">댓글쓰기</a>
+                  <form class="comment-reply-form" id="comment3-1" style="display: none;">
+                    <div class="form-group mb-2">
+                      <textarea class="form-control border-0 bg-smoke" placeholder="Comment" rows="2"></textarea>
+                    </div>
+
+                    <div style="display: flex; justify-content: right">
+                      <button type="button" class="btn btn-outline-info-comment-button mb-2" style="padding: 8px 18px">
+                        등록
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </li>
+            <li class="comment-item" id="comment4">
+              <a class="me-n4 comment-tool" id="navbarDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">. . .</a>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="#">수정</a></li>
+                <li><a class="dropdown-item" href="#">삭제</a></li>
+              </ul>
+              <div>
+                <div>
+                  <p class="comment-username">닉네임</p>
+                </div>
+                <div>
+                  <p class="comment-content">이름 : 댓글</p>
+                </div>
+                <div>
+                  <p class="comment-date">작성일자</p>
+                  <a class="comment-date" onclick="showCommentReply('comment4-1')">댓글쓰기</a>
+                  <form class="comment-reply-form" id="comment4-1" style="display: none;">
+                    <div class="form-group mb-2">
+                      <textarea class="form-control border-0 bg-smoke" placeholder="Comment" rows="2"></textarea>
+                    </div>
+
+                    <div style="display: flex; justify-content: right">
+                      <button type="button" class="btn btn-outline-info-comment-button mb-2" style="padding: 8px 18px">
+                        등록
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </li>
+          </ul>
         </div>
       </div>
     </div>
-
   </div>
 </section>
+
 
   </div><!-- element wrapper ends -->
 
@@ -329,7 +401,7 @@
           <div class="row">
             <div class="col-md-6 col-lg-3 mb-7 mb-lg-0">
               <a class="d-inline-block" href="index.html">
-                <img class="w-100 mb-6 lazyestload" data-src="/assets/img/logo-color-sm.png" src="/assets/img/logo-color-sm.png" alt="img">
+                <img class="w-100 mb-6 lazyestload" data-src="assets/img/logo-color-sm.png" src="assets/img/logo-color-sm.png" alt="img">
               </a>
               <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute</p>
             </div>
@@ -379,9 +451,9 @@
                 <div class="col-4 mb-3">
                   <div class="media media-hover">
                     <div class="content w-100">
-                      <img class="media-img lazyestload" data-src="/assets/img/home/gallery/thumb-gallery-1.jpg"
-                        src="/assets/img/home/gallery/thumb-gallery-1.jpg" alt="gallery-img">
-                      <a class="media-img-overlay" data-fancybox="footer-gallery" href="/assets/img/home/gallery/gallery-1.jpg"></a>
+                      <img class="media-img lazyestload" data-src="assets/img/home/gallery/thumb-gallery-1.jpg"
+                        src="assets/img/home/gallery/thumb-gallery-1.jpg" alt="gallery-img">
+                      <a class="media-img-overlay" data-fancybox="footer-gallery" href="assets/img/home/gallery/gallery-1.jpg"></a>
                     </div>
                   </div>
                 </div>
@@ -389,9 +461,9 @@
                 <div class="col-4 mb-3">
                   <div class="media media-hover">
                     <div class="content w-100">
-                      <img class="media-img lazyestload" data-src="/assets/img/home/gallery/thumb-gallery-2.jpg"
-                        src="/assets/img/home/gallery/thumb-gallery-2.jpg" alt="gallery-img">
-                      <a class="media-img-overlay" data-fancybox="footer-gallery" href="/assets/img/home/gallery/gallery-2.jpg"></a>
+                      <img class="media-img lazyestload" data-src="assets/img/home/gallery/thumb-gallery-2.jpg"
+                        src="assets/img/home/gallery/thumb-gallery-2.jpg" alt="gallery-img">
+                      <a class="media-img-overlay" data-fancybox="footer-gallery" href="assets/img/home/gallery/gallery-2.jpg"></a>
                     </div>
                   </div>
                 </div>
@@ -399,9 +471,9 @@
                 <div class="col-4 mb-3">
                   <div class="media media-hover">
                     <div class="content w-100">
-                      <img class="media-img lazyestload" data-src="/assets/img/home/gallery/thumb-gallery-3.jpg"
-                        src="/assets/img/home/gallery/thumb-gallery-3.jpg" alt="gallery-img">
-                      <a class="media-img-overlay" data-fancybox="footer-gallery" href="/assets/img/home/gallery/gallery-3.jpg"></a>
+                      <img class="media-img lazyestload" data-src="assets/img/home/gallery/thumb-gallery-3.jpg"
+                        src="assets/img/home/gallery/thumb-gallery-3.jpg" alt="gallery-img">
+                      <a class="media-img-overlay" data-fancybox="footer-gallery" href="assets/img/home/gallery/gallery-3.jpg"></a>
                     </div>
                   </div>
                 </div>
@@ -409,9 +481,9 @@
                 <div class="col-4">
                   <div class="media media-hover">
                     <div class="content w-100">
-                      <img class="media-img lazyestload" data-src="/assets/img/home/gallery/thumb-gallery-4.jpg"
-                        src="/assets/img/home/gallery/thumb-gallery-4.jpg" alt="gallery-img">
-                      <a class="media-img-overlay" data-fancybox="footer-gallery" href="/assets/img/home/gallery/gallery-4.jpg"></a>
+                      <img class="media-img lazyestload" data-src="assets/img/home/gallery/thumb-gallery-4.jpg"
+                        src="assets/img/home/gallery/thumb-gallery-4.jpg" alt="gallery-img">
+                      <a class="media-img-overlay" data-fancybox="footer-gallery" href="assets/img/home/gallery/gallery-4.jpg"></a>
                     </div>
                   </div>
                 </div>
@@ -419,9 +491,9 @@
                 <div class="col-4">
                   <div class="media media-hover">
                     <div class="content w-100">
-                      <img class="media-img lazyestload" data-src="/assets/img/home/gallery/thumb-gallery-5.jpg"
-                        src="/assets/img/home/gallery/thumb-gallery-5.jpg" alt="gallery-img">
-                      <a class="media-img-overlay" data-fancybox="footer-gallery" href="/assets/img/home/gallery/gallery-5.jpg"></a>
+                      <img class="media-img lazyestload" data-src="assets/img/home/gallery/thumb-gallery-5.jpg"
+                        src="assets/img/home/gallery/thumb-gallery-5.jpg" alt="gallery-img">
+                      <a class="media-img-overlay" data-fancybox="footer-gallery" href="assets/img/home/gallery/gallery-5.jpg"></a>
                     </div>
                   </div>
                 </div>
@@ -429,9 +501,9 @@
                 <div class="col-4">
                   <div class="media media-hover">
                     <div class="content w-100">
-                      <img class="media-img lazyestload" data-src="/assets/img/home/gallery/thumb-gallery-6.jpg"
-                        src="/assets/img/home/gallery/thumb-gallery-6.jpg" alt="gallery-img">
-                      <a class="media-img-overlay" data-fancybox="footer-gallery" href="/assets/img/home/gallery/gallery-6.jpg"></a>
+                      <img class="media-img lazyestload" data-src="assets/img/home/gallery/thumb-gallery-6.jpg"
+                        src="assets/img/home/gallery/thumb-gallery-6.jpg" alt="gallery-img">
+                      <a class="media-img-overlay" data-fancybox="footer-gallery" href="assets/img/home/gallery/gallery-6.jpg"></a>
                     </div>
                   </div>
                 </div>
@@ -663,29 +735,43 @@
     </div>
 
     <!-- Javascript -->
-    <script src="/assets/plugins/jquery/jquery-3.4.1.min.js"></script>
-    <script src="/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="/assets/plugins/menuzord/js/menuzord.js"></script>
-    
-    
-    
-    <script src='/assets/plugins/fancybox/jquery.fancybox.min.js'></script>
-    
-    <script src='/assets/plugins/selectric/jquery.selectric.min.js'></script>
-    <script src='/assets/plugins/daterangepicker/js/moment.min.js'></script>
-    <script src='/assets/plugins/daterangepicker/js/daterangepicker.min.js'></script>
-    <script src='/assets/plugins/rateyo/jquery.rateyo.min.js'></script>
-    <script src="/assets/plugins/lazyestload/lazyestload.js"></script>
-    
-    
-    
-    <script src='/assets/plugins/no-ui-slider/nouislider.min.js'></script>
-    
-    <script src="/assets/plugins/smoothscroll/SmoothScroll.js"></script>
-    
-    <script src="/assets/js/star.js"></script>
+    <script src="assets/plugins/jquery/jquery-3.4.1.min.js"></script>
+    <script src="assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/plugins/menuzord/js/menuzord.js"></script>
 
-    <script src="/assets/js/custom.js"></script>
+
+
+    <script src='assets/plugins/fancybox/jquery.fancybox.min.js'></script>
+
+
+  <script>
+    function showCommentReply(commentReplyId) {
+      let search = document.getElementById(commentReplyId);
+      let check = search.style.display;
+      if(check == "none") {
+        search.style.display="block";
+      } else {
+        search.style.display="none";
+      }
+    }
+  </script>
+
+
+    <script src='assets/plugins/rateyo/jquery.rateyo.min.js'></script>
+    <script src="assets/plugins/lazyestload/lazyestload.js"></script>
+
+
+
+
+
+    <script src='assets/plugins/owl-carousel/owl.carousel.min.js'></script>
+
+
+    <script src="assets/plugins/smoothscroll/SmoothScroll.js"></script>
+    <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyDU79W1lu5f6PIiuMqNfT1C6M0e_lq1ECY'></script>
+    <script src="assets/js/star.js"></script>
+
+    <script src="assets/js/custom.js"></script>
   </body>
 </html>
 
