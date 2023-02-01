@@ -1,6 +1,7 @@
 package com.team9.bucket_list.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.team9.bucket_list.domain.dto.member.MemberCheckUserNameRequest;
 import com.team9.bucket_list.domain.dto.member.MemberDto;
 import com.team9.bucket_list.domain.dto.member.MemberJoinRequest;
 import com.team9.bucket_list.domain.dto.member.MemberLoginRequest;
@@ -20,6 +21,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -30,9 +33,28 @@ public class MemberService {
     private final BCryptPasswordEncoder encoder;
     private final JwtUtil jwtUtil;
 
+    public Boolean checkUserName(MemberCheckUserNameRequest request) {
+        String userName = request.getUserName();
+        Optional<Member> findMember = memberRepository.findByUserName(userName);
+        if (findMember.isPresent()) {
+            throw new ApplicationException(ErrorCode.DUPLICATED_USERNAME);
+        } else {
+            return true;
+        }
+    }
+
+    public Boolean checkEmail(String email) {
+        Optional<Member> findMember = memberRepository.findByEmail(email);
+        if (findMember.isPresent()) {
+            throw new ApplicationException(ErrorCode.DUPLICATED_EMAIL);
+        } else {
+            return true;
+        }
+    }
+
     public MemberDto findByEmail(String email) {
         return memberRepository.findByEmail(email).orElseThrow(() -> {
-            throw new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED);
+            throw new ApplicationException(ErrorCode.DUPLICATED_EMAIL);
         }).toDto();
     }
 
