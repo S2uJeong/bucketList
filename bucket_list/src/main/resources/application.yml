@@ -65,6 +65,11 @@ cloud:
     stack:
       auto: false
 
+servlet:
+  multipart:
+    max-file-size: 50MB
+    max-request-size: 50MB
+
 # ProfileService에서 사용 할 image file path
 file:
   path: C:/User/c/git/bucketlist/image/
