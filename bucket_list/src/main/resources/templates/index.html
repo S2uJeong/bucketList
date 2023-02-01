@@ -579,33 +579,51 @@
           </div>
 
           <div class="modal-body">
-            <form class="" action="index.html" method="post">
+            <form onsubmit="join(); return false;">
               <div class="mb-3">
                 <div class="mb-3" style="display: flex">
-                  <input type="id" class="form-control bg-smoke" required="" placeholder="아이디">
-                  <button class="btn btn-facebook btn-block text-uppercase text-white" type="submit" style="width: 25%; padding: 0">중복확인</button>
+                  <input type="text" id="form_userName" class="form-control bg-smoke" required="" placeholder="닉네임">
+                  <button class="btn btn-facebook btn-block text-uppercase text-white" onclick="checkUserName()" style="width: 25%; padding: 0">중복확인</button>
                 </div>
+                  <p id="able_userName" style="display: none">사용 가능한 닉네임 입니다.</p>
+                  <p id="error_userName" style="display: none">중복되는 닉네임 입니다.</p>
               </div>
 
               <div class="mb-3">
-                <input type="password" class="form-control bg-smoke" required="" placeholder="비밀번호">
-                <input type="password" class="form-control bg-smoke" required="" placeholder="비밀번호 확인">
+                <input type="password" id="pw" class="form-control bg-smoke" required="" placeholder="비밀번호">
+                <input type="password" id="check_pw" onchange="checkPasswordCorrect()" class="form-control bg-smoke" required="" placeholder="비밀번호 확인">
+                <p id="error_passwordCorrect" style="display: none">일치하지 않습니다.</p>
               </div>
 
-              <div class="mb-3" style="display: flex">
-                <input style="flex: 1;" type="year" class="form-control bg-smoke" required="" placeholder="년(4자)">
-                <input style="flex: 1;" type="month1" class="form-control bg-smoke" required="" placeholder="월">
-                <input style="flex: 1;" type="day" class="form-control bg-smoke" required="" placeholder="일">
+              <div class="mb-3">
+                <select id="form_gender" class="form-control bg-smoke">
+                  <option value="">성별</option>
+                  <option value="MAN">남자</option>
+                  <option value="WOMAN">여자</option>
+                </select>
+                <p id="error_gender" style="display: none">성별을 선택 해주세요.</p>
               </div>
+
+              <div class="mb-3">
+                <input type="number" id="age" class="form-control bg-smoke" required="" placeholder="나이">
+              </div>
+<!--              <div class="mb-3" style="display: flex">-->
+<!--                <input style="flex: 1;" id="birth_year" type="year" class="form-control bg-smoke" required="" placeholder="년(4자)">-->
+<!--                <input style="flex: 1;" id="birth_month" type="month1" class="form-control bg-smoke" required="" placeholder="월">-->
+<!--                <input style="flex: 1;" id="birth_day" type="day" class="form-control bg-smoke" required="" placeholder="일">-->
+<!--              </div>-->
 
               <div class="mb-3">
                 <div style="display: flex">
-                  <input style="flex: auto;" type="email" class="form-control bg-smoke" required="" placeholder="이메일">
-                  <button class="btn btn-facebook btn-block text-uppercase text-white" type="submit" style="width: 25%; padding: 0">인증요청</button>
+                  <input style="flex: auto;" type="email" class="form-control bg-smoke" required="" placeholder="이메일" id="form_email">
+                  <button class="btn btn-facebook btn-block text-uppercase text-white" onclick="checkEmail()" style="width: 25%; padding: 0">인증요청</button>
                 </div>
-                <input type="emailCheck" class="form-control bg-smoke" required="" placeholder="인증번호">
+                <p id="error_email" style="display: none">중복된 이메일 입니다.</p>
+                <input type="emailCheck" id="code" class="form-control bg-smoke" required="" placeholder="인증번호">
+                <p id="error_code" style="display: none">인증 코드가 불일치 합니다.</p>
+
               </div>
-    
+
               <div class="mb-3 form-check mb-0">
                 <input type="checkbox" class="form-check-input" id="exampleCheck4">
                 <label class="form-check-label text-gray-color mb-3" for="exampleCheck4">
@@ -632,13 +650,13 @@
           </div>
 
           <div class="modal-body">
-            <form class="" action="index.html" method="post">
+            <form class="" onsubmit="return false;">
               <div class="mb-3">
-                <input type="email" class="form-control bg-smoke" required="" placeholder="이메일">
+                <input type="email" id="email" class="form-control bg-smoke" required="" placeholder="이메일">
               </div>
 
               <div class="mb-3">
-                <input type="password" class="form-control bg-smoke" required="" placeholder="비밀번호">
+                <input type="password" id="password" class="form-control bg-smoke" required="" placeholder="비밀번호">
               </div>
 
 <!--              <div class="mb-3 form-check mb-0">-->
@@ -650,7 +668,7 @@
 <!--             </div>-->
 
              <div class="d-grid">
-              <button type="submit" class="btn btn-primary text-uppercase">Login</button>
+              <button class="btn btn-primary text-uppercase" onclick="login(); return false;">Login</button>
              </div>
 
               <div class="text-uppercase text-center py-3">Or</div>
@@ -742,6 +760,7 @@
     <script src="/assets/js/custom.js"></script>
 
   </body>
+  <script src="/js/axios.js"></script>
 
   <script>
     window.onload = function () {
@@ -761,18 +780,103 @@
 
     };
   </script>
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
   <script>
-    function click() {
-      console.log('click');
-      axios.get('/click')
-              .then((res) => {
-                console.log(res.data);
-              })
-              .catch((err) => {
-                console.log(err);
-              })
+    let code;
+    const config = {"Content-Type" : `application/json` };
+
+    //닉네임 중복 검사
+    async function checkUserName() {
+      let userName = document.getElementById('form_userName').value;
+
+      try {
+        const response = await axios.post(
+                '/join/checkUserName',
+                {'userName' : userName} ,
+                config);
+        if (response.status === 200) {
+          document.getElementById('error_userName').style.display = 'none';
+          document.getElementById('able_userName').style.display = 'block';
+          document.getElementById('form_userName').readOnly = true;
+        }
+      } catch (error) {
+        document.getElementById('error_userName').style.display = 'block';
+        document.getElementById('able_userName').style.display = 'none';
+      }
     }
+
+    //이메일 인증
+    async function checkEmail() {
+      let email = document.getElementById('form_email').value;
+
+      try {
+        const response = await axios.post(
+                '/join/email',
+                {'email' : email} ,
+                config);
+
+        code = response.data.result;
+        document.getElementById('error_email').style.display = 'none';
+
+      } catch (error) {
+        console.log(error);
+        document.getElementById('error_email').style.display = 'block';
+
+      }
+    }
+
+    //비밀번호-비밀번호확인 일치여부
+    function checkPasswordCorrect() {
+      let password_correct = document.getElementById('check_pw').value;
+      let password = document.getElementById('pw').value;
+
+      if (password_correct !== password) {
+        document.getElementById('error_passwordCorrect').style.display = 'block';
+      } else {
+        document.getElementById('error_passwordCorrect').style.display = 'none';
+      }
+    }
+
+    //회원가입 요청
+    async function join() {
+      let check_userName = document.getElementById("form_userName").readOnly
+      let userName = document.getElementById("form_userName").value;
+      let pw = document.getElementById("pw").value;
+      let check_pw = document.getElementById("check_pw").value;
+      let gender = document.getElementById("form_gender").value;
+      let age = document.getElementById("age").value;
+      let email = document.getElementById("form_email").value;
+      let input_code = document.getElementById("code").value;
+
+      let data = {
+        'userName' : userName,
+        'email' : email,
+        'password' : pw,
+        'passwordCorrect' : check_pw,
+        'age' : age,
+        'gender' : gender
+      }
+
+      if (code !== input_code) {
+        document.getElementById('error_code').style.display = 'block';
+      }
+
+      if (gender.length === 0) {
+        document.getElementById('error_gender').style.display = 'block';
+      }
+
+      if(check_userName && (code === input_code) && gender.length>0) {
+        document.getElementById('error_code').style.display = 'none';
+        try {
+          const res = await axios.post('/join', data, config);
+
+          alert('회원가입 완료')
+          window.location.href = '/';
+        } catch (e) {
+        }
+      }
+    }
+
     function logout() {
       localStorage.clear();
       window.location.href = '/';
@@ -782,8 +886,8 @@
       //           window.location.href = '/';
       //         })
     }
-    function login() {
 
+    function login() {
       let email = document.getElementById('email').value;
       let pw = document.getElementById('password').value;
 
