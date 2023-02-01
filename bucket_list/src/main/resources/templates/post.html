@@ -24,8 +24,8 @@
     <link href='/assets/plugins/rateyo/jquery.rateyo.min.css' rel='stylesheet'>
     
     <link href='/assets/plugins/no-ui-slider/nouislider.min.css' rel='stylesheet'>
-
-
+    
+    
     
     
     
@@ -145,9 +145,8 @@
         <div class="col-lg-6">
           <div class="page-title-content">
             <div class="title-border">
-              <h2 class="text-uppercase text-white font-weight-bold">버킷리스트 작성</h2>
+              <h2 class="text-uppercase text-white font-weight-bold">버킷리스트</h2>
             </div>
-            <p class="text-white mb-0"></p>
           </div>
         </div>
       </div>
@@ -157,166 +156,287 @@
 
 
 <!-- ====================================
-———	BOOKING SECTION
+———	TOUR PACKAGES SECTION
 ===================================== -->
-<section class="py-8 py-md-8">
+<section class="bg-smoke py-10">
   <div class="container">
-    <div class="mb-0">
-      <ul class="nav nav-tabs nav-justified blog-tabs" id="myTab" role="tablist">
-        <li class="nav-item">
-          <a class="nav-link active" id="recent-tab" data-bs-toggle="tab" href="#koreaBox" role="tab" aria-controls="recent"
-             aria-selected="true">Korea</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" id="popular-tab" data-bs-toggle="tab" href="#worldBox" role="tab" aria-controls="popular"
-             aria-selected="false">World</a>
-        </li>
-      </ul>
-
-      <div class="tab-content bg-smoke border border-light-gray border-top-0 rounded-bottom px-3 py-5" id="myTabContent">
-        <div id="koreaBox" class="tab-pane fade show active" role="tabpanel" aria-labelledby="recent-tab">
-          <form action="" method="post" target="_blank">
-            <div class="row">
-              <div class="form-group mb-5">
-                <label>제목</label>
-                <input type="text" name="post" class="form-control border-0" placeholder="title">
-              </div>
-
-              <div class="col-lg-4">
-                <div class="form-group">
-                  <label>모집종료일</label>
-                  <input type="text" name="post" class="form-control border-0" placeholder="2023.01.25">
+    <div class="row">
+      <div class="col-md-12 col-lg-3">
+        <div class="row">
+          <div class="col-md-6 col-lg-12">
+            <div class="mb-6 bg-white p-3 border-top border-top-5 border-primary rounded">
+              <form class="" action="index.html" method="GET">
+                <h4 class="text-uppercase font-weight-bold">Search</h4>
+                
+                <div class="mb-5">
+                  <div class="select-default select-category-1">
+                    <select class="select-option">
+                      <option>Category</option>
+                      <option>Travel</option>
+                      <option>Extreme</option>
+                      <option>Study</option>
+                      <option>Volunteer</option>
+                      <option>Experience</option>
+                      <option>Etc</option>
+                    </select>
+                  </div>
                 </div>
-              </div>
-
-              <div class="col-lg-4">
-                <div class="form-group">
-                  <label>버킷 시작일</label>
-                  <input type="text" name="post" class="form-control border-0" placeholder="2023.02.01">
+            
+                <div class="form-group form-group-icon form-group-icon-dark mb-5">
+                  <i class="far fa-calendar-alt" aria-hidden="true"></i>
+                  <input type="text" class="form-control daterange-picker sidebar-daterange-picker" autocomplete="off" name="dateRange" value=""
+                    placeholder="MM/DD/YYYY" />
                 </div>
-              </div>
-
-              <div class="col-lg-4">
-                <div class="form-group">
-                  <label>버킷 종료일</label>
-                  <input type="text" name="post" class="form-control border-0" placeholder="2023.02.08">
+            
+                <div class="form-group form-group-icon form-group-icon-dark mb-5">
+                  <i class="far fa-calendar-alt" aria-hidden="true"></i>
+                  <input type="text" class="form-control daterange-picker sidebar-daterange-picker" autocomplete="off" name="dateRange" value=""
+                    placeholder="MM/DD/YYYY" />
                 </div>
-              </div>
 
-              <div class="col-lg-4">
-                <div class="form-group">
-                  <label>카테고리 드롭박스</label>
-                  <input type="text" name="post" class="form-control border-0">
+                <div class="d-grid">
+                  <button type="button" onclick="location.href='javascript:void(0)';"
+                  class="btn btn-xs btn-outline-secondary text-uppercase">Search</button>
                 </div>
-              </div>
+              </form>
+            </div>
+          </div>
 
-              <div class="col-lg-4">
-                <div class="form-group">
-                  <label>모집인원</label>
-                  <input type="number" class="form-control border-0" placeholder="3">
+          <div class="col-md-6 col-lg-12">
+            <div class="mb-6 bg-white p-3 border-top border-top-5 border-primary rounded overflow-hidden">
+              <h4 class="text-uppercase font-weight-bold">Price</h4>
+
+              <div class="price-range mt-5" id="price-range">
+                <div class="price-range-content mb-5">
+                  <span class="price-value" id="lower-value"></span>
+                  <span class="mx-3"><i class="fa fa-minus" aria-hidden="true"></i></span>
+                  <span class="price-value" id="upper-value"></span>
                 </div>
-              </div>
 
-              <div class="col-lg-4">
-                <div class="form-group">
-                  <label>비용</label>
-                  <input type="text" name="post" class="form-control border-0" placeholder="3000000">
-                </div>
-              </div>
-
-              <div class="form-group mb-5">
-                <label>주소</label>
-                <input type="text" name="post" id="address_kakao" class="form-control border-0">
+                <div class="mb-6" id="slider-non-linear-step"></div>
               </div>
             </div>
-
-            <div class="form-group mb-5">
-              <label>내용</label>
-              <textarea class="form-control border-0" rows="7"></textarea>
-            </div>
-
-            <div class="text-center text-md-start text-lg-end">
-              <button type="button" onclick="location.href='booking-step-2.html';" class="btn btn-primary text-uppercase">
-                Next
-              </button>
-            </div>
-          </form>
-        </div>
-
-        <div id="worldBox" class="tab-pane fade show" role="tabpanel" aria-labelledby="recent-tab">
-          <form action="" method="post" target="_blank">
-            <div class="row">
-              <div class="form-group mb-5">
-                <label>제목</label>
-                <input type="text" name="post" class="form-control border-0" placeholder="title">
-              </div>
-
-              <div class="col-lg-4">
-                <div class="form-group">
-                  <label>모집종료일</label>
-                  <input type="text" name="post" class="form-control border-0" placeholder="2023.01.25">
-                </div>
-              </div>
-
-              <div class="col-lg-4">
-                <div class="form-group">
-                  <label>버킷 시작일</label>
-                  <input type="text" name="post" class="form-control border-0" placeholder="2023.02.01">
-                </div>
-              </div>
-
-              <div class="col-lg-4">
-                <div class="form-group">
-                  <label>버킷 종료일</label>
-                  <input type="text" name="post" class="form-control border-0" placeholder="2023.02.08">
-                </div>
-              </div>
-
-              <div class="col-lg-4">
-                <div class="form-group">
-                  <label>카테고리 드롭박스</label>
-                  <input type="text" name="post" class="form-control border-0">
-                </div>
-              </div>
-
-              <div class="col-lg-4">
-                <div class="form-group">
-                  <label>모집인원</label>
-                  <input type="number" class="form-control border-0" placeholder="3">
-                </div>
-              </div>
-
-              <div class="col-lg-4">
-                <div class="form-group">
-                  <label>비용</label>
-                  <input type="text" name="post" class="form-control border-0" placeholder="3000000">
-                </div>
-              </div>
-
-              <div class="form-group mb-5">
-                <label>영문 주소</label>
-                <input type="text" name="post" id="address" class="form-control border-0" placeholder="5 Avenue Anatole France, 75007 Paris, France">
-              </div>
-            </div>
-
-            <div class="form-group mb-5">
-              <label>내용</label>
-              <textarea class="form-control border-0" rows="7"></textarea>
-            </div>
-
-            <div class="text-center text-md-start text-lg-end">
-              <button type="button" onclick="location.href='booking-step-2.html';" class="btn btn-primary text-uppercase">
-                Next
-              </button>
-            </div>
-          </form>
+          </div>
         </div>
       </div>
-    </div>
 
+      <div class="col-lg-8 col-xl-9">
+        <div class="row">
+          <div class="col-md-6 col-xl-4 mb-5">
+            <div class="card card-hover">
+              <a href="single-package-right-sidebar.html" class="position-relative">
+                <img class="card-img-top lazyestload" data-src="assets/img/home/deal/deal-01.jpg" src="assets/img/home/deal/deal-01.jpg" alt="Card image cap">
+                <div class="card-img-overlay card-hover-overlay rounded-top d-flex flex-column">
+                  <div class="badge bg-primary badge-rounded-circle">
+                    <span class="d-block">
+                      모집중
+                    </span>
+                  </div>
+                </div>
+              </a>
+
+              <div class="card-body px-4">
+                <h5>
+                  <a href="single-package-right-sidebar.html" class="card-title text-uppercase">두바이 스카이 다이빙</a>
+                </h5>
+                <h6 class="mt-n2">
+                  주최자 이름 (옆에 매너지수 표시?)
+                </h6>
+                <p class="mb-1">모집 기간 : ~ 2023.02.17</p>
+                <p class="mb-1">일정 : 2023.02.18 ~ 2023.02.19</p>
+                <p class="mb-1">장소</p>
+                <p class="mb-1">비용</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-xl-4 mb-5">
+            <div class="card card-hover">
+              <a href="single-package-right-sidebar.html" class="position-relative">
+                <img class="card-img-top lazyestload" data-src="assets/img/home/deal/deal-01.jpg" src="assets/img/home/deal/deal-01.jpg" alt="Card image cap">
+                <div class="card-img-overlay card-hover-overlay rounded-top d-flex flex-column">
+                  <div class="badge bg-success badge-rounded-circle">
+                    <span class="d-block">
+                      모집완료
+                    </span>
+                  </div>
+                </div>
+              </a>
+
+              <div class="card-body px-4">
+                <h5>
+                  <a href="single-package-right-sidebar.html" class="card-title text-uppercase">두바이 스카이 다이빙</a>
+                </h5>
+                <h6 class="mt-n2">
+                  주최자 이름 (옆에 매너지수 표시?)
+                </h6>
+                <p class="mb-1">모집 기간 : ~ 2023.02.05</p>
+                <p class="mb-1">일정 : 2023.02.12</p>
+                <p class="mb-1">장소</p>
+                <p class="mb-1">비용</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-xl-4 mb-5">
+            <div class="card card-hover">
+              <a href="single-package-right-sidebar.html" class="position-relative">
+                <img class="card-img-top lazyestload" data-src="assets/img/home/deal/deal-01.jpg" src="assets/img/home/deal/deal-01.jpg" alt="Card image cap">
+                <div class="card-img-overlay card-hover-overlay rounded-top d-flex flex-column">
+                  <div class="badge bg-danger badge-rounded-circle">
+                    <span class="d-block">
+                      진행중
+                    </span>
+                  </div>
+                </div>
+              </a>
+
+              <div class="card-body px-4">
+                <h5>
+                  <a href="single-package-right-sidebar.html" class="card-title text-uppercase">두바이 스카이 다이빙</a>
+                </h5>
+                <h6 class="mt-n2">
+                  주최자 이름 (옆에 매너지수 표시?)
+                </h6>
+                <p class="mb-1">모집 기간 : ~ 2023.02.05</p>
+                <p class="mb-1">일정 : 2023.02.12</p>
+                <p class="mb-1">장소</p>
+                <p class="mb-1">비용</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-xl-4 mb-5">
+            <div class="card card-hover">
+              <a href="single-package-right-sidebar.html" class="position-relative">
+                <img class="card-img-top lazyestload" data-src="assets/img/home/deal/deal-01.jpg" src="assets/img/home/deal/deal-01.jpg" alt="Card image cap">
+                <div class="card-img-overlay card-hover-overlay rounded-top d-flex flex-column">
+                  <div class="badge bg-info badge-rounded-circle">
+                    <span class="d-block">
+                      진행완료
+                    </span>
+                  </div>
+                </div>
+              </a>
+
+              <div class="card-body px-4">
+                <h5>
+                  <a href="single-package-right-sidebar.html" class="card-title text-uppercase">두바이 스카이 다이빙</a>
+                </h5>
+                <h6 class="mt-n2">
+                  주최자 이름 (옆에 매너지수 표시?)
+                </h6>
+                <p class="mb-1">모집 기간 : ~ 2023.02.05</p>
+                <p class="mb-1">일정 : 2023.02.12</p>
+                <p class="mb-1">장소</p>
+                <p class="mb-1">비용</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+<!--      <div class="col-md-12 col-lg-9">-->
+<!--        <div class="media media-list-view flex-column flex-md-row mb-5">-->
+<!--          <div class="media-img position-relative">-->
+<!--            <img class="img-fluid position-relative lazyestload" data-src="/assets/img/packages/package-list-01.jpg" src="/assets/img/packages/package-list-01.jpg" alt="gallery-img">-->
+<!--            <a class="media-img-overlay" data-fancybox="gallery" href="/assets/img/packages/package-list-01.jpg"></a>-->
+<!--          </div>-->
+
+<!--          <div class="media-body">-->
+<!--            <div class="row">-->
+<!--              <div class="col-md-7 col-xl-8 position-relative">-->
+<!--                <h5>-->
+<!--                  모집중-->
+<!--                </h5>-->
+<!--                <h3>-->
+<!--                  <a class="media-title" href="single-package-right-sidebar.html">두바이 스카이 다이빙</a>-->
+<!--                </h3>-->
+<!--                <h6>-->
+<!--                  주최자 이름 (옆에 매너지수 표시?)-->
+<!--                </h6>-->
+<!--                <p class="content-view text-uppercase" style="margin-bottom: 3px">모집 기간 : ~</p>-->
+<!--                <p class="content-view text-uppercase" style="margin-bottom: 3px">진행 기간 : 시작일 ~ 종료일 or 시작일</p>-->
+<!--                <p class="content-view text-uppercase" style="margin-bottom: 3px">장소</p>-->
+<!--                <p class="content-view text-uppercase" style="margin-bottom: 3px">비용</p>-->
+<!--              </div>-->
+
+<!--              <div class="col-md-5 col-xl-4">-->
+<!--                <h5 class="font-weight-bold">현재 인원 : 3/5</h5>-->
+<!--                <div class="right_area">-->
+<!--                  <a href="javascript:;" class="icon heart">-->
+<!--                    <img src="/assets/img/like/blank-heart.png" alt="찜하기">-->
+<!--                  </a>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--&lt;!&ndash;              <div class="col-md-5 col-xl-4">&ndash;&gt;-->
+<!--&lt;!&ndash;                <div class="bg-primary text-center p-3 view-details">&ndash;&gt;-->
+<!--&lt;!&ndash;                  <h2 class="text-white font-weight-bold h1">$499</h2>&ndash;&gt;-->
+<!--&lt;!&ndash;                  <p class="text-white text-capitalize">Per person</p>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                  <div class="d-grid gap-2">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <a href="single-package-fullwidth.html" class="btn btn-xs btn-outline-white btn-booking text-uppercase">Details</a>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                    <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#inquiry" class="btn btn-xs btn-outline-white btn-booking text-uppercase">Inquiry</a>&ndash;&gt;-->
+<!--&lt;!&ndash;                  </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;              </div>&ndash;&gt;-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+
+
+<!--      </div>-->
+    </div>
+  </div>
+
+  <!-- ====================================
+———	PAGINATION
+===================================== -->
+<section class="pt-5 pt-md-7">
+  <div class="container">
+    <nav aria-label="Page navigation">
+      <ul class="pagination justify-content-center align-items-center">
+        <li class="page-item">
+          <a class="page-link" href="javascript:void(0)" tabindex="-1">
+            <i class="fas fa-long-arrow-alt-left d-none d-md-inline-block me-md-1" aria-hidden="true"></i> Previous
+          </a>
+        </li>
+    
+        <li class="page-item">
+          <a class="page-link active" href="javascript:void(0)">1</a>
+        </li>
+    
+        <li class="page-item">
+          <a class="page-link" href="javascript:void(0)">2</a>
+        </li>
+    
+        <li class="page-item">
+          <a class="page-link" href="javascript:void(0)">3</a>
+        </li>
+    
+        <li class="page-item">
+          <a class="page-link" href="javascript:void(0)">...</a>
+        </li>
+    
+        <li class="page-item">
+          <a class="page-link" href="javascript:void(0)">9</a>
+        </li>
+    
+        <li class="page-item">
+          <a class="page-link" href="javascript:void(0)">Next
+            <i class="fas fa-long-arrow-alt-right d-none d-md-inline-block ms-md-1" aria-hidden="true"></i>
+          </a>
+        </li>
+      </ul>
+    </nav>
   </div>
 </section>
+
+</section>
+
+
 
   </div><!-- element wrapper ends -->
 
@@ -582,51 +702,56 @@
       </div>
     </div>
 
-    <!-- Login Modal -->
-    <div class="modal fade" id="login" tabindex="-1" role="dialog" aria-label="loginModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header rounded">
-            <h3 class="modal-title text-uppercase font-weight-bold">Log in to your account</h3>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
+  <!-- Login Modal -->
+  <div class="modal fade" id="login" tabindex="-1" role="dialog" aria-label="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header rounded">
+          <h3 class="modal-title text-uppercase font-weight-bold">로그인</h3>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
 
-          <div class="modal-body">
-            <form class="" action="index.html" method="post">
-              <div class="mb-3">
-                <input type="email" class="form-control bg-smoke" required="" placeholder="Email">
-              </div>
+        <div class="modal-body">
+          <form class="" action="index.html" method="post">
+            <div class="mb-3">
+              <input type="email" class="form-control bg-smoke" required="" placeholder="이메일">
+            </div>
 
-              <div class="mb-3">
-                <input type="password" class="form-control bg-smoke" required="" placeholder="Password">
-              </div>
+            <div class="mb-3">
+              <input type="password" class="form-control bg-smoke" required="" placeholder="비밀번호">
+            </div>
 
-              <div class="mb-3 form-check mb-0">
-                <input type="checkbox" class="form-check-input" id="exampleCheck5">
-                <label class="form-check-label text-gray-color mb-3" for="exampleCheck5">
-                  Remember me
-                </label>
-                <a class="pull-right" href="javascript:void(0)">Fogot Password?</a>
-             </div>
+            <!--              <div class="mb-3 form-check mb-0">-->
+            <!--                <input type="checkbox" class="form-check-input" id="exampleCheck5">-->
+            <!--                <label class="form-check-label text-gray-color mb-3" for="exampleCheck5">-->
+            <!--                  Remember me-->
+            <!--                </label>-->
+            <!--                <a class="pull-right" href="javascript:void(0)">Fogot Password?</a>-->
+            <!--             </div>-->
 
-             <div class="d-grid">
+            <div class="d-grid">
               <button type="submit" class="btn btn-primary text-uppercase">Login</button>
-             </div>
+            </div>
 
-              <div class="text-uppercase text-center py-3">Or</div>
+            <div class="text-uppercase text-center py-3">Or</div>
 
-              <div class="d-grid">
-                <button type="submit" class="btn btn-facebook text-uppercase text-white">Login with facebook</button>
-               </div>
-            </form>
-          </div>
+            <div style="display: flex;">
+              <div style="flex: 1;">
+                <a href="/login/google"><img src="/assets/img/google-button.png" style="width: 95%; margin-left: 5%"></a>
+              </div>
+              <div style="flex: 1;">
+                <a href="/login/naver"><img src="/assets/img/naver-button.png" style="width: 85%; float: right; margin-right: 10%"></a>
+              </div>
+            </div>
+          </form>
+        </div>
 
-          <div class="modal-footer justify-content-center">
-            <p class="mb-1">Don’t have an Account? <a href="javascript:void(0)">Sign up</a></p>
-          </div>
+        <div class="modal-footer justify-content-center">
+          <p class="mb-1">Don’t have an Account? <a href="javascript:void(0)" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#signup">Sign up</a></p>
         </div>
       </div>
     </div>
+  </div>
 
     <!-- INQUIRY IN MODAL -->
     <div class="modal fade" id="inquiry" tabindex="-1" role="dialog" aria-label="inquiryModalLabel" aria-hidden="true">
@@ -676,10 +801,30 @@
     <script src='/assets/plugins/daterangepicker/js/daterangepicker.min.js'></script>
     <script src='/assets/plugins/rateyo/jquery.rateyo.min.js'></script>
     <script src="/assets/plugins/lazyestload/lazyestload.js"></script>
-    
-    
+
     
     <script src='/assets/plugins/no-ui-slider/nouislider.min.js'></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      console.log('getPostList');
+      axios.get('/post/list')
+              .then((res) => {
+                console.log(res.data);
+                const totalPages = res.data.result.totalPages;
+
+
+
+              })
+              .catch((err) => {
+                console.log(err);
+              })
+    })
+  </script>
+
+
+
     
     <script src="/assets/plugins/smoothscroll/SmoothScroll.js"></script>
     
