@@ -15,7 +15,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.channels.MulticastChannel;
 
 
 @Slf4j
@@ -46,7 +50,6 @@ public class PostController {
         PostCreateResponse response = postService.create(request,userName);       // DB에 데이터 저장
         return response.getPostId();
     }
-
 
     //== 전체조회 ==//
     @GetMapping("list")
@@ -122,6 +125,21 @@ public class PostController {
         log.info("Post 삭제 성공");
         return Response.success(postDeleteResponse);
     }
+
+    // S3에 파일 업로드
+    @PostMapping("/{postId}/files")
+    public Response<UploadFileResponse> upload(@PathVariable("postId") Long postId,
+                                               @RequestParam MultipartFile multipartFile) throws IOException {
+        return Response.success(postService.UploadFile(multipartFile));
+    }
+    // S3 파일 삭제
+    @DeleteMapping("/{postId}/files/{fileId}")
+    public Response<DeleteFileResponse> delete(@PathVariable("postId") Long postId,
+                                               @PathVariable("fileId") Long fileId,
+                                               @RequestParam String filePath) {
+        return Response.success(postService.deleteFile(fileId, filePath));
+    }
+
 
     //== 좋아요 개수 ==//
     @GetMapping("/{postId}/likes")
