@@ -23,6 +23,8 @@ public enum ErrorCode {
     BUCKETLIST_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 버킷리스트가 없습니다."),
     APPLICATION_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 신청서가 없습니다"),
     ALARM_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 알람이 없습니다."),
+    // POST 관련
+    FILE_NOT_EXISTS(HttpStatus.NOT_FOUND, "빈 파일 입니다.")
 
     ;
 
