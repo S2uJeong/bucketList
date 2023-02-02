@@ -66,6 +66,7 @@ public class ChatPreHandler implements ChannelInterceptor {
             }
         } catch (Exception e) {
             log.error("JWT에러");
+            throw new ApplicationException(ErrorCode.INVALID_TOKEN);
         }
         return message;
     }
@@ -75,5 +76,6 @@ public class ChatPreHandler implements ChannelInterceptor {
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(memberId, null, List.of(new SimpleGrantedAuthority(MemberRole.USER.name())));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         headerAccessor.setUser(authentication);
+        log.info("채팅 인증 id받아오기 : "+authentication.getName());
     }
 }
