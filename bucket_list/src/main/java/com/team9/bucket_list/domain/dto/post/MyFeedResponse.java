@@ -13,5 +13,4 @@ import org.springframework.data.domain.Page;
 public class MyFeedResponse {
     Page<PostReadResponse> createPosts;
     Page<PostReadResponse> applyPosts;
-    Page<PostReadResponse> likePosts;
 }

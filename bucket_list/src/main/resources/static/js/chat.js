@@ -8,7 +8,6 @@ let connectingElement = document.querySelector('.connecting');
 
 
 let stompClient = null;
-let username = null;
 
 let colors = [
     '#2196F3', '#32c787', '#00BCD4', '#ff5652',
@@ -18,8 +17,9 @@ let colors = [
 const url = new URL(location.href).searchParams;
 const roomId = url.get('roomId');
 
-//이전 채팅 기록을 불러오면서 userName도 같이 불러온다
-userName = "test1";
+//토큰에서 memeberId와 userName을 꺼낸다
+const userName = "test1";
+const memebrId = "";
 
 //서버 연결
 let socket = new SockJS('/ws');
@@ -27,6 +27,8 @@ stompClient = Stomp.over(socket);
 let header = {
     Authorization : "Bearer " + localStorage.getItem("accessToken")
 };
+
+console.log("header" + header);
 
 stompClient.connect(header,onConnected,onError);
 
