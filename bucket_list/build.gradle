@@ -23,6 +23,10 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework:spring-messaging:6.0.3'
+    implementation group: 'org.springframework.security', name: 'spring-security-messaging', version: '6.0.1'
+
 
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.mysql:mysql-connector-j'
@@ -74,7 +78,7 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
-
+// compileQuerydsl 실행파일 동작 하지 않도록 하기 위해
 compileQuerydsl.enabled = false
 
 //querydsl 추가 시작

@@ -6,6 +6,7 @@ import com.team9.bucket_list.domain.enumerate.PostStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -14,6 +15,10 @@ import java.util.List;
 @Getter
 @Builder
 public class PostReadResponse {
+
+    @Value("${google.map.key}")
+    private Object API_KEY;// 실제 서버에서 구동할때는 무조건 환경변수에 숨겨야함 절대 노출되면 안됨!!!
+
     private Long postId;
     private String title; //제목
     private String content; //내용

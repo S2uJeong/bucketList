@@ -8,6 +8,7 @@ import com.team9.bucket_list.domain.dto.chat.ChatRoomResponse;
 import com.team9.bucket_list.domain.entity.ChatParticipant;
 import com.team9.bucket_list.domain.entity.ChatRoom;
 import com.team9.bucket_list.service.ChatService;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -28,7 +29,7 @@ public class ChatRestController {
     //유저 채팅목록
     //auth 나중에 추가
     @GetMapping
-    public Page<ChatRoomResponse> getChatList(/*auth*/ @PageableDefault(size = 20) /*제일 마지막에 채팅이 올라온 시간이 기준 @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC)*/ Pageable pageable) {
+    public Page<ChatRoomResponse> getChatList(/*auth*/@Parameter(hidden = true) @PageableDefault(size = 20) /*제일 마지막에 채팅이 올라온 시간이 기준 @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC)*/ Pageable pageable) {
         log.info("컨트롤러");
         Long userId = 1L;
         //userId에 해당하는 채팅방 리스트를 가져온다
