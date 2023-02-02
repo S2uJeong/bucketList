@@ -23,7 +23,7 @@ import java.nio.channels.MulticastChannel;
 
 
 @Slf4j
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/post")
 public class PostController {
@@ -140,6 +140,12 @@ public class PostController {
         return Response.success(postService.deleteFile(fileId, filePath));
     }
 
+    //== 좋아요 확인 ==//
+    @GetMapping("/{postId}/likes/check")
+    public Response<Integer> checkLike(@PathVariable("postId") long postId, Authentication authentication) {
+        int checkLike = postService.checkLike(postId, Long.valueOf(authentication.getName()));
+        return Response.success(checkLike);
+    }
 
     //== 좋아요 개수 ==//
     @GetMapping("/{postId}/likes")
@@ -151,7 +157,7 @@ public class PostController {
     //== 좋아요 누르기 ==//
     @PostMapping("/{postId}/likes")
     public Response<Integer> clickLike(@PathVariable("postId") long postId, Authentication authentication) {
-        int result = postService.clickLike(postId, authentication.getName());
+        int result = postService.clickLike(postId, Long.valueOf(authentication.getName()));
         return Response.success(result);
     }
 
@@ -159,9 +165,9 @@ public class PostController {
     @GetMapping("/my")
     public Response<MyFeedResponse> myFeed(@PageableDefault(size = 15, sort = {"id"}, direction = Sort.Direction.DESC)
                                            Pageable pageable, Authentication authentication) {
-        Page<PostReadResponse> createPosts = postService.myFeedCreate(pageable, authentication.getName());
-        Page<PostReadResponse> applyPosts = postService.myFeedApply(pageable, authentication.getName());
-        Page<PostReadResponse> likePosts = postService.myFeedLike(pageable, authentication.getName());
+        Page<PostReadResponse> createPosts = postService.myFeedCreate(pageable, Long.valueOf(authentication.getName()));
+        Page<PostReadResponse> applyPosts = postService.myFeedApply(pageable, Long.valueOf(authentication.getName()));
+        Page<PostReadResponse> likePosts = postService.myFeedLike(pageable, Long.valueOf(authentication.getName()));
         return Response.success(new MyFeedResponse(createPosts, applyPosts, likePosts));
     }
 }
