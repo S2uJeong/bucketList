@@ -16,10 +16,8 @@ import java.util.List;
 @Builder
 public class PostReadResponse {
 
-    @Value("${google.map.key}")
-    private Object API_KEY;// 실제 서버에서 구동할때는 무조건 환경변수에 숨겨야함 절대 노출되면 안됨!!!
-
     private Long postId;
+    private String userName;    // 유저 아이디이름
     private String title; //제목
     private String content; //내용
     private int cost; //비용
@@ -38,9 +36,10 @@ public class PostReadResponse {
 //    private List<Comment> commentList; // 버킷리스트의 댓글들
 
     // 글 하나 상세볼 때 사용하는 메서드
-    public static PostReadResponse detailOf(Post post, Double lat, Double lng) {  // 위경도는 DB에 저장하지 않으므로 매개변수로 받아서 DTO화 시킨다.
+    public static PostReadResponse detailOf(Post post, Double lat, Double lng,String userName) {  // 위경도는 DB에 저장하지 않으므로 매개변수로 받아서 DTO화 시킨다.
         return PostReadResponse.builder()
                 .postId(post.getId())
+                .userName(userName)
                 .title(post.getTitle())
                 .content(post.getContent())
                 .cost(post.getCost())

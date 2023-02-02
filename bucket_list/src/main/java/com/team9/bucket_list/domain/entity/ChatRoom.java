@@ -46,6 +46,10 @@ public class ChatRoom {
 
     public static ChatRoom messageTimeUpdate(ChatRoom chatRoom) {
         return chatRoom.builder()
+                .id(chatRoom.getId())
+                .roomName(chatRoom.getRoomName())
+                .totalNum(chatRoom.getTotalNum())
+                .bucketlist(chatRoom.getBucketlist())
                 .lastMessageTime(LocalDateTime.now())
                 .build();
     }

@@ -97,13 +97,15 @@ public class PostController {
     @GetMapping("/{postId}")        // 페이지 이동만을 위한 코드
     public String readPost(@PathVariable(value = "postId") Long postId){
         log.info("postdetail 페이지 이동");
-        return "Post/AxiosPostDetail";
+//        return "Post/AxiosPostDetail";
+        return "Post/postDetailUI";
     }
 
     @GetMapping(value = "/{postId}/json", produces = "application/json")
     @ResponseBody
     public Response<PostReadResponse> jsonreadPost(@PathVariable(value = "postId") Long postId){
-        PostReadResponse postReadResponse = postService.read(postId);
+        String userName = "han";
+        PostReadResponse postReadResponse = postService.read(postId,userName);
         log.info("DB에서 데이터 호출 location :"+postReadResponse.getLocation());
         return Response.success(postReadResponse);
     }
