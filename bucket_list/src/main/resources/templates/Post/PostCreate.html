@@ -852,7 +852,6 @@
                 .then(function (response) {
                   let res = response.data.result.postId;
                   let url = "/post/"+res;
-                  localStorage.setItem('postId',res);
                   window.location.replace(url);
                   console.log(res);
                 })
@@ -901,31 +900,33 @@
         //   }
         // });
 
+        // axios.post('/post/detailpost', JSON.stringify(KoreaData),axiosConfig)
+        //         .then(function (response) {
+        //           let res = response.data.result.postId;
+        //           let url = "/post/"+res;
+        //           localStorage.setItem('postId',res);
+        //           window.location.replace(url);
+        //           console.log(res);
+        //         })
+        //         .catch(function (error) {
+        //           console.log(error);
+        //         });
 
-        // async()=>{
-        //   try{
-        //     const response = await axios.post('/post/detailpost',JSON.stringify(KoreaData),axiosConfig);
-        //     alert("성공");
-        //     let url = "/post/"+response;
-        //     alert(response);
-        //     localStorage.setItem('postId',response);
-        //     window.location.replace(url);
-        //   }catch (error){
-        //     alert("실패");
-        //   }
-        // }
+        const data = async()=>{
+          try{
+            const response = await axios.post('/post/detailpost',JSON.stringify(KoreaData),axiosConfig);
+            alert("성공");
+            let url = "/post/"+response.data.result.postId;
+            alert(response);
+            window.location.replace(url);
+          }catch (error){
+            alert("실패");
+          }
+        }
 
-        axios.post('/post/detailpost', JSON.stringify(KoreaData),axiosConfig)
-                .then(function (response) {
-                  let res = response.data.result.postId;
-                  let url = "/post/"+res;
-                  localStorage.setItem('postId',res);
-                  window.location.replace(url);
-                  console.log(res);
-                })
-                .catch(function (error) {
-                  console.log(error);
-                });
+        data();
+
+
       }
     })
   });

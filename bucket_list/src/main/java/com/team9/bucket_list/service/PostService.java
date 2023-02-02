@@ -106,14 +106,15 @@ public class PostService {
     }
 
     // 상세조회
-    public PostReadResponse read(Long postId) {
+    public PostReadResponse read(Long postId,String userName) {
+//        Member member = checkMember(1l);
         // Entity
         Post post = checkPost(postId);
         // Dto
         Map<String, Double> locationNum = findLoction(post.getLocation());
         Double lat = locationNum.get("lat");
         Double lng = locationNum.get("lng");
-        PostReadResponse postReadResponse = PostReadResponse.detailOf(post,lat,lng);
+        PostReadResponse postReadResponse = PostReadResponse.detailOf(post,lat,lng,userName);
         return postReadResponse;
     }
 
