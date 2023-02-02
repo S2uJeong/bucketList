@@ -4,9 +4,12 @@ import com.team9.bucket_list.domain.dto.comment.CommentCreateRequest;
 import com.team9.bucket_list.domain.dto.comment.CommentCreateResponse;
 import com.team9.bucket_list.domain.dto.comment.CommentListResponse;
 import com.team9.bucket_list.domain.entity.Comment;
+import com.team9.bucket_list.domain.entity.Member;
 import com.team9.bucket_list.domain.entity.Post;
+import com.team9.bucket_list.domain.enumerate.MemberRole;
 import com.team9.bucket_list.execption.ApplicationException;
 import com.team9.bucket_list.execption.ErrorCode;
+import com.team9.bucket_list.repository.MemberRepository;
 import com.team9.bucket_list.repository.PostRepository;
 import com.team9.bucket_list.repository.comment.CommentRepository;
 import lombok.AllArgsConstructor;
@@ -29,45 +32,54 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
 
+    private final MemberRepository memberRepository;
+
     // -------------- 예외처리 ------------------
+
+    public Post postDBCheck(Long id){
+        return  postRepository.findById(id)
+                .orElseThrow(() -> new ApplicationException(ErrorCode.POST_NOT_FOUND));
+    }
+
+    public Member memberDBCheck(String userName){
+        return memberRepository.findByUserName(userName)
+                .orElseThrow(() -> new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED));
+    }
+
     public Comment commentDBCheck(Long id){
         return commentRepository.findById(id)
                 .orElseThrow(() -> new ApplicationException(ErrorCode.COMMENT_NOT_FOUND));
     }
 
 //      Member와 합쳐지면 현재 유저의 권한이 관리자인지 아닌지 판단
-//    public Boolean rolecheck(Member member, String userName){
-//        if((member.getRole() != UserRole.ADMIN)&&(member.getUserName().equals(userName))) {      // 현재 토큰의 유저의 권한이 ADMIN이 아닐때
-//            throw new ApplicationException(ErrorCode.INVALID_PERMISSION);
-//        }
-//        return true;
-//    }
-
-    // Member와 합쳐지기 전까지 임시로 사용
-        public Boolean rolecheck(String member, String userName){
-        if(!member.equals(userName)) {      // 현재 토큰의 유저의 권한이 ADMIN이 아닐때
+    public Boolean rolecheck(Member member, String userName){
+        if((member.getMemberRole() != MemberRole.ADMIN)&&(member.getUserName().equals(userName))) {      // 현재 토큰의 유저의 권한이 ADMIN이 아닐때
             throw new ApplicationException(ErrorCode.INVALID_PERMISSION);
         }
         return true;
-        }
+    }
+
+//    // Member와 합쳐지기 전까지 임시로 사용
+//        public Boolean rolecheck(String member, String userName){
+//        if(!member.equals(userName)) {      // 현재 토큰의 유저의 권한이 ADMIN이 아닐때
+//            throw new ApplicationException(ErrorCode.INVALID_PERMISSION);
+//        }
+//        return true;
+//        }
+
+
 
     // 1. 댓글 생성
     @CacheEvict(value = "comments", key = "#postId")
     public CommentCreateResponse commentCreate(Long postId, CommentCreateRequest request,String userName) {
-//            Member member = memberRepository.findById(c.getWriterId())            Member 합치면 연동
-//                    .orElseThrow(() -> new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED));
+        Member member = memberDBCheck(userName);
 
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new ApplicationException(ErrorCode.POST_NOT_FOUND));
-
-
-        Long writerId = 1l;         // member와 연동하지 않아서 임시용
-
+        Post post = postDBCheck(postId);
 
         Comment parentComment = request.getParentId() != null ?              // parentid를 입력받았으면 comment 객체 생성, 입력이 없다면 null 반환
-                commentDBCheck(request.getParentId()) : null;
+                commentDBCheck(request.getParentId()) : null;                // 댓글인지 대댓글인지 구분하기 위해
 
-        Comment comment = request.toEntity(post,parentComment,writerId);       // Dto -> Entity
+        Comment comment = request.toEntity(post,parentComment,member);       // Dto -> Entity
 
         commentRepository.save(comment);
 
@@ -76,26 +88,23 @@ public class CommentService {
     }
 
     // 2. 댓글 리스트 출력
-    @Cacheable(value = "comments", key = "#postId")
+    @Cacheable(value = "comments", key = "#postId")                     // 캐시 사용하여 DB를 가지않고 캐시에서 데이터 가져옴
     public List<CommentListResponse> commentList(Long postId){
-        postRepository.findById(postId)
-              .orElseThrow(() -> new ApplicationException(ErrorCode.POST_NOT_FOUND));   // 게시물 존재 확인
+        postDBCheck(postId);
         return structureChange(commentRepository.findCommentByPostId(postId));
     }
 
     // 3. 댓글 수정
-    @CacheEvict(value = "comments", key = "#postId")
+    @CacheEvict(value = "comments", key = "#postId")                    // 값이 변경되므로 캐시 초기화
     @Transactional
     public List<CommentListResponse> updateComment(Long postId,Long commentId, CommentCreateRequest request,String userName){
-//     Member member = memberRepository.findById(c.getWriterId())            Member 합치면 연동
-//          .orElseThrow(() -> new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED));
+        Member member = memberDBCheck(userName);            // 현재 유저가 존재하는지 확인
 
-        postRepository.findById(postId)
-                .orElseThrow(() -> new ApplicationException(ErrorCode.POST_NOT_FOUND));   // 게시물 존재 확인
+        postDBCheck(postId);   // 게시물 존재 확인
 
         Comment comment = commentDBCheck(commentId);        // Comment 존재 확인
 
-        rolecheck("test",userName);                 // 댓글 작성자와 현재 유저 비교
+        rolecheck(member,userName);                 // 댓글 작성자와 현재 유저 비교
 
         if(!request.getContent().equals(comment.getContent())){     // 서버에 저장되어 있는 데이터와 유저가 새로 입력한 데이터가 다를경우 덮어씌움
             comment.update(request.getContent());      // Jpa 영속성을 활용한 update 기능 활용
@@ -107,21 +116,19 @@ public class CommentService {
 
 
     // 4. 댓글 삭제
-    @CacheEvict(value = "comments", key = "#postId")
+    @CacheEvict(value = "comments", key = "#postId")                        //  값이 변경되므로 캐시 초기화
     @Transactional
     public List<CommentListResponse> deleteComment(Long postId,Long commentId,String userName){
-//     Member member = memberRepository.findById(c.getWriterId())            Member 합치면 연동
-//          .orElseThrow(() -> new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED));
+        Member member = memberDBCheck(userName);            // 현재 유저가 존재하는지 확인
 
-        postRepository.findById(postId)
-                .orElseThrow(() -> new ApplicationException(ErrorCode.POST_NOT_FOUND));   // 게시물 존재 확인
+        postDBCheck(postId);   // 게시물 존재 확인
 
-        Comment comment =  commentRepository.findCommentByIdWithParent(commentId)
+        Comment comment =  commentRepository.findCommentByIdWithParent(commentId)           // 현재 comment Entity는 내부 매핑이 되어 있는 상태라 매핑으로 되어 있는 값까지 같이 찾아야함
                 .orElseThrow(() -> new ApplicationException(ErrorCode.COMMENT_NOT_FOUND));
 
-        rolecheck("test",userName);                 // 댓글 작성자와 현재 유저 비교
+        rolecheck(member,userName);                 // 댓글 작성자와 현재 유저 비교
 
-        commentRepository.delete(comment);
+        commentRepository.delete(comment);              // soft Delete 실행
 
         return structureChange(commentRepository.findCommentByPostId(postId));
     }
@@ -132,10 +139,8 @@ public class CommentService {
         List<CommentListResponse> result = new ArrayList<>();       // 댓글 전체를 담을 리스트
         Map<Long,CommentListResponse> map = new HashMap<>();        // 댓글과 대댓글을 연결시켜주기 위한 임시 map
         comments.stream().forEach(c -> {                            // Comment 형식으로 되어있는 댓글 전체 리스트를 stream.foreach를 통해 모든값을 CommentDto로 변환함
-//            Member member = memberRepository.findById(c.getWriterId())            Member 합치면 연동
-//                    .orElseThrow(() -> new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED));
-//            String userName = member.getUserName();
-            String userName = "usernametest";
+            Member member = memberDBCheck(c.getMember().getUserName());
+            String userName = member.getUserName();
             CommentListResponse dto = CommentListResponse.EntityToDto(c,userName);     // Comment에서 원하는 값만 추출하여 Dto로 변환함
             map.put(c.getId(),dto);                                                    // map에 (commentId, dto) 형식으로 저장
             if(c.getParent() != null)

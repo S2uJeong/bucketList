@@ -28,6 +28,8 @@ let header = {
     Authorization : "Bearer " + localStorage.getItem("accessToken")
 };
 
+console.log("header" + header);
+
 stompClient.connect(header,onConnected,onError);
 
 function onConnected() {
