@@ -24,13 +24,16 @@ userName = "test1";
 //서버 연결
 let socket = new SockJS('/ws');
 stompClient = Stomp.over(socket);
+let header = {
+    Authorization : "Bearer " + localStorage.getItem("accessToken")
+};
 
-stompClient.connect({},onConnected,onError);
+stompClient.connect(header,onConnected,onError);
 
 function onConnected() {
     stompClient.subscribe('/sub/chat/room/'+roomId, onMessageReceived);
     stompClient.send("/pub/chat/enter",
-        {},
+        header,
         JSON.stringify({
             'roomId':roomId,
             'userName':username,
@@ -64,7 +67,7 @@ function sendMessage() {
             'message': messageInput.value,
             chatType: 'CHAT'
         };
-        stompClient.send("/pub/chat/sendMessage", {}, JSON.stringify(chatMessage));
+        stompClient.send("/pub/chat/sendMessage", header, JSON.stringify(chatMessage));
 
         $('#messageArea').append(messageInput.value);
 

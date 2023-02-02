@@ -1,8 +1,11 @@
 package com.team9.bucket_list.controller.rest;
 
 import com.team9.bucket_list.domain.Response;
+import com.team9.bucket_list.domain.dto.member.MemberCheckUserNameRequest;
 import com.team9.bucket_list.domain.dto.member.MemberDto;
 import com.team9.bucket_list.domain.dto.member.MemberJoinRequest;
+import com.team9.bucket_list.execption.ApplicationException;
+import com.team9.bucket_list.execption.ErrorCode;
 import com.team9.bucket_list.service.MailService;
 import com.team9.bucket_list.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +26,12 @@ public class JoinController {
     private final MemberService memberService;
     private final MailService mailService;
 
+    @PostMapping("/checkUserName")
+    public Response<Boolean> checkUserName(@RequestBody MemberCheckUserNameRequest request) {
+        log.info("닉네임 중복 검사 요청 = {}", request.getUserName());
+        Boolean checkUserName = memberService.checkUserName(request);
+        return Response.success(checkUserName);
+    }
     //== 회원가입 요청 ==//
     @PostMapping
     public Response<String> join(@RequestBody MemberJoinRequest memberJoinRequest) {
@@ -36,7 +45,11 @@ public class JoinController {
     public Response<String> sendCode(@RequestBody Map<String, String> emailMap) throws Exception {
         String email = emailMap.get("email");
         log.info("email={}", email);
-        String code = mailService.sendSimpleMessage(email);
-        return Response.success(code);
+        if (memberService.checkEmail(email)) {
+            String code = mailService.sendSimpleMessage(email);
+            return Response.success(code);
+        } else {
+            throw new ApplicationException(ErrorCode.DUPLICATED_EMAIL);
+        }
     }
 }
