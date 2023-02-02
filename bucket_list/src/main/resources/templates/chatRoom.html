@@ -85,8 +85,11 @@
             console.log("입장");
         } else if (message.type === 'LEAVE') {
             console.log("퇴장");
+        } else if (message.type === 'LIST') {
+            console.log("채팅방 리스트 업데이트")
         } else {
-            $('#messageArea').append(message.message);
+            if(!(message.memberId === memberId))
+                $('#messageArea').append(message.message);
         }
 
     }
