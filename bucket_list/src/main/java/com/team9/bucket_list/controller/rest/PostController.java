@@ -24,10 +24,6 @@ import java.io.UnsupportedEncodingException;
 @RequestMapping("/post")
 public class PostController {
 
-    @Value("${google.map.key}")
-    private Object API_KEY;// 실제 서버에서 구동할때는 무조건 환경변수에 숨겨야함 절대 노출되면 안됨!!!
-
-
     private final PostService postService;
 
     // 게시글 작성 폼 페이지 이동
@@ -36,15 +32,16 @@ public class PostController {
         return "Post/PostCreate";
     }
 
-
-      // 게시글 폼에서 데이터 받아오기(Ajax 사용하여 받아옴)
+    // 게시글 폼에서 데이터 받아오기(Ajax 사용하여 받아옴)
     @PostMapping(value = "/detailpost" ,produces = "application/json")
     @ResponseBody
-    public Long getData(@RequestBody PostCreateRequest request) throws UnsupportedEncodingException {
+    public Response<PostIdResponse> getData(@RequestBody PostCreateRequest request){
+        log.info("detailpost");
         String userName = "test";
-
         PostCreateResponse response = postService.create(request,userName);       // DB에 데이터 저장
-        return response.getPostId();
+        log.info("postId():"+response.getPostId());
+        PostIdResponse postid = new PostIdResponse(response.getPostId());
+        return Response.success(postid);
     }
 
 
@@ -57,38 +54,54 @@ public class PostController {
         return Response.success(postReadResponses);
     }
 
-    //== 세부조회 ==//
+    //== model 사용 세부조회 ==//
 
-    @GetMapping("{postId}")
-    public String readPost(@PathVariable(value = "postId") Long postId, Model model){
+//    @GetMapping("/{postId}")
+//    public String readPost(@PathVariable(value = "postId") Long postId, Model model){
+//        PostReadResponse postReadResponse = postService.read(postId);
+//
+//        String title = postReadResponse.getTitle();
+//        String untile = postReadResponse.getUntilRecruit();
+//        String eventStart = postReadResponse.getEventStart();
+//        String eventEnd = postReadResponse.getEventEnd();
+//        int cost = postReadResponse.getCost();
+//        int entrantNum = postReadResponse.getEntrantNum();
+//        String category = postReadResponse.getCategory();
+//        String location = postReadResponse.getLocation();
+//        String content = postReadResponse.getContent();
+//        double lat = postReadResponse.getLat();
+//        double lng = postReadResponse.getLng();
+//
+//
+//        model.addAttribute("title",title);
+//        model.addAttribute("untilRecruit",untile);
+//        model.addAttribute("eventStart",eventStart);
+//        model.addAttribute("eventEnd",eventEnd);
+//        model.addAttribute("cost",cost);
+//        model.addAttribute("entrantNum",entrantNum);
+//        model.addAttribute("category",category);
+//        model.addAttribute("content",content);
+//        model.addAttribute("lat",lat);
+//        model.addAttribute("lng",lng);
+//        model.addAttribute("location",location);
+//        model.addAttribute("apikey",postReadResponse.getAPI_KEY());
+//        return "Post/PostDetail";
+//    }
+
+    //== json 세부조회 ==//
+
+    @GetMapping("/{postId}")        // 페이지 이동만을 위한 코드
+    public String readPost(@PathVariable(value = "postId") Long postId){
+        log.info("postdetail 페이지 이동");
+        return "Post/AxiosPostDetail";
+    }
+
+    @GetMapping(value = "/{postId}/json", produces = "application/json")
+    @ResponseBody
+    public Response<PostReadResponse> jsonreadPost(@PathVariable(value = "postId") Long postId){
         PostReadResponse postReadResponse = postService.read(postId);
-
-        String title = postReadResponse.getTitle();
-        String untile = postReadResponse.getUntilRecruit();
-        String eventStart = postReadResponse.getEventStart();
-        String eventEnd = postReadResponse.getEventEnd();
-        int cost = postReadResponse.getCost();
-        int entrantNum = postReadResponse.getEntrantNum();
-        String category = postReadResponse.getCategory();
-        String location = postReadResponse.getLocation();
-        String content = postReadResponse.getContent();
-        double lat = postReadResponse.getLat();
-        double lng = postReadResponse.getLng();
-
-
-        model.addAttribute("title",title);
-        model.addAttribute("untilRecruit",untile);
-        model.addAttribute("eventStart",eventStart);
-        model.addAttribute("eventEnd",eventEnd);
-        model.addAttribute("cost",cost);
-        model.addAttribute("entrantNum",entrantNum);
-        model.addAttribute("category",category);
-        model.addAttribute("content",content);
-        model.addAttribute("lat",lat);
-        model.addAttribute("lng",lng);
-        model.addAttribute("location",location);
-        model.addAttribute("apikey",API_KEY);
-        return "Post/PostDetail";
+        log.info("DB에서 데이터 호출 location :"+postReadResponse.getLocation());
+        return Response.success(postReadResponse);
     }
 
 
