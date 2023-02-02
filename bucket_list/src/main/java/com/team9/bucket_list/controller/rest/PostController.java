@@ -154,13 +154,20 @@ public class PostController {
         return Response.success(likePosts);
     }
 
-    // 작성한, 신청한
-    @GetMapping("/my")
-    public Response<MyFeedResponse> myFeed(@PageableDefault(size = 15, sort = {"id"}, direction = Sort.Direction.DESC)
+    // 작성한
+    @GetMapping("/my/create")
+    public Response<Page<PostReadResponse>> myFeedCreate(@PageableDefault(size = 16, sort = {"id"}, direction = Sort.Direction.DESC)
                                            Pageable pageable, Authentication authentication) {
         Page<PostReadResponse> createPosts = postService.myFeedCreate(pageable, Long.valueOf(authentication.getName()));
+        return Response.success(createPosts);
+    }
+
+    // 신청한
+    @GetMapping("/my/apply")
+    public Response<Page<PostReadResponse>> myFeedApply(@PageableDefault(size = 16, sort = {"id"}, direction = Sort.Direction.DESC)
+                                           Pageable pageable, Authentication authentication) {
         Page<PostReadResponse> applyPosts = postService.myFeedApply(pageable, Long.valueOf(authentication.getName()));
-        return Response.success(new MyFeedResponse(createPosts, applyPosts));
+        return Response.success(applyPosts);
     }
 }
 
