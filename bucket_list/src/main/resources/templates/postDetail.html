@@ -152,6 +152,9 @@
               <a href="javascript:void(0);" class="icon heart">
                 <img src="/assets/img/like/blank-heart.png" alt="찜하기">
               </a>
+              <div class="cntLike">
+                <p id="cntLike">0</p>
+              </div>
             </div>
           </div>
         </div>
@@ -782,6 +785,15 @@
               .catch((err) => {
                 console.log(err);
               })
+      axios.get('/post/1/likes')
+              .then((res) => {
+                console.log(res.data);
+                let cntLike = res.data.result;
+                document.getElementById("cntLike").innerText = cntLike;
+              })
+              .catch((err) => {
+                console.log(err);
+              })
     })
 
     //heart 좋아요 클릭시! 하트 뿅
@@ -790,6 +802,7 @@
 
       $likeBtn.click(function(){
         $likeBtn.toggleClass('active');
+        var cntLike = document.getElementById("cntLike").innerText
 
         if($likeBtn.hasClass('active')){
           axios.post('/post/1/likes')
@@ -806,7 +819,7 @@
             alt:'찜하기 완료'
           });
 
-
+          document.getElementById("cntLike").innerText = parseInt(cntLike) + 1;
         }else{
           axios.post('/post/1/likes')
                   .then((res) => {
@@ -822,6 +835,8 @@
             'src': '/assets/img/like/blank-heart.png',
             alt:"찜하기"
           })
+
+          document.getElementById("cntLike").innerText = parseInt(cntLike) - 1;
         }
       })
     })
