@@ -221,119 +221,10 @@
       </div>
 
       <div class="col-lg-8 col-xl-9">
-        <div class="row">
-          <div class="col-md-6 col-xl-4 mb-5">
-            <div class="card card-hover">
-              <a href="single-package-right-sidebar.html" class="position-relative">
-                <img class="card-img-top lazyestload" data-src="assets/img/home/deal/deal-01.jpg" src="assets/img/home/deal/deal-01.jpg" alt="Card image cap">
-                <div class="card-img-overlay card-hover-overlay rounded-top d-flex flex-column">
-                  <div class="badge bg-primary badge-rounded-circle">
-                    <span class="d-block">
-                      모집중
-                    </span>
-                  </div>
-                </div>
-              </a>
-
-              <div class="card-body px-4">
-                <h5>
-                  <a href="single-package-right-sidebar.html" class="card-title text-uppercase">두바이 스카이 다이빙</a>
-                </h5>
-                <h6 class="mt-n2">
-                  주최자 이름 (옆에 매너지수 표시?)
-                </h6>
-                <p class="mb-1">모집 기간 : ~ 2023.02.17</p>
-                <p class="mb-1">일정 : 2023.02.18 ~ 2023.02.19</p>
-                <p class="mb-1">장소</p>
-                <p class="mb-1">비용</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-6 col-xl-4 mb-5">
-            <div class="card card-hover">
-              <a href="single-package-right-sidebar.html" class="position-relative">
-                <img class="card-img-top lazyestload" data-src="assets/img/home/deal/deal-01.jpg" src="assets/img/home/deal/deal-01.jpg" alt="Card image cap">
-                <div class="card-img-overlay card-hover-overlay rounded-top d-flex flex-column">
-                  <div class="badge bg-success badge-rounded-circle">
-                    <span class="d-block">
-                      모집완료
-                    </span>
-                  </div>
-                </div>
-              </a>
-
-              <div class="card-body px-4">
-                <h5>
-                  <a href="single-package-right-sidebar.html" class="card-title text-uppercase">두바이 스카이 다이빙</a>
-                </h5>
-                <h6 class="mt-n2">
-                  주최자 이름 (옆에 매너지수 표시?)
-                </h6>
-                <p class="mb-1">모집 기간 : ~ 2023.02.05</p>
-                <p class="mb-1">일정 : 2023.02.12</p>
-                <p class="mb-1">장소</p>
-                <p class="mb-1">비용</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-6 col-xl-4 mb-5">
-            <div class="card card-hover">
-              <a href="single-package-right-sidebar.html" class="position-relative">
-                <img class="card-img-top lazyestload" data-src="assets/img/home/deal/deal-01.jpg" src="assets/img/home/deal/deal-01.jpg" alt="Card image cap">
-                <div class="card-img-overlay card-hover-overlay rounded-top d-flex flex-column">
-                  <div class="badge bg-danger badge-rounded-circle">
-                    <span class="d-block">
-                      진행중
-                    </span>
-                  </div>
-                </div>
-              </a>
-
-              <div class="card-body px-4">
-                <h5>
-                  <a href="single-package-right-sidebar.html" class="card-title text-uppercase">두바이 스카이 다이빙</a>
-                </h5>
-                <h6 class="mt-n2">
-                  주최자 이름 (옆에 매너지수 표시?)
-                </h6>
-                <p class="mb-1">모집 기간 : ~ 2023.02.05</p>
-                <p class="mb-1">일정 : 2023.02.12</p>
-                <p class="mb-1">장소</p>
-                <p class="mb-1">비용</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-6 col-xl-4 mb-5">
-            <div class="card card-hover">
-              <a href="single-package-right-sidebar.html" class="position-relative">
-                <img class="card-img-top lazyestload" data-src="assets/img/home/deal/deal-01.jpg" src="assets/img/home/deal/deal-01.jpg" alt="Card image cap">
-                <div class="card-img-overlay card-hover-overlay rounded-top d-flex flex-column">
-                  <div class="badge bg-info badge-rounded-circle">
-                    <span class="d-block">
-                      진행완료
-                    </span>
-                  </div>
-                </div>
-              </a>
-
-              <div class="card-body px-4">
-                <h5>
-                  <a href="single-package-right-sidebar.html" class="card-title text-uppercase">두바이 스카이 다이빙</a>
-                </h5>
-                <h6 class="mt-n2">
-                  주최자 이름 (옆에 매너지수 표시?)
-                </h6>
-                <p class="mb-1">모집 기간 : ~ 2023.02.05</p>
-                <p class="mb-1">일정 : 2023.02.12</p>
-                <p class="mb-1">장소</p>
-                <p class="mb-1">비용</p>
-              </div>
-            </div>
-          </div>
-
+        <div id="list_container" class="row">
+<!--          포스트 리스트 부분-->
+<!--          포스트 리스트 부분-->
+<!--          포스트 리스트 부분-->
         </div>
       </div>
 
@@ -807,20 +698,69 @@
 
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script>
-    $(document).ready(function() {
-      console.log('getPostList');
-      axios.get('/post/list')
-              .then((res) => {
-                console.log(res.data);
-                const totalPages = res.data.result.totalPages;
+    let html = "<div class=\"col-md-6 col-xl-4 mb-5\">\n" +
+            "            <div class=\"card card-hover\">\n" +
+            "              <a href=\"single-package-right-sidebar.html\" class=\"position-relative\">\n" +
+            "                <img class=\"card-img-top lazyestload\" data-src=\"assets/img/home/deal/deal-01.jpg\" src=\"assets/img/home/deal/deal-01.jpg\" alt=\"Card image cap\">\n" +
+            "                <div class=\"card-img-overlay card-hover-overlay rounded-top d-flex flex-column\">\n" +
+            "                  <div class=\"badge {배경색} badge-rounded-circle\">\n" +
+            "                    <span class=\"d-block\">{모집상태}</span>\n" +
+            "                  </div>\n" +
+            "                </div>\n" +
+            "              </a>\n" +
+            "\n" +
+            "              <div class=\"card-body px-4\">\n" +
+            "                <h5>\n" +
+            "                  <a href=\"single-package-right-sidebar.html\" class=\"card-title text-uppercase\">{제목}</a>\n" +
+            "                </h5>\n" +
+            "                <h6 class=\"mt-n2\">\n" +
+            "                  {주최자 이름}\n" +
+            "                </h6>\n" +
+            "                <p class=\"mb-1\">모집 기간 : ~ {모집 마감 날짜}</p>\n" +
+            "                <p class=\"mb-1\">일정 : {일정 시작 날짜} ~ {일정 종료 날짜}</p>\n" +
+            "                <p class=\"mb-1\">{장소}</p>\n" +
+            "                <p class=\"mb-1\">{비용}</p>\n" +
+            "              </div>\n" +
+            "            </div>\n" +
+            "          </div>";
+    $(window).ready( async function () {
+      try {
+        const response = await axios.get('/post/list');
+        const result = response.data.result;
+        let post_list = result.content;
 
+        post_list.forEach(function (post) {
+          let html_result = html.replace("{제목}", post.title)
+                  .replace("{비용}", post.cost)
+                  .replace("{장소}", post.location)
+                  .replace("{일정 시작 날짜}", post.eventStart)
+                  .replace("{일정 종료 날짜}", post.eventEnd)
+                  .replace("{모집 마감 날짜}", post.untilRecruit);
 
+          if (post.status === 'JOIN') {
+            html_result = html_result.replace("{모집상태}", '모집중')
+                    .replace("{배경색}", 'bg-primary');
+          } else if (post.status === 'JOINCOMPLETE') {
+            html_result = html_result.replace("{모집상태}", '모집완료')
+                    .replace("{배경색}", 'bg-success');
+          } else if (post.status === 'PROCESS') {
+            html_result = html_result.replace("{모집상태}", '진행중')
+                    .replace("{배경색}", 'bg-danger');
+          } else if (post.status === 'COMPLETE') {
+            html_result = html_result.replace("{모집상태}", '진행완료')
+                    .replace("{배경색}", 'bg-info');
+          }
 
-              })
-              .catch((err) => {
-                console.log(err);
-              })
-    })
+          let parent = document.getElementById('list_container');
+          parent.innerHTML += html_result;
+        })
+
+      } catch (e) {
+
+      }
+
+    });
+
   </script>
 
 
