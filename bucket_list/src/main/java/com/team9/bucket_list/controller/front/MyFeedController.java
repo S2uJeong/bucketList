@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/my")
 public class MyFeedController {
 
-//    @GetMapping
-//    public String myFeedList() { return "post"; }
+    @GetMapping
+    public String myFeedList() { return "myFeed"; }
 
     @GetMapping("/likes")
     public String myFeedLikeList() { return "myFeedLike"; }
