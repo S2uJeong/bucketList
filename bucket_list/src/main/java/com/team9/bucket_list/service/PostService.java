@@ -107,7 +107,7 @@ public class PostService {
 
     // 상세조회
     public PostReadResponse read(Long postId,String userName) {
-        Member member = checkMember(userName);
+//        Member member = checkMember(1l);
         // Entity
         Post post = checkPost(postId);
         // Dto
