@@ -39,13 +39,16 @@ public class ChatController {
 
     @MessageMapping("/chat/enter")
     public void enter(@Payload ChatRequest chatRequest, SimpMessageHeaderAccessor headerAccessor) {
-        headerAccessor.getSessionAttributes().put("username", chatRequest.getUserName());
+        //입장하기 전 해당 유저가 채팅방db에 존재하는 유저인지 확인
+        chatService.checkParticipant(chatRequest);
         template.convertAndSend("/sub/chat/room/"+chatRequest.getRoomId(),chatRequest);
     }
 
     @MessageMapping("/chat/sendMessage")
     public void sendMessage(@Payload ChatRequest chatRequest) {
         chatService.updateMessage(chatRequest);
+        //template.convertAndSend("/sub/chat/roomlist/"+chatRequest.getRoomId());
         template.convertAndSend("/sub/chat/room/"+chatRequest.getRoomId(), chatRequest);
+        log.info("메시지 구독자들에게 전송 완료");
     }
 }
