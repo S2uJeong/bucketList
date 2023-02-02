@@ -44,16 +44,24 @@
     //이전 채팅 기록을 불러오면서 userName도 같이 불러온다
     username = "test1";
 
+    let header = {
+        Authorization : "Bearer " + localStorage.getItem("accessToken")
+    };
+
     //서버 연결
-    let socket = new SockJS('/ws');
+    let socket = new SockJS('/ws', null, {headers: {'Authorization': header}});
     stompClient = Stomp.over(socket);
 
-    stompClient.connect({},onConnected,onError);
+
+
+    console.log(`header : ${header}`);
+
+    stompClient.connect(header,onConnected,onError);
 
     function onConnected() {
         stompClient.subscribe('/sub/chat/room/'+roomId, onMessageReceived);
         stompClient.send("/pub/chat/enter",
-            {},
+            header,
             JSON.stringify({
                 'roomId':roomId,
                 'userName':username,
@@ -87,7 +95,7 @@
                 'message': messageInput.value,
                 chatType: 'CHAT'
             };
-            stompClient.send("/pub/chat/sendMessage", {}, JSON.stringify(chatMessage));
+            stompClient.send("/pub/chat/sendMessage", header, JSON.stringify(chatMessage));
 
             $('#messageArea').append(messageInput.value);
 
