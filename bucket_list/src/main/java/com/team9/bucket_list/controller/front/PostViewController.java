@@ -58,13 +58,7 @@ public class PostViewController {
         return "Post/success"; // post 상세 조회 화면으로 연결할 예정. 임시 html 연결함.
     }
 
-
     @GetMapping
     public String postList() { return "post"; }
 
-    // 게시글 작성 폼 페이지 이동
-    @GetMapping("/createform")
-    public String movePostForm(){
-        return "Post/PostCreate";
-    }
 }
