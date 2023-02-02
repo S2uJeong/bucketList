@@ -5,6 +5,8 @@ import com.team9.bucket_list.domain.dto.chat.ChatRequest;
 import com.team9.bucket_list.domain.dto.chat.ChatRoomRequest;
 import com.team9.bucket_list.domain.dto.chat.ChatRoomResponse;
 import com.team9.bucket_list.domain.entity.*;
+import com.team9.bucket_list.execption.ApplicationException;
+import com.team9.bucket_list.execption.ErrorCode;
 import com.team9.bucket_list.repository.ChatParticipantRepository;
 import com.team9.bucket_list.repository.ChatRepository;
 import com.team9.bucket_list.repository.ChatRoomRepository;
@@ -77,10 +79,19 @@ public class ChatService {
 
     @Async
     public void updateMessage(ChatRequest chatRequest) {
-        ChatRoom chatRoom = chatRoomRepository.findById(chatRequest.getRoomId()).orElseThrow(() -> new RuntimeException());
-        Member member = memberRepository.findById(chatRequest.getUserId()).orElseThrow(() -> new RuntimeException());
+        log.info(chatRequest.toString());
+        ChatRoom chatRoom = chatRoomRepository.findById(chatRequest.getRoomId()).orElseThrow(() -> new ApplicationException(ErrorCode.INVALID_PERMISSION));
+        Member member = memberRepository.findById(chatRequest.getMemberId()).orElseThrow(() -> new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED));
 
         chatRepository.save(Chat.save(chatRequest,chatRoom,member));
         chatRoomRepository.save(ChatRoom.messageTimeUpdate(chatRoom));
+        log.info("채팅 저장 완료");
+    }
+
+    public void checkParticipant(ChatRequest chatRequest) {
+        log.info("해당 참가자가 채팅방에 들어오는게 허용된 참가자인지 확인");
+        chatParticipantRepository.findByChatRoom_IdAndMember_Id(chatRequest.getRoomId(), chatRequest.getMemberId())
+                .orElseThrow(() -> new ApplicationException(ErrorCode.INVALID_PERMISSION));
+        log.info("채팅방에 등록된 사용자 확인완료");
     }
 }
