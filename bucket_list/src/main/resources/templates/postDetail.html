@@ -802,57 +802,55 @@
 
       $likeBtn.click(function(){
         $likeBtn.toggleClass('active');
-        var cntLike = document.getElementById("cntLike").innerText
-
         if($likeBtn.hasClass('active')){
           axios.post('/post/1/likes')
                   .then((res) => {
                     console.log(res.data);
 
+                    $(this).find('img').attr({
+                      'src': '/assets/img/like/full-heart.png',
+                      alt:'찜하기 완료'
+                    });
+
+                    axios.get('/post/1/likes')
+                            .then((res) => {
+                              console.log(res.data);
+                              let cntLike = res.data.result;
+                              document.getElementById("cntLike").innerText = cntLike;
+                            })
+                            .catch((err) => {
+                              console.log(err);
+                            })
                   })
                   .catch((err) => {
                     console.log(err);
+                    alert("로그인 후 이용해주세요.")
                   })
-
-          $(this).find('img').attr({
-            'src': '/assets/img/like/full-heart.png',
-            alt:'찜하기 완료'
-          });
-
-          setTimeout(() => axios.get('/post/1/likes')
-                  .then((res) => {
-                    console.log(res.data);
-                    let cntLike = res.data.result;
-                    document.getElementById("cntLike").innerText = cntLike;
-                  })
-                  .catch((err) => {
-                    console.log(err);
-                  }), 60);
         }else{
           axios.post('/post/1/likes')
                   .then((res) => {
                     console.log(res.data);
 
+                    $(this).find('i').removeClass('fas').addClass('far')
+                    $(this).find('img').attr({
+                      'src': '/assets/img/like/blank-heart.png',
+                      alt:"찜하기"
+                    })
+
+                    axios.get('/post/1/likes')
+                            .then((res) => {
+                              console.log(res.data);
+                              let cntLike = res.data.result;
+                              document.getElementById("cntLike").innerText = cntLike;
+                            })
+                            .catch((err) => {
+                              console.log(err);
+                            })
                   })
                   .catch((err) => {
                     console.log(err);
+                    alert("로그인 후 이용해주세요.")
                   })
-
-          $(this).find('i').removeClass('fas').addClass('far')
-          $(this).find('img').attr({
-            'src': '/assets/img/like/blank-heart.png',
-            alt:"찜하기"
-          })
-
-          setTimeout(() => axios.get('/post/1/likes')
-                  .then((res) => {
-                    console.log(res.data);
-                    let cntLike = res.data.result;
-                    document.getElementById("cntLike").innerText = cntLike;
-                  })
-                  .catch((err) => {
-                    console.log(err);
-                  }), 60);
         }
       })
     })
