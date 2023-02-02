@@ -45,8 +45,9 @@ public class ChatPreHandler implements ChannelInterceptor {
 
             //token 분리
             String token = "";
-            if (authorizationHeader.startsWith("Bearer ")) {
-                token = authorizationHeader.replace("Bearer ", "");
+            String authorizationHeaderStr = authorizationHeader.replace("[","").replace("]","");
+            if (authorizationHeaderStr.startsWith("Bearer ")) {
+                token = authorizationHeaderStr.replace("Bearer ", "");
             } else {
                 log.error("Authorization 헤더 형식이 틀립니다. : {}", authorizationHeader);
                 throw new ApplicationException(ErrorCode.INVALID_TOKEN);
@@ -65,9 +66,8 @@ public class ChatPreHandler implements ChannelInterceptor {
             }
         } catch (Exception e) {
             log.error("JWT에러");
-        } finally {
-            return message;
         }
+        return message;
     }
 
     private void setAuthentication(Message<?> message, StompHeaderAccessor headerAccessor) {
