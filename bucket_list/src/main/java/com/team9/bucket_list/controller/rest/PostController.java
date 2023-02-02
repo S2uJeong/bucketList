@@ -53,6 +53,7 @@ public class PostController {
 
     //== 전체조회 ==//
     @GetMapping("list")
+    @ResponseBody
     public Response<Page<PostReadResponse>> readAllPost(@PageableDefault(size = 15, sort = {"id"}, direction = Sort.Direction.DESC)
                                                         Pageable pageable) {
         Page<PostReadResponse> postReadResponses = postService.readAll(pageable);
