@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-
+  
   <head>
 
     <!-- SITE TITTLE -->
@@ -16,19 +16,19 @@
     <link href="/assets/plugins/menuzord/css/menuzord.css" rel="stylesheet">
     <link href="/assets/plugins/menuzord/css/menuzord-animations.css" rel="stylesheet">
 
-
+    
     <link href='/assets/plugins/fancybox/jquery.fancybox.min.css' rel='stylesheet'>
-
-
-
+    
+    <link href='/assets/plugins/selectric/selectric.css' rel='stylesheet'>
+    <link href='/assets/plugins/daterangepicker/css/daterangepicker.css' rel='stylesheet'>
     <link href='/assets/plugins/rateyo/jquery.rateyo.min.css' rel='stylesheet'>
-
-
-
-
-    <link href='/assets/plugins/owl-carousel/owl.carousel.min.css' rel='stylesheet' media='screen'>
-    <link href='/assets/plugins/owl-carousel/owl.theme.default.min.css' rel='stylesheet' media='screen'>
-
+    
+    <link href='/assets/plugins/no-ui-slider/nouislider.min.css' rel='stylesheet'>
+    
+    
+    
+    
+    
 
     <!-- GOOGLE FONT -->
     <link href='https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700' rel='stylesheet'>
@@ -48,190 +48,7 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-
-    <!-- axios, jquery 사용-->
-    <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-
-    <!-- 구글 맵 사용 -->
-    <!-- 맵 api key 삭제해야함 서버에서 환경변수값을 넘겨줘야 함-->
-    <script type="text/javascript" src="http://maps.google.com/maps/api/js?key=AIzaSyDm0lS0V5pE5Yfn_LFBpPLyFa9KmYsQrZg" ></script>
-
-
-    <style>
-      #map_ma {width:100%; height:400px; clear:both; border:solid 1px red;}
-    </style>
-
-    <script>
-      $(document).ready(function() {
-        const postId = new URL(window.location.href).pathname.replace("/post/", "");
-        console.log(postId);
-
-        // axios header에 넣을 데이터
-        const axiosConfig = {
-          headers:{
-            "Content-Type": "application/json"
-          }
-        }
-
-        let jsonState;        // Json 반환 상태(성공인지 에러인지)
-        let jsonResult;       // Json 반환 값 저장
-        let title;
-        let userName;    //  => writer로 사용 유저 아이디이름
-        let content;
-        let cost;
-        let location;
-        let lat;
-        let lng;
-        let untilRecruit;
-        let entrantNum;
-        let eventStart;
-        let eventEnd;
-        let status;
-        let category;
-
-
-        const getdata = async()=>{
-          try{
-            const response = await axios.get('/post/'+postId+'/json');
-            console.log(response);     // json 데이터 받아온거
-            jsonState = response.data.resultCode;
-            console.log(jsonState);
-            if(jsonState == "SUCCESS") {
-              jsonResult = response.data.result;
-
-              title = jsonResult.title;
-              userName = jsonResult.userName;
-              content = jsonResult.content;
-              cost = jsonResult.cost;
-              location = jsonResult.location;
-              lat = jsonResult.lat;
-              lng = jsonResult.lng;
-              untilRecruit = jsonResult.untilRecruit;
-              entrantNum = jsonResult.entrantNum;
-              eventStart = jsonResult.eventStart;
-              eventEnd = jsonResult.eventEnd;
-              status = jsonResult.status;
-              category = jsonResult.category;
-
-              // window.onload = function(){
-                var htmltitle = document.getElementById("title");
-                htmltitle.innerHTML = title;
-
-                var htmluserName = document.getElementById("writer");
-                htmluserName.innerHTML = userName;
-
-                var htmluntil = document.getElementById("untilRecruit");
-                htmluntil.innerHTML = "모집기간 : "+ untilRecruit;
-
-                var htmlevent = document.getElementById("eventStart");
-                htmlevent.innerHTML = "일정 : "+eventStart +" ~ "+eventEnd;
-
-                var htmlcost = document.getElementById("cost");
-                htmlcost.innerHTML = "비용 : " + cost;
-
-                var htmllocation = document.getElementById("location");
-                htmllocation.innerHTML = "장소 : " + location;
-
-              var htmlcontent = document.getElementById("content");
-              htmlcontent.innerHTML = content;
-              // }
-              //
-              // onload();
-
-              console.log(location);
-            }else
-              alert("서버 반환값 Error임 404페이지 이동");
-          }catch (ERROR){
-            alert("404 에러");
-          }
-        }
-
-        getdata();
-
-
-        <!-- 좋아요 -->
-        console.log('getLike');
-        axios.get('/post/' + postId + '/likes/check')
-                .then((res) => {
-                  console.log(res.data);
-                  let likeCheck = res.data.result;
-                  let $likeBtn =$('.icon.heart');
-                  if (likeCheck == 1){
-                    $likeBtn.toggleClass('active');
-                    $likeBtn.find('img').attr({
-                      'src': '/assets/img/like/full-heart.png',
-                      alt:'찜하기 완료'
-                    });
-                  }
-                })
-                .catch((err) => {
-                  console.log(err);
-                });
-
-        axios.get('/post/' + postId + '/likes')
-                .then((res) => {
-                  console.log(res.data);
-                  let cntLike = res.data.result;
-                  document.getElementById("cntLike").innerText = cntLike;
-                })
-                .catch((err) => {
-                  console.log(err);
-                });
-
-        <!-- google map 위/경도 구해와 출력하기 -->
-        // var myLatlng = new google.maps.LatLng(35.837143,128.558612); // 위치값 위도 경도
-        // var Y_point			= 35.837143;		// Y 좌표
-        // var X_point			= 128.558612;		// X 좌표
-        // var zoomLevel		= 18;				// 지도의 확대 레벨 : 숫자가 클수록 확대정도가 큼
-        // var markerTitle		= "테스트";		// 현재 위치 마커에 마우스를 오버을때 나타나는 정보
-        // var markerMaxWidth	= 300;				// 마커를 클릭했을때 나타나는 말풍선의 최대 크기
-
-        console.log(lat);
-        console.log(lng);
-
-        var myLatlng = new google.maps.LatLng(lat,lng); // 위치값 위도 경도
-        var Y_point			= lat;		// Y 좌표
-        var X_point			= lng;		// X 좌표
-        var zoomLevel		= 18;				// 지도의 확대 레벨 : 숫자가 클수록 확대정도가 큼
-        var markerTitle		= location;		// 현재 위치 마커에 마우스를 오버을때 나타나는 정보
-        var markerMaxWidth	= 300;				// 마커를 클릭했을때 나타나는 말풍선의 최대 크기
-
-// 말풍선 내용
-        var contentString	= '<div>' +
-                '<h2>hello</h2>'+
-                '<p>test입니다</p>' +
-
-                '</div>';
-
-
-
-
-        var myLatlng = new google.maps.LatLng(Y_point, X_point);
-        var mapOptions = {
-          zoom: zoomLevel,
-          center: myLatlng,
-          mapTypeId: google.maps.MapTypeId.ROADMAP
-        }
-        var map = new google.maps.Map(document.getElementById('map_ma'), mapOptions);
-        var marker = new google.maps.Marker({
-          position: myLatlng,
-          map: postDetailUI,
-          title: markerTitle
-        });
-        var infowindow = new google.maps.InfoWindow(
-                {
-                  content: contentString,
-                  maxWizzzdth: markerMaxWidth
-                }
-        );
-        google.maps.event.addListener(marker, 'click', function() {
-          infowindow.open(PostDetail, marker);
-        });
-      });
-    </script>
-
-  </head>
+  </head>     
 
 <body id="body" class="up-scroll">
 
@@ -293,11 +110,11 @@
                 </li>
 
                 <li class="">
-                  <a href="/post/sports">좋아요</a>
+                  <a href="/my/likes">좋아요</a>
                 </li>
 
                 <li class="">
-                  <a href="index-3.html">마이 피드</a>
+                  <a href="/my">마이 피드</a>
                 </li>
 
                 <li class="">
@@ -322,23 +139,15 @@
 ———	PAGE TITLE
 ===================================== -->
 <section class="page-title">
-  <div class="page-title-img bg-img bg-overlay-darken" style="background-image: url(/assets/img/pages/page-title-bg13.jpg);">
+  <div class="page-title-img bg-img bg-overlay-darken" style="background-image: url(/assets/img/pages/page-title-bg6.jpg);">
     <div class="container">
       <div class="row align-items-center justify-content-center" style="height: 200px;">
         <div class="col-lg-6">
           <div class="page-title-content">
             <div class="title-border">
-              <h2 class="text-uppercase text-white font-weight-bold">모집중</h2>
+              <h2 class="text-uppercase text-white font-weight-bold">버킷리스트</h2>
             </div>
-            <p class="text-white mb-0">현재 인원 : (3 / 5)</p>
-            <div class="right_area pt-2" style="display: flex; justify-content: center">
-              <a href="javascript:void(0);" class="icon heart">
-                <img src="/assets/img/like/blank-heart.png" alt="찜하기">
-              </a>
-              <div class="cntLike">
-                <p id="cntLike">0</p>
-              </div>
-            </div>
+            <h3 class="text-uppercase text-white font-weight-bold">좋아요</h3>
           </div>
         </div>
       </div>
@@ -348,235 +157,66 @@
 
 
 <!-- ====================================
-———	PACKAGES SECTION
+———	TOUR PACKAGES SECTION
 ===================================== -->
-<section class="py-8">
+<section class="bg-smoke py-10">
   <div class="container">
     <div class="row">
-      <div class="col-md-12">
-        <div class="mt-n7" style="float: right">
-          <button type="button" class="btn btn-outline-dark mb-2" style="padding: 8px 18px">수정</button>
-          <button type="button" class="btn btn-outline-dark mb-2" style="padding: 8px 18px">삭제</button>
-        </div>
-        <div>
-          <h2 class="text-uppercase mb-2" id="title"></h2>
-          <h4 class="text-uppercase mb-5" id="writer"></h4>
-
-          <div class="mb-5">
-            <div class="row">
-              <div class="col-md-12">
-                <ul class="list-unstyled mb-0">
-                  <li class="media">
-                    <div class="text-gray-color me-2">
-                      <i class="far fa-dot-circle" aria-hidden="true"></i>
-                    </div>
-                    <div class="media-body">
-                      <p id="untilRecruit"></p>
-                    </div>
-                  </li>
-
-
-                  <li class="media">
-                    <div class="text-gray-color me-2">
-                      <i class="far fa-dot-circle" aria-hidden="true"></i>
-                    </div>
-                    <div class="media-body">
-                      <p id="eventStart"></p>
-                    </div>
-                  </li>
-
-                  <li class="media">
-                    <div class="text-gray-color me-2">
-                      <i class="far fa-dot-circle" aria-hidden="true"></i>
-                    </div>
-                    <div class="media-body">
-                      <p id="cost"></p>
-                    </div>
-                  </li>
-
-                  <li class="media">
-                    <div class="text-gray-color me-2">
-                      <i class="far fa-dot-circle" aria-hidden="true"></i>
-                    </div>
-                    <div class="media-body">
-                      <p id="location"></p>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="mb-6">
-          <div class="row">
-            <!-- 구글 맵 출력 부분-->
-            <div id="map_ma"></div>
-
-            <!-- 이미지 출력 부분 -->
-            <div id="package-slider" class="owl-carousel owl-theme package-slider col-md-6">
-              <div class="item">
-                <img class="lazyestload" data-src="/assets/img/packages/package-slider-03.jpg" src="/assets/img/packages/package-slider-03.jpg" alt="image">
-              </div>
-
-              <div class="item">
-                <img class="lazyestload" data-src="/assets/img/packages/package-slider-04.jpg" src="/assets/img/packages/package-slider-04.jpg" alt="image">
-              </div>
-
-              <div class="item">
-                <img class="lazyestload" data-src="/assets/img/packages/package-slider-05.jpg" src="/assets/img/packages/package-slider-05.jpg" alt="image">
-              </div>
-            </div>
-          </div>
-          <p class="my-6" id="content">설명 내용</p>
-        </div>
-
-        <div class="mb-5" style="display: flex; justify-content: center">
-          <button type="button" class="btn btn-primary mb-2">참가하기</button>
-        </div>
-
-        <div class="comment-box">
-          <form class="">
-            <h3 class="text-uppercase mb-6">댓글 (댓글 수?)</h3>
-
-            <div class="form-group mb-2">
-              <textarea class="form-control border-0 bg-smoke" placeholder="Comment" rows="3"></textarea>
-            </div>
-
-            <div style="display: flex; justify-content: right">
-              <button type="button" class="btn btn-outline-info-comment-button mb-2" style="padding: 8px 18px">
-                등록
-              </button>
-            </div>
-          </form>
-
-          <ul class="comment-list">
-            <li class="comment-item" id="comment1">       <!-- id값 중복되면 안됨 -->
-              <a class="me-n4 comment-tool" id="navbarDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">. . .</a>
-              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="#">수정</a></li>
-                <li><a class="dropdown-item" href="#">삭제</a></li>
-              </ul>
-              <div>
-                <div>
-                  <p class="comment-username">닉네임</p>
-                </div>
-                <div>
-                  <p class="comment-content">이름 : 댓글</p>
-                </div>
-                <div>
-                  <p class="comment-date">작성일자</p>
-                  <a class="comment-date" onclick="showCommentReply('comment1-1')">댓글쓰기</a>   <!-- 아래 id값과 같아야함-->
-                  <form class="comment-reply-form" id="comment1-1" style="display: none;">      <!-- comment1은 부모댓글과 같아야하고 그 뒤에 숫자는 한개씩 출력되야함 -->
-                    <div class="form-group mb-2">
-                      <textarea class="form-control border-0 bg-smoke" placeholder="Comment" rows="2"></textarea>
-                    </div>
-
-                    <div style="display: flex; justify-content: right">
-                      <button type="button" class="btn btn-outline-info-comment-button mb-2" style="padding: 8px 18px">
-                        등록
-                      </button>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </li>
-            <li class="comment-reply" id="comment2">
-              <a class="me-n4 comment-tool" id="navbarDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">. . .</a>
-              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="#">수정</a></li>
-                <li><a class="dropdown-item" href="#">삭제</a></li>
-              </ul>
-              <div>
-                <div>
-                  <p class="comment-username">닉네임</p>
-                </div>
-                <div>
-                  <p class="comment-content">이름 : 댓글</p>
-                </div>
-                <div>
-                  <p class="comment-date">작성일자</p>
-                  <a class="comment-date" onclick="showCommentReply('comment2-1')">댓글쓰기</a>
-                  <form class="comment-reply-form" id="comment2-1" style="display: none;">
-                    <div class="form-group mb-2">
-                      <textarea class="form-control border-0 bg-smoke" placeholder="Comment" rows="2"></textarea>
-                    </div>
-
-                    <div style="display: flex; justify-content: right">
-                      <button type="button" class="btn btn-outline-info-comment-button mb-2" style="padding: 8px 18px">
-                        등록
-                      </button>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </li>
-            <li class="comment-item" id="comment3">
-              <a class="me-n4 comment-tool" id="navbarDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">. . .</a>
-              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="#">수정</a></li>
-                <li><a class="dropdown-item" href="#">삭제</a></li>
-              </ul>
-              <div>
-                <div>
-                  <p class="comment-username">닉네임</p>
-                </div>
-                <div>
-                  <p class="comment-content">이름 : 댓글</p>
-                </div>
-                <div>
-                  <p class="comment-date">작성일자</p>
-                  <a class="comment-date" onclick="showCommentReply('comment3-1')">댓글쓰기</a>
-                  <form class="comment-reply-form" id="comment3-1" style="display: none;">
-                    <div class="form-group mb-2">
-                      <textarea class="form-control border-0 bg-smoke" placeholder="Comment" rows="2"></textarea>
-                    </div>
-
-                    <div style="display: flex; justify-content: right">
-                      <button type="button" class="btn btn-outline-info-comment-button mb-2" style="padding: 8px 18px">
-                        등록
-                      </button>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </li>
-            <li class="comment-item" id="comment4">
-              <a class="me-n4 comment-tool" id="navbarDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">. . .</a>
-              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="#">수정</a></li>
-                <li><a class="dropdown-item" href="#">삭제</a></li>
-              </ul>
-              <div>
-                <div>
-                  <p class="comment-username">닉네임</p>
-                </div>
-                <div>
-                  <p class="comment-content">이름 : 댓글</p>
-                </div>
-                <div>
-                  <p class="comment-date">작성일자</p>
-                  <a class="comment-date" onclick="showCommentReply('comment4-1')">댓글쓰기</a>
-                  <form class="comment-reply-form" id="comment4-1" style="display: none;">
-                    <div class="form-group mb-2">
-                      <textarea class="form-control border-0 bg-smoke" placeholder="Comment" rows="2"></textarea>
-                    </div>
-
-                    <div style="display: flex; justify-content: right">
-                      <button type="button" class="btn btn-outline-info-comment-button mb-2" style="padding: 8px 18px">
-                        등록
-                      </button>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </li>
-          </ul>
+      <div class="col-lg-8 col-xl-12">
+        <div id="list_container" class="row">
+<!--          포스트 리스트 부분-->
+<!--          포스트 리스트 부분-->
+<!--          포스트 리스트 부분-->
         </div>
       </div>
     </div>
   </div>
+
+  <!-- ====================================
+———	PAGINATION
+===================================== -->
+<section class="pt-5 pt-md-7">
+  <div class="container">
+    <nav aria-label="Page navigation">
+      <ul class="pagination justify-content-center align-items-center">
+        <li class="page-item">
+          <a class="page-link" href="javascript:void(0)" tabindex="-1">
+            <i class="fas fa-long-arrow-alt-left d-none d-md-inline-block me-md-1" aria-hidden="true"></i> Previous
+          </a>
+        </li>
+    
+        <li class="page-item">
+          <a class="page-link active" href="javascript:void(0)">1</a>
+        </li>
+    
+        <li class="page-item">
+          <a class="page-link" href="javascript:void(0)">2</a>
+        </li>
+    
+        <li class="page-item">
+          <a class="page-link" href="javascript:void(0)">3</a>
+        </li>
+    
+        <li class="page-item">
+          <a class="page-link" href="javascript:void(0)">...</a>
+        </li>
+    
+        <li class="page-item">
+          <a class="page-link" href="javascript:void(0)">9</a>
+        </li>
+    
+        <li class="page-item">
+          <a class="page-link" href="javascript:void(0)">Next
+            <i class="fas fa-long-arrow-alt-right d-none d-md-inline-block ms-md-1" aria-hidden="true"></i>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
 </section>
+
+</section>
+
 
 
   </div><!-- element wrapper ends -->
@@ -590,7 +230,7 @@
           <div class="row">
             <div class="col-md-6 col-lg-3 mb-7 mb-lg-0">
               <a class="d-inline-block" href="index.html">
-                <img class="w-100 mb-6 lazyestload" data-src="assets/img/logo-color-sm.png" src="assets/img/logo-color-sm.png" alt="img">
+                <img class="w-100 mb-6 lazyestload" data-src="/assets/img/logo-color-sm.png" src="/assets/img/logo-color-sm.png" alt="img">
               </a>
               <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute</p>
             </div>
@@ -843,7 +483,7 @@
       </div>
     </div>
 
-    <!-- Login Modal -->
+  <!-- Login Modal -->
   <div class="modal fade" id="login" tabindex="-1" role="dialog" aria-label="loginModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
       <div class="modal-content">
@@ -932,86 +572,85 @@
     <script src="/assets/plugins/jquery/jquery-3.4.1.min.js"></script>
     <script src="/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="/assets/plugins/menuzord/js/menuzord.js"></script>
-
-
-
+    
+    
+    
     <script src='/assets/plugins/fancybox/jquery.fancybox.min.js'></script>
+    
+    <script src='/assets/plugins/selectric/jquery.selectric.min.js'></script>
+    <script src='/assets/plugins/daterangepicker/js/moment.min.js'></script>
+    <script src='/assets/plugins/daterangepicker/js/daterangepicker.min.js'></script>
+    <script src='/assets/plugins/rateyo/jquery.rateyo.min.js'></script>
+    <script src="/assets/plugins/lazyestload/lazyestload.js"></script>
+
+    
+    <script src='/assets/plugins/no-ui-slider/nouislider.min.js'></script>
 
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script>
-    function showCommentReply(commentReplyId) {
-      let search = document.getElementById(commentReplyId);
-      let check = search.style.display;
-      if(check == "none") {
-        search.style.display="block";
-      } else {
-        search.style.display="none";
+    let html = "<div class=\"col-md-6 col-xl-3 mb-5\">\n" +
+            "            <div class=\"card card-hover\">\n" +
+            "              <a href=\"single-package-right-sidebar.html\" class=\"position-relative\">\n" +
+            "                <img class=\"card-img-top lazyestload\" data-src=\"/assets/img/home/deal/deal-01.jpg\" src=\"/assets/img/home/deal/deal-01.jpg\" alt=\"Card image cap\">\n" +
+            "                <div class=\"card-img-overlay card-hover-overlay rounded-top d-flex flex-column\">\n" +
+            "                  <div class=\"badge {배경색} badge-rounded-circle\">\n" +
+            "                    <span class=\"d-block\">{모집상태}</span>\n" +
+            "                  </div>\n" +
+            "                </div>\n" +
+            "              </a>\n" +
+            "\n" +
+            "              <div class=\"card-body px-4\">\n" +
+            "                <h5>\n" +
+            "                  <a href=\"single-package-right-sidebar.html\" class=\"card-title text-uppercase\">{제목}</a>\n" +
+            "                </h5>\n" +
+            "                <h6 class=\"mt-n2\">\n" +
+            "                  {주최자 이름}\n" +
+            "                </h6>\n" +
+            "                <p class=\"mb-1\">모집 기간 : ~ {모집 마감 날짜}</p>\n" +
+            "                <p class=\"mb-1\">일정 : {일정 시작 날짜} ~ {일정 종료 날짜}</p>\n" +
+            "                <p class=\"mb-1\">{장소}</p>\n" +
+            "                <p class=\"mb-1\">{비용}</p>\n" +
+            "              </div>\n" +
+            "            </div>\n" +
+            "          </div>";
+    $(window).ready( async function () {
+      try {
+        const response = await axios.get('/post/my/likes');
+        const result = response.data.result;
+        let post_list = result.content;
+        console.log(result)
+
+        post_list.forEach(function (post) {
+          let html_result = html.replace("{제목}", post.title)
+                  .replace("{비용}", post.cost)
+                  .replace("{장소}", post.location)
+                  .replace("{일정 시작 날짜}", post.eventStart)
+                  .replace("{일정 종료 날짜}", post.eventEnd)
+                  .replace("{모집 마감 날짜}", post.untilRecruit);
+
+          if (post.status === 'JOIN') {
+            html_result = html_result.replace("{모집상태}", '모집중')
+                    .replace("{배경색}", 'bg-primary');
+          } else if (post.status === 'JOINCOMPLETE') {
+            html_result = html_result.replace("{모집상태}", '모집완료')
+                    .replace("{배경색}", 'bg-success');
+          } else if (post.status === 'PROCESS') {
+            html_result = html_result.replace("{모집상태}", '진행중')
+                    .replace("{배경색}", 'bg-danger');
+          } else if (post.status === 'COMPLETE') {
+            html_result = html_result.replace("{모집상태}", '진행완료')
+                    .replace("{배경색}", 'bg-info');
+          }
+
+          let parent = document.getElementById('list_container');
+          parent.innerHTML += html_result;
+        })
+
+      } catch (e) {
+
       }
-    }
-  </script>
 
-  <script>
-    //heart 좋아요 클릭시! 하트 뿅
-    $(function(){
-      var $likeBtn =$('.icon.heart');
-
-      $likeBtn.click(function(){
-        const postId = new URL(window.location.href).pathname.replace("/post/", "");
-        console.log(postId);
-
-        $likeBtn.toggleClass('active');
-        if($likeBtn.hasClass('active')){
-          axios.post('/post/' + postId + '/likes')
-                  .then((res) => {
-                    console.log(res.data);
-
-                    $(this).find('img').attr({
-                      'src': '/assets/img/like/full-heart.png',
-                      alt:'찜하기 완료'
-                    });
-
-                    axios.get('/post/' + postId + '/likes')
-                            .then((res) => {
-                              console.log(res.data);
-                              let cntLike = res.data.result;
-                              document.getElementById("cntLike").innerText = cntLike;
-                            })
-                            .catch((err) => {
-                              console.log(err);
-                            })
-                  })
-                  .catch((err) => {
-                    console.log(err);
-                    alert("로그인 후 이용해주세요.")
-                  })
-        }else{
-          axios.post('/post/' + postId + '/likes')
-                  .then((res) => {
-                    console.log(res.data);
-
-                    $(this).find('i').removeClass('fas').addClass('far')
-                    $(this).find('img').attr({
-                      'src': '/assets/img/like/blank-heart.png',
-                      alt:"찜하기"
-                    })
-
-                    axios.get('/post/' + postId + '/likes')
-                            .then((res) => {
-                              console.log(res.data);
-                              let cntLike = res.data.result;
-                              document.getElementById("cntLike").innerText = cntLike;
-                            })
-                            .catch((err) => {
-                              console.log(err);
-                            })
-                  })
-                  .catch((err) => {
-                    console.log(err);
-                    alert("로그인 후 이용해주세요.")
-                  })
-        }
-      })
-    })
+    });
 
     axios.interceptors.request.use(function(config) {
       const accessToken = localStorage.getItem('accessToken');
@@ -1049,18 +688,10 @@
   </script>
 
 
-    <script src='/assets/plugins/rateyo/jquery.rateyo.min.js'></script>
-    <script src="/assets/plugins/lazyestload/lazyestload.js"></script>
 
-
-
-
-
-    <script src='/assets/plugins/owl-carousel/owl.carousel.min.js'></script>
-
-
+    
     <script src="/assets/plugins/smoothscroll/SmoothScroll.js"></script>
-    <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyDU79W1lu5f6PIiuMqNfT1C6M0e_lq1ECY'></script>
+    
     <script src="/assets/js/star.js"></script>
 
     <script src="/assets/js/custom.js"></script>

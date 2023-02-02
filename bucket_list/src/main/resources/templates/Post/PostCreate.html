@@ -852,7 +852,6 @@
                 .then(function (response) {
                   let res = response.data.result.postId;
                   let url = "/post/"+res;
-                  localStorage.setItem('postId',res);
                   window.location.replace(url);
                   console.log(res);
                 })
@@ -919,8 +918,6 @@
             alert("성공");
             let url = "/post/"+response.data.result.postId;
             alert(response);
-            localStorage.removeItem("postId");
-            localStorage.setItem('postId',response.data.result.postId);
             window.location.replace(url);
           }catch (error){
             alert("실패");
