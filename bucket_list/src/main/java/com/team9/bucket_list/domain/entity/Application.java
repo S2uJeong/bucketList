@@ -34,7 +34,7 @@ public class Application {
 
     public static Application save(ApplicationRequest applicationRequest, Post post, Member member) {
         return Application.builder()
-                .content(applicationRequest.getComment())
+                .content(applicationRequest.getContent())
                 .status((byte)0)
                 .member(member)
                 .post(post)

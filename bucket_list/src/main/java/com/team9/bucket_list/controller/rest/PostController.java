@@ -30,12 +30,6 @@ public class PostController {
 
     private final PostService postService;
 
-    // 게시글 작성 폼 페이지 이동
-    @GetMapping("/createform")
-    public String movePostForm(){
-        return "Post/PostCreate";
-    }
-
     // 게시글 폼에서 데이터 받아오기(Ajax 사용하여 받아옴)
     @PostMapping(value = "/detailpost" ,produces = "application/json")
     @ResponseBody

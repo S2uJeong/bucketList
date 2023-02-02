@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,12 +22,12 @@ public class ApplicationRestController {
 
     //신청서 제출
     @PostMapping
-    public Response getApplication(ApplicationRequest applicationRequest) {
+    public Response getApplication(@RequestBody ApplicationRequest applicationRequest, Authentication authentication) {
         //memberId는 jwt에서 가져옴
-        Long memberId = 1L;
-        log.info("app comment : " + applicationRequest.getComment() + "app postId : " + applicationRequest.getPostId());
+        Long memberId = Long.parseLong(authentication.getName());
+        log.info("app content : " + applicationRequest.getContent() + "app postId : " + applicationRequest.getPostId());
         applicationService.getApplication(applicationRequest,memberId);
-        return Response.success("해당 게시글로 리다이렉트");
+        return Response.success("신청서 제출 성공");
     }
 
     //특정 포스트의 신청서 리스트 (승낙, 거절 제외), 글쓴이만 확인 가능
