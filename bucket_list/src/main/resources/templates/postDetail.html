@@ -819,7 +819,15 @@
             alt:'찜하기 완료'
           });
 
-          document.getElementById("cntLike").innerText = parseInt(cntLike) + 1;
+          setTimeout(() => axios.get('/post/1/likes')
+                  .then((res) => {
+                    console.log(res.data);
+                    let cntLike = res.data.result;
+                    document.getElementById("cntLike").innerText = cntLike;
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                  }), 60);
         }else{
           axios.post('/post/1/likes')
                   .then((res) => {
@@ -836,7 +844,15 @@
             alt:"찜하기"
           })
 
-          document.getElementById("cntLike").innerText = parseInt(cntLike) - 1;
+          setTimeout(() => axios.get('/post/1/likes')
+                  .then((res) => {
+                    console.log(res.data);
+                    let cntLike = res.data.result;
+                    document.getElementById("cntLike").innerText = cntLike;
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                  }), 60);
         }
       })
     })
