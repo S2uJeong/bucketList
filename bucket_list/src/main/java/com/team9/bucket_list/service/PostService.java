@@ -68,8 +68,8 @@ public class PostService {
 
     // ========= 유효성검사 ===========
     // 1. findByMemberId : memberId로 member 찾아 로그인 되어있는지 확인 ->  error : 권한이 없습니다.
-    public Member checkMember(String userName) {
-        return memberRepository.findByUserName(userName)
+    public Member checkMember(Long memberId) {
+        return memberRepository.findById(memberId)
                 .orElseThrow(() -> new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED));
     }
 //    // 2. checkPostMember : post를 작성한 mem과 현재 로그인 된 mem 비교 -> INVALID_PERMISSION
@@ -180,6 +180,23 @@ public class PostService {
     }
 
     //== 좋아요 ==//
+    // 좋아요 확인
+    public int checkLike(Long postId, Long memberId) {
+        //        로그인 되어있는지 확인하고 아니면 에러던짐 -> userName인지 memberId인지 확인하여 수정
+        Member member = checkMember(memberId);
+
+        // postid에 해당하는 post가 DB에 없으면 에러던짐 - entity
+        checkPost(postId);
+
+        Optional<Likes> savedLike = likesRepository.findByPost_IdAndMember_Id(postId, member.getId());
+
+        if (savedLike.isEmpty()){
+            return 0;
+        }else {
+            return 1;
+        }
+    }
+
     // 좋아요 개수
     public Long countLike(Long postId) {
         // postid에 해당하는 post가 DB에 없으면 에러던짐 - entity
@@ -190,9 +207,9 @@ public class PostService {
 
     // 좋아요 누르기
     @Transactional
-    public int clickLike(long postId, String userName) {
+    public int clickLike(Long postId, Long memberId) {
         //        로그인 되어있는지 확인하고 아니면 에러던짐 -> userName인지 memberId인지 확인하여 수정
-        Member member = checkMember(userName);
+        Member member = checkMember(memberId);
 
         // postid에 해당하는 post가 DB에 없으면 에러던짐 - entity
         Post post = checkPost(postId);
@@ -217,9 +234,9 @@ public class PostService {
 
     //== 마이피드 ==//
     // 작성한 포스트 리턴
-    public Page<PostReadResponse> myFeedCreate(Pageable pageable, String userName) {
+    public Page<PostReadResponse> myFeedCreate(Pageable pageable, Long memberId) {
         //        로그인 되어있는지 확인하고 아니면 에러던짐 -> userName인지 memberId인지 확인하여 수정
-        Member member = checkMember(userName);
+        Member member = checkMember(memberId);
 
         // Entity
         Page<Post> createPosts = postRepository.findByMember_Id(member.getId(), pageable);
@@ -230,9 +247,9 @@ public class PostService {
     }
 
     // 신청한 포스트 리턴
-    public Page<PostReadResponse> myFeedApply(Pageable pageable, String userName) {
+    public Page<PostReadResponse> myFeedApply(Pageable pageable, Long memberId) {
         //        로그인 되어있는지 확인하고 아니면 에러던짐 -> userName인지 memberId인지 확인하여 수정
-        Member member = checkMember(userName);
+        Member member = checkMember(memberId);
 
         // Entity
         Set<Application> applications = applicationRepository.findByMember_Id(member.getId());
@@ -245,9 +262,9 @@ public class PostService {
     }
 
     // 좋아요한 포스트 리턴
-    public Page<PostReadResponse> myFeedLike(Pageable pageable, String userName) {
+    public Page<PostReadResponse> myFeedLike(Pageable pageable, Long memberId) {
         //        로그인 되어있는지 확인하고 아니면 에러던짐 -> userName인지 memberId인지 확인하여 수정
-        Member member = checkMember(userName);
+        Member member = checkMember(memberId);
 
         // Entity
         Set<Likes> likes = likesRepository.findByMember_Id(member.getId());
