@@ -64,10 +64,8 @@
 
     <script>
       $(document).ready(function() {
-
-        <!-- PostId에 따른 데이터 호출하기 -->
-        let postId = JSON.parse(localStorage.getItem("postId"));
-
+        const postId = new URL(window.location.href).pathname.replace("/post/", "");
+        console.log(postId);
 
         // axios header에 넣을 데이터
         const axiosConfig = {
@@ -150,6 +148,36 @@
         }
 
         getdata();
+
+
+        <!-- 좋아요 -->
+        console.log('getLike');
+        axios.get('/post/' + postId + '/likes/check')
+                .then((res) => {
+                  console.log(res.data);
+                  let likeCheck = res.data.result;
+                  let $likeBtn =$('.icon.heart');
+                  if (likeCheck == 1){
+                    $likeBtn.toggleClass('active');
+                    $likeBtn.find('img').attr({
+                      'src': '/assets/img/like/full-heart.png',
+                      alt:'찜하기 완료'
+                    });
+                  }
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+
+        axios.get('/post/' + postId + '/likes')
+                .then((res) => {
+                  console.log(res.data);
+                  let cntLike = res.data.result;
+                  document.getElementById("cntLike").innerText = cntLike;
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
 
         <!-- google map 위/경도 구해와 출력하기 -->
         // var myLatlng = new google.maps.LatLng(35.837143,128.558612); // 위치값 위도 경도
@@ -923,45 +951,17 @@
   </script>
 
   <script>
-    $(document).ready(function() {
-      console.log('getLike');
-      axios.get('/post/1/likes/check')
-              .then((res) => {
-                console.log(res.data);
-                let likeCheck = res.data.result;
-                let $likeBtn =$('.icon.heart');
-                if (likeCheck == 1){
-                  $likeBtn.toggleClass('active');
-                  $likeBtn.find('img').attr({
-                    'src': '/assets/img/like/full-heart.png',
-                    alt:'찜하기 완료'
-                  });
-                }
-
-
-              })
-              .catch((err) => {
-                console.log(err);
-              })
-      axios.get('/post/1/likes')
-              .then((res) => {
-                console.log(res.data);
-                let cntLike = res.data.result;
-                document.getElementById("cntLike").innerText = cntLike;
-              })
-              .catch((err) => {
-                console.log(err);
-              })
-    })
-
     //heart 좋아요 클릭시! 하트 뿅
     $(function(){
       var $likeBtn =$('.icon.heart');
 
       $likeBtn.click(function(){
+        const postId = new URL(window.location.href).pathname.replace("/post/", "");
+        console.log(postId);
+
         $likeBtn.toggleClass('active');
         if($likeBtn.hasClass('active')){
-          axios.post('/post/1/likes')
+          axios.post('/post/' + postId + '/likes')
                   .then((res) => {
                     console.log(res.data);
 
@@ -970,7 +970,7 @@
                       alt:'찜하기 완료'
                     });
 
-                    axios.get('/post/1/likes')
+                    axios.get('/post/' + postId + '/likes')
                             .then((res) => {
                               console.log(res.data);
                               let cntLike = res.data.result;
@@ -985,7 +985,7 @@
                     alert("로그인 후 이용해주세요.")
                   })
         }else{
-          axios.post('/post/1/likes')
+          axios.post('/post/' + postId + '/likes')
                   .then((res) => {
                     console.log(res.data);
 
@@ -995,7 +995,7 @@
                       alt:"찜하기"
                     })
 
-                    axios.get('/post/1/likes')
+                    axios.get('/post/' + postId + '/likes')
                             .then((res) => {
                               console.log(res.data);
                               let cntLike = res.data.result;
