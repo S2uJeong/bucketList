@@ -78,7 +78,7 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
-
+// compileQuerydsl 실행파일 동작 하지 않도록 하기 위해
 compileQuerydsl.enabled = false
 
 //querydsl 추가 시작

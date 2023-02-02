@@ -1,5 +1,6 @@
 package com.team9.bucket_list.controller.rest;
 
+import com.team9.bucket_list.domain.Response;
 import com.team9.bucket_list.domain.dto.comment.CommentCreateRequest;
 import com.team9.bucket_list.domain.dto.comment.CommentCreateResponse;
 import com.team9.bucket_list.domain.dto.comment.CommentListResponse;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Slf4j
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/comment")
 public class CommentController {
@@ -21,37 +22,35 @@ public class CommentController {
 
 
     // 댓글 작성
-    @PostMapping("/{postsId}")
-    @ResponseBody
-    public CommentCreateResponse commentCreate(@PathVariable(name = "postsId")Long id,@RequestBody CommentCreateRequest request){
-        String userName = "test";
+    @PostMapping("/{postId}")
+
+    public Response<CommentCreateResponse> commentCreate(@PathVariable(name = "postId")Long id, @RequestBody CommentCreateRequest request){
+        String userName = "han";
         log.info("댓글작성 username :"+userName);
-        return commentService.commentCreate(id,request,userName);
+        return Response.success(commentService.commentCreate(id,request,userName));
     }
 
     // 댓글 리스트 전체 출력
     @GetMapping("/{postId}/comments")
-    @ResponseBody
-    public List<CommentListResponse> commentList(@PathVariable(name = "postId") Long id){
+    public Response<List<CommentListResponse>> commentList(@PathVariable(name = "postId") Long id){
         List<CommentListResponse> commentList = commentService.commentList(id);
-        return commentList;
+        return Response.success(commentList);
     }
 
     // 댓글 수정
     @PutMapping("/{postId}/comments/{commentId}")
-    @ResponseBody
-    public List<CommentListResponse> commentUpdate(@PathVariable(name = "postId")Long postid, @PathVariable(name="commentId")Long id,@RequestBody CommentCreateRequest request){
-        String userName = "test";
+    public Response<List<CommentListResponse>> commentUpdate(@PathVariable(name = "postId")Long postid, @PathVariable(name="commentId")Long id,@RequestBody CommentCreateRequest request){
+        String userName = "han";
         List<CommentListResponse> commentList = commentService.updateComment(postid,id,request,userName);
-        return commentList;
+        return Response.success(commentList);
     }
 
     // 댓글 삭제
     @DeleteMapping("{postId}/comments/{commentId}")
     @ResponseBody
-    public List<CommentListResponse> commentDelete(@PathVariable(name = "postId")Long postid, @PathVariable(name="commentId")Long id){
-        String userName = "test";
+    public Response<List<CommentListResponse>> commentDelete(@PathVariable(name = "postId")Long postid, @PathVariable(name="commentId")Long id){
+        String userName = "han";
         List<CommentListResponse> commentList = commentService.deleteComment(postid,id,userName);
-        return commentList;
+        return Response.success(commentList);
     }
 }
