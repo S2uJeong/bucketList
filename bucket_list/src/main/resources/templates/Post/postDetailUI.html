@@ -56,7 +56,7 @@
 
   <!-- 구글 맵 사용 -->
   <!-- 맵 api key 삭제해야함 서버에서 환경변수값을 넘겨줘야 함-->
-  <script type="text/javascript" src="http://maps.google.com/maps/api/js?key=AIzaSyBnEbknTcJ0sg7EJiuKhDkP8fNEke7HNMU" ></script>
+  <script type="text/javascript" src="https://maps.google.com/maps/api/js?key=AIzaSyBnEbknTcJ0sg7EJiuKhDkP8fNEke7HNMU" ></script>
 
   <style>
     #map_ma {width:100%; height:400px; clear:both; border:solid 1px red;}
@@ -78,6 +78,8 @@
 
       let jsonState;        // Json 반환 상태(성공인지 에러인지)
       let jsonResult;       // Json 반환 값 저장
+      let jsonCommentState;        // Json 댓글 반환 상태(성공인지 에러인지)
+      let jsonCommentResult;       // Json 댓글 반환 값 저장
       let title;
       let userName;    //  => writer로 사용 유저 아이디이름
       let content;
@@ -96,9 +98,21 @@
       const getdata = async()=>{
         try{
           const response = await axios.get('/post/'+postId+'/json');
+          const commentresponse = await axios.get('/comment/'+postId+'/comments');
           console.log(response);     // json 데이터 받아온거
           jsonState = response.data.resultCode;
+          jsonCommentState = commentresponse.data.resultCode;
+
           console.log(jsonState);
+          console.log(jsonCommentState);
+
+          if(jsonCommentState == "SUCCESS") {
+
+
+
+          }else
+            alert("서버 반환값 Error임 404페이지 이동");
+
           if(jsonState == "SUCCESS") {
 
             jsonResult = response.data.result;
@@ -152,6 +166,8 @@
             console.log(location);
           }else
             alert("서버 반환값 Error임 404페이지 이동");
+
+
         }catch (ERROR){
           alert("404 에러");
         }
