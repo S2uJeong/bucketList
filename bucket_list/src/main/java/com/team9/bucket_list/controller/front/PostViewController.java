@@ -29,7 +29,6 @@ public class PostViewController {
     @GetMapping("/{postId}")        // 페이지 이동만을 위한 코드
     public String readPost(@PathVariable(value = "postId") Long postId){
         log.info("postdetail 페이지 이동");
-//        return "Post/AxiosPostDetail";
         return "Post/postDetailUI";
     }
 
