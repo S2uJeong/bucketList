@@ -32,7 +32,7 @@ public class PostViewController {
     @GetMapping("/{postId}")        // 페이지 이동만을 위한 코드
     public String readPost(@PathVariable(value = "postId") Long postId){
         log.info("postdetail 페이지 이동");
-        return "Post/postDetailUI2";
+        return "Post/postDetailUI";
     }
 
     //== 수정 ==// ==> (리팩토링) rest 형식 또 만들 예정
