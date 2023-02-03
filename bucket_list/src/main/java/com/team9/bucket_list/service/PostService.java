@@ -13,6 +13,7 @@ import com.team9.bucket_list.domain.entity.Likes;
 import com.team9.bucket_list.domain.entity.Member;
 import com.team9.bucket_list.domain.entity.File;
 import com.team9.bucket_list.domain.entity.Post;
+import com.team9.bucket_list.domain.enumerate.MemberRole;
 import com.team9.bucket_list.exception.AppException;
 import com.team9.bucket_list.execption.ApplicationException;
 import com.team9.bucket_list.execption.ErrorCode;
@@ -72,12 +73,14 @@ public class PostService {
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED));
     }
-//    // 2. checkPostMember : post를 작성한 mem과 현재 로그인 된 mem 비교 -> INVALID_PERMISSION
-//    public void checkPostMember(Long memberId, Long postMemberId) {
-//        Member loginMember = checkMember(memberId);
-//        Member postMember = checkMember(postMemberId);
-//        if(!loginMember.equals(postMember)) throw new ApplicationException(ErrorCode.INVALID_PERMISSION);
-//    }
+    // 2. checkPostMember : post를 작성한 mem과 현재 로그인 된 mem 비교 -> INVALID_PERMISSION
+    public void checkPostMember(Long userId, Long postMemberId) {
+        Member loginMember = checkMember(userId);
+        Member postMember = checkMember(postMemberId);
+        if((!loginMember.getMemberRole().equals(MemberRole.ADMIN))&&loginMember.getUserName().equals(postMember.getUserName()))
+            throw new ApplicationException(ErrorCode.INVALID_PERMISSION);
+    }
+
     // 3. findByPostId : postId에 따른 post가 DB에 잘 있는지 확인 -> error : 없는 게시물입니다. POST_NOT_FOUND
     public Post checkPost(Long postId) {
         return postRepository.findById(postId)
@@ -86,11 +89,11 @@ public class PostService {
 
     // 작성
     @Transactional
-    public PostCreateResponse create(PostCreateRequest request, String username) {
+    public PostCreateResponse create(PostCreateRequest request, Long userId) {
         // 로그인 되어있는지 확인하고 아니면 에러던짐
-//        Member member = checkMember(username);
+        Member member = checkMember(userId);
         // requestDTO 안의 toEntity 메서드를 이용해 post Entity 객체를 생성한다.
-        Post post = request.toEntity();
+        Post post = request.toEntity(member);
         // request를 통해 만들어진 post를 DB에 저장한다.
         Post savedPost = postRepository.save(post);
         return PostCreateResponse.of(savedPost);
@@ -106,15 +109,15 @@ public class PostService {
     }
 
     // 상세조회
-    public PostReadResponse read(Long postId,String userName) {
-//        Member member = checkMember(1l);
+    public PostReadResponse read(Long postId) {
+
         // Entity
         Post post = checkPost(postId);
         // Dto
         Map<String, Double> locationNum = findLoction(post.getLocation());
         Double lat = locationNum.get("lat");
         Double lng = locationNum.get("lng");
-        PostReadResponse postReadResponse = PostReadResponse.detailOf(post,lat,lng,userName);
+        PostReadResponse postReadResponse = PostReadResponse.detailOf(post,lat,lng);
         return postReadResponse;
     }
 
@@ -143,13 +146,13 @@ public class PostService {
 
     // 삭제
     @Transactional
-    public PostDeleteResponse delete(Long postId, Long memberId) {
+    public PostDeleteResponse delete(Long postId, Long userId) {
         // 로그인 되어있는지 확인하고 아니면 에러던짐
-//        Member member = checkMember(memberId);
+        Member member = checkMember(userId);
         // postid에 해당하는 post가 DB에 없으면 에러던짐
         Post post = checkPost(postId);
         // post를 쓴 멤버와 로그인 되어 있는 member가 같은 멤버가 아니면 에러던짐
-//        checkPostMember(memberId, post.getId());
+        checkPostMember(userId, post.getMember().getId());
         postRepository.deleteById(post.getId());
         return PostDeleteResponse.of(post);
 
