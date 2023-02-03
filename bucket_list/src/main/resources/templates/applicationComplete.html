@@ -63,53 +63,40 @@
             <img class="lazyestload" data-src="/assets/img/logo-color-big.png" src="/assets/img/logo-color-big.png" alt="logo-img">
           </a>
 
-          <div class="nav-item dropdown nav-item-left me-0">
-            <button class="btn btn-xs btn-primary d-none d-lg-inline-block notify-toggler">
-              <i class="fa fa-search text-white me-0" aria-hidden="true"></i>
-            </button>
-
-            <div class="dropdown-menu dropdown-menu-end dropdown-notify rounded-0">
-              <form class="mb-0" action="index.html" method="post">
-                <div class="input-group input-group-sm">
-                  <input type="text" class="form-control form-control-sm rounded-0" required="" placeholder="Search...." aria-label="Search....">
-                  <button class="btn bg-primary border-0 rounded-0" type="submit">
-                    <span class="text-white text-uppercase font-weight-bold">Search</span>
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-
           <ul class="menuzord-menu menuzord-right">
             <li class="">
               <a class="" href="javascript:void(0)">멤버십</a>
             </li>
 
             <li class="">
-              <a class="" href="/post">버킷리스트</a>
+              <a class="" href="javascript:void(0)">버킷리스트</a>
               <ul class="dropdown drop-up">
-                <li class=" active ">
-                  <a href="index.html">Travel</a>
+                <li class="">
+                  <a href="/post">All</a>
                 </li>
 
                 <li class="">
-                  <a href="/post">Extreme</a>
+                  <a href="/post?category=travel">Travel</a>
                 </li>
 
                 <li class="">
-                  <a href="index-3.html">Study</a>
+                  <a href="/post?category=extreme">Extreme</a>
                 </li>
 
                 <li class="">
-                  <a href="index-3.html">Volunteer</a>
+                  <a href="/post?category=study">Study</a>
                 </li>
 
                 <li class="">
-                  <a href="index-3.html">Experience</a>
+                  <a href="/post?category=volunteer">Volunteer</a>
                 </li>
 
                 <li class="">
-                  <a href="index-3.html">Etc</a>
+                  <a href="/post?category=experience">Experience</a>
+                </li>
+
+                <li class="">
+                  <a href="/post?category=etc">Etc</a>
                 </li>
               </ul>
             </li>
@@ -121,16 +108,16 @@
             <li class="" id="user_li">
               <a class="" href="javascript:void(0)" id="userName">유저명</a>
               <ul class="dropdown drop-up">
-                <li class=" active ">
-                  <a href="/createform">버킷리스트 작성</a>
+                <li class="">
+                  <a href="/post/createform">버킷리스트 작성</a>
                 </li>
 
                 <li class="">
-                  <a href="/post/sports">좋아요</a>
+                  <a href="/my/likes">좋아요</a>
                 </li>
 
                 <li class="">
-                  <a href="index-3.html">마이 피드</a>
+                  <a href="/my">마이 피드</a>
                 </li>
 
                 <li class="">
@@ -142,6 +129,7 @@
                 </li>
               </ul>
             </li>
+
           </ul>
         </div>
       </div>
