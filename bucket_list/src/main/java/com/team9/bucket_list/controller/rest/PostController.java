@@ -163,7 +163,7 @@ public class PostController {
     // 좋아요한
     @GetMapping("/my/likes")
     public Response<Page<PostReadResponse>> myFeedLike(@PageableDefault(size = 16, sort = {"id"}, direction = Sort.Direction.DESC)
-                                           Pageable pageable, Authentication authentication) {
+                                                       Pageable pageable, Authentication authentication) {
         Page<PostReadResponse> likePosts = postService.myFeedLike(pageable, Long.valueOf(authentication.getName()));
         return Response.success(likePosts);
     }
@@ -171,7 +171,7 @@ public class PostController {
     // 작성한
     @GetMapping("/my/create")
     public Response<Page<PostReadResponse>> myFeedCreate(@PageableDefault(size = 16, sort = {"id"}, direction = Sort.Direction.DESC)
-                                           Pageable pageable, Authentication authentication) {
+                                                         Pageable pageable, Authentication authentication) {
         Page<PostReadResponse> createPosts = postService.myFeedCreate(pageable, Long.valueOf(authentication.getName()));
         return Response.success(createPosts);
     }
@@ -179,9 +179,8 @@ public class PostController {
     // 신청한
     @GetMapping("/my/apply")
     public Response<Page<PostReadResponse>> myFeedApply(@PageableDefault(size = 16, sort = {"id"}, direction = Sort.Direction.DESC)
-                                           Pageable pageable, Authentication authentication) {
+                                                        Pageable pageable, Authentication authentication) {
         Page<PostReadResponse> applyPosts = postService.myFeedApply(pageable, Long.valueOf(authentication.getName()));
         return Response.success(applyPosts);
     }
 }
-
