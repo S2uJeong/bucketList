@@ -35,16 +35,19 @@ public class PostController {
     @PostMapping(value = "/detailpost" ,produces = "application/json")
     @ResponseBody
     public Response<PostIdResponse> getData(@RequestBody PostCreateRequest request){
+//        Long userId = Long.valueOf(authentication.getName());
+        Long userId = 1l;
+
         log.info("detailpost");
         String userName = "test";
-        PostCreateResponse response = postService.create(request,userName);       // DB에 데이터 저장
+        PostCreateResponse response = postService.create(request,userId);       // DB에 데이터 저장
         log.info("postId():"+response.getPostId());
         PostIdResponse postid = new PostIdResponse(response.getPostId());
         return Response.success(postid);
     }
 
     //== 전체조회 ==//
-    @GetMapping("list")
+    @GetMapping("/list")
     @ResponseBody
     public Response<Page<PostReadResponse>> readAllPost(@PageableDefault(size = 15, sort = {"id"}, direction = Sort.Direction.DESC)
                                                         Pageable pageable) {
@@ -91,8 +94,7 @@ public class PostController {
     @GetMapping(value = "/{postId}/json", produces = "application/json")
     @ResponseBody
     public Response<PostReadResponse> jsonreadPost(@PathVariable(value = "postId") Long postId){
-        String userName = "han";
-        PostReadResponse postReadResponse = postService.read(postId,userName);
+        PostReadResponse postReadResponse = postService.read(postId);
         log.info("DB에서 데이터 호출 location :"+postReadResponse.getLocation());
         return Response.success(postReadResponse);
     }
@@ -101,10 +103,12 @@ public class PostController {
 
 
     //== 삭제 ==//
-    @DeleteMapping("/{postId}/{memberId}")
+    @DeleteMapping("/{postId}")
     public Response<PostDeleteResponse> deletePost(
-            @PathVariable("postId") long postId, @PathVariable("memberId") long memberId ) {
-        PostDeleteResponse postDeleteResponse = postService.delete(postId, memberId);
+            @PathVariable("postId") long postId ,Authentication authentication) {
+        Long userId = Long.valueOf(authentication.getName());
+
+        PostDeleteResponse postDeleteResponse = postService.delete(postId,userId);
         log.info("Post 삭제 성공");
         return Response.success(postDeleteResponse);
     }
