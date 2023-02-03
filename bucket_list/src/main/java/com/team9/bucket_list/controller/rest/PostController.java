@@ -47,11 +47,24 @@ public class PostController {
     @GetMapping("list")
     @ResponseBody
     public Response<Page<PostReadResponse>> readAllPost(@PageableDefault(size = 15, sort = {"id"}, direction = Sort.Direction.DESC)
-                                                        Pageable pageable) {
-        Page<PostReadResponse> postReadResponses = postService.readAll(pageable);
-        log.info("PostList 보기 성공");
-        return Response.success(postReadResponses);
+                                                        Pageable pageable, @RequestParam(value = "category", required = false) String category) {
+        if(category == null){
+            Page<PostReadResponse> postReadResponses = postService.readAll(pageable);
+            log.info("PostList 보기 성공");
+            return Response.success(postReadResponses);
+        } else{
+            Page<PostReadResponse> filterPosts = postService.filter(category, pageable);
+            return Response.success(filterPosts);
+        }
     }
+
+    // 버킷리스트 필터
+//    @GetMapping("list")
+//    public Response<Page<PostReadResponse>> postFilter(@PageableDefault(size = 15, sort = {"id"}, direction = Sort.Direction.DESC)
+//                                                       Pageable pageable, @RequestParam("category") String category ) {
+//        Page<PostReadResponse> filterPosts = postService.filter(category);
+//        return Response.success(filterPosts);
+//    }
 
     //== model 사용 세부조회 ==//
 
@@ -97,9 +110,6 @@ public class PostController {
         log.info("DB에서 데이터 호출 location :"+postReadResponse.getLocation());
         return Response.success(postReadResponse);
     }
-
-
-
 
     //== 삭제 ==//
     @DeleteMapping("/{postId}/{memberId}")

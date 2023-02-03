@@ -725,7 +725,10 @@
             "          </div>";
     $(window).ready( async function () {
       try {
-        const response = await axios.get('/post/list');
+        const category = new URL(window.location.href).search;
+        console.log(category)
+        const response = await axios.get('/post/list' + category);
+        console.log(response)
         const result = response.data.result;
         let post_list = result.content;
 
