@@ -31,6 +31,12 @@ public class ChatController {
         return "chatRoomList";
     }
 
+    // test
+    @GetMapping("/")
+    public String chatRoomTest() {
+        return "chat/chat";
+    }
+
     //방 내부
     @GetMapping("/{roomId}")
     public String chatRoom(@PathVariable Long roomId) {
