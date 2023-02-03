@@ -662,7 +662,7 @@
 <!--                </label>-->
 <!--                <a class="pull-right" href="javascript:void(0)">Fogot Password?</a>-->
 <!--             </div>-->
-
+             <p id="login_error" style="display: none"></p>
              <div class="d-grid">
               <button class="btn btn-primary text-uppercase" onclick="login(); return false;">Login</button>
              </div>
@@ -867,38 +867,22 @@
     function logout() {
       localStorage.clear();
       window.location.href = '/';
-      // return axios.post('/logout')
-      //         .then((res) => {
-      //           localStorage.clear();
-      //           window.location.href = '/';
-      //         })
     }
 
-    function login() {
+    async function login() {
       let email = document.getElementById('email').value;
       let pw = document.getElementById('password').value;
 
-      return fetch('/login', {
-        method: "POST",
-        headers: {
-          "Content-Type" : "application/json",
-          "Accept": "application/json"
-        },
-        body: JSON.stringify({
-          email: email,
-          password: pw,
-        })
-      })
-              .then(response => {
-                return response.json();
-              })
-              .then(json => {
-                localStorage.setItem("accessToken", json.result.accessToken);
-                window.location.href = '/';
-              })
-              .catch(err => {
-                console.log(err);
-              })
+      try {
+        data = {"email" : email, "password" : pw }
+        const login_response = await axios.post('/login', data, config);
+        localStorage.setItem("accessToken", login_response.data.result.accessToken);
+        window.location.reload();
+      } catch (e) {
+        const login_error_message = e.response.data.result.message;
+        document.getElementById("login_error").style.display = 'block';
+        document.getElementById("login_error").innerText = login_error_message;
+      }
     }
 
     axios.interceptors.request.use(function(config) {
@@ -920,7 +904,7 @@
 
                 await axios.post('/reissue')
                         .then(response => {
-                          console.log(response.data);
+                          console.log('interceptor error='+response.data);
                           localStorage.setItem("accessToken", response.data);
                           originRequest.headers.authorization = 'Bearer ' + response.data;
                           return axios(originRequest);
@@ -932,6 +916,7 @@
                         })
                 return Promise.reject(error)
               }
+              return Promise.reject(error);
             }
     )
   </script>
