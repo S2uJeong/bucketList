@@ -36,10 +36,10 @@ public class PostReadResponse {
 //    private List<Comment> commentList; // 버킷리스트의 댓글들
 
     // 글 하나 상세볼 때 사용하는 메서드
-    public static PostReadResponse detailOf(Post post, Double lat, Double lng,String userName) {  // 위경도는 DB에 저장하지 않으므로 매개변수로 받아서 DTO화 시킨다.
+    public static PostReadResponse detailOf(Post post, Double lat, Double lng) {  // 위경도는 DB에 저장하지 않으므로 매개변수로 받아서 DTO화 시킨다.
         return PostReadResponse.builder()
                 .postId(post.getId())
-                .userName(userName)
+                .userName(post.getMember().getUserName())
                 .title(post.getTitle())
                 .content(post.getContent())
                 .cost(post.getCost())
