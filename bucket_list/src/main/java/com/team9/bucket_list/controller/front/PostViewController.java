@@ -9,6 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/post")
@@ -54,7 +57,7 @@ public class PostViewController {
         return "Post/success"; // post 상세 조회 화면으로 연결할 예정. 임시 html 연결함.
     }
 
-
     @GetMapping
     public String postList() { return "post"; }
+
 }

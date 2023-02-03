@@ -157,8 +157,41 @@
         }
       }
 
+      <!-- 좋아요 -->
+      console.log('getLike');
+      axios.get('/post/' + postId + '/likes/check')
+              .then((res) => {
+                console.log(res.data);
+                let likeCheck = res.data.result;
+                let $likeBtn =$('.icon.heart');
+                if (likeCheck == 1){
+                  $likeBtn.toggleClass('active');
+                  $likeBtn.find('img').attr({
+                    'src': '/assets/img/like/full-heart.png',
+                    alt:'찜하기 완료'
+                  });
+                }
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+
+      axios.get('/post/' + postId + '/likes')
+              .then((res) => {
+                console.log(res.data);
+                let cntLike = res.data.result;
+                document.getElementById("cntLike").innerText = cntLike;
+              })
+              .catch((err) => {
+                console.log(err);
+              });
 
       const googlemap = function(lat,lng,location,title,content){
+
+
+
+        console.log(lat);
+        console.log(lng);
 
         var myLatlng = new google.maps.LatLng(lat,lng); // 위치값 위도 경도
         var Y_point			= lat;		// Y 좌표
@@ -926,70 +959,68 @@
   }
 </script>
 
-<script>
-  $(document).ready(function() {
-    console.log('getLike');
-    axios.get('/post/1/likes/check')
-            .then((res) => {
-              console.log(res.data);
-              let likeCheck = res.data.result;
-              let $likeBtn =$('.icon.heart');
-              if (likeCheck == 1){
-                $likeBtn.toggleClass('active');
-                $likeBtn.find('img').attr({
-                  'src': '/assets/img/like/full-heart.png',
-                  alt:'찜하기 완료'
-                });
-              }
+  <script>
+    //heart 좋아요 클릭시! 하트 뿅
+    $(function(){
+      var $likeBtn =$('.icon.heart');
 
+      $likeBtn.click(function(){
+        const postId = new URL(window.location.href).pathname.replace("/post/", "");
+        console.log(postId);
 
-            })
-            .catch((err) => {
-              console.log(err);
-            })
-  })
+        $likeBtn.toggleClass('active');
+        if($likeBtn.hasClass('active')){
+          axios.post('/post/' + postId + '/likes')
+                  .then((res) => {
+                    console.log(res.data);
 
-  //heart 좋아요 클릭시! 하트 뿅
-  $(function(){
-    var $likeBtn =$('.icon.heart');
+                    $(this).find('img').attr({
+                      'src': '/assets/img/like/full-heart.png',
+                      alt:'찜하기 완료'
+                    });
 
-    $likeBtn.click(function(){
-      $likeBtn.toggleClass('active');
+                    axios.get('/post/' + postId + '/likes')
+                            .then((res) => {
+                              console.log(res.data);
+                              let cntLike = res.data.result;
+                              document.getElementById("cntLike").innerText = cntLike;
+                            })
+                            .catch((err) => {
+                              console.log(err);
+                            })
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                    alert("로그인 후 이용해주세요.")
+                  })
+        }else{
+          axios.post('/post/' + postId + '/likes')
+                  .then((res) => {
+                    console.log(res.data);
 
-      if($likeBtn.hasClass('active')){
-        axios.post('/post/1/likes')
-                .then((res) => {
-                  console.log(res.data);
+                    $(this).find('i').removeClass('fas').addClass('far')
+                    $(this).find('img').attr({
+                      'src': '/assets/img/like/blank-heart.png',
+                      alt:"찜하기"
+                    })
 
-                })
-                .catch((err) => {
-                  console.log(err);
-                })
-
-        $(this).find('img').attr({
-          'src': '/assets/img/like/full-heart.png',
-          alt:'찜하기 완료'
-        });
-
-
-      }else{
-        axios.post('/post/1/likes')
-                .then((res) => {
-                  console.log(res.data);
-
-                })
-                .catch((err) => {
-                  console.log(err);
-                })
-
-        $(this).find('i').removeClass('fas').addClass('far')
-        $(this).find('img').attr({
-          'src': '/assets/img/like/blank-heart.png',
-          alt:"찜하기"
-        })
-      }
+                    axios.get('/post/' + postId + '/likes')
+                            .then((res) => {
+                              console.log(res.data);
+                              let cntLike = res.data.result;
+                              document.getElementById("cntLike").innerText = cntLike;
+                            })
+                            .catch((err) => {
+                              console.log(err);
+                            })
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                    alert("로그인 후 이용해주세요.")
+                  })
+        }
+      })
     })
-  })
 
   axios.interceptors.request.use(function(config) {
     const accessToken = localStorage.getItem('accessToken');

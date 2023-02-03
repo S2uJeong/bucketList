@@ -91,6 +91,7 @@ public class PostController {
 //    }
 
 
+
     @GetMapping(value = "/{postId}/json", produces = "application/json")
     @ResponseBody
     public Response<PostReadResponse> jsonreadPost(@PathVariable(value = "postId") Long postId){
@@ -151,19 +152,26 @@ public class PostController {
     //== 마이피드 ==//
     // 좋아요한
     @GetMapping("/my/likes")
-    public Response<Page<PostReadResponse>> myFeedLike(@PageableDefault(size = 15, sort = {"id"}, direction = Sort.Direction.DESC)
+    public Response<Page<PostReadResponse>> myFeedLike(@PageableDefault(size = 16, sort = {"id"}, direction = Sort.Direction.DESC)
                                            Pageable pageable, Authentication authentication) {
         Page<PostReadResponse> likePosts = postService.myFeedLike(pageable, Long.valueOf(authentication.getName()));
         return Response.success(likePosts);
     }
 
-    // 작성한, 신청한
-    @GetMapping("/my")
-    public Response<MyFeedResponse> myFeed(@PageableDefault(size = 15, sort = {"id"}, direction = Sort.Direction.DESC)
+    // 작성한
+    @GetMapping("/my/create")
+    public Response<Page<PostReadResponse>> myFeedCreate(@PageableDefault(size = 16, sort = {"id"}, direction = Sort.Direction.DESC)
                                            Pageable pageable, Authentication authentication) {
         Page<PostReadResponse> createPosts = postService.myFeedCreate(pageable, Long.valueOf(authentication.getName()));
+        return Response.success(createPosts);
+    }
+
+    // 신청한
+    @GetMapping("/my/apply")
+    public Response<Page<PostReadResponse>> myFeedApply(@PageableDefault(size = 16, sort = {"id"}, direction = Sort.Direction.DESC)
+                                           Pageable pageable, Authentication authentication) {
         Page<PostReadResponse> applyPosts = postService.myFeedApply(pageable, Long.valueOf(authentication.getName()));
-        return Response.success(new MyFeedResponse(createPosts, applyPosts));
+        return Response.success(applyPosts);
     }
 }
 
