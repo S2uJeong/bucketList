@@ -68,7 +68,7 @@
       <!-- PostId에 따른 데이터 호출하기 -->
       const postId = new URL(window.location.href).pathname.replace("/post/", "");
 
-
+      console.log(postId);
       // axios header에 넣을 데이터
       const axiosConfig = {
         headers:{
