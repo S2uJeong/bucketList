@@ -457,7 +457,7 @@
           </div>
 
           <div class="mb-5" style="display: flex; justify-content: center">
-            <button type="button" class="btn btn-primary mb-2">참가하기</button>
+            <button type="button" class="btn btn-primary mb-2" onclick="goToApplication()">참가하기</button>
           </div>
 
           <div class="comment-box">
@@ -824,22 +824,54 @@
   <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header rounded">
-        <h3 class="modal-title text-uppercase font-weight-bold">Create your account</h3>
+        <h3 class="modal-title text-uppercase font-weight-bold">회원가입</h3>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
 
       <div class="modal-body">
-        <form class="" action="index.html" method="post">
+        <form onsubmit="join(); return false;">
           <div class="mb-3">
-            <input type="text" class="form-control bg-smoke" required="" placeholder="Full Name">
+            <div class="mb-3" style="display: flex">
+              <input type="text" id="form_userName" class="form-control bg-smoke" required="" placeholder="닉네임">
+              <button class="btn btn-facebook btn-block text-uppercase text-white" onclick="checkUserName()" style="width: 25%; padding: 0">중복확인</button>
+            </div>
+            <p id="able_userName" style="display: none">사용 가능한 닉네임 입니다.</p>
+            <p id="error_userName" style="display: none">중복되는 닉네임 입니다.</p>
           </div>
 
           <div class="mb-3">
-            <input type="email" class="form-control bg-smoke" required="" placeholder="Email">
+            <input type="password" id="pw" class="form-control bg-smoke" required="" placeholder="비밀번호">
+            <input type="password" id="check_pw" onchange="checkPasswordCorrect()" class="form-control bg-smoke" required="" placeholder="비밀번호 확인">
+            <p id="error_passwordCorrect" style="display: none">일치하지 않습니다.</p>
           </div>
 
           <div class="mb-3">
-            <input type="password" class="form-control bg-smoke" required="" placeholder="Password">
+            <select id="form_gender" class="form-control bg-smoke">
+              <option value="">성별</option>
+              <option value="MAN">남자</option>
+              <option value="WOMAN">여자</option>
+            </select>
+            <p id="error_gender" style="display: none">성별을 선택 해주세요.</p>
+          </div>
+
+          <div class="mb-3">
+            <input type="number" id="age" class="form-control bg-smoke" required="" placeholder="나이">
+          </div>
+          <!--              <div class="mb-3" style="display: flex">-->
+          <!--                <input style="flex: 1;" id="birth_year" type="year" class="form-control bg-smoke" required="" placeholder="년(4자)">-->
+          <!--                <input style="flex: 1;" id="birth_month" type="month1" class="form-control bg-smoke" required="" placeholder="월">-->
+          <!--                <input style="flex: 1;" id="birth_day" type="day" class="form-control bg-smoke" required="" placeholder="일">-->
+          <!--              </div>-->
+
+          <div class="mb-3">
+            <div style="display: flex">
+              <input style="flex: auto;" type="email" class="form-control bg-smoke" required="" placeholder="이메일" id="form_email">
+              <button class="btn btn-facebook btn-block text-uppercase text-white" onclick="checkEmail()" style="width: 25%; padding: 0">인증요청</button>
+            </div>
+            <p id="error_email" style="display: none">중복된 이메일 입니다.</p>
+            <input type="emailCheck" id="code" class="form-control bg-smoke" required="" placeholder="인증번호">
+            <p id="error_code" style="display: none">인증 코드가 불일치 합니다.</p>
+
           </div>
 
           <div class="mb-3 form-check mb-0">
@@ -850,19 +882,9 @@
           </div>
 
           <div class="d-grid">
-            <button type="submit" class="btn btn-primary btn-block text-uppercase">Login</button>
-          </div>
-
-          <div class="text-uppercase text-center py-3">Or</div>
-
-          <div class="d-grid">
-            <button type="submit" class="btn btn-facebook btn-block text-uppercase text-white">Login with facebook</button>
+            <button type="submit" class="btn btn-primary btn-block text-uppercase">가입하기</button>
           </div>
         </form>
-      </div>
-
-      <div class="modal-footer justify-content-center">
-        <p class="mb-1">Don’t have an Account? <a href="javascript:void(0)">Sign up</a></p>
       </div>
     </div>
   </div>
@@ -878,13 +900,13 @@
       </div>
 
       <div class="modal-body">
-        <form class="" action="index.html" method="post">
+        <form class="" onsubmit="return false;">
           <div class="mb-3">
-            <input type="email" class="form-control bg-smoke" required="" placeholder="이메일">
+            <input type="email" id="email" class="form-control bg-smoke" required="" placeholder="이메일">
           </div>
 
           <div class="mb-3">
-            <input type="password" class="form-control bg-smoke" required="" placeholder="비밀번호">
+            <input type="password" id="password" class="form-control bg-smoke" required="" placeholder="비밀번호">
           </div>
 
           <!--              <div class="mb-3 form-check mb-0">-->
@@ -894,9 +916,9 @@
           <!--                </label>-->
           <!--                <a class="pull-right" href="javascript:void(0)">Fogot Password?</a>-->
           <!--             </div>-->
-
+          <p id="login_error" style="display: none"></p>
           <div class="d-grid">
-            <button type="submit" class="btn btn-primary text-uppercase">Login</button>
+            <button class="btn btn-primary text-uppercase" onclick="login(); return false;">Login</button>
           </div>
 
           <div class="text-uppercase text-center py-3">Or</div>
@@ -1041,6 +1063,17 @@
     })
   })
 
+  function goToApplication() {
+    let accessToken = localStorage.getItem("accessToken")
+    if (accessToken === null) {
+      alert("로그인이 필요한 서비스 입니다.");
+      window.location.reload();
+    } else {
+      const postId = new URL(window.location.href).pathname.replace("/post/", "");
+      window.location.href = '/app/form/' + postId;
+    }
+  }
+
   axios.interceptors.request.use(function(config) {
     const accessToken = localStorage.getItem('accessToken');
     if(accessToken) {
@@ -1092,6 +1125,8 @@
 <script src="/assets/js/star.js"></script>
 
 <script src="/assets/js/custom.js"></script>
+<script src="/js/header.js"></script>
+
 </body>
 </html>
 

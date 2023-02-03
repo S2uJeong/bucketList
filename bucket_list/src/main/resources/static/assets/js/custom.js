@@ -19,7 +19,8 @@ window.onload = function () {
         $("#user_li").show();
 
         const payload = accessToken.split('.')[1];
-        let userName = JSON.parse(atob(payload)).userName;
+        let userName = JSON.parse(decodeURIComponent(escape(window.atob(payload)))).userName;
+        console.log(userName);
         document.getElementById("userName").innerText = userName;
     }
 };
