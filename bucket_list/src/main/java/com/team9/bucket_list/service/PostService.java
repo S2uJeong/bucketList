@@ -183,6 +183,13 @@ public class PostService {
         return locationNum;
     }
 
+    // 버킷리스트 필터
+    public Page<PostReadResponse> filter(String category, Pageable pageable) {
+        Page<Post> filterPosts = postRepository.findByCategory(category, pageable);
+        Page<PostReadResponse> filterPostReadResponses = PostReadResponse.listOf(filterPosts);
+        return filterPostReadResponses;
+    }
+
     //== 좋아요 ==//
     // 좋아요 확인
     public int checkLike(Long postId, Long memberId) {

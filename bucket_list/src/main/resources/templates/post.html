@@ -72,28 +72,32 @@
             <li class="">
               <a class="" href="javascript:void(0)">버킷리스트</a>
               <ul class="dropdown drop-up">
-                <li class=" active ">
-                  <a href="index.html">Travel</a>
+                <li class="">
+                  <a href="/post">All</a>
                 </li>
 
                 <li class="">
-                  <a href="/post/sports">Extreme</a>
+                  <a href="/post?category=travel">Travel</a>
                 </li>
 
                 <li class="">
-                  <a href="index-3.html">Study</a>
+                  <a href="/post?category=extreme">Extreme</a>
                 </li>
 
                 <li class="">
-                  <a href="index-3.html">Volunteer</a>
+                  <a href="/post?category=study">Study</a>
                 </li>
 
                 <li class="">
-                  <a href="index-3.html">Experience</a>
+                  <a href="/post?category=volunteer">Volunteer</a>
                 </li>
 
                 <li class="">
-                  <a href="index-3.html">Etc</a>
+                  <a href="/post?category=experience">Experience</a>
+                </li>
+
+                <li class="">
+                  <a href="/post?category=etc">Etc</a>
                 </li>
               </ul>
             </li>
@@ -105,16 +109,16 @@
             <li class="" id="user_li">
               <a class="" href="javascript:void(0)" id="userName">유저명</a>
               <ul class="dropdown drop-up">
-                <li class=" active ">
-                  <a href="/createform">버킷리스트 작성</a>
+                <li class="">
+                  <a href="/post/createform">버킷리스트 작성</a>
                 </li>
 
                 <li class="">
-                  <a href="/post/sports">좋아요</a>
+                  <a href="/my/likes">좋아요</a>
                 </li>
 
                 <li class="">
-                  <a href="index-3.html">마이 피드</a>
+                  <a href="/my">마이 피드</a>
                 </li>
 
                 <li class="">
@@ -227,58 +231,6 @@
 <!--          포스트 리스트 부분-->
         </div>
       </div>
-
-<!--      <div class="col-md-12 col-lg-9">-->
-<!--        <div class="media media-list-view flex-column flex-md-row mb-5">-->
-<!--          <div class="media-img position-relative">-->
-<!--            <img class="img-fluid position-relative lazyestload" data-src="/assets/img/packages/package-list-01.jpg" src="/assets/img/packages/package-list-01.jpg" alt="gallery-img">-->
-<!--            <a class="media-img-overlay" data-fancybox="gallery" href="/assets/img/packages/package-list-01.jpg"></a>-->
-<!--          </div>-->
-
-<!--          <div class="media-body">-->
-<!--            <div class="row">-->
-<!--              <div class="col-md-7 col-xl-8 position-relative">-->
-<!--                <h5>-->
-<!--                  모집중-->
-<!--                </h5>-->
-<!--                <h3>-->
-<!--                  <a class="media-title" href="single-package-right-sidebar.html">두바이 스카이 다이빙</a>-->
-<!--                </h3>-->
-<!--                <h6>-->
-<!--                  주최자 이름 (옆에 매너지수 표시?)-->
-<!--                </h6>-->
-<!--                <p class="content-view text-uppercase" style="margin-bottom: 3px">모집 기간 : ~</p>-->
-<!--                <p class="content-view text-uppercase" style="margin-bottom: 3px">진행 기간 : 시작일 ~ 종료일 or 시작일</p>-->
-<!--                <p class="content-view text-uppercase" style="margin-bottom: 3px">장소</p>-->
-<!--                <p class="content-view text-uppercase" style="margin-bottom: 3px">비용</p>-->
-<!--              </div>-->
-
-<!--              <div class="col-md-5 col-xl-4">-->
-<!--                <h5 class="font-weight-bold">현재 인원 : 3/5</h5>-->
-<!--                <div class="right_area">-->
-<!--                  <a href="javascript:;" class="icon heart">-->
-<!--                    <img src="/assets/img/like/blank-heart.png" alt="찜하기">-->
-<!--                  </a>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--&lt;!&ndash;              <div class="col-md-5 col-xl-4">&ndash;&gt;-->
-<!--&lt;!&ndash;                <div class="bg-primary text-center p-3 view-details">&ndash;&gt;-->
-<!--&lt;!&ndash;                  <h2 class="text-white font-weight-bold h1">$499</h2>&ndash;&gt;-->
-<!--&lt;!&ndash;                  <p class="text-white text-capitalize">Per person</p>&ndash;&gt;-->
-
-<!--&lt;!&ndash;                  <div class="d-grid gap-2">&ndash;&gt;-->
-<!--&lt;!&ndash;                    <a href="single-package-fullwidth.html" class="btn btn-xs btn-outline-white btn-booking text-uppercase">Details</a>&ndash;&gt;-->
-
-<!--&lt;!&ndash;                    <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#inquiry" class="btn btn-xs btn-outline-white btn-booking text-uppercase">Inquiry</a>&ndash;&gt;-->
-<!--&lt;!&ndash;                  </div>&ndash;&gt;-->
-<!--&lt;!&ndash;                </div>&ndash;&gt;-->
-<!--&lt;!&ndash;              </div>&ndash;&gt;-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-
-
-<!--      </div>-->
     </div>
   </div>
 
@@ -725,7 +677,10 @@
             "          </div>";
     $(window).ready( async function () {
       try {
-        const response = await axios.get('/post/list');
+        const category = new URL(window.location.href).search;
+        console.log(category)
+        const response = await axios.get('/post/list' + category);
+        console.log(response)
         const result = response.data.result;
         let post_list = result.content;
 
