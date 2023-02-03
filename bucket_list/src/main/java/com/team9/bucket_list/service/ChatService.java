@@ -1,9 +1,6 @@
 package com.team9.bucket_list.service;
 
-import com.team9.bucket_list.domain.dto.chat.ChatInviteRequest;
-import com.team9.bucket_list.domain.dto.chat.ChatRequest;
-import com.team9.bucket_list.domain.dto.chat.ChatRoomRequest;
-import com.team9.bucket_list.domain.dto.chat.ChatRoomResponse;
+import com.team9.bucket_list.domain.dto.chat.*;
 import com.team9.bucket_list.domain.entity.*;
 import com.team9.bucket_list.execption.ApplicationException;
 import com.team9.bucket_list.execption.ErrorCode;
@@ -16,10 +13,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 @Service
@@ -78,14 +77,18 @@ public class ChatService {
     }
 
     @Async
-    public void updateMessage(ChatRequest chatRequest) {
+    public CompletableFuture<ChatRequest> updateMessage(ChatRequest chatRequest) {
         log.info(chatRequest.toString());
+        //채팅방이 존재하는지, 멤버가 존재하는지 확인
         ChatRoom chatRoom = chatRoomRepository.findById(chatRequest.getRoomId()).orElseThrow(() -> new ApplicationException(ErrorCode.INVALID_PERMISSION));
         Member member = memberRepository.findById(chatRequest.getMemberId()).orElseThrow(() -> new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED));
 
+        //채팅저장및 채팅방 업데이트 시간 저장
         chatRepository.save(Chat.save(chatRequest,chatRoom,member));
-        chatRoomRepository.save(ChatRoom.messageTimeUpdate(chatRoom));
+        ChatRoom savedChatRoom = chatRoomRepository.save(ChatRoom.messageTimeUpdate(chatRoom));
         log.info("채팅 저장 완료");
+
+        return CompletableFuture.completedFuture(ChatRequest.chatListResponse(savedChatRoom));
     }
 
     public void checkParticipant(ChatRequest chatRequest) {
