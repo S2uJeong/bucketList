@@ -59,7 +59,7 @@
     <nav class="nav-menuzord navbar-sticky">
       <div class="container clearfix">
         <div id="menuzord" class="menuzord">
-          <a href="index.html" class="menuzord-brand">
+          <a href="/" class="menuzord-brand">
             <img class="lazyestload" data-src="/assets/img/logo-color-big.png" src="/assets/img/logo-color-big.png" alt="logo-img">
           </a>
 
@@ -263,7 +263,7 @@
         <div class="container">
           <div class="row">
             <div class="col-md-6 col-lg-3 mb-7 mb-lg-0">
-              <a class="d-inline-block" href="index.html">
+              <a class="d-inline-block" href="/">
                 <img class="w-100 mb-6 lazyestload" data-src="/assets/img/logo-color-sm.png" src="/assets/img/logo-color-sm.png" alt="img">
               </a>
               <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute</p>
@@ -656,21 +656,12 @@
     let post_id;
 
     $(window).ready(async function () {
+      let accessToken = localStorage.getItem("accessToken");
+      if(accessToken === null){
+        alert("로그인이 필요한 서비스 입니다.");
+        window.history.back();
+      }
       try {
-        const accessToken = localStorage.getItem("accessToken");
-        console.log(accessToken);
-        if (accessToken === null) {
-          $("#login_li").show();
-          $("#user_li").hide();
-        } else {
-          $("#login_li").hide();
-          $("#user_li").show();
-
-          const payload = accessToken.split('.')[1];
-          let userName = JSON.parse(atob(payload)).userName;
-          document.getElementById("userName").innerText = userName;
-        }
-
         post_id = window.location.pathname.replace("/app/form/", "");
         const url = '/post/' + post_id + '/json';
 
@@ -696,42 +687,10 @@
       window.location.href = '/app/form/' + post_id + '/complete';
       return false;
     }
-
-    axios.interceptors.request.use(function(config) {
-      const accessToken = localStorage.getItem('accessToken');
-      if(accessToken) {
-        config.headers.Authorization = 'Bearer' + ' ' + accessToken
-      }
-      return config;
-    })
-
-    axios.interceptors.response.use(
-            success => success,
-            async(error) => {
-              console.log(error);
-              const status = error.response.status
-
-              if(status === 401) {
-                const originRequest = error.config
-
-                await axios.post('/reissue')
-                        .then(response => {
-                          console.log(response.data);
-                          localStorage.setItem("accessToken", response.data);
-                          originRequest.headers.authorization = 'Bearer ' + response.data;
-                          return axios(originRequest);
-                        })
-                        .catch(error => {
-                          console.log('재발급 실패, refresh token 만료');
-                          localStorage.removeItem('accessToken')
-                          window.location.href = '/';
-                        })
-                return Promise.reject(error)
-              }
-            }
-    )
-
   </script>
+  <script src="/js/axios.js"></script>
+  <script src="/js/header.js"></script>
+  <script src="/assets/js/custom.js"></script>
   </body>
 
 </html>

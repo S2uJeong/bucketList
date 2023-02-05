@@ -496,54 +496,76 @@
     <!-- ====================================
     ——— MODAL SECTION
     ===================================== -->
-    <!-- Signup Modal -->
-    <div class="modal fade" id="signup" tabindex="-1" role="dialog" aria-label="signupModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header rounded">
-            <h3 class="modal-title text-uppercase font-weight-bold">Create your account</h3>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
+  <!-- Signup Modal -->
+  <div class="modal fade" id="signup" tabindex="-1" role="dialog" aria-label="signupModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header rounded">
+          <h3 class="modal-title text-uppercase font-weight-bold">회원가입</h3>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
 
-          <div class="modal-body">
-            <form class="" action="index.html" method="post">
-              <div class="mb-3">
-                <input type="text" class="form-control bg-smoke" required="" placeholder="Full Name">
+        <div class="modal-body">
+          <form onsubmit="join(); return false;">
+            <div class="mb-3">
+              <div class="mb-3" style="display: flex">
+                <input type="text" id="form_userName" class="form-control bg-smoke" required="" placeholder="닉네임">
+                <button class="btn btn-facebook btn-block text-uppercase text-white" onclick="checkUserName()" style="width: 25%; padding: 0">중복확인</button>
               </div>
+              <p id="able_userName" style="display: none">사용 가능한 닉네임 입니다.</p>
+              <p id="error_userName" style="display: none">중복되는 닉네임 입니다.</p>
+            </div>
 
-              <div class="mb-3">
-                <input type="email" class="form-control bg-smoke" required="" placeholder="Email">
-              </div>
-    
-              <div class="mb-3">
-                <input type="password" class="form-control bg-smoke" required="" placeholder="Password">
-              </div>
-    
-              <div class="mb-3 form-check mb-0">
-                <input type="checkbox" class="form-check-input" id="exampleCheck4">
-                <label class="form-check-label text-gray-color mb-3" for="exampleCheck4">
-                  I agree to the terms of use and privacy.
-                </label>
-              </div>
+            <div class="mb-3">
+              <input type="password" id="pw" class="form-control bg-smoke" required="" placeholder="비밀번호">
+              <input type="password" id="check_pw" onchange="checkPasswordCorrect()" class="form-control bg-smoke" required="" placeholder="비밀번호 확인">
+              <p id="error_passwordCorrect" style="display: none">일치하지 않습니다.</p>
+            </div>
 
-              <div class="d-grid">
-                <button type="submit" class="btn btn-primary btn-block text-uppercase">Login</button>
-              </div>
+            <div class="mb-3">
+              <select id="form_gender" class="form-control bg-smoke">
+                <option value="">성별</option>
+                <option value="MAN">남자</option>
+                <option value="WOMAN">여자</option>
+              </select>
+              <p id="error_gender" style="display: none">성별을 선택 해주세요.</p>
+            </div>
 
-              <div class="text-uppercase text-center py-3">Or</div>
+            <div class="mb-3">
+              <input type="number" id="age" class="form-control bg-smoke" required="" placeholder="나이">
+            </div>
+            <!--              <div class="mb-3" style="display: flex">-->
+            <!--                <input style="flex: 1;" id="birth_year" type="year" class="form-control bg-smoke" required="" placeholder="년(4자)">-->
+            <!--                <input style="flex: 1;" id="birth_month" type="month1" class="form-control bg-smoke" required="" placeholder="월">-->
+            <!--                <input style="flex: 1;" id="birth_day" type="day" class="form-control bg-smoke" required="" placeholder="일">-->
+            <!--              </div>-->
 
-              <div class="d-grid">
-                <button type="submit" class="btn btn-facebook btn-block text-uppercase text-white">Login with facebook</button>
+            <div class="mb-3">
+              <div style="display: flex">
+                <input style="flex: auto;" type="email" class="form-control bg-smoke" required="" placeholder="이메일" id="form_email">
+                <button class="btn btn-facebook btn-block text-uppercase text-white" onclick="checkEmail()" style="width: 25%; padding: 0">인증요청</button>
               </div>
-            </form>
-          </div>
-    
-          <div class="modal-footer justify-content-center">
-            <p class="mb-1">Don’t have an Account? <a href="javascript:void(0)">Sign up</a></p>
-          </div>
+              <p id="error_email" style="display: none">중복된 이메일 입니다.</p>
+              <input type="emailCheck" id="code" class="form-control bg-smoke" required="" placeholder="인증번호">
+              <p id="error_code" style="display: none">인증 코드가 불일치 합니다.</p>
+
+            </div>
+
+            <div class="mb-3 form-check mb-0">
+              <input type="checkbox" class="form-check-input" id="exampleCheck4">
+              <label class="form-check-label text-gray-color mb-3" for="exampleCheck4">
+                I agree to the terms of use and privacy.
+              </label>
+            </div>
+
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary btn-block text-uppercase">가입하기</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
+  </div>
 
   <!-- Login Modal -->
   <div class="modal fade" id="login" tabindex="-1" role="dialog" aria-label="loginModalLabel" aria-hidden="true">
@@ -555,13 +577,13 @@
         </div>
 
         <div class="modal-body">
-          <form class="" action="index.html" method="post">
+          <form class="" onsubmit="return false;">
             <div class="mb-3">
-              <input type="email" class="form-control bg-smoke" required="" placeholder="이메일">
+              <input type="email" id="email" class="form-control bg-smoke" required="" placeholder="이메일">
             </div>
 
             <div class="mb-3">
-              <input type="password" class="form-control bg-smoke" required="" placeholder="비밀번호">
+              <input type="password" id="password" class="form-control bg-smoke" required="" placeholder="비밀번호">
             </div>
 
             <!--              <div class="mb-3 form-check mb-0">-->
@@ -571,9 +593,9 @@
             <!--                </label>-->
             <!--                <a class="pull-right" href="javascript:void(0)">Fogot Password?</a>-->
             <!--             </div>-->
-
+            <p id="login_error" style="display: none"></p>
             <div class="d-grid">
-              <button type="submit" class="btn btn-primary text-uppercase">Login</button>
+              <button class="btn btn-primary text-uppercase" onclick="login(); return false;">Login</button>
             </div>
 
             <div class="text-uppercase text-center py-3">Or</div>
@@ -648,11 +670,10 @@
     
     <script src='/assets/plugins/no-ui-slider/nouislider.min.js'></script>
 
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script>
     let html = "<div class=\"col-md-6 col-xl-4 mb-5\">\n" +
             "            <div class=\"card card-hover\">\n" +
-            "              <a href=\"single-package-right-sidebar.html\" class=\"position-relative\">\n" +
+            "              <a href=\"post/{포스트 아이디}\" class=\"position-relative\">\n" +
             "                <img class=\"card-img-top lazyestload\" data-src=\"assets/img/home/deal/deal-01.jpg\" src=\"assets/img/home/deal/deal-01.jpg\" alt=\"Card image cap\">\n" +
             "                <div class=\"card-img-overlay card-hover-overlay rounded-top d-flex flex-column\">\n" +
             "                  <div class=\"badge {배경색} badge-rounded-circle\">\n" +
@@ -663,7 +684,7 @@
             "\n" +
             "              <div class=\"card-body px-4\">\n" +
             "                <h5>\n" +
-            "                  <a href=\"single-package-right-sidebar.html\" class=\"card-title text-uppercase\">{제목}</a>\n" +
+            "                  <a href=\"post/{포스트 아이디}\" class=\"card-title text-uppercase\">{제목}</a>\n" +
             "                </h5>\n" +
             "                <h6 class=\"mt-n2\">\n" +
             "                  {주최자 이름}\n" +
@@ -686,6 +707,7 @@
 
         post_list.forEach(function (post) {
           let html_result = html.replace("{제목}", post.title)
+                  .replace("{포스트 아이디}", post.postId)
                   .replace("{비용}", post.cost)
                   .replace("{장소}", post.location)
                   .replace("{일정 시작 날짜}", post.eventStart)
@@ -726,6 +748,8 @@
     <script src="/assets/js/star.js"></script>
 
     <script src="/assets/js/custom.js"></script>
+    <script src="/js/axios.js"></script>
+    <script src="/js/header.js"></script>
   </body>
 </html>
 

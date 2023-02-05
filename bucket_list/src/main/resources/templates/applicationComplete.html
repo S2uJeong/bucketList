@@ -671,20 +671,6 @@
   <script>
   $(window).ready(async function () {
     try {
-      const accessToken = localStorage.getItem("accessToken");
-      console.log(accessToken);
-      if (accessToken === null) {
-        $("#login_li").show();
-        $("#user_li").hide();
-      } else {
-        $("#login_li").hide();
-        $("#user_li").show();
-
-        const payload = accessToken.split('.')[1];
-        let userName = JSON.parse(atob(payload)).userName;
-        document.getElementById("userName").innerText = userName;
-      }
-
       post_id = window.location.pathname.replace("/app/form/", "").replace("/complete", "");
       const url = '/post/' + post_id + '/json';
 
@@ -701,6 +687,8 @@
     }
   });
 </script>
+  <script src="/js/axios.js"></script>
+  <script src="/js/header.js"></script>
   </body>
 </html>
 
