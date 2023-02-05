@@ -2,24 +2,15 @@ package com.team9.bucket_list.controller.rest;
 
 import com.team9.bucket_list.domain.Response;
 import com.team9.bucket_list.domain.dto.post.*;
-import com.team9.bucket_list.domain.entity.Post;
 import com.team9.bucket_list.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.nio.channels.MulticastChannel;
 
 
 @Slf4j
@@ -124,7 +115,7 @@ public class PostController {
         return Response.success(postDeleteResponse);
     }
 
-    // S3에 파일 업로드
+   /* // S3에 파일 업로드
     @PostMapping("/{postId}/files")
     public Response<UploadFileResponse> upload(@PathVariable("postId") Long postId,
                                                @RequestParam MultipartFile multipartFile) throws IOException {
@@ -136,7 +127,7 @@ public class PostController {
                                                @PathVariable("fileId") Long fileId,
                                                @RequestParam String filePath) {
         return Response.success(postService.deleteFile(fileId, filePath));
-    }
+    }*/
 
     //== 좋아요 확인 ==//
     @GetMapping("/{postId}/likes/check")
