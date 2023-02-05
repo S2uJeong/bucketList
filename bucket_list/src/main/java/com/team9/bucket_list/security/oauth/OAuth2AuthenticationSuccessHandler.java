@@ -1,4 +1,4 @@
-package com.team9.bucket_list.security;
+package com.team9.bucket_list.security.oauth;
 
 import com.team9.bucket_list.domain.dto.member.MemberProfile;
 import com.team9.bucket_list.domain.dto.token.TokenDto;
@@ -21,6 +21,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Optional;
 
 @Slf4j
 @Component
@@ -33,12 +35,28 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     /**주석들은 redirect 구현 시 사용예정**/
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        String targetUrl = determineTargetUrl(request, response, authentication);
-        if(response.isCommitted()){
-            log.debug("Response has already been commited");
-            return;
+        MemberProfile memberProfile = (MemberProfile) authentication.getPrincipal();
+        String email = (String) memberProfile.getAttributes().get("email");
+
+        Optional<Member> duplicatedMember = memberRepository.findByEmailAndOauthIdIsNull(email);
+        if(duplicatedMember.isPresent()){
+            try {
+                response.setContentType("text/html; charset=utf-8");
+                PrintWriter w = response.getWriter();
+                w.write("<script>alert('해당 이메일로 회원가입한 계정이 있습니다.');location.href='/';</script>");
+                w.flush();
+                w.close();
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            String targetUrl = determineTargetUrl(request, response, authentication);
+            if(response.isCommitted()){
+                log.debug("Response has already been commited");
+                return;
+            }
+            getRedirectStrategy().sendRedirect(request, response, targetUrl);
         }
-        getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 
     protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response, Authentication authentication){
