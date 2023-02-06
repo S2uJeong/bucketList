@@ -120,31 +120,32 @@
 
             let commenthtml=
                     "<li class=\"comment-item\" id=\"comment1\">\n"+
-                      "<a class=\"me-n4 comment-tool\" id=\"navbarDropdown\" href=\"#\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\">. . .</a>\n"+
-                        "<ul class=\"dropdown-menu droclassName-menu-end\" aria-labelledby=\"navbarDropdown\">\n" +
-                          "<li><a class=\"dropdown-item\" hrclassName\">수정</a></li>\n"+
-                          "<li><a class=\"dropdown-item\" hrclassName\">삭제</a></li>\n"+
-                        "</ul>\n"+
-                        "<div>\n"+
-                          "<div>\n"+
-                            "<p class=\"comment-username\">{닉네임}</p>\n"+
-                          "</div>\n"+
-                          "<div>\n"+
-                          "<p class=\"comment-content\">{내용}</p>\n"+
-                          "</div>\n"+
-                          "<div>\n"+
-                            "<p class=\"comment-date\">{작성일자}</p>\n"+
-                            "<a class=\"comment-date\" onclick=\"showCommentReply('comment1-1')\">댓글쓰기</a>\n"+
-                            "<form class=\"comment-reply-form\" id=\"comment1-1\" style=\"display: none;\">\n"+
-                              "<div class=\"form-group mb-2\">\n"+
-                                "<textarea class=\"form-control border-0 bg-smoke\" id =\"replyComment\" placeholder=\"Comment\" rows=\"2\"></textarea>\n"+
-                              "</div>\n"+
-                              "<div style=\"display: flex; justify-content: right\">\n"+
-                                "<button type=\"button\" id=\"replyCommentButton\" class=\"btn btn-outline-info-comment-button mb-2\" style=\"padding: 8px 18px\">등록</button>\n"+
-                              "</div>\n"+
-                            "</form>\n"+
-                          "</div>\n"+
-                        "</div>\n"+
+                    "<a class=\"me-n4 comment-tool\" id=\"navbarDropdown\" href=\"#\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\">. . .</a>\n"+
+                    "<ul class=\"dropdown-menu droclassName-menu-end\" aria-labelledby=\"navbarDropdown\">\n" +
+                    "<li><a class=\"dropdown-item\" hrclassName\">수정</a></li>\n"+
+                    "<li><a class=\"dropdown-item\" hrclassName\">삭제</a></li>\n"+
+                    "</ul>\n"+
+                    "<div>\n"+
+                    "<div id=\"parentId\" style='display: none'>{postId}</div>\n"+
+                    "<div>\n"+
+                    "<p class=\"comment-username\" id=\"parentUsername\">{닉네임}</p>\n"+
+                    "</div>\n"+
+                    "<div>\n"+
+                    "<p class=\"comment-content\">{내용}</p>\n"+
+                    "</div>\n"+
+                    "<div>\n"+
+                    "<p class=\"comment-date\">{작성일자}</p>\n"+
+                    "<a class=\"comment-date\" onclick=\"showCommentReply('comment1-1')\">댓글쓰기</a>\n"+
+                    "<form class=\"comment-reply-form\" id=\"comment1-1\" style=\"display: none;\">\n"+
+                    "<div class=\"form-group mb-2\">\n"+
+                    "<textarea class=\"form-control border-0 bg-smoke\" id =\"replyComment\" placeholder=\"Comment\" rows=\"2\"></textarea>\n"+
+                    "</div>\n"+
+                    "<div style=\"display: flex; justify-content: right\">\n"+
+                    "<button type=\"button\" id=\"replyCommentButton\" class=\"btn btn-outline-info-comment-button mb-2\" style=\"padding: 8px 18px\">등록</button>\n"+
+                    "</div>\n"+
+                    "</form>\n"+
+                    "</div>\n"+
+                    "</div>\n"+
                     "</li>";
 
 
@@ -171,70 +172,79 @@
             let comment_list = commentresponse.data.result;         // 부모 댓글 리스트
 
 
+
             console.log(comment_list);
 
             comment_list.forEach(function (comment){
               let comment_parent_id = comment.parentId;
+              var num = 1;
               console.log(comment_parent_id);
+              // document.querySelector('.comment-item').setAttribute("id", "comment"+num);
               let html_result = commenthtml.replace("{닉네임}",comment.userName)
                       .replace("{작성일자}",comment.createAt)
                       .replace("{내용}",comment.content);
 
               let html_reply_result;
-              let reply_commentResult;
-                if (comment.children.length != 0) {                     // 댓글이 있다면
-                  let reply_comment_list = comment.children;      // 댓글 리스트 저장
-                  console.log(reply_comment_list);
-                  // if(comment.id == reply_comment_list.parentId) {
-                    reply_comment_list.forEach(function (replycomment) {
-                      console.log(replycomment.parentId);
-                      html_reply_result += reply_commenthtml.replace("{닉네임}", replycomment.userName)
-                              .replace("{작성일자}", replycomment.createAt)
-                              .replace("{내용}", replycomment.content);
+              if (comment.children.length != 0) {                     // 댓글이 있다면
+                let reply_comment_list = comment.children;      // 댓글 리스트 저장
+                console.log(reply_comment_list);
+                // if(comment.id == reply_comment_list.parentId) {
+                reply_comment_list.forEach(function (replycomment) {
+                  console.log(replycomment.parentId);
+                  html_reply_result += reply_commenthtml.replace("{닉네임}", replycomment.userName)
+                          .replace("{작성일자}", replycomment.createAt)
+                          .replace("{내용}", replycomment.content)
+                          .replace("{postId}",replycomment.parentId);
 
-                    });
-                  // }
-                  let commentResult = document.getElementById('list_comment');
-                  commentResult.innerHTML += (html_result+html_reply_result);
-                }else{
-                  let commentResult = document.getElementById('list_comment');
-                  commentResult.innerHTML += html_result;
-                }
+                });
+                // }
+                let commentResult = document.getElementById('list_comment');
+                commentResult.innerHTML += (html_result+html_reply_result);
+              }else{
+                let commentResult = document.getElementById('list_comment');
+                commentResult.innerHTML += html_result;
+              }
+              num ++;
             });
 
 
 
             <!-- 대댓글 작성 -->
             $("#replyCommentButton").click(function() {
-             // var parentId =          // 부모 id값 받아와야함
-              var replycomment = $("#replyComment").val();   // 댓글 값 저장
+              // var parentId =          // 부모 id값 받아와야함
 
+              var replycomment = $("#replyComment").val();   // 댓글 값 저장
+              var reply_parentId = $("#parentId").val();
+              var reply_parentUsername = $("#parentUsername").val();
+
+              console.log(reply_parentUsername);
+              console.log(reply_parentId);
               const CommentData = {       // 해외 데이터
                 "content" : replycomment,         //  댓글 내용            comment
-                "parentId" : null
+                "parentId" : reply_parentId
               }
 
               console.log(CommentData);
 
               // axios header에 넣을 데이터
-              const axiosConfig = {
-                headers: {
-                  "Content-Type": "application/json"
-                }
-              }
-
-              const sendData = async () => {
-                try {
-
-                  const response = await axios.post('/comment/'+postId, JSON.stringify(CommentData), axiosConfig);
-                  alert("전송 성공");
-                  let url = "/post/" + postId;
-                  window.location.replace(url);
-                } catch (error) {
-                  alert("실패");
-                }
-              }
-              sendData();
+              // const axiosConfig = {
+              //   headers: {
+              //     "Content-Type": "application/json"
+              //   }
+              // }
+              //
+              // const sendData = async () => {
+              //   try {
+              //
+              //     const response = await axios.post('/comment/'+postId, JSON.stringify(CommentData), axiosConfig);
+              //     alert("전송 성공");
+              //     let url = "/post/" + postId;
+              //     window.location.replace(url);
+              //   } catch (error) {
+              //     alert("실패");
+              //   }
+              // }
+              // sendData();
             });
 
 
@@ -335,6 +345,7 @@
       }
 
 
+
       const googlemap = function(lat,lng,location,title,content){
 
         var myLatlng = new google.maps.LatLng(lat,lng); // 위치값 위도 경도
@@ -407,10 +418,54 @@
                 console.log(err);
               });
 
+
     });
 
   </script>
 
+  <script>
+    function showCommentReply(commentReplyId) {
+      let search = document.getElementById(commentReplyId);
+      let check = search.style.display;
+      if(check == "none") {
+        search.style.display="block";
+      } else {
+        search.style.display="none";
+      }
+    }
+
+    const postId = new URL(window.location.href).pathname.replace("/post/", "");
+    <!-- 포스트 수정 -->
+    function updatePost(){
+      const gotopostUpdate = async()=>{         // 포스트 수정 페이지 이동
+        try{
+          let url = "/post/" + postId+"/edit";
+          window.location.replace(url);
+        }catch (e){
+          alert("수정 페이지 이동 불가능");
+        }
+      }
+
+      gotopostUpdate();
+    }
+
+
+    <!-- 포스트 삭제 -->
+    function deletePost() {
+      const postDelete = async() => {
+        try {
+          await axios.delete('/post/' + postId);
+          let url = "/post";
+          window.location.replace(url);
+        }catch (e){
+        }
+      }
+
+      postDelete();
+    }
+
+
+  </script>
 </head>
 
 <body id="body" class="up-scroll">
@@ -539,8 +594,8 @@
       <div class="row">
         <div class="col-md-12">
           <div class="mt-n7" style="float: right">
-            <button type="button" class="btn btn-outline-dark mb-2" style="padding: 8px 18px">수정</button>
-            <button type="button" class="btn btn-outline-dark mb-2" style="padding: 8px 18px">삭제</button>
+            <button type="button" onclick="updatePost()" class="btn btn-outline-dark mb-2" style="padding: 8px 18px">수정</button>
+            <button type="button" onclick="deletePost()" class="btn btn-outline-dark mb-2" style="padding: 8px 18px">삭제</button>
           </div>
           <div>
             <h2 class="text-uppercase mb-2" id="title"></h2>
@@ -1040,17 +1095,17 @@
 
 
 
-<script>
-  function showCommentReply(commentReplyId) {
-    let search = document.getElementById(commentReplyId);
-    let check = search.style.display;
-    if(check == "none") {
-      search.style.display="block";
-    } else {
-      search.style.display="none";
-    }
-  }
-</script>
+<!--<script>-->
+<!--  function showCommentReply(commentReplyId) {-->
+<!--    let search = document.getElementById(commentReplyId);-->
+<!--    let check = search.style.display;-->
+<!--    if(check == "none") {-->
+<!--      search.style.display="block";-->
+<!--    } else {-->
+<!--      search.style.display="none";-->
+<!--    }-->
+<!--  }-->
+<!--</script>-->
 
 <script>
   //heart 좋아요 클릭시! 하트 뿅
