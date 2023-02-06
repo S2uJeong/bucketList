@@ -52,49 +52,6 @@ public class PostController {
         }
     }
 
-    // 버킷리스트 필터
-//    @GetMapping("list")
-//    public Response<Page<PostReadResponse>> postFilter(@PageableDefault(size = 15, sort = {"id"}, direction = Sort.Direction.DESC)
-//                                                       Pageable pageable, @RequestParam("category") String category ) {
-//        Page<PostReadResponse> filterPosts = postService.filter(category);
-//        return Response.success(filterPosts);
-//    }
-
-    //== model 사용 세부조회 ==//
-
-//    @GetMapping("/{postId}")
-//    public String readPost(@PathVariable(value = "postId") Long postId, Model model){
-//        PostReadResponse postReadResponse = postService.read(postId);
-//
-//        String title = postReadResponse.getTitle();
-//        String untile = postReadResponse.getUntilRecruit();
-//        String eventStart = postReadResponse.getEventStart();
-//        String eventEnd = postReadResponse.getEventEnd();
-//        int cost = postReadResponse.getCost();
-//        int entrantNum = postReadResponse.getEntrantNum();
-//        String category = postReadResponse.getCategory();
-//        String location = postReadResponse.getLocation();
-//        String content = postReadResponse.getContent();
-//        double lat = postReadResponse.getLat();
-//        double lng = postReadResponse.getLng();
-//
-//
-//        model.addAttribute("title",title);
-//        model.addAttribute("untilRecruit",untile);
-//        model.addAttribute("eventStart",eventStart);
-//        model.addAttribute("eventEnd",eventEnd);
-//        model.addAttribute("cost",cost);
-//        model.addAttribute("entrantNum",entrantNum);
-//        model.addAttribute("category",category);
-//        model.addAttribute("content",content);
-//        model.addAttribute("lat",lat);
-//        model.addAttribute("lng",lng);
-//        model.addAttribute("location",location);
-//        model.addAttribute("apikey",postReadResponse.getAPI_KEY());
-//        return "Post/PostDetail";
-//    }
-
-
 
     @GetMapping(value = "/{postId}/json", produces = "application/json")
     @ResponseBody
@@ -104,15 +61,26 @@ public class PostController {
         return Response.success(postReadResponse);
     }
 
+    // 클라이언트에서 데이터 받아와서 수정
+    @PostMapping(value = "/{postId}/update" ,produces = "application/json")
+    public void updatePost( @PathVariable Long postId, @RequestBody PostUpdateRequest request)  {
+        // update 메서드를 통해 request 내용대로 수정해준다. 반환값 : post Entity
+        Long userId = 1l;
+        log.info(request.toString());
+        log.info("postId:"+postId);
+        postService.update(request,postId,userId);
+        log.info("🔵 Post 수정 성공");
+    }
+
     //== 삭제 ==//
     @DeleteMapping("/{postId}")
-    public Response<PostDeleteResponse> deletePost(
-            @PathVariable("postId") long postId ,Authentication authentication) {
-        Long userId = Long.valueOf(authentication.getName());
-
-        PostDeleteResponse postDeleteResponse = postService.delete(postId,userId);
+    public Long deletePost(
+            @PathVariable("postId") long postId ) {
+//        Long userId = Long.valueOf(authentication.getName());
+        Long userId = 1l;
+        postService.delete(postId,userId);
         log.info("Post 삭제 성공");
-        return Response.success(postDeleteResponse);
+        return 1l;
     }
 
    /* // S3에 파일 업로드
