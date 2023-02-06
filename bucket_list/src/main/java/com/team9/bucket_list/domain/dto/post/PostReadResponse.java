@@ -30,6 +30,7 @@ public class PostReadResponse {
     private String eventEnd; //버킷 종료일
     private PostStatus status; //defalt = 모집중
     private String category; //카테고리
+    private String fileName; //S3에 저장된 이미지 파일이름
 //    private Member member; // 버킷리스트를 만든 member --> member_id, nickname
 //    private List<Application> applicationList; // 버킷리스트 참가자 목록
 //    private List<Likes> likeList; // 버킷리스트 좋아요 누른 사람 목록
@@ -52,6 +53,7 @@ public class PostReadResponse {
                 .eventEnd(post.getEventEnd())
                 .status(post.getStatus())
                 .category(post.getCategory())
+                .fileName(post.getPostFileList().get(0).getAwsS3FileName())
 //                .member(post.getMember())
 //                .applicationList(post.getApplicationList())
 //                .likeList(post.getLikesList())
