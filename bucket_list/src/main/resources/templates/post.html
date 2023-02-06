@@ -674,7 +674,7 @@
     let html = "<div class=\"col-md-6 col-xl-4 mb-5\">\n" +
             "            <div class=\"card card-hover\">\n" +
             "              <a href=\"post/{포스트 아이디}\" class=\"position-relative\">\n" +
-            "                <img class=\"card-img-top lazyestload\" data-src=\"assets/img/home/deal/deal-01.jpg\" src=\"assets/img/home/deal/deal-01.jpg\" alt=\"Card image cap\">\n" +
+            "                <img class=\"card-img-top lazyestload\" data-src=\"{이미지 URL}\" src=\"{이미지 URL}\" alt=\"Card image cap\">\n" +
             "                <div class=\"card-img-overlay card-hover-overlay rounded-top d-flex flex-column\">\n" +
             "                  <div class=\"badge {배경색} badge-rounded-circle\">\n" +
             "                    <span class=\"d-block\">{모집상태}</span>\n" +
@@ -712,7 +712,8 @@
                   .replace("{장소}", post.location)
                   .replace("{일정 시작 날짜}", post.eventStart)
                   .replace("{일정 종료 날짜}", post.eventEnd)
-                  .replace("{모집 마감 날짜}", post.untilRecruit);
+                  .replace("{모집 마감 날짜}", post.untilRecruit)
+                  .replace("{이미지 URL}", "https://bucketlist-post-image-bucket.s3.ap-northeast-2.amazonaws.com/" + post.fileName);
 
           if (post.status === 'JOIN') {
             html_result = html_result.replace("{모집상태}", '모집중')
