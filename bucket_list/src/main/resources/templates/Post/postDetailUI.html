@@ -93,6 +93,7 @@
       let eventEnd;
       let status;
       let category;
+      let fileName;
 
 
       const getdata = async()=>{
@@ -131,6 +132,8 @@
             eventEnd = jsonResult.eventEnd;
             status = jsonResult.status;
             category = jsonResult.category;
+            fileName = jsonResult.fileName;
+
 
             googlemap(lat,lng,location,title,content);
             console.log(lat);
@@ -159,6 +162,8 @@
 
             var htmlcontent = document.getElementById("content");
             htmlcontent.innerHTML = content;
+
+            document.getElementById("image_box").src = 'https://bucketlist-post-image-bucket.s3.ap-northeast-2.amazonaws.com/' + fileName;
             // }
             //
             // onload();
@@ -441,7 +446,7 @@
               <!-- 이미지 출력 부분 -->
               <div id="package-slider" class="owl-carousel owl-theme package-slider col-md-6">
                 <div class="item">
-                  <img class="lazyestload" data-src="/assets/img/packages/package-slider-03.jpg" src="/assets/img/packages/package-slider-03.jpg" alt="image">
+                  <img id="image_box" class="lazyestload" data-src="/assets/img/packages/package-slider-03.jpg" src="/assets/img/packages/package-slider-03.jpg" alt="image">
                 </div>
 
                 <div class="item">
