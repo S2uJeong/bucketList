@@ -16,6 +16,12 @@ spring:
       hibernate:
         show-sql: true
         format_sql: true
+  # multipart 용량 늘려주는 부분
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
 
   mvc:
     pathmatch:
@@ -28,7 +34,6 @@ spring:
             client-id: 784534608821-4arov6mqr5uf6rbt1p0mm5fo9rpl4s2r.apps.googleusercontent.com
             client-secret: aaa
             scope: profile,email
-            redirect-uri: "https://www.ourbucketlist.link/login/oauth2/code/google"
           # 네이버는 spring security가 기본적을 제공해주지 않기 때문에 github, google과 달리 많은 정보를 적어줘야한다.
           naver:
             client-id: p9eywB6xBBrwCAglysCB
@@ -53,7 +58,7 @@ google:
 logging.level:
     org.hibernate.SQL : debug
 
-# Post Image를 위한 환경변수 추가
+# Image 추가를 위한 환경변수 추가
 cloud:
   aws:
     credentials:
@@ -66,10 +71,6 @@ cloud:
     stack:
       auto: false
 
-servlet:
-  multipart:
-    max-file-size: 50MB
-    max-request-size: 50MB
 
 # ProfileService에서 사용 할 image file path
 file:
