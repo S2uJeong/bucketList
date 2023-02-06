@@ -903,36 +903,6 @@
           }
         }
 
-        // $.ajax({
-        //   type        :   "post",
-        //   url         :   "/post/detailpost",
-        //   headers : {
-        //     "Content-Type" : "application/json"
-        //   },
-        //   dataType    :   "text",
-        //   // contentType :   "application/json",
-        //   data        :   JSON.stringify(KoreaData),
-        //   async : false,
-        //   success     :   function(data){
-        //     console.log(data);
-        //     let url = "/post/"+data;
-        //     localStorage.setItem('postId',data);
-        //     window.location.replace(url);
-        //   }
-        // });
-
-        // axios.post('/post/detailpost', JSON.stringify(KoreaData),axiosConfig)
-        //         .then(function (response) {
-        //           let res = response.data.result.postId;
-        //           let url = "/post/"+res;
-        //           localStorage.setItem('postId',res);
-        //           window.location.replace(url);
-        //           console.log(res);
-        //         })
-        //         .catch(function (error) {
-        //           console.log(error);
-        //         });
-
         const data = async()=>{
           try{
             const response = await axios.post('/post/detailpost',JSON.stringify(KoreaData),axiosConfig);
