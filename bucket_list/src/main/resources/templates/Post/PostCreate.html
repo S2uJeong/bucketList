@@ -243,6 +243,13 @@
               </div>
             </div>
 
+            <div class="col-lg-4">
+              <div class="form-group">
+                <label>사진</label>
+                <input type="file" id="pic_file_kr" class="form-control border-0" placeholder="3000000">
+              </div>
+            </div>
+
             <div class="form-group mb-5">
               <label>내용</label>
               <textarea class="form-control border-0" name="post" rows="7"></textarea>
@@ -355,6 +362,13 @@
               <div class="form-group mb-5">
                 <label>영문 주소</label>
                 <input type="text" name="post" id="address" class="form-control border-0" placeholder="5 Avenue Anatole France, 75007 Paris, France">
+              </div>
+            </div>
+
+            <div class="col-lg-4">
+              <div class="form-group">
+                <label>사진</label>
+                <input type="file" id="pic_file_wd" class="form-control border-0" placeholder="3000000">
               </div>
             </div>
 
@@ -845,7 +859,7 @@
         arr.push($(item).val());
       });
 
-      var finddata = $("#address_kakao").val();   // 국내 주소 값 저장
+      let finddata = $("#address_kakao").val();   // 국내 주소 값 저장
 
       console.log(arr);
 
@@ -869,10 +883,23 @@
           }
         }
 
+        const fileConfig = {
+          headers:{
+            "Content-Type": "multipart/form-data"
+          }
+        }
         const data = async () => {
           try {
             const response = await axios.post('/post/detailpost', JSON.stringify(WorldData), axiosConfig);
-            let url = "/post/" + response.data.result.postId;
+            const post_id = response.data.result.postId;
+
+            let frm = new FormData();
+            let photoFile = document.getElementById('pic_file_wd');
+            frm.append("file", photoFile.files[0]);
+
+            await axios.post('/post/' + post_id + '/files/upload', frm, fileConfig);
+
+            let url = "/post/" + post_id;
             window.location.replace(url);
           } catch (error) {
             alert("실패");
@@ -902,12 +929,25 @@
             "Content-Type": "application/json"
           }
         }
+        const fileConfig = {
+          headers:{
+            "Content-Type": "multipart/form-data"
+          }
+        }
+
 
         const data = async()=>{
           try{
             const response = await axios.post('/post/detailpost',JSON.stringify(KoreaData),axiosConfig);
-            let url = "/post/"+response.data.result.postId;
+            const post_id = response.data.result.postId;
 
+            let frm = new FormData();
+            let photoFile = document.getElementById('pic_file_kr');
+            frm.append("file", photoFile.files[0]);
+
+            await axios.post('/post/' + post_id + '/files/upload', frm, fileConfig);
+
+            let url = "/post/" + post_id;
             window.location.replace(url);
           }catch (error){
             alert("실패");

@@ -95,6 +95,7 @@
       let eventEnd;
       let status;
       let category;
+      let fileName;
 
 
       const getdata = async()=>{
@@ -302,6 +303,8 @@
             eventEnd = jsonResult.eventEnd;
             status = jsonResult.status;
             category = jsonResult.category;
+            fileName = jsonResult.fileName;
+
 
             googlemap(lat,lng,location,title,content);
             console.log(lat);
@@ -330,6 +333,8 @@
 
             var htmlcontent = document.getElementById("content");
             htmlcontent.innerHTML = content;
+
+            document.getElementById("image_box").src = 'https://bucketlist-post-image-bucket.s3.ap-northeast-2.amazonaws.com/' + fileName;
             // }
             //
             // onload();
@@ -654,18 +659,19 @@
               <div style="width:400px; height:400px;" id="map_ma"></div>
 
               <!-- 이미지 출력 부분 -->
-              <div id="package-slider" class="owl-carousel owl-theme package-slider col-md-6">
+<!--              <div id="package-slider" class="owl-carousel owl-theme package-slider col-md-6">-->
+<!--              <div id="package-slider" class="owl-carousel owl-theme package-slider col-md-6">-->
                 <div class="item">
-                  <img class="lazyestload" data-src="/assets/img/packages/package-slider-03.jpg" src="/assets/img/packages/package-slider-03.jpg" alt="image">
+                  <img id="image_box" class="lazyestload" src="/assets/img/packages/package-slider-03.jpg" alt="image">
                 </div>
 
-                <div class="item">
-                  <img class="lazyestload" data-src="/assets/img/packages/package-slider-04.jpg" src="/assets/img/packages/package-slider-04.jpg" alt="image">
-                </div>
+<!--                <div class="item">-->
+<!--                  <img class="lazyestload" data-src="/assets/img/packages/package-slider-04.jpg" src="/assets/img/packages/package-slider-04.jpg" alt="image">-->
+<!--                </div>-->
 
-                <div class="item">
-                  <img class="lazyestload" data-src="/assets/img/packages/package-slider-05.jpg" src="/assets/img/packages/package-slider-05.jpg" alt="image">
-                </div>
+<!--                <div class="item">-->
+<!--                  <img class="lazyestload" data-src="/assets/img/packages/package-slider-05.jpg" src="/assets/img/packages/package-slider-05.jpg" alt="image">-->
+<!--                </div>-->
               </div>
             </div>
             <p class="my-6" id="content">설명 내용</p>

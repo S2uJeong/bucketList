@@ -60,6 +60,9 @@ public class Post extends BaseTimeEntity{
     @OneToMany(mappedBy = "post")
     private List<BucketlistReview> bucketlistReviewList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PostFile> postFileList = new ArrayList<>();
+
     public void update(PostUpdateRequest request,Member member,PostStatus status) {
         this.title = request.getTitle();
         this.content=request.getContent();
