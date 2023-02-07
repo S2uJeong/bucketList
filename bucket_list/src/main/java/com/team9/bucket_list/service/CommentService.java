@@ -97,7 +97,7 @@ public class CommentService {
     // 3. 댓글 수정
     @CacheEvict(value = "comments", key = "#postId")                    // 값이 변경되므로 캐시 초기화
     @Transactional
-    public void updateComment(Long postId,Long commentId, CommentCreateRequest request,Long memberId){
+    public List<CommentListResponse> updateComment(Long postId,Long commentId, CommentCreateRequest request,Long memberId){
         Member member = checkMember(memberId);            // 현재 유저가 존재하는지 확인
 
         postDBCheck(postId);   // 게시물 존재 확인
@@ -110,13 +110,14 @@ public class CommentService {
             comment.update(request.getContent());      // Jpa 영속성을 활용한 update 기능 활용
         }
 
+        return structureChange(commentRepository.findCommentByPostId(postId));
     }
 
 
     // 4. 댓글 삭제
     @CacheEvict(value = "comments", key = "#postId")                        //  값이 변경되므로 캐시 초기화
     @Transactional
-    public void deleteComment(Long postId,Long commentId,Long memberId){
+    public List<CommentListResponse> deleteComment(Long postId,Long commentId,Long memberId){
         Member member = checkMember(memberId);            // 현재 유저가 존재하는지 확인
         log.info("member Id : "+member.getId());
         postDBCheck(postId);   // 게시물 존재 확인
@@ -128,6 +129,7 @@ public class CommentService {
 
         commentRepository.delete(comment);              // soft Delete 실행
 
+        return structureChange(commentRepository.findCommentByPostId(postId));
     }
 
 

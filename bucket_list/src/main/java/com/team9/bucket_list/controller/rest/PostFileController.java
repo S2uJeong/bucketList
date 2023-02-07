@@ -34,14 +34,13 @@ public class PostFileController {
     }
 
     // file 삭제
-    @DeleteMapping("/{postId}/files/{postileId}")
+    @DeleteMapping("/{postId}/files/{postFileId}")
     @Operation(summary = "파일 삭제", description = "해당 게시글에 첨부된 파일을 S3 버킷에서 삭제 하고, 서버 DB에 해당 파일 S3객체 URL을 삭제 합니다.")
     public Response<DeleteFileResponse> delete(@Parameter(name = "postId", description = "게시글 id") @PathVariable("postId") Long postId,
                                                @Parameter(name = "postFileId", description = "파일 id") @PathVariable("postFileId") Long postFileId) {
         DeleteFileResponse response = postFileService.delete(postId, postFileId);
         return Response.success(response);
     }
-
 
 
 

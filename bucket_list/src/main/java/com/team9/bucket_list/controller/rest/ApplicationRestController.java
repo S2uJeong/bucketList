@@ -2,6 +2,7 @@ package com.team9.bucket_list.controller.rest;
 
 import com.team9.bucket_list.domain.Response;
 import com.team9.bucket_list.domain.dto.application.ApplicationDecisionRequest;
+import com.team9.bucket_list.domain.dto.application.ApplicationFindAllResponse;
 import com.team9.bucket_list.domain.dto.application.ApplicationListResponse;
 import com.team9.bucket_list.domain.dto.application.ApplicationRequest;
 import com.team9.bucket_list.service.ApplicationService;
@@ -15,6 +16,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -35,6 +38,15 @@ public class ApplicationRestController {
         log.info("app content : " + applicationRequest.getContent() + "app postId : " + applicationRequest.getPostId());
         applicationService.getApplication(applicationRequest,memberId);
         return Response.success("신청서 제출 성공");
+    }
+
+    //특정 포스트의 신청서 리스트 전체 출력
+    @GetMapping("/{postId}")
+    public Response<ApplicationFindAllResponse> applicationListAll(@PathVariable Long postId, Authentication authentication) {
+        //memberId는 jwt에서 가져옴
+        Long memberId = Long.parseLong(authentication.getName());
+        List<ApplicationListResponse> all = applicationService.getNotDicisionList(postId, memberId);
+        return Response.success(new ApplicationFindAllResponse(all, all.size()));
     }
 
     //특정 포스트의 신청서 리스트 (승낙, 거절 제외), 글쓴이만 확인 가능
@@ -61,9 +73,9 @@ public class ApplicationRestController {
     @PutMapping("/{postId}")
     @Operation(summary = "신청서 수락/거절", description = "게시글 작성자가 신청서를 수락/거절합니다.")
     public Response applicationDecision(@Parameter(name = "postId", description = "게시글 id", in = ParameterIn.PATH) @PathVariable Long postId,
-                                        @Parameter ApplicationDecisionRequest applicationDecisionRequest) {
+                                        @Parameter ApplicationDecisionRequest applicationDecisionRequest, Authentication authentication) {
         //memberId는 jwt에서 가져옴
-        Long memberId = 1L;
+        Long memberId = Long.parseLong(authentication.getName());
         return Response.success(applicationService.applicationDecision(postId, memberId, applicationDecisionRequest));
     }
 
