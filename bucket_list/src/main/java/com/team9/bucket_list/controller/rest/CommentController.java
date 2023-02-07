@@ -46,22 +46,22 @@ public class CommentController {
     // 댓글 수정
     @PutMapping("/{postId}/comments/{commentId}")
     @Operation(summary = "댓글 수정", description = "댓글을 수정합니다.")
-    public Long commentUpdate(@Parameter(name = "postId", description = "게시글 id") @PathVariable(name = "postId")Long postid,
+    public Response<List<CommentListResponse>> commentUpdate(@Parameter(name = "postId", description = "게시글 id") @PathVariable(name = "postId")Long postid,
                                                              @Parameter(name = "commentId", description = "댓글 id") @PathVariable(name="commentId")Long id,
                                                              @RequestBody CommentCreateRequest request){
         Long memberId = 1l;
-        commentService.updateComment(postid,id,request,memberId);
-        return 1l;
+        List<CommentListResponse> commentList = commentService.updateComment(postid,id,request,memberId);
+        return Response.success(commentList);
     }
 
     // 댓글 삭제
     @DeleteMapping("{postId}/comments/{commentId}")
     @ResponseBody
-    public Long commentDelete(@Parameter(name = "postId", description = "게시글 id") @PathVariable(name = "postId")Long postid,
+    public Response<List<CommentListResponse>> commentDelete(@Parameter(name = "postId", description = "게시글 id") @PathVariable(name = "postId")Long postid,
                                                              @Parameter(name = "commentId", description = "댓글 id") @PathVariable(name="commentId")Long id){
         log.info("댓글 삭제");
         Long memberId = 1l;
-        commentService.deleteComment(postid,id,memberId);
-        return 1l;
+        List<CommentListResponse> commentList = commentService.deleteComment(postid,id,memberId);
+        return Response.success(commentList);
     }
 }
