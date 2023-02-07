@@ -98,7 +98,7 @@ public class Post extends BaseTimeEntity{
         return getApplicationList().stream()
                 .filter(a -> a.getStatus() == 1)
                 .peek(System.out::println)
-                .count();
+                .count() + 1;
     }
 
     public void setRecruitComplete() {
