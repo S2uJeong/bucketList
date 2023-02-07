@@ -24,7 +24,7 @@ public class MemberReview {
     @Column(length = 500)
     private String content;
     private Long writerId;
-    private int rate;
+    private double rate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")

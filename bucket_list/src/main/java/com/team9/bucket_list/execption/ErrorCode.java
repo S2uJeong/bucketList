@@ -24,8 +24,9 @@ public enum ErrorCode {
     APPLICATION_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 신청서가 없습니다"),
     ALARM_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 알람이 없습니다."),
     // POST 관련
-    FILE_NOT_EXISTS(HttpStatus.NOT_FOUND, "빈 파일 입니다.")
-
+    FILE_NOT_EXISTS(HttpStatus.NOT_FOUND, "빈 파일 입니다."),
+    WRONG_FILE_FORMAT(HttpStatus.BAD_REQUEST, "올바르지 않은 파일 형식입니다."),
+    FILE_UPLOAD_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패했습니다."),
     ;
 
 
