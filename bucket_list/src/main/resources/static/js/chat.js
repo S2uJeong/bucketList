@@ -69,6 +69,7 @@ function getHoursMinTime(time) {
 function showChatRoom(roomId,roomName) {
     $(`#chat-message-box-wrap`).children().remove();
     $('#chat-room-name').text(roomName);
+    $('#chat-room-id').val(roomId);
 
     /*let chatRoomName = `<div class="chat-room-title-box">
                             <h2 style="margin: 20px 0 10px 0" id="chat-room-name">${roomName}</h2>
@@ -210,8 +211,8 @@ function sendMessage() {
         };
         stompClient.send("/pub/chat/sendMessage", messageHeader, JSON.stringify(chatMessage));
 
-        $(`.text-area`).val('');
     }
+    $(`.text-area`).val('');
 }
 
 function onError(error) {
