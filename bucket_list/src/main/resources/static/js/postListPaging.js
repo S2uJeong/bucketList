@@ -65,7 +65,7 @@ function setTable() {
 
     post_list.forEach(function (post) {
         let html_result = html.replace("{제목}", post.title)
-            .replace("{포스트 아이디}", post.postId)
+            .replaceAll("{포스트 아이디}", post.postId)
             .replace("{비용}", post.cost)
             .replace("{장소}", post.location)
             .replace("{일정 시작 날짜}", post.eventStart)
