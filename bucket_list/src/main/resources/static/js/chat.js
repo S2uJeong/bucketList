@@ -1,5 +1,5 @@
-const accessToken = localStorage.getItem("accessToken");
-const lsPayload = accessToken.split('.')[1];
+const lsAccessToken = localStorage.getItem("accessToken");
+const lsPayload = lsAccessToken.split('.')[1];
 const lsMemberId = JSON.parse(atob(lsPayload)).memberId;
 const lsUserName = JSON.parse(atob(lsPayload)).userName;
 
@@ -10,15 +10,15 @@ let stompMessage, stompRoomList;
 stompClient = Stomp.over(socket);
 
 let header = {
-    Authorization : "Bearer " + accessToken
+    Authorization : "Bearer " + lsAccessToken
 }
 let listHeader = {
-    Authorization : "Bearer " + accessToken,
+    Authorization : "Bearer " + lsAccessToken,
     id : "list"
 };
 
 let messageHeader = {
-    Authorization : "Bearer " + accessToken,
+    Authorization : "Bearer " + lsAccessToken,
     id : "message"
 }
 
@@ -68,14 +68,15 @@ function getHoursMinTime(time) {
 //채팅방 하나 클릭시 해당 채팅방 채팅내역 불러오기
 function showChatRoom(roomId,roomName) {
     $(`#chat-message-box-wrap`).children().remove();
+    $('#chat-room-name').text(roomName);
 
-    let chatRoomName = `<h2 style="margin: 20px 0 10px 0" id="chat-room-name">${roomName}</h2>
+    /*let chatRoomName = `<div class="chat-room-title-box">
+                            <h2 style="margin: 20px 0 10px 0" id="chat-room-name">${roomName}</h2>
                           <hr class="dropdown-divider" style="margin: 10px 0 30px 0">
                           <input type="hidden" name="roomId" value="${roomId}" id="chat-room-id">
+                    </div>`;
 
-`
-
-    $('#chat-message-box-wrap').append(chatRoomName.replace('undefined',''));
+    $('#chat-message-box-wrap').append(chatRoomName.replace('undefined',''));*/
 
     axios({
         method:"GET",
@@ -87,8 +88,9 @@ function showChatRoom(roomId,roomName) {
 
         html += `<div id="chat-message-box-${roomId}">`
 
-        for(i=data.length-1; i>0; i--) {
-            if(data[i].message === '' || data[i].message === null) continue;
+        for(i=data.length-1; i>=0; i--) {
+            if(data[i].message === '' || data[i].message == null) continue;
+            if(data[i].chatType !== 'CHAT') continue;
             if(data[i].userName === lsUserName) {
                 html += `<div class="d-flex flex-column justify-content-end message-box-wrap">
                             <div class="d-flex flex-row align-items-end justify-content-end">
@@ -163,15 +165,17 @@ function onMessageReceived(payload) {
     let message = JSON.parse(payload.body);
     let html;
 
-    console.log(getHoursMinTime(message.lastModifiedAt));
-
-    if(message.type === 'JOIN') {
-        console.log("입장");
-    } else if (message.type === 'LEAVE') {
+    if(message.chatType === 'JOIN') {
+       html += `<div class="d-flex flex-column justify-content-end message-box-wrap join-message-wrap">
+                    <div class="alert alert-secondary join-message">
+                        ${message.userName}님이 입장하셨습니다
+                    </div>
+                </div>`
+    } else if (message.chatType === 'LEAVE') {
         console.log("퇴장");
-    } else if (message.type === 'LIST') {
+    } else if (message.chatType === 'LIST') {
 
-    } else {
+    } else if(message.chatType === 'CHAT' && message.message != '\n'){
         if(message.userName === lsUserName) {
             html += `<div class="d-flex flex-column justify-content-end message-box-wrap">
                             <div class="d-flex flex-row align-items-end justify-content-end">
@@ -188,16 +192,15 @@ function onMessageReceived(payload) {
                         </div>
                     </div>`;
         }
-
-        $('#chat-message-box-wrap').append(html.replace('undefined',''));
-        $('#chat-message-box-wrap').scrollTop($('#chat-message-box-wrap')[0].scrollHeight);
     }
+    $('#chat-message-box-wrap').append(html.replace('undefined',''));
+    $('#chat-message-box-wrap').scrollTop($('#chat-message-box-wrap')[0].scrollHeight);
 }
 
 function sendMessage() {
     let messageContent = $(`.text-area`).val();
     let roomId = $(`#chat-room-id`).val();
-    if(messageContent && stompClient) {
+    if(messageContent && stompClient && messageContent != '\n') {
         let chatMessage = {
             'roomId':roomId,
             'memberId':lsMemberId,
@@ -214,3 +217,10 @@ function sendMessage() {
 function onError(error) {
 
 }
+
+//엔터키 누를시 전송
+$(".text-area").on("keyup",function(key){
+    if(key.keyCode==13) {
+        sendMessage();
+    }
+});
