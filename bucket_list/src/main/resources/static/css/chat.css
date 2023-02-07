@@ -8,6 +8,7 @@
     overflow-x: hidden;
 }
 .chat-list-box {
+    margin-bottom: 10px;
     cursor: pointer;
 }
 
@@ -37,7 +38,7 @@
 }
 
 .chat-room-box{
-    height: 700px;
+    height: 650px;
     overflow: scroll;
     overflow-x: hidden;
     margin-bottom: 0 !important;
@@ -66,4 +67,24 @@
 
 .message-username{
     margin-bottom: 2px;
+}
+
+.join-message-wrap{
+    margin: 20px 0;
+}
+
+.join-message{
+    margin: 0 auto;
+    padding: 10px 14px;
+    border-radius: 30px;
+}
+
+.chat-room-title-box{
+    margin: 0 !important;
+    height: 50px;
+    border-bottom: 1px solid #cacaca !important;
+}
+
+.chat-room-title {
+    padding-left: 12px;
 }
