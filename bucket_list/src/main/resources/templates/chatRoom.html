@@ -29,8 +29,7 @@
     let connectingElement = document.querySelector('.connecting');
 
 
-    let stompClient = null;
-    let username = null;
+    let stompClient = null;;
 
     let colors = [
         '#2196F3', '#32c787', '#00BCD4', '#ff5652',
@@ -41,22 +40,40 @@
     let roomId = url.get('roomId');
     roomId = 1;
 
-    //이전 채팅 기록을 불러오면서 userName도 같이 불러온다
-    username = "test1";
+    //토큰
+    const accessToken = localStorage.getItem("accessToken");
+
+    if(accessToken == null) {
+        location.href="/";
+    }
+
+    const payload = accessToken.split('.')[1];
+    const memberId = JSON.parse(atob(payload)).memberId;
+    const userName = JSON.parse(atob(payload)).userName;
+
+    let header = {
+        Authorization : "Bearer " + accessToken
+    };
 
     //서버 연결
-    let socket = new SockJS('/ws');
+    let socket = new SockJS('/ws', null, {headers: {'Authorization': header}});
     stompClient = Stomp.over(socket);
 
-    stompClient.connect({},onConnected,onError);
+
+
+    console.log(`header : ${header}`);
+
+    stompClient.connect(header,onConnected,onError);
 
     function onConnected() {
-        stompClient.subscribe('/sub/chat/room/'+roomId, onMessageReceived);
+        stompClient.subscribe('/sub/chat/room/'+roomId, onMessageReceived,header);
+
         stompClient.send("/pub/chat/enter",
-            {},
+            header,
             JSON.stringify({
                 'roomId':roomId,
-                'userName':username,
+                'memberId':memberId,
+                'userName':userName,
                 'chatType':'JOIN'
             }));
     }
@@ -83,11 +100,12 @@
         if(messageContent && stompClient) {
             let chatMessage = {
                 'roomId':roomId,
-                userName: username,
+                'memberId':memberId,
+                'userName':userName,
                 'message': messageInput.value,
                 chatType: 'CHAT'
             };
-            stompClient.send("/pub/chat/sendMessage", {}, JSON.stringify(chatMessage));
+            stompClient.send("/pub/chat/sendMessage", header, JSON.stringify(chatMessage));
 
             $('#messageArea').append(messageInput.value);
 

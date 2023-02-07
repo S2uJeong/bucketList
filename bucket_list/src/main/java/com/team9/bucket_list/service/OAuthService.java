@@ -14,6 +14,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -36,9 +37,17 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
         //OAuth 서비스에 따라 유저정보를 공통된 class인 UserProfile 객체로 만들어 준다.
         MemberProfile memberProfile = OAuthAttributes.extract(registrationId, oAuth2User); /**attribute만 넘기도록 리팩토링 필요**/
 
-        Member member = saveOrUpdate(registrationId, memberProfile);      //DB에 저장
-        log.info("userName : {}", oAuth2User.getName());
-        return memberProfile;
+        String email = (String) memberProfile.getAttributes().get("email");
+
+        // 기존 email로 회원가입한 사람 있는지 확인
+        Optional<Member> duplicatedMember = memberRepository.findByEmailAndOauthIdIsNull(email);
+        if(duplicatedMember.isPresent()){
+            return memberProfile;
+        } else {
+            Member member = saveOrUpdate(registrationId, memberProfile);      //DB에 저장
+            log.info("userName : {}", oAuth2User.getName());
+            return memberProfile;
+        }
     }
     private Member saveOrUpdate(String registrationId, MemberProfile memberProfile){
         String oAuthId = (String) memberProfile.getAttributes().get("oauthId");

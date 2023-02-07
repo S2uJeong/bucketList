@@ -23,6 +23,9 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework:spring-messaging:6.0.3'
+    implementation group: 'org.springframework.security', name: 'spring-security-messaging', version: '6.0.1'
 
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.mysql:mysql-connector-j'
@@ -32,7 +35,6 @@ dependencies {
     implementation 'org.springframework.security:spring-security-test'
     // swagger
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
-
 
     //SNS로그인을 위한 의존성
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
@@ -66,7 +68,7 @@ dependencies {
     // 캐싱 사용하기 위한 의존성
     implementation 'org.springframework.boot:spring-boot-starter-cache'
 
-    // post Image 추가를 위한 스프링 클라우드 의존성 추가
+    // Image 추가를 위한 스프링 클라우드 의존성 추가
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
 }
@@ -74,7 +76,7 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
-
+// compileQuerydsl 실행파일 동작 하지 않도록 하기 위해
 compileQuerydsl.enabled = false
 
 //querydsl 추가 시작

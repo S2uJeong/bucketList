@@ -21,13 +21,12 @@ import java.util.List;
 @ToString
 @Where(clause = "deleted_at is NULL")
 @SQLDelete(sql = "UPDATE post SET deleted_at = current_timestamp WHERE post_id = ?")
-public class Post {
+public class Post extends BaseTimeEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_id")
     private Long id;
-    private LocalDateTime deletedAt;
     private String title;
     private String content;
     @Column(nullable = false)               // not null
@@ -60,6 +59,9 @@ public class Post {
 
     @OneToMany(mappedBy = "post")
     private List<BucketlistReview> bucketlistReviewList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PostFile> postFileList = new ArrayList<>();
 
     public static Post update(Post post, PostUpdateRequest request) {
 

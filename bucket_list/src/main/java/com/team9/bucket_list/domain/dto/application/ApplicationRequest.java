@@ -8,6 +8,6 @@ import lombok.*;
 @AllArgsConstructor
 public class ApplicationRequest {
 
-    private String comment;
+    private String content;
     private Long postId;
 }

@@ -94,6 +94,9 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<ChatParticipant> chatParticipants = new ArrayList<>();
 
+    @OneToMany(mappedBy = "member")
+    private List<Comment> comments = new ArrayList<>();
+
     public MemberDto toDto() {
         return MemberDto.builder()
                 .id(id)

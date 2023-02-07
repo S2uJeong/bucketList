@@ -43,7 +43,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
                 //헤더 형식 확인
                 if (authorizationHeader == null) {
-                    log.info("header가 없는 요청입니다.");
+//                    log.info("header가 없는 요청입니다.");
                     SecurityContextHolder.getContext().setAuthentication(null);
                     filterChain.doFilter(request, response);
                     return;
