@@ -27,7 +27,7 @@ public class ChatConfig implements WebSocketMessageBrokerConfigurer {
         //클라이언트의 send요청 처리
         registry.setApplicationDestinationPrefixes("/pub");
         //sub하는 클라이언트에게 메시지 전달
-        registry.enableSimpleBroker("/sub");
+        registry.enableSimpleBroker("/sub","/sub/list");
 
     }
 

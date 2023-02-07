@@ -1,6 +1,7 @@
 package com.team9.bucket_list.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.team9.bucket_list.domain.dto.chat.ChatRequest;
 import com.team9.bucket_list.domain.dto.chat.ChatRoomRequest;
 import jakarta.persistence.*;
 import lombok.*;
@@ -22,6 +23,9 @@ public class ChatRoom {
     private String roomName;
     private int totalNum;
     private LocalDateTime lastMessageTime;
+    private String lastMessage;
+    private String lastUserName;
+
     @OneToOne
     @JoinColumn(name = "bucketlist_id")
     private Bucketlist bucketlist;
@@ -40,16 +44,20 @@ public class ChatRoom {
                 .roomName(chatRoomRequest.getRoomName())
                 .bucketlist(bucketlist)
                 .totalNum(chatRoomRequest.getTotalNum())
+                .lastMessage("")
+                .lastUserName("")
                 .lastMessageTime(LocalDateTime.now())
                 .build();
     }
 
-    public static ChatRoom messageTimeUpdate(ChatRoom chatRoom) {
+    public static ChatRoom messageTimeUpdate(ChatRoom chatRoom, ChatRequest chatRequest) {
         return chatRoom.builder()
                 .id(chatRoom.getId())
                 .roomName(chatRoom.getRoomName())
                 .totalNum(chatRoom.getTotalNum())
                 .bucketlist(chatRoom.getBucketlist())
+                .lastMessage(chatRequest.getMessage())
+                .lastUserName(chatRequest.getUserName())
                 .lastMessageTime(LocalDateTime.now())
                 .build();
     }
