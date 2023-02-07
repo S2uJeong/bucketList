@@ -204,7 +204,7 @@
                     "<div style='display: none' data-id=\"{댓글 아이디}\"></div>\n"+
                     "<a class=\"me-n4 comment-tool\" id=\"navbarDropdown\" href=\"#\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\">. . .</a>\n"+
                     "<ul class=\"dropdown-menu droclassName-menu-end\" aria-labelledby=\"navbarDropdown\">\n" +
-                    "<li><a  class=\"dropdown-item\" hrclassName\">수정</a></li>\n"+
+                    // "<li><a  class=\"dropdown-item\" hrclassName\">수정</a></li>\n"+
                     "<li><a data-id=\"{댓글 삭제}\" onclick=\'commentReplyDeleteButton(this)\' class=\"dropdown-item\" hrclassName\">삭제</a></li>\n"+
                     "</ul>\n"+
                     "<div>\n"+
@@ -220,7 +220,7 @@
                     "<a class=\"comment-date\" data-id=\"{댓글 노출}\" onclick=\"showCommentReply(this)\">댓글쓰기</a>\n"+
                     "<form class=\"comment-reply-form\" id=\"{댓글 노출2}\" style=\"display: none;\">\n"+
                     "<div class=\"form-group mb-2\">\n"+
-                    "<textarea class=\"form-control border-0 bg-smoke\" id =\"replyComment\" placeholder=\"Comment\" rows=\"2\"></textarea>\n"+
+                    "<textarea class=\"form-control border-0 bg-smoke\" id =\"{대댓글 작성}\" placeholder=\"Comment\" rows=\"2\"></textarea>\n"+
                     "</div>\n"+
                     "<div style=\"display: flex; justify-content: right\">\n"+
                     "<button type=\"button\" data-id=\"{댓글 아이디2}\" onclick=\"commentReplyButton(this)\"  class=\"btn btn-outline-info-comment-button mb-2\" style=\"padding: 8px 18px\">등록</button>\n"+
@@ -236,18 +236,18 @@
                     "<div style='display: none' ></div>\n"+
                     "<a class=\"me-n4 comment-tool\" id=\"navbarDropdown\" href=\"#\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\">. . .</a>\n"+
                     "<ul class=\"dropdown-menu droclassName-menu-end\" aria-labelledby=\"navbarDropdown\">\n" +
-                    "<li><a data-id=\"{대댓글 아이디}\" onclick='commentReplyUpdateButton(this)' class=\"dropdown-item\" hrclassName\">수정</a></li>\n"+
+                    // "<li><a data-id=\"{대댓글 아이디}\" onclick='commentReplyUpdateButton(this)' class=\"dropdown-item\" hrclassName\">수정</a></li>\n"+
                     <!-- 수정버튼 클릭시 글작성 칸 출력-->
-                    "<form class=\"comment-reply-form\" id=\"{대댓글 노출}\" style=\"display: none;\">\n"+
-                    "<div class=\"form-group mb-2\">\n"+
-                    "<textarea class=\"form-control border-0 bg-smoke\" id =\"replyComment\"  placeholder=\"Comment\" rows=\"2\"></textarea>\n"+
-                    "</div>\n"+
-                    "<div style=\"display: flex; justify-content: right\">\n"+
-                    "<button type=\"button\" data-id=\"{대댓글 아이디2}\" onclick=\"commentReplyButton(this)\"  class=\"btn btn-outline-info-comment-button mb-2\" style=\"padding: 8px 18px\">등록</button>\n"+
-                    "</div>\n"+
-                    "</form>\n"+
+                    // "<form class=\"comment-reply-form\" id=\"{대댓글 노출}\" style=\"display: none;\">\n"+
+                    // "<div class=\"form-group mb-2\">\n"+
+                    // "<textarea class=\"form-control border-0 bg-smoke\" id =\"replyComment\"  placeholder=\"Comment\" rows=\"2\"></textarea>\n"+
+                    // "</div>\n"+
+                    // "<div style=\"display: flex; justify-content: right\">\n"+
+                    // "<button type=\"button\" data-id=\"{대댓글 아이디2}\" onclick=\"commentReplyButton(this)\"  class=\"btn btn-outline-info-comment-button mb-2\" style=\"padding: 8px 18px\">등록</button>\n"+
+                    // "</div>\n"+
+                    // "</form>\n"+
                     <!-- 수정버튼 클릭시 글작성 칸 출력 종료 -->
-                    "<li><a data-id=\"{대댓글 아이디3}\" onclick=\'commentReplyDeleteButton(this)\' class=\"dropdown-item\" hrclassName\">삭제</a></li>\n"+
+                    "<li><a data-id=\"{대댓글 삭제}\" onclick=\'commentReplyDeleteButton(this)\' class=\"dropdown-item\" hrclassName\">삭제</a></li>\n"+
                     "</ul>\n"+
                     "<div>\n"+
                     "<div>\n"+
@@ -278,7 +278,8 @@
                       .replace("{댓글 아이디2}",comment.id)
                       .replace("{댓글 노출}",'comment'+comment.id+'-'+comment.id)
                       .replace("{댓글 노출2}",'comment'+comment.id+'-'+comment.id)
-                      .replace("{댓글 삭제}",comment.id);
+                      .replace("{댓글 삭제}",comment.id)
+                      .replace("{대댓글 작성}",'replyComment'+comment.id);
 
               let html_reply_result;
               if (comment.children.length != 0) {                     // 만약 대댓글이 있다면
@@ -290,11 +291,11 @@
                           .replace("{작성일자}", replycomment.createAt)
                           .replace("{내용}", replycomment.content)
                           .replace("{postId}",replycomment.parentId)
-                          .replace("{대댓글 노출}",replycomment.id)
-                          .replace("{대댓글 아이디}",replycomment.id)
-                          .replace("{대댓글 아이디2}",replycomment.id)
-                          .replace("{대댓글 아이디3}",replycomment.id)
-                          .replace("replyComment".value,replycomment.content);
+                          // .replace("{대댓글 노출}",replycomment.id)
+                          // .replace("{대댓글 아이디}",replycomment.id)
+                          // .replace("{대댓글 아이디2}",replycomment.id)
+                          .replace("{대댓글 삭제}",replycomment.id);
+                  // .replace("replyComment".value,replycomment.content);
                 });
 
                 let commentResult = document.getElementById('list_comment');          // 대댓글 html에 대댓글 갯수만큼 데이터를 넣어 저장한 후
@@ -527,14 +528,18 @@
 
     <!-- 대댓글 작성 -->
     function commentReplyButton(comment) {
-
-      let replycomment = $("#replyComment").val();   // 댓글 값 저장
       const parentId = $(comment).data('id')
 
-      console.log(replycomment);
+      let str = 'replyComment'+parentId;
+      let name = document.getElementById(str);
+      console.log(name);
+
+      let temp = $("#"+str).val();
+
+      console.log(temp);
       console.log(parentId);
       const CommentData = {       // 서버로 보낼 데이터
-        "content" : replycomment,         //  댓글 내용            comment
+        "content" : temp,         //  댓글 내용            comment
         "parentId" : parentId // 부모댓글 ID가 들어가야함
       }
 
@@ -562,44 +567,44 @@
     }
 
     <!-- 대댓글 수정 -->
-    function commentReplyUpdateButton(comment) {
-
-      <!-- 이 부분부터 다시 작성, 현재 대댓글에 기존 댓글의 내용을 출력시켜야함 -->
-      let replycommentUpdate = $("#replyComment").val();   // 댓글 값 저장
-      const parentId = $(comment).data('id');
-      <!-- -->
-
-
-
-      console.log(replycommentUpdate);
-      console.log(parentId);
-      const CommentData = {       // 서버로 보낼 데이터
-        "content" : replycommentUpdate,         //  댓글 내용            comment
-        "parentId" : parentId // 부모댓글 ID가 들어가야함
-      }
-
-      console.log(CommentData);
-
-      // axios header에 넣을 데이터
-      const axiosConfig = {
-        headers: {
-          "Content-Type": "application/json"
-        }
-      }
-
-      const sendData = async () => {
-        try {
-
-          const response = await axios.put('/comment/'+postId+'/comments/'+parentId, JSON.stringify(CommentData), axiosConfig);
-          alert("전송 성공");
-          let url = "/post/" + postId;
-          window.location.replace(url);
-        } catch (error) {
-          alert("실패");
-        }
-      }
-      sendData();
-    }
+    // function commentReplyUpdateButton(comment) {
+    //
+    //   <!-- 이 부분부터 다시 작성, 현재 대댓글에 기존 댓글의 내용을 출력시켜야함 -->
+    //   let replycommentUpdate = $("#replyComment").val();   // 댓글 값 저장
+    //   const parentId = $(comment).data('id');
+    //   <!-- -->
+    //
+    //
+    //
+    //   console.log(replycommentUpdate);
+    //   console.log(parentId);
+    //   const CommentData = {       // 서버로 보낼 데이터
+    //     "content" : replycommentUpdate,         //  댓글 내용            comment
+    //     "parentId" : parentId // 부모댓글 ID가 들어가야함
+    //   }
+    //
+    //   console.log(CommentData);
+    //
+    //   // axios header에 넣을 데이터
+    //   const axiosConfig = {
+    //     headers: {
+    //       "Content-Type": "application/json"
+    //     }
+    //   }
+    //
+    //   const sendData = async () => {
+    //     try {
+    //
+    //       const response = await axios.put('/comment/'+postId+'/comments/'+parentId, JSON.stringify(CommentData), axiosConfig);
+    //       alert("전송 성공");
+    //       let url = "/post/" + postId;
+    //       window.location.replace(url);
+    //     } catch (error) {
+    //       alert("실패");
+    //     }
+    //   }
+    //   sendData();
+    // }
 
 
     <!-- 대댓글 삭제 -->
@@ -848,14 +853,14 @@
               <!-- 이미지 출력 부분 -->
               <!--              <div id="package-slider" class="owl-carousel owl-theme package-slider col-md-6">-->
               <!--              <div id="package-slider" class="owl-carousel owl-theme package-slider col-md-6">-->
-                <div class="item">
-                  <img class="lazyestload" src="/assets/img/packages/package-slider-03.jpg" alt="image">
-                  <img id="image_box" class="lazyestload" src="/assets/img/packages/package-slider-03.jpg" alt="image">
-                </div>
+              <div class="item">
+                <!--                <img class="lazyestload" src="/assets/img/packages/package-slider-03.jpg" alt="image">-->
+                <img id="image_box" class="lazyestload" src="/assets/img/packages/package-slider-03.jpg" alt="image">
+              </div>
 
-<!--              <div class="item">-->
-<!--                <img id="image_box" class="lazyestload" src="/assets/img/packages/package-slider-03.jpg" alt="image">-->
-<!--              </div>-->
+              <!--              <div class="item">-->
+              <!--                <img id="image_box" class="lazyestload" src="/assets/img/packages/package-slider-03.jpg" alt="image">-->
+              <!--              </div>-->
 
               <!--                <div class="item">-->
               <!--                  <img class="lazyestload" data-src="/assets/img/packages/package-slider-04.jpg" src="/assets/img/packages/package-slider-04.jpg" alt="image">-->
@@ -910,8 +915,7 @@
 
       </div>
     </div>
-</div>
-</section>
+  </section>
 
 
 </div><!-- element wrapper ends -->
