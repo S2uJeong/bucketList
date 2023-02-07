@@ -737,22 +737,22 @@
 <!-- 주소 검색 api 사용-->
 <script>
   window.onload = function(){
-    // const accessToken = localStorage.getItem("accessToken");
-    //
-    // if (accessToken === null) {
-    //   alert('로그인이 필요한 서비스 입니다.');
-    //   window.history.back();
-    //   $("#login_li").show();
-    //   $("#user_li").hide();
-    // } else {
-    //   $("#login_li").hide();
-    //   $("#user_li").show();
-    //
-    //   const payload = accessToken.split('.')[1];
-    //   let userName = JSON.parse(decodeURIComponent(escape(window.atob(payload)))).userName;
-    //   console.log(userName);
-    //   document.getElementById("userName").innerText = userName;
-    // }
+    const accessToken = localStorage.getItem("accessToken");
+
+    if (accessToken === null) {
+      alert('로그인이 필요한 서비스 입니다.');
+      window.history.back();
+      $("#login_li").show();
+      $("#user_li").hide();
+    } else {
+      $("#login_li").hide();
+      $("#user_li").show();
+
+      const payload = accessToken.split('.')[1];
+      let userName = JSON.parse(decodeURIComponent(escape(window.atob(payload)))).userName;
+      console.log(userName);
+      document.getElementById("userName").innerText = userName;
+    }
 
     document.getElementById("address_kakao").addEventListener("click", function(){ //주소입력칸을 클릭하면
       //카카오 지도 발생
