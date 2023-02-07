@@ -32,6 +32,7 @@ public class PostReadResponse {
     private String category; //카테고리
     private String fileName; //S3에 저장된 이미지 파일이름
     private Long permitNum;
+    private Long fileId;    // DB에 저장된 파일 ID
 //    private Member member; // 버킷리스트를 만든 member --> member_id, nickname
 //    private List<Application> applicationList; // 버킷리스트 참가자 목록
 //    private List<Likes> likeList; // 버킷리스트 좋아요 누른 사람 목록
@@ -56,6 +57,7 @@ public class PostReadResponse {
                 .category(post.getCategory())
                 .fileName(post.getPostFileList().get(0).getAwsS3FileName())
                 .permitNum(post.getPermitNum())
+                .fileId(post.getPostFileList().get(0).getId())
 //                .member(post.getMember())
 //                .applicationList(post.getApplicationList())
 //                .likeList(post.getLikesList())

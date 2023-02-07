@@ -60,13 +60,28 @@
     stompClient = Stomp.over(socket);
 
 
+    /*let socket2 = new SockJS('/ws/list');
+    let stompClient2 = Stomp.over(socket2);
 
-    console.log(`header : ${header}`);
+    stompClient2.connect(header,onConnected2(),onError());
+
+    function onConnected2() {
+        stompClient.subscribe('/sub/list/chat/room/'+roomId, onMessageReceived2,header);
+    }
+
+    function onMessageReceived2(payload) {
+        let data = JSON.parse(payload.body);
+        console.log("채팅 리스트"+data)
+    }
+
+    console.log(`header : ${header}`);*/
 
     stompClient.connect(header,onConnected,onError);
 
     function onConnected() {
         stompClient.subscribe('/sub/chat/room/'+roomId, onMessageReceived,header);
+
+        stompClient.subscribe('/sub/list/chat/room/'+roomId, onMessageReceived2,header);
 
         stompClient.send("/pub/chat/enter",
             header,
@@ -78,6 +93,12 @@
             }));
     }
 
+    function onMessageReceived2(payload) {
+        let data = JSON.parse(payload.body);
+        console.log("on message received2 : "+payload);
+        console.log("채팅 리스트"+data)
+    }
+
     function onMessageReceived(payload) {
         let message = JSON.parse(payload.body);
 
@@ -85,8 +106,11 @@
             console.log("입장");
         } else if (message.type === 'LEAVE') {
             console.log("퇴장");
+        } else if (message.type === 'LIST') {
+            console.log("채팅방 리스트 업데이트")
         } else {
-            $('#messageArea').append(message.message);
+            if(!(message.memberId === memberId))
+                $('#messageArea').append(message.message);
         }
 
     }

@@ -1,9 +1,9 @@
 package com.team9.bucket_list.config;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -14,7 +14,12 @@ public class SwaggerConfig {
     public OpenAPI customizeOpenAPI() {
         final String securitySchemeName = "bearerAuth";
 
+        Info info = new Info()
+                .title("BUCKETLIST")
+                .description("✨ Let's find BUCKETLIST with us ✨");
+
         return new OpenAPI()
+
                 .addSecurityItem(new SecurityRequirement()
                         .addList(securitySchemeName))
                 .components(new Components()
@@ -22,6 +27,7 @@ public class SwaggerConfig {
                                 .name(securitySchemeName)
                                 .type(SecurityScheme.Type.HTTP)
                                 .scheme("bearer")
-                                .bearerFormat("JWT")));
+                                .bearerFormat("JWT")))
+                .info(info);
     }
 }
