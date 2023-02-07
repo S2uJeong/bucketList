@@ -73,7 +73,7 @@ public class ApplicationRestController {
     @PutMapping("/{postId}")
     @Operation(summary = "신청서 수락/거절", description = "게시글 작성자가 신청서를 수락/거절합니다.")
     public Response applicationDecision(@Parameter(name = "postId", description = "게시글 id", in = ParameterIn.PATH) @PathVariable Long postId,
-                                        @Parameter ApplicationDecisionRequest applicationDecisionRequest) {
+                                        @Parameter ApplicationDecisionRequest applicationDecisionRequest, Authentication authentication) {
         //memberId는 jwt에서 가져옴
         Long memberId = Long.parseLong(authentication.getName());
         return Response.success(applicationService.applicationDecision(postId, memberId, applicationDecisionRequest));
