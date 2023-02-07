@@ -1,7 +1,9 @@
 package com.team9.bucket_list.domain.dto.post;
+import com.team9.bucket_list.domain.entity.Member;
 import com.team9.bucket_list.domain.entity.Post;
 import com.team9.bucket_list.domain.enumerate.PostCategory;
 import com.team9.bucket_list.domain.enumerate.PostStatus;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,7 +29,7 @@ public class PostCreateRequest {
 
 
 
-    public Post toEntity() {
+    public Post toEntity(Member member) {
         return Post.builder()
                 .title(this.title)
                 .content(this.content)
@@ -37,6 +39,7 @@ public class PostCreateRequest {
                 .entrantNum(this.entrantNum)
                 .eventStart(this.eventStart)
                 .eventEnd(this.eventEnd)
+                .member(member)
                 .status(PostStatus.JOIN)             // enum에서 값 대입
                 .category(this.category)
                 .build();

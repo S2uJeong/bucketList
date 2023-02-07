@@ -28,7 +28,6 @@ dependencies {
     implementation group: 'org.springframework.security', name: 'spring-security-messaging', version: '6.0.1'
     implementation 'org.springframework.boot:spring-boot-devtools:3.0.1'
 
-
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.mysql:mysql-connector-j'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
@@ -37,7 +36,6 @@ dependencies {
     implementation 'org.springframework.security:spring-security-test'
     // swagger
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
-
 
     //SNS로그인을 위한 의존성
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
@@ -71,7 +69,7 @@ dependencies {
     // 캐싱 사용하기 위한 의존성
     implementation 'org.springframework.boot:spring-boot-starter-cache'
 
-    // post Image 추가를 위한 스프링 클라우드 의존성 추가
+    // Image 추가를 위한 스프링 클라우드 의존성 추가
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
 }

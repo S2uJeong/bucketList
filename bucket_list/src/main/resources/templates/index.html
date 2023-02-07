@@ -44,14 +44,6 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
   </head>
-  <style>
-    #login_li{
-      display: none;
-    }
-    #user_li{
-      display: none;
-    }
-  </style>
   <script>
     let check = false;
     function showSearch() {
@@ -111,30 +103,34 @@
             </li>
 
             <li class="">
-              <a class="" href="/post">버킷리스트</a>
+              <a class="" href="javascript:void(0)">버킷리스트</a>
               <ul class="dropdown drop-up">
-                <li class=" active ">
-                  <a href="index.html">Travel</a>
+                <li class="">
+                  <a href="/post">All</a>
                 </li>
 
                 <li class="">
-                  <a href="/post">Extreme</a>
+                  <a href="/post?category=travel">Travel</a>
                 </li>
 
                 <li class="">
-                  <a href="index-3.html">Study</a>
+                  <a href="/post?category=extreme">Extreme</a>
                 </li>
 
                 <li class="">
-                  <a href="index-3.html">Volunteer</a>
+                  <a href="/post?category=study">Study</a>
                 </li>
 
                 <li class="">
-                  <a href="index-3.html">Experience</a>
+                  <a href="/post?category=volunteer">Volunteer</a>
                 </li>
 
                 <li class="">
-                  <a href="index-3.html">Etc</a>
+                  <a href="/post?category=experience">Experience</a>
+                </li>
+
+                <li class="">
+                  <a href="/post?category=etc">Etc</a>
                 </li>
               </ul>
             </li>
@@ -146,16 +142,16 @@
             <li class="" id="user_li">
               <a class="" href="javascript:void(0)" id="userName">유저명</a>
               <ul class="dropdown drop-up">
-                <li class=" active ">
-                  <a href="/createform">버킷리스트 작성</a>
+                <li class="">
+                  <a href="/post/createform">버킷리스트 작성</a>
                 </li>
 
                 <li class="">
-                  <a href="/post/sports">좋아요</a>
+                  <a href="/my/likes">좋아요</a>
                 </li>
 
                 <li class="">
-                  <a href="index-3.html">마이 피드</a>
+                  <a href="/my">마이 피드</a>
                 </li>
 
                 <li class="">
@@ -273,7 +269,7 @@
     <div class="row grid">
       <div class="col-md-6 col-lg-4 element-item america">
         <div class="media media-hoverable justify-content-center mb-2 mb-md-4 mb-lg-6">
-          <a href="single-package-fullwidth.html" class="media-content">
+          <a href="/post?category=travel" class="media-content">
             <img class="media-img lazyestload" data-src="/assets/img/home/packages/packages-1.jpg" src="/assets/img/home/packages/packages-1.jpg" alt="Generic placeholder image">
             <div class="media-object">
               <h3 class="text-uppercase mb-0">Travel</h3>
@@ -286,7 +282,7 @@
       
       <div class="col-md-6 col-lg-4 element-item africa">
         <div class="media media-hoverable justify-content-center mb-2 mb-md-4 mb-lg-6">
-          <a href="single-package-fullwidth.html" class="media-content">
+          <a href="/post?category=extreme" class="media-content">
             <img class="media-img lazyestload" data-src="/assets/img/home/packages/packages-2.jpg" src="/assets/img/home/packages/packages-2.jpg" alt="Generic placeholder image">
             <div class="media-object">
               <h3 class="text-uppercase mb-0">Extreme</h3>
@@ -299,7 +295,7 @@
 
       <div class="col-md-6 col-lg-4 element-item asia america">
         <div class="media media-hoverable justify-content-center mb-2 mb-md-4 mb-lg-6">
-          <a href="single-package-fullwidth.html" class="media-content">
+          <a href="/post?category=study" class="media-content">
             <img class="media-img lazyestload" data-src="/assets/img/home/packages/packages-3.jpg" src="/assets/img/home/packages/packages-3.jpg" alt="Generic placeholder image">
             <div class="media-object">
               <h3 class="text-uppercase mb-0">Study</h3>
@@ -312,7 +308,7 @@
 
       <div class="col-md-6 col-lg-4 element-item asia africa">
         <div class="media media-hoverable justify-content-center mb-2 mb-md-4 mb-lg-0">
-          <a href="single-package-fullwidth.html" class="media-content">
+          <a href="/post?category=volunteer" class="media-content">
             <img class="media-img lazyestload" data-src="/assets/img/home/packages/packages-4.jpg" src="/assets/img/home/packages/packages-4.jpg" alt="Generic placeholder image">
             <div class="media-object">
               <h3 class="text-uppercase mb-0">Volunteer</h3>
@@ -325,7 +321,7 @@
 
       <div class="col-md-6 col-lg-4 element-item america">
         <div class="media media-hoverable justify-content-center mb-2 mb-md-0">
-          <a href="single-package-fullwidth.html" class="media-content">
+          <a href="/post?category=experience" class="media-content">
             <img class="media-img lazyestload" data-src="/assets/img/home/packages/packages-5.jpg" src="/assets/img/home/packages/packages-5.jpg" alt="Generic placeholder image">
             <div class="media-object">
               <h3 class="text-uppercase mb-0">Experience</h3>
@@ -338,7 +334,7 @@
 
       <div class="col-md-6 col-lg-4 element-item asia africa">
         <div class="media media-hoverable justify-content-center">
-          <a href="single-package-fullwidth.html" class="media-content">
+          <a href="/post?category=etc" class="media-content">
             <img class="media-img lazyestload" data-src="/assets/img/home/packages/packages-6.jpg" src="/assets/img/home/packages/packages-6.jpg" alt="Generic placeholder image">
             <div class="media-object">
               <h3 class="text-uppercase mb-0">Etc</h3>
@@ -666,7 +662,7 @@
 <!--                </label>-->
 <!--                <a class="pull-right" href="javascript:void(0)">Fogot Password?</a>-->
 <!--             </div>-->
-
+             <p id="login_error" style="display: none"></p>
              <div class="d-grid">
               <button class="btn btn-primary text-uppercase" onclick="login(); return false;">Login</button>
              </div>
@@ -750,194 +746,8 @@
 
     <script src="/assets/js/custom.js"></script>
 
+    <script src="/js/axios.js"></script>
+    <script src="/js/header.js"></script>
   </body>
-  <script src="/js/axios.js"></script>
-
-  <script>
-    window.onload = function () {
-      const accessToken = localStorage.getItem("accessToken");
-
-      if (accessToken === null) {
-        $("#login_li").show();
-        $("#user_li").hide();
-      } else {
-        $("#login_li").hide();
-        $("#user_li").show();
-
-        const payload = accessToken.split('.')[1];
-        let userName = JSON.parse(atob(payload)).userName;
-        document.getElementById("userName").innerText = userName;
-      }
-
-    };
-  </script>
-
-  <script>
-    let code;
-    const config = {"Content-Type" : `application/json` };
-
-    //닉네임 중복 검사
-    async function checkUserName() {
-      let userName = document.getElementById('form_userName').value;
-
-      try {
-        const response = await axios.post(
-                '/join/checkUserName',
-                {'userName' : userName} ,
-                config);
-        if (response.status === 200) {
-          document.getElementById('error_userName').style.display = 'none';
-          document.getElementById('able_userName').style.display = 'block';
-          document.getElementById('form_userName').readOnly = true;
-        }
-      } catch (error) {
-        document.getElementById('error_userName').style.display = 'block';
-        document.getElementById('able_userName').style.display = 'none';
-      }
-    }
-
-    //이메일 인증
-    async function checkEmail() {
-      let email = document.getElementById('form_email').value;
-
-      try {
-        const response = await axios.post(
-                '/join/email',
-                {'email' : email} ,
-                config);
-
-        code = response.data.result;
-        document.getElementById('error_email').style.display = 'none';
-
-      } catch (error) {
-        console.log(error);
-        document.getElementById('error_email').style.display = 'block';
-
-      }
-    }
-
-    //비밀번호-비밀번호확인 일치여부
-    function checkPasswordCorrect() {
-      let password_correct = document.getElementById('check_pw').value;
-      let password = document.getElementById('pw').value;
-
-      if (password_correct !== password) {
-        document.getElementById('error_passwordCorrect').style.display = 'block';
-      } else {
-        document.getElementById('error_passwordCorrect').style.display = 'none';
-      }
-    }
-
-    //회원가입 요청
-    async function join() {
-      let check_userName = document.getElementById("form_userName").readOnly
-      let userName = document.getElementById("form_userName").value;
-      let pw = document.getElementById("pw").value;
-      let check_pw = document.getElementById("check_pw").value;
-      let gender = document.getElementById("form_gender").value;
-      let age = document.getElementById("age").value;
-      let email = document.getElementById("form_email").value;
-      let input_code = document.getElementById("code").value;
-
-      let data = {
-        'userName' : userName,
-        'email' : email,
-        'password' : pw,
-        'passwordCorrect' : check_pw,
-        'age' : age,
-        'gender' : gender
-      }
-
-      if (code !== input_code) {
-        document.getElementById('error_code').style.display = 'block';
-      }
-
-      if (gender.length === 0) {
-        document.getElementById('error_gender').style.display = 'block';
-      }
-
-      if(check_userName && (code === input_code) && gender.length>0) {
-        document.getElementById('error_code').style.display = 'none';
-        try {
-          const res = await axios.post('/join', data, config);
-
-          alert('회원가입 완료')
-          window.location.href = '/';
-        } catch (e) {
-        }
-      }
-    }
-
-    function logout() {
-      localStorage.clear();
-      window.location.href = '/';
-      // return axios.post('/logout')
-      //         .then((res) => {
-      //           localStorage.clear();
-      //           window.location.href = '/';
-      //         })
-    }
-
-    function login() {
-      let email = document.getElementById('email').value;
-      let pw = document.getElementById('password').value;
-
-      return fetch('/login', {
-        method: "POST",
-        headers: {
-          "Content-Type" : "application/json",
-          "Accept": "application/json"
-        },
-        body: JSON.stringify({
-          email: email,
-          password: pw,
-        })
-      })
-              .then(response => {
-                return response.json();
-              })
-              .then(json => {
-                localStorage.setItem("accessToken", json.result.accessToken);
-                window.location.href = '/';
-              })
-              .catch(err => {
-                console.log(err);
-              })
-    }
-
-    axios.interceptors.request.use(function(config) {
-      const accessToken = localStorage.getItem('accessToken');
-      if(accessToken) {
-        config.headers.Authorization = 'Bearer' + ' ' + accessToken
-      }
-      return config;
-    })
-
-    axios.interceptors.response.use(
-            success => success,
-            async(error) => {
-              console.log(error);
-              const status = error.response.status
-
-              if(status === 401) {
-                const originRequest = error.config
-
-                await axios.post('/reissue')
-                        .then(response => {
-                          console.log(response.data);
-                          localStorage.setItem("accessToken", response.data);
-                          originRequest.headers.authorization = 'Bearer ' + response.data;
-                          return axios(originRequest);
-                        })
-                        .catch(error => {
-                          console.log('재발급 실패, refresh token 만료');
-                          localStorage.removeItem('accessToken')
-                          window.location.href = '/';
-                        })
-                return Promise.reject(error)
-              }
-            }
-    )
-  </script>
 </html>
 

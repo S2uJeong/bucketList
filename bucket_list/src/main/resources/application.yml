@@ -16,6 +16,12 @@ spring:
       hibernate:
         show-sql: true
         format_sql: true
+  # multipart 용량 늘려주는 부분
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
 
   mvc:
     pathmatch:
@@ -57,7 +63,7 @@ google:
 logging.level:
     org.hibernate.SQL : debug
 
-# Post Image를 위한 환경변수 추가
+# Image 추가를 위한 환경변수 추가
 cloud:
   aws:
     credentials:
@@ -70,10 +76,6 @@ cloud:
     stack:
       auto: false
 
-servlet:
-  multipart:
-    max-file-size: 50MB
-    max-request-size: 50MB
 
 # ProfileService에서 사용 할 image file path
 file:

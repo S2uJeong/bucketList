@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>BucketList</title>
+    <title>Bucketlist - 신청완료</title>
 
     <!-- Plugins css Style -->
     <link href='/assets/plugins/fontawesome-5.15.2/css/all.min.css' rel='stylesheet'>
@@ -19,11 +19,11 @@
     
     <link href='/assets/plugins/fancybox/jquery.fancybox.min.css' rel='stylesheet'>
     
-    <link href='/assets/plugins/selectric/selectric.css' rel='stylesheet'>
-    <link href='/assets/plugins/daterangepicker/css/daterangepicker.css' rel='stylesheet'>
-    <link href='/assets/plugins/rateyo/jquery.rateyo.min.css' rel='stylesheet'>
     
-    <link href='/assets/plugins/no-ui-slider/nouislider.min.css' rel='stylesheet'>
+    
+    
+    
+    
     
     
     
@@ -35,7 +35,6 @@
 
     <!-- CUSTOM CSS -->
     <link href="/assets/css/star.css" id="option_style" rel="stylesheet">
-    <link href="/assets/css/custom.css" id="custom_style" rel="stylesheet">
 
 
     <!-- FAVICON -->
@@ -60,7 +59,7 @@
     <nav class="nav-menuzord navbar-sticky">
       <div class="container clearfix">
         <div id="menuzord" class="menuzord">
-          <a href="/" class="menuzord-brand">
+          <a href="index.html" class="menuzord-brand">
             <img class="lazyestload" data-src="/assets/img/logo-color-big.png" src="/assets/img/logo-color-big.png" alt="logo-img">
           </a>
 
@@ -136,21 +135,22 @@
       </div>
     </nav>
   </header>
-  <div class="main-wrapper packages-list-left-sidebar">
+  <div class="main-wrapper booking-step-3">
 
 
 <!-- ====================================
 ———	PAGE TITLE
 ===================================== -->
 <section class="page-title">
-  <div class="page-title-img bg-img bg-overlay-darken" style="background-image: url(/assets/img/pages/page-title-bg6.jpg);">
+  <div class="page-title-img bg-img bg-overlay-darken" style="background-image: url(/assets/img/pages/page-title-bg7.jpg);">
     <div class="container">
       <div class="row align-items-center justify-content-center" style="height: 200px;">
         <div class="col-lg-6">
           <div class="page-title-content">
             <div class="title-border">
-              <h2 class="text-uppercase text-white font-weight-bold">버킷리스트</h2>
+              <h2 class="text-uppercase text-white font-weight-bold">신청 완료</h2>
             </div>
+            <p class="text-white mb-0"></p>
           </div>
         </div>
       </div>
@@ -160,95 +160,139 @@
 
 
 <!-- ====================================
-———	TOUR PACKAGES SECTION
+———	BOOKING SECTION
 ===================================== -->
-<section class="bg-smoke py-10">
+<section class="py-8 py-md-10">
   <div class="container">
-    <div class="row">
-      <div class="col-md-12 col-lg-3">
-        <div class="row">
-          <div class="col-md-6 col-lg-12">
-            <div class="mb-6 bg-white p-3 border-top border-top-5 border-primary rounded">
-              <form class="" action="index.html" method="GET">
-                <h4 class="text-uppercase font-weight-bold">Search</h4>
-                
-                <div class="mb-5">
-                  <div class="select-default select-category-1">
-                    <select class="select-option">
-                      <option>Category</option>
-                      <option>Travel</option>
-                      <option>Extreme</option>
-                      <option>Study</option>
-                      <option>Volunteer</option>
-                      <option>Experience</option>
-                      <option>Etc</option>
-                    </select>
-                  </div>
-                </div>
-            
-                <div class="form-group form-group-icon form-group-icon-dark mb-5">
-                  <i class="far fa-calendar-alt" aria-hidden="true"></i>
-                  <input type="text" class="form-control daterange-picker sidebar-daterange-picker" autocomplete="off" name="dateRange" value=""
-                    placeholder="MM/DD/YYYY" />
-                </div>
-            
-                <div class="form-group form-group-icon form-group-icon-dark mb-5">
-                  <i class="far fa-calendar-alt" aria-hidden="true"></i>
-                  <input type="text" class="form-control daterange-picker sidebar-daterange-picker" autocomplete="off" name="dateRange" value=""
-                    placeholder="MM/DD/YYYY" />
-                </div>
-
-                <div class="d-grid">
-                  <button type="button" onclick="location.href='javascript:void(0)';"
-                  class="btn btn-xs btn-outline-secondary text-uppercase">Search</button>
-                </div>
-              </form>
-            </div>
+    <div class="mb-8">
+      <div class="row progress-wizard">
+        <div class="col-6 progress-wizard-step complete">
+          <div class="progress">
+            <div class="progress-bar"></div>
           </div>
-
-          <div class="col-md-6 col-lg-12">
-            <div class="mb-6 bg-white p-3 border-top border-top-5 border-primary rounded overflow-hidden">
-              <h4 class="text-uppercase font-weight-bold">Price</h4>
-
-              <div class="price-range mt-5" id="price-range">
-                <div class="price-range-content mb-5">
-                  <span class="price-value" id="lower-value"></span>
-                  <span class="mx-3"><i class="fa fa-minus" aria-hidden="true"></i></span>
-                  <span class="price-value" id="upper-value"></span>
-                </div>
-
-                <div class="mb-6" id="slider-non-linear-step"></div>
-              </div>
+      
+          <a class="progress-wizard-dot">
+            <div class="progress-wizard-content">
+              <i class="fa fa-user" aria-hidden="true"></i>
+              <span class="d-block">1. 참여 신청서 작성</span>
             </div>
+          </a>
+        </div>
+
+        <div class="col-6 progress-wizard-step active">
+          <div class="progress">
+            <div class="progress-bar"></div>
           </div>
+      
+          <a href="javascript:void(0)" class="progress-wizard-dot">
+            <div class="progress-wizard-content">
+              <i class="fa fa-check" aria-hidden="true"></i>
+              <span class="d-block">2. 신청서 제출</span>
+            </div>
+          </a>
         </div>
       </div>
+    </div>
+    
+    <div class="alert alert-success alert-dismissible alert-confirm fade show mb-7" role="alert">
+      <i class="fa fa-check" aria-hidden="true"></i>
+      <span><strong>신청이 완료되었습니다!</strong> 마이피드에서 승인여부를 확인 할 수 있습니다.</span>
+    </div>
 
-      <div class="col-lg-8 col-xl-9">
-        <div id="list_container" class="row">
-<!--          포스트 리스트 부분-->
-<!--          포스트 리스트 부분-->
-<!--          포스트 리스트 부분-->
+    <h2 class="text-capitalize mb-5">버킷리스트 정보</h2>
+
+    <div class="card mb-6 mb-md-0">
+      <img class="card-img-top rounded lazyestload" data-src="/assets/img/booking/booking-complete.jpg" src="/assets/img/booking/booking-complete.jpg" alt="Card image cap">
+      <div class="card-body px-6">
+        <h3 class="text-capitalize mb-5">버킷리스트 정보</h3>
+        <p class="mb-0" id="post_content">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
+        aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis
+        aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
+        occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde
+        omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo
+        inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+      </div>
+
+      <div class="card-footer bg-transparent">
+        <div class="row">
+          <div class="col-md-4">
+            <ul class="list-unstyled">
+              <li class="mb-2">
+                <div class="row">
+                  <div class="col-5 col-md-6 col-lg-5 col-xl-4">
+                    <dt>
+                      <span class="me-1"><i class="far fa-calendar-alt" aria-hidden="true"></i></span>
+                      <span>시작일:</span>
+                    </dt>
+                  </div>
+                
+                  <div class="col-7 col-md-6 ps-0">
+                    <span id="post_eventStart" class="text-gray-color">25 Mar, 2019</span>
+                  </div>
+                </div>
+              </li>
+
+              <li class="mb-2">
+                <div class="row">
+                  <div class="col-5 col-md-6 col-lg-5 col-xl-4">
+                    <dt>
+                      <span class="me-1"><i class="far fa-calendar-alt" aria-hidden="true"></i></span>
+                      <span>종료일:</span>
+                    </dt>
+                  </div>
+                
+                  <div class="col-7 col-md-6 ps-0">
+                    <span id="post_eventEnd" class="text-gray-color">28 Mar, 2019</span>
+                  </div>
+                </div>
+              </li>
+
+              <li>
+                <div class="row">
+                  <div class="col-5 col-md-6 col-lg-5 col-xl-4">
+                    <dt>
+                      <span class="me-1"><i class="fa fa-user" aria-hidden="true"></i></span>
+                      <span>참가자수:</span>
+                    </dt>
+                  </div>
+              
+                  <div class="col-7 col-md-6 ps-0">
+                    <span id="post_entrantNum" class="text-gray-color">2 Adults, 1 Child</span>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="col-md-4">
+            <ul class="list-unstyled">
+              <li class="mb-2">
+                <div class="row">
+                  <div class="col-5 col-md-6 col-lg-5 col-xl-4">
+                    <dt>
+                      <span class="me-1"><i class="fas fa-map-marker-alt" aria-hidden="true"></i></span>
+                      <span>진행 장소:</span>
+                    </dt>
+                  </div>
+            
+                  <div class="col-7 col-md-6 col-lg-7 ps-0 pe-md-0 pe-xl-5">
+                    <span id="post_location" class="text-gray-color">Amanda Rodney Smith, Eiffel Tower, Art Louvre Museum, Paris Road, France.</span>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="col-md-4">
+            <h2 class="text-center text-xl-left mb-0">
+              <span>예상 비용:</span>
+              <span id="post_cost" class="text-primary font-weight-bold">$6,500</span>
+            </h2>
+          </div>
         </div>
       </div>
     </div>
   </div>
-
-  <!-- ====================================
-———	PAGINATION
-===================================== -->
-<section class="pt-5 pt-md-7">
-  <div class="container">
-    <nav aria-label="Page navigation">
-      <ul class="pagination justify-content-center align-items-center">
-<!--          페이징 부분-->
-<!--          페이징 부분-->
-<!--          페이징 부분-->
-      </ul>
-    </nav>
-  </div>
-</section>
-
 </section>
 
 
@@ -468,127 +512,100 @@
     <!-- ====================================
     ——— MODAL SECTION
     ===================================== -->
-  <!-- Signup Modal -->
-  <div class="modal fade" id="signup" tabindex="-1" role="dialog" aria-label="signupModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header rounded">
-          <h3 class="modal-title text-uppercase font-weight-bold">회원가입</h3>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
+    <!-- Signup Modal -->
+    <div class="modal fade" id="signup" tabindex="-1" role="dialog" aria-label="signupModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header rounded">
+            <h3 class="modal-title text-uppercase font-weight-bold">Create your account</h3>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
 
-        <div class="modal-body">
-          <form onsubmit="join(); return false;">
-            <div class="mb-3">
-              <div class="mb-3" style="display: flex">
-                <input type="text" id="form_userName" class="form-control bg-smoke" required="" placeholder="닉네임">
-                <button class="btn btn-facebook btn-block text-uppercase text-white" onclick="checkUserName()" style="width: 25%; padding: 0">중복확인</button>
+          <div class="modal-body">
+            <form class="" action="index.html" method="post">
+              <div class="mb-3">
+                <input type="text" class="form-control bg-smoke" required="" placeholder="Full Name">
               </div>
-              <p id="able_userName" style="display: none">사용 가능한 닉네임 입니다.</p>
-              <p id="error_userName" style="display: none">중복되는 닉네임 입니다.</p>
-            </div>
 
-            <div class="mb-3">
-              <input type="password" id="pw" class="form-control bg-smoke" required="" placeholder="비밀번호">
-              <input type="password" id="check_pw" onchange="checkPasswordCorrect()" class="form-control bg-smoke" required="" placeholder="비밀번호 확인">
-              <p id="error_passwordCorrect" style="display: none">일치하지 않습니다.</p>
-            </div>
-
-            <div class="mb-3">
-              <select id="form_gender" class="form-control bg-smoke">
-                <option value="">성별</option>
-                <option value="MAN">남자</option>
-                <option value="WOMAN">여자</option>
-              </select>
-              <p id="error_gender" style="display: none">성별을 선택 해주세요.</p>
-            </div>
-
-            <div class="mb-3">
-              <input type="number" id="age" class="form-control bg-smoke" required="" placeholder="나이">
-            </div>
-            <!--              <div class="mb-3" style="display: flex">-->
-            <!--                <input style="flex: 1;" id="birth_year" type="year" class="form-control bg-smoke" required="" placeholder="년(4자)">-->
-            <!--                <input style="flex: 1;" id="birth_month" type="month1" class="form-control bg-smoke" required="" placeholder="월">-->
-            <!--                <input style="flex: 1;" id="birth_day" type="day" class="form-control bg-smoke" required="" placeholder="일">-->
-            <!--              </div>-->
-
-            <div class="mb-3">
-              <div style="display: flex">
-                <input style="flex: auto;" type="email" class="form-control bg-smoke" required="" placeholder="이메일" id="form_email">
-                <button class="btn btn-facebook btn-block text-uppercase text-white" onclick="checkEmail()" style="width: 25%; padding: 0">인증요청</button>
+              <div class="mb-3">
+                <input type="email" class="form-control bg-smoke" required="" placeholder="Email">
               </div>
-              <p id="error_email" style="display: none">중복된 이메일 입니다.</p>
-              <input type="emailCheck" id="code" class="form-control bg-smoke" required="" placeholder="인증번호">
-              <p id="error_code" style="display: none">인증 코드가 불일치 합니다.</p>
+    
+              <div class="mb-3">
+                <input type="password" class="form-control bg-smoke" required="" placeholder="Password">
+              </div>
+    
+              <div class="mb-3 form-check mb-0">
+                <input type="checkbox" class="form-check-input" id="exampleCheck4">
+                <label class="form-check-label text-gray-color mb-3" for="exampleCheck4">
+                  I agree to the terms of use and privacy.
+                </label>
+              </div>
 
-            </div>
+              <div class="d-grid">
+                <button type="submit" class="btn btn-primary btn-block text-uppercase">Login</button>
+              </div>
 
-            <div class="mb-3 form-check mb-0">
-              <input type="checkbox" class="form-check-input" id="exampleCheck4">
-              <label class="form-check-label text-gray-color mb-3" for="exampleCheck4">
-                I agree to the terms of use and privacy.
-              </label>
-            </div>
+              <div class="text-uppercase text-center py-3">Or</div>
 
-            <div class="d-grid">
-              <button type="submit" class="btn btn-primary btn-block text-uppercase">가입하기</button>
-            </div>
-          </form>
+              <div class="d-grid">
+                <button type="submit" class="btn btn-facebook btn-block text-uppercase text-white">Login with facebook</button>
+              </div>
+            </form>
+          </div>
+    
+          <div class="modal-footer justify-content-center">
+            <p class="mb-1">Don’t have an Account? <a href="javascript:void(0)">Sign up</a></p>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Login Modal -->
-  <div class="modal fade" id="login" tabindex="-1" role="dialog" aria-label="loginModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header rounded">
-          <h3 class="modal-title text-uppercase font-weight-bold">로그인</h3>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
+    <!-- Login Modal -->
+    <div class="modal fade" id="login" tabindex="-1" role="dialog" aria-label="loginModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header rounded">
+            <h3 class="modal-title text-uppercase font-weight-bold">Log in to your account</h3>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
 
-        <div class="modal-body">
-          <form class="" onsubmit="return false;">
-            <div class="mb-3">
-              <input type="email" id="email" class="form-control bg-smoke" required="" placeholder="이메일">
-            </div>
-
-            <div class="mb-3">
-              <input type="password" id="password" class="form-control bg-smoke" required="" placeholder="비밀번호">
-            </div>
-
-            <!--              <div class="mb-3 form-check mb-0">-->
-            <!--                <input type="checkbox" class="form-check-input" id="exampleCheck5">-->
-            <!--                <label class="form-check-label text-gray-color mb-3" for="exampleCheck5">-->
-            <!--                  Remember me-->
-            <!--                </label>-->
-            <!--                <a class="pull-right" href="javascript:void(0)">Fogot Password?</a>-->
-            <!--             </div>-->
-            <p id="login_error" style="display: none"></p>
-            <div class="d-grid">
-              <button class="btn btn-primary text-uppercase" onclick="login(); return false;">Login</button>
-            </div>
-
-            <div class="text-uppercase text-center py-3">Or</div>
-
-            <div style="display: flex;">
-              <div style="flex: 1;">
-                <a href="/login/google"><img src="/assets/img/google-button.png" style="width: 95%; margin-left: 5%"></a>
+          <div class="modal-body">
+            <form class="" action="index.html" method="post">
+              <div class="mb-3">
+                <input type="email" class="form-control bg-smoke" required="" placeholder="Email">
               </div>
-              <div style="flex: 1;">
-                <a href="/login/naver"><img src="/assets/img/naver-button.png" style="width: 85%; float: right; margin-right: 10%"></a>
-              </div>
-            </div>
-          </form>
-        </div>
 
-        <div class="modal-footer justify-content-center">
-          <p class="mb-1">Don’t have an Account? <a href="javascript:void(0)" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#signup">Sign up</a></p>
+              <div class="mb-3">
+                <input type="password" class="form-control bg-smoke" required="" placeholder="Password">
+              </div>
+
+              <div class="mb-3 form-check mb-0">
+                <input type="checkbox" class="form-check-input" id="exampleCheck5">
+                <label class="form-check-label text-gray-color mb-3" for="exampleCheck5">
+                  Remember me
+                </label>
+                <a class="pull-right" href="javascript:void(0)">Fogot Password?</a>
+             </div>
+
+             <div class="d-grid">
+              <button type="submit" class="btn btn-primary text-uppercase">Login</button>
+             </div>
+
+              <div class="text-uppercase text-center py-3">Or</div>
+
+              <div class="d-grid">
+                <button type="submit" class="btn btn-facebook text-uppercase text-white">Login with facebook</button>
+               </div>
+            </form>
+          </div>
+
+          <div class="modal-footer justify-content-center">
+            <p class="mb-1">Don’t have an Account? <a href="javascript:void(0)">Sign up</a></p>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
     <!-- INQUIRY IN MODAL -->
     <div class="modal fade" id="inquiry" tabindex="-1" role="dialog" aria-label="inquiryModalLabel" aria-hidden="true">
@@ -633,26 +650,45 @@
     
     <script src='/assets/plugins/fancybox/jquery.fancybox.min.js'></script>
     
-    <script src='/assets/plugins/selectric/jquery.selectric.min.js'></script>
-    <script src='/assets/plugins/daterangepicker/js/moment.min.js'></script>
-    <script src='/assets/plugins/daterangepicker/js/daterangepicker.min.js'></script>
-    <script src='/assets/plugins/rateyo/jquery.rateyo.min.js'></script>
-    <script src="/assets/plugins/lazyestload/lazyestload.js"></script>
-
     
-    <script src='/assets/plugins/no-ui-slider/nouislider.min.js'></script>
-
-
-
-
+    
+    
+    
+    <script src="/assets/plugins/lazyestload/lazyestload.js"></script>
+    
+    
+    
+    
+    
+    
+    
     
     <script src="/assets/plugins/smoothscroll/SmoothScroll.js"></script>
     
     <script src="/assets/js/star.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
-    <script src="/js/axios.js"></script>
-    <script src="/js/header.js"></script>
-    <script src="/js/paging/postList.js"></script>
+  <script>
+  $(window).ready(async function () {
+    try {
+      post_id = window.location.pathname.replace("/app/form/", "").replace("/complete", "");
+      const url = '/post/' + post_id + '/json';
+
+      const post_info = await axios.get(url);
+      let result = post_info.data.result;
+      document.getElementById('post_content').innerText = result.content;
+      document.getElementById('post_eventStart').innerHTML = result.eventStart;
+      document.getElementById('post_eventEnd').innerHTML = result.eventEnd;
+      document.getElementById('post_entrantNum').innerHTML = result.entrantNum;
+      document.getElementById('post_location').innerHTML = result.location;
+      document.getElementById('post_cost').innerHTML = result.cost;
+    } catch (e) {
+      console.log(e);
+    }
+  });
+</script>
+  <script src="/js/axios.js"></script>
+  <script src="/js/header.js"></script>
   </body>
 </html>
 
