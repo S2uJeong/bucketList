@@ -1,3 +1,13 @@
+// sns 로그인 accessToken 저장
+const url = new URL(window.location.href)
+const accessToken = url.searchParams.get('accessToken')
+
+if(accessToken != null) {
+    localStorage.setItem('accessToken', accessToken)
+    window.location.href = '/';
+}
+
+// 로그인 상태 유지
 window.onload = function () {
     const accessToken = localStorage.getItem("accessToken");
 
