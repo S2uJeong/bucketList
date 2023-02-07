@@ -291,6 +291,10 @@
             console.log(lat);
             console.log(lng);
 
+
+            var htmlentrantNum = document.getElementById("status");
+            htmlentrantNum.innerHTML = status;
+
             var htmlentrantNum = document.getElementById("entrantNum");
             htmlentrantNum.innerHTML = "현재 인원 :" + "("+entrantNum +"/"+entrantNum+")";
 
@@ -660,7 +664,7 @@
           <div class="col-lg-6">
             <div class="page-title-content">
               <div class="title-border">
-                <h2 class="text-uppercase text-white font-weight-bold">모집중</h2>
+                <h2 class="text-uppercase text-white font-weight-bold" id="status">모집중</h2>
               </div>
               <p class="text-white mb-0" id="entrantNum">현재 인원 : (3 / 5)</p>
               <div class="right_area pt-2" style="display: flex; justify-content: center">
