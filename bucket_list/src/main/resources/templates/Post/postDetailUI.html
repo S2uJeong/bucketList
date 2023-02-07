@@ -62,7 +62,41 @@
     #map_ma {width:100%; height:400px; clear:both; border:solid 1px red;}
   </style>
 
+  <script>
+    const post_id = new URL(window.location.href).pathname.replace("/post/", "");
+    const config = { "Content-Type": "application/json" }
 
+    async function permit(identifier) {
+      try{
+        const application_id = $(identifier).data('id')
+        let body = {"applicationId" : application_id, "status" : 1}
+
+        await axios.put('/application-rest/' + post_id, body, config);
+
+        window.location.reload();
+        return false;
+      } catch (e) {
+        console.log(e.response.data.result.errorCode);
+        if (e.response.data.result.errorCode === "EXCEED_ENTRANT_NUM") {
+          alert('참가 인원 수를 초과하였습니다.');
+        }
+      }
+    }
+
+    async function reject(identifier) {
+      try{
+        const application_id = $(identifier).data('id')
+        let body = {"applicationId" : application_id, "status" : 2}
+
+        await axios.put('/application-rest/' + post_id, body, config);
+
+        window.location.reload();
+        return false;
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  </script>
   <script type="text/javascript">
     $(document).ready(function() {
 
@@ -82,6 +116,7 @@
       let jsonResult;       // Json 반환 값 저장
       let jsonCommentState;        // Json 댓글 반환 상태(성공인지 에러인지)
       let jsonCommentResult;       // Json 댓글 반환 값 저장
+      let jsonApplicationState;
       let title;
       let userName;    //  => writer로 사용 유저 아이디이름
       let content;
@@ -96,20 +131,64 @@
       let status;
       let category;
       let fileName;
+      let permitNum;
 
 
       const getdata = async()=>{
         try{
           const response = await axios.get('/post/'+postId+'/json');
+          const applicationResponse = await axios.get('/application-rest/' + postId);
           const commentresponse = await axios.get('/comment/'+postId+'/comments');
           console.log(response);     // json 데이터 받아온거
 
 
           jsonState = response.data.resultCode;
           jsonCommentState = commentresponse.data.resultCode;
+          jsonApplicationState = applicationResponse.data.resultCode;
 
           console.log(jsonState);
           console.log(jsonCommentState);
+          console.log(jsonApplicationState);
+
+          if (jsonApplicationState == "SUCCESS") {
+            console.log(applicationResponse);
+
+            let application_html =
+                              "<form class=\"\">\n" +
+                    "            <h3 class=\"text-uppercase mb-3\" >{닉네임} / {나이} / {성별}</h3>\n" +
+                    "\n" +
+                    "            <div class=\"form-group mb-2\">\n" +
+                    "              <textarea readonly class=\"form-control border-0 bg-smoke\" rows=\"3\">{내용}</textarea>\n" +
+                    "            </div>\n" +
+                    "\n" +
+                    "            <div style=\"display: flex; justify-content: right\">\n" +
+                    "              <button type=\"button\" class=\"btn btn-outline-success mb-2 mx-2\" data-id=\"{신청서 아이디}\" onclick=\"permit(this)\" style=\"padding: 8px 18px\">\n" +
+                    "                수락\n" +
+                    "              </button>\n" +
+                    "              <button type=\"button\" class=\"btn btn-outline-danger mb-2 mx-2\" data-id=\"{신청서 아이디}\" onclick=\"reject(this)\" style=\"padding: 8px 18px\">\n" +
+                    "                거절\n" +
+                    "              </button>\n" +
+                    "            </div>\n" +
+                    "          </form>"
+            applicationResponse.data.result.list.forEach(function (application) {
+              let application_html_result = application_html.replace("{닉네임}", application.userName)
+                      .replace("{나이}", application.age)
+                      .replace("{내용}", application.content)
+                      .replace("{신청서 아이디}", application.id)
+                      .replace("{신청서 아이디}", application.id);
+
+              if (application.gender === 'MAN') {
+                application_html_result = application_html_result.replace("{성별}", "남")
+              } else {
+                application_html_result = application_html_result.replace("{성별}", "여")
+              }
+
+              let application_box = document.getElementById('application-box');
+              application_box.innerHTML += application_html_result;
+            })
+          } else {
+            console.log('asdasf');
+          }
 
           if(jsonCommentState == "SUCCESS") {
             console.log(commentresponse);
@@ -272,10 +351,12 @@
               sendData();
             });
 
-          }else
+          }else {
             alert("서버 반환값 Error임 404페이지 이동");
+            console.log("댓글 없음");
+          }
 
-          if(jsonState == "SUCCESS") {
+          if (jsonState == "SUCCESS") {
 
             jsonResult = response.data.result;
             console.log(jsonResult);
@@ -294,14 +375,22 @@
             status = jsonResult.status;
             category = jsonResult.category;
             fileName = jsonResult.fileName;
+            permitNum = jsonResult.permitNum;
 
 
-            googlemap(lat,lng,location,title,content);
+            googlemap(lat, lng, location, title, content);
             console.log(lat);
             console.log(lng);
 
+            var htmlPostStatus = document.getElementById("postStatus");
+            if (status === "JOIN") {
+              htmlPostStatus.innerText = "모집중";
+            } else if (status === "JOINCOMPLETE") {
+              htmlPostStatus.innerText = "모집완료";
+            }
+
             var htmlentrantNum = document.getElementById("entrantNum");
-            htmlentrantNum.innerHTML = "현재 인원 :" + "("+entrantNum +"/"+entrantNum+")";
+            htmlentrantNum.innerHTML = "현재 인원 :" + "(" + permitNum + "/" + entrantNum + ")";
 
             var htmltitle = document.getElementById("title");
             htmltitle.innerHTML = title;
@@ -310,10 +399,10 @@
             htmluserName.innerHTML = userName;
 
             var htmluntil = document.getElementById("untilRecruit");
-            htmluntil.innerHTML = "모집기간 : "+ untilRecruit;
+            htmluntil.innerHTML = "모집기간 : " + untilRecruit;
 
             var htmlevent = document.getElementById("eventStart");
-            htmlevent.innerHTML = "일정 : "+eventStart +" ~ "+eventEnd;
+            htmlevent.innerHTML = "일정 : " + eventStart + " ~ " + eventEnd;
 
             var htmlcost = document.getElementById("cost");
             htmlcost.innerHTML = "비용 : " + cost;
@@ -325,13 +414,23 @@
             htmlcontent.innerHTML = content;
 
             document.getElementById("image_box").src = 'https://bucketlist-post-image-bucket.s3.ap-northeast-2.amazonaws.com/' + fileName;
+
+            const accessToken = localStorage.getItem("accessToken");
+            const payload = accessToken.split('.')[1];
+            let token_userName = JSON.parse(decodeURIComponent(escape(window.atob(payload)))).userName;
+
+            if (userName === token_userName) {
+              document.getElementById("application_button").style.display = 'none';
+            }
             // }
             //
             // onload();
 
             console.log(location);
-          }else
+          } else {
             alert("서버 반환값 Error임 404페이지 이동");
+            console.log("1개조회 실패")
+          }
 
 
         }catch (ERROR){
@@ -517,7 +616,7 @@
           <div class="col-lg-6">
             <div class="page-title-content">
               <div class="title-border">
-                <h2 class="text-uppercase text-white font-weight-bold">모집중</h2>
+                <h2 class="text-uppercase text-white font-weight-bold" id="postStatus">모집중</h2>
               </div>
               <p class="text-white mb-0" id="entrantNum">현재 인원 : (3 / 5)</p>
               <div class="right_area pt-2" style="display: flex; justify-content: center">
@@ -623,10 +722,15 @@
           </div>
 
           <div class="mb-5" style="display: flex; justify-content: center">
-            <button type="button" class="btn btn-primary mb-2" onclick="goToApplication()">참가하기</button>
+            <button id="application_button" type="button" class="btn btn-primary mb-2" onclick="goToApplication()">참가하기</button>
           </div>
 
-
+          <!-- ----------------------- 신청서 출력 부분 ----------------------- -->
+        <div id="application-box">
+          <h2 class="text-uppercase mb-6">신청 현황</h2>
+          <!-- 신청서 리스트 출력 부분 -->
+          <!-- 신청서 리스트 출력 부분 -->
+        </div>
 
           <!-- ----------------------- 댓글 출력 부분 ----------------------- -->
           <div class="comment-box">
@@ -1161,8 +1265,9 @@
                         localStorage.removeItem('accessToken')
                         window.location.href = '/';
                       })
-              return Promise.reject(error)
+              return Promise.reject(error);
             }
+            return Promise.reject(error);
           }
   )
 </script>

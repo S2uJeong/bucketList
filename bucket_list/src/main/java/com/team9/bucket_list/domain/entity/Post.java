@@ -89,6 +89,22 @@ public class Post extends BaseTimeEntity{
 
     }
 
+    // == 편의 메서드 == //
+
+    /**
+     * 확정된 인원 반환
+     */
+    public Long getPermitNum() {
+        return getApplicationList().stream()
+                .filter(a -> a.getStatus() == 1)
+                .peek(System.out::println)
+                .count();
+    }
+
+    public void setRecruitComplete() {
+        this.status = PostStatus.JOINCOMPLETE;
+    }
+
     // ====== 지환님 필요 부분 ========
     public void modifiedContent (String content){
         this.content = content;
