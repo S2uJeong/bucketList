@@ -6,7 +6,6 @@ import lombok.Getter;
 @Getter
 @Builder
 public class ApplicationDecisionRequest {
-    private Long id;
-    private Long memberId;
-    private byte status;
+    private Long applicationId; //신청서 아이디
+    private byte status; //업데이트할 상태
 }
