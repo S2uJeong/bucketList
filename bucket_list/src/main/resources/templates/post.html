@@ -242,34 +242,46 @@
     <nav aria-label="Page navigation">
       <ul class="pagination justify-content-center align-items-center">
         <li class="page-item">
-          <a class="page-link" href="javascript:void(0)" tabindex="-1">
-            <i class="fas fa-long-arrow-alt-left d-none d-md-inline-block me-md-1" aria-hidden="true"></i> Previous
+          <a class="page-link-i">
+            <i id="first_page" class="fas fa-angle-double-left d-none d-md-inline-block me-md-1" aria-hidden="true"></i>
           </a>
         </li>
-    
+
         <li class="page-item">
-          <a class="page-link active" href="javascript:void(0)">1</a>
+          <a class="page-link-i">
+            <i id="prev_page" class="fas fa-angle-left d-none d-md-inline-block me-md-1" aria-hidden="true"></i>
+          </a>
         </li>
-    
+
         <li class="page-item">
-          <a class="page-link" href="javascript:void(0)">2</a>
+          <a class="page-link active">1</a>
         </li>
-    
+
         <li class="page-item">
-          <a class="page-link" href="javascript:void(0)">3</a>
+          <a class="page-link">2</a>
         </li>
-    
+
         <li class="page-item">
-          <a class="page-link" href="javascript:void(0)">...</a>
+          <a class="page-link">3</a>
         </li>
-    
+
         <li class="page-item">
-          <a class="page-link" href="javascript:void(0)">9</a>
+          <a class="page-link">4</a>
         </li>
-    
+
         <li class="page-item">
-          <a class="page-link" href="javascript:void(0)">Next
-            <i class="fas fa-long-arrow-alt-right d-none d-md-inline-block ms-md-1" aria-hidden="true"></i>
+          <a class="page-link">5</a>
+        </li>
+
+        <li class="page-item">
+          <a class="page-link-i">
+            <i id="next_page" class="fas fa-angle-right d-none d-md-inline-block ms-md-1" aria-hidden="true"></i>
+          </a>
+        </li>
+
+        <li class="page-item">
+          <a class="page-link-i">
+            <i id="last_page" class="fas fa-angle-double-right d-none d-md-inline-block ms-md-1" aria-hidden="true"></i>
           </a>
         </li>
       </ul>
@@ -670,75 +682,6 @@
     
     <script src='/assets/plugins/no-ui-slider/nouislider.min.js'></script>
 
-  <script>
-    let html = "<div class=\"col-md-6 col-xl-4 mb-5\">\n" +
-            "            <div class=\"card card-hover\">\n" +
-            "              <a href=\"post/{포스트 아이디}\" class=\"position-relative\">\n" +
-            "                <img class=\"card-img-top lazyestload\" data-src=\"assets/img/home/deal/deal-01.jpg\" src=\"assets/img/home/deal/deal-01.jpg\" alt=\"Card image cap\">\n" +
-            "                <div class=\"card-img-overlay card-hover-overlay rounded-top d-flex flex-column\">\n" +
-            "                  <div class=\"badge {배경색} badge-rounded-circle\">\n" +
-            "                    <span class=\"d-block\">{모집상태}</span>\n" +
-            "                  </div>\n" +
-            "                </div>\n" +
-            "              </a>\n" +
-            "\n" +
-            "              <div class=\"card-body px-4\">\n" +
-            "                <h5>\n" +
-            "                  <a href=\"post/{포스트 아이디}\" class=\"card-title text-uppercase\">{제목}</a>\n" +
-            "                </h5>\n" +
-            "                <h6 class=\"mt-n2\">\n" +
-            "                  {주최자 이름}\n" +
-            "                </h6>\n" +
-            "                <p class=\"mb-1\">모집 기간 : ~ {모집 마감 날짜}</p>\n" +
-            "                <p class=\"mb-1\">일정 : {일정 시작 날짜} ~ {일정 종료 날짜}</p>\n" +
-            "                <p class=\"mb-1\">{장소}</p>\n" +
-            "                <p class=\"mb-1\">{비용}</p>\n" +
-            "              </div>\n" +
-            "            </div>\n" +
-            "          </div>";
-    $(window).ready( async function () {
-      try {
-        const category = new URL(window.location.href).search;
-        console.log(category)
-        const response = await axios.get('/post/list' + category);
-        console.log(response)
-        const result = response.data.result;
-        let post_list = result.content;
-
-        post_list.forEach(function (post) {
-          let html_result = html.replace("{제목}", post.title)
-                  .replace("{포스트 아이디}", post.postId)
-                  .replace("{비용}", post.cost)
-                  .replace("{장소}", post.location)
-                  .replace("{일정 시작 날짜}", post.eventStart)
-                  .replace("{일정 종료 날짜}", post.eventEnd)
-                  .replace("{모집 마감 날짜}", post.untilRecruit);
-
-          if (post.status === 'JOIN') {
-            html_result = html_result.replace("{모집상태}", '모집중')
-                    .replace("{배경색}", 'bg-primary');
-          } else if (post.status === 'JOINCOMPLETE') {
-            html_result = html_result.replace("{모집상태}", '모집완료')
-                    .replace("{배경색}", 'bg-success');
-          } else if (post.status === 'PROCESS') {
-            html_result = html_result.replace("{모집상태}", '진행중')
-                    .replace("{배경색}", 'bg-danger');
-          } else if (post.status === 'COMPLETE') {
-            html_result = html_result.replace("{모집상태}", '진행완료')
-                    .replace("{배경색}", 'bg-info');
-          }
-
-          let parent = document.getElementById('list_container');
-          parent.innerHTML += html_result;
-        })
-
-      } catch (e) {
-
-      }
-
-    });
-
-  </script>
 
 
 
@@ -750,6 +693,7 @@
     <script src="/assets/js/custom.js"></script>
     <script src="/js/axios.js"></script>
     <script src="/js/header.js"></script>
+    <script src="/js/postListPaging.js"></script>
   </body>
 </html>
 
