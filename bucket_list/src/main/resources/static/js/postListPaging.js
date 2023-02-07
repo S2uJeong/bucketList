@@ -10,6 +10,7 @@ let url_href = urlHref(urlSearch);  // 페이지 넘버의 href를 정할 수 �
 
 // 화면이 로딩되면 실행되는 부분
 const todosUrl = '/post/list' + urlSearch;
+console.log("todosUrl " + todosUrl)
 axios.get(todosUrl)
     .then(res => {
         page_info = res.data.result;
@@ -36,7 +37,7 @@ function setTable() {
     let html = "<div class=\"col-md-6 col-xl-4 mb-5\">\n" +
         "            <div class=\"card card-hover\">\n" +
         "              <a href=\"post/{포스트 아이디}\" class=\"position-relative\">\n" +
-        "                <img class=\"card-img-top lazyestload\" data-src=\"assets/img/home/deal/deal-01.jpg\" src=\"assets/img/home/deal/deal-01.jpg\" alt=\"Card image cap\">\n" +
+        "                <img class=\"card-img-top lazyestload\" data-src=\"{이미지 URL}\" src=\"{이미지 URL}\" alt=\"Card image cap\">\n" +
         "                <div class=\"card-img-overlay card-hover-overlay rounded-top d-flex flex-column\">\n" +
         "                  <div class=\"badge {배경색} badge-rounded-circle\">\n" +
         "                    <span class=\"d-block\">{모집상태}</span>\n" +
@@ -63,27 +64,28 @@ function setTable() {
     parent.innerHTML = "";
 
     post_list.forEach(function (post) {
-              let html_result = html.replace("{제목}", post.title)
-                      .replace("{포스트 아이디}", post.postId)
-                      .replace("{비용}", post.cost)
-                      .replace("{장소}", post.location)
-                      .replace("{일정 시작 날짜}", post.eventStart)
-                      .replace("{일정 종료 날짜}", post.eventEnd)
-                      .replace("{모집 마감 날짜}", post.untilRecruit);
+        let html_result = html.replace("{제목}", post.title)
+            .replace("{포스트 아이디}", post.postId)
+            .replace("{비용}", post.cost)
+            .replace("{장소}", post.location)
+            .replace("{일정 시작 날짜}", post.eventStart)
+            .replace("{일정 종료 날짜}", post.eventEnd)
+            .replace("{모집 마감 날짜}", post.untilRecruit)
+            .replace("{이미지 URL}", "https://bucketlist-post-image-bucket.s3.ap-northeast-2.amazonaws.com/" + post.fileName);
 
-              if (post.status === 'JOIN') {
-                html_result = html_result.replace("{모집상태}", '모집중')
-                        .replace("{배경색}", 'bg-primary');
-              } else if (post.status === 'JOINCOMPLETE') {
-                html_result = html_result.replace("{모집상태}", '모집완료')
-                        .replace("{배경색}", 'bg-success');
-              } else if (post.status === 'PROCESS') {
-                html_result = html_result.replace("{모집상태}", '진행중')
-                        .replace("{배경색}", 'bg-danger');
-              } else if (post.status === 'COMPLETE') {
-                html_result = html_result.replace("{모집상태}", '진행완료')
-                        .replace("{배경색}", 'bg-info');
-              }
+        if (post.status === 'JOIN') {
+            html_result = html_result.replace("{모집상태}", '모집중')
+                .replace("{배경색}", 'bg-primary');
+        } else if (post.status === 'JOINCOMPLETE') {
+            html_result = html_result.replace("{모집상태}", '모집완료')
+                .replace("{배경색}", 'bg-success');
+        } else if (post.status === 'PROCESS') {
+            html_result = html_result.replace("{모집상태}", '진행중')
+                .replace("{배경색}", 'bg-danger');
+        } else if (post.status === 'COMPLETE') {
+            html_result = html_result.replace("{모집상태}", '진행완료')
+                .replace("{배경색}", 'bg-info');
+        }
 
         parent.innerHTML += html_result;
     });

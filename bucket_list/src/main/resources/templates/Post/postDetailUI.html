@@ -62,10 +62,12 @@
     #map_ma {width:100%; height:400px; clear:both; border:solid 1px red;}
   </style>
 
+
   <script type="text/javascript">
     $(document).ready(function() {
 
       <!-- PostId에 따른 데이터 호출하기 -->
+
       const postId = new URL(window.location.href).pathname.replace("/post/", "");
 
       console.log(postId);
@@ -93,6 +95,7 @@
       let eventEnd;
       let status;
       let category;
+      let fileName;
 
 
       const getdata = async()=>{
@@ -100,6 +103,8 @@
           const response = await axios.get('/post/'+postId+'/json');
           const commentresponse = await axios.get('/comment/'+postId+'/comments');
           console.log(response);     // json 데이터 받아온거
+
+
           jsonState = response.data.resultCode;
           jsonCommentState = commentresponse.data.resultCode;
 
@@ -107,8 +112,165 @@
           console.log(jsonCommentState);
 
           if(jsonCommentState == "SUCCESS") {
+            console.log(commentresponse);
+
+            var htmlentrantNum = document.getElementById("commentCount");
+            htmlentrantNum.innerHTML = "댓글 " + "("+commentresponse.data.result.length+")";
+
+            <!-- 댓글 리스트 출력 -->
+
+            let commenthtml=
+                    "<li class=\"comment-item\" id=\"comment1\">\n"+
+                      "<a class=\"me-n4 comment-tool\" id=\"navbarDropdown\" href=\"#\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\">. . .</a>\n"+
+                        "<ul class=\"dropdown-menu droclassName-menu-end\" aria-labelledby=\"navbarDropdown\">\n" +
+                          "<li><a class=\"dropdown-item\" hrclassName\">수정</a></li>\n"+
+                          "<li><a class=\"dropdown-item\" hrclassName\">삭제</a></li>\n"+
+                        "</ul>\n"+
+                        "<div>\n"+
+                          "<div>\n"+
+                            "<p class=\"comment-username\">{닉네임}</p>\n"+
+                          "</div>\n"+
+                          "<div>\n"+
+                          "<p class=\"comment-content\">{내용}</p>\n"+
+                          "</div>\n"+
+                          "<div>\n"+
+                            "<p class=\"comment-date\">{작성일자}</p>\n"+
+                            "<a class=\"comment-date\" onclick=\"showCommentReply('comment1-1')\">댓글쓰기</a>\n"+
+                            "<form class=\"comment-reply-form\" id=\"comment1-1\" style=\"display: none;\">\n"+
+                              "<div class=\"form-group mb-2\">\n"+
+                                "<textarea class=\"form-control border-0 bg-smoke\" id =\"replyComment\" placeholder=\"Comment\" rows=\"2\"></textarea>\n"+
+                              "</div>\n"+
+                              "<div style=\"display: flex; justify-content: right\">\n"+
+                                "<button type=\"button\" id=\"replyCommentButton\" class=\"btn btn-outline-info-comment-button mb-2\" style=\"padding: 8px 18px\">등록</button>\n"+
+                              "</div>\n"+
+                            "</form>\n"+
+                          "</div>\n"+
+                        "</div>\n"+
+                    "</li>";
 
 
+            let reply_commenthtml=
+                    "<li class=\"comment-reply\" id=\"comment2\">\n"+
+                    "<a class=\"me-n4 comment-tool\" id=\"navbarDropdown\" href=\"#\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\">. . .</a>\n"+
+                    "<ul class=\"dropdown-menu droclassName-menu-end\" aria-labelledby=\"navbarDropdown\">\n" +
+                    "<li><a class=\"dropdown-item\" hrclassName\">수정</a></li>\n"+
+                    "<li><a class=\"dropdown-item\" hrclassName\">삭제</a></li>\n"+
+                    "</ul>\n"+
+                    "<div>\n"+
+                    "<div>\n"+
+                    "<p class=\"comment-username\">{닉네임}</p>\n"+
+                    "</div>\n"+
+                    "<div>\n"+
+                    "<p class=\"comment-content\">{내용}</p>\n"+
+                    "</div>\n"+
+                    "<div>\n"+
+                    "<p class=\"comment-date\">{작성일자}</p>\n"+
+                    "</div>\n"+
+                    "</div>\n"+
+                    "</li>";
+
+            let comment_list = commentresponse.data.result;         // 부모 댓글 리스트
+
+
+            console.log(comment_list);
+
+            comment_list.forEach(function (comment){
+              let comment_parent_id = comment.parentId;
+              console.log(comment_parent_id);
+              let html_result = commenthtml.replace("{닉네임}",comment.userName)
+                      .replace("{작성일자}",comment.createAt)
+                      .replace("{내용}",comment.content);
+
+              let html_reply_result;
+              let reply_commentResult;
+                if (comment.children.length != 0) {                     // 댓글이 있다면
+                  let reply_comment_list = comment.children;      // 댓글 리스트 저장
+                  console.log(reply_comment_list);
+                  // if(comment.id == reply_comment_list.parentId) {
+                    reply_comment_list.forEach(function (replycomment) {
+                      console.log(replycomment.parentId);
+                      html_reply_result += reply_commenthtml.replace("{닉네임}", replycomment.userName)
+                              .replace("{작성일자}", replycomment.createAt)
+                              .replace("{내용}", replycomment.content);
+
+                    });
+                  // }
+                  let commentResult = document.getElementById('list_comment');
+                  commentResult.innerHTML += (html_result+html_reply_result);
+                }else{
+                  let commentResult = document.getElementById('list_comment');
+                  commentResult.innerHTML += html_result;
+                }
+            });
+
+
+
+            <!-- 대댓글 작성 -->
+            $("#replyCommentButton").click(function() {
+             // var parentId =          // 부모 id값 받아와야함
+              var replycomment = $("#replyComment").val();   // 댓글 값 저장
+
+              const CommentData = {       // 해외 데이터
+                "content" : replycomment,         //  댓글 내용            comment
+                "parentId" : null
+              }
+
+              console.log(CommentData);
+
+              // axios header에 넣을 데이터
+              const axiosConfig = {
+                headers: {
+                  "Content-Type": "application/json"
+                }
+              }
+
+              const sendData = async () => {
+                try {
+
+                  const response = await axios.post('/comment/'+postId, JSON.stringify(CommentData), axiosConfig);
+                  alert("전송 성공");
+                  let url = "/post/" + postId;
+                  window.location.replace(url);
+                } catch (error) {
+                  alert("실패");
+                }
+              }
+              sendData();
+            });
+
+
+            <!-- 댓글 작성 -->
+            $("#parentCommentButton").click(function() {
+
+              var comment = $("#parentComment").val();   // 댓글 값 저장
+
+              const CommentData = {       // 해외 데이터
+                "content" : comment,         //  댓글 내용            comment
+                "parentId" : null
+              }
+
+              console.log(CommentData);
+
+              // axios header에 넣을 데이터
+              const axiosConfig = {
+                headers: {
+                  "Content-Type": "application/json"
+                }
+              }
+
+              const sendData = async () => {
+                try {
+
+                  const response = await axios.post('/comment/'+postId, JSON.stringify(CommentData), axiosConfig);
+                  alert("전송 성공");
+                  let url = "/post/" + postId;
+                  window.location.replace(url);
+                } catch (error) {
+                  alert("실패");
+                }
+              }
+              sendData();
+            });
 
           }else
             alert("서버 반환값 Error임 404페이지 이동");
@@ -131,6 +293,8 @@
             eventEnd = jsonResult.eventEnd;
             status = jsonResult.status;
             category = jsonResult.category;
+            fileName = jsonResult.fileName;
+
 
             googlemap(lat,lng,location,title,content);
             console.log(lat);
@@ -159,6 +323,8 @@
 
             var htmlcontent = document.getElementById("content");
             htmlcontent.innerHTML = content;
+
+            document.getElementById("image_box").src = 'https://bucketlist-post-image-bucket.s3.ap-northeast-2.amazonaws.com/' + fileName;
             // }
             //
             // onload();
@@ -185,11 +351,11 @@
 
 
 // 말풍선 내용
-        var contentString	= '<div>' +
-                '<h2 id="pintitle">hello</h2>'+
-                '<p id="pincontent">test입니다</p>' +
-
+        let contentString	= '<div>' +
+                '<h2>{제목}</h2>'+
                 '</div>';
+
+        let contentResult = contentString.replace("{제목}",title);
 
 
         var myLatlng = new google.maps.LatLng(Y_point, X_point);
@@ -206,7 +372,7 @@
         });
         var infowindow = new google.maps.InfoWindow(
                 {
-                  content: contentString,
+                  content: contentResult,
                   maxWizzzdth: markerMaxWidth
                 }
         );
@@ -246,9 +412,8 @@
                 console.log(err);
               });
 
-
-
     });
+
   </script>
 
 </head>
@@ -272,57 +437,57 @@
             <a class="" href="javascript:void(0)">멤버십</a>
           </li>
 
-            <li class="">
-              <a class="" href="javascript:void(0)">버킷리스트</a>
-              <ul class="dropdown drop-up">
-                <li class="">
-                  <a href="/post">All</a>
-                </li>
+          <li class="">
+            <a class="" href="javascript:void(0)">버킷리스트</a>
+            <ul class="dropdown drop-up">
+              <li class="">
+                <a href="/post">All</a>
+              </li>
 
-                <li class="">
-                  <a href="/post?category=travel">Travel</a>
-                </li>
+              <li class="">
+                <a href="/post?category=travel">Travel</a>
+              </li>
 
-                <li class="">
-                  <a href="/post?category=extreme">Extreme</a>
-                </li>
+              <li class="">
+                <a href="/post?category=extreme">Extreme</a>
+              </li>
 
-                <li class="">
-                  <a href="/post?category=study">Study</a>
-                </li>
+              <li class="">
+                <a href="/post?category=study">Study</a>
+              </li>
 
-                <li class="">
-                  <a href="/post?category=volunteer">Volunteer</a>
-                </li>
+              <li class="">
+                <a href="/post?category=volunteer">Volunteer</a>
+              </li>
 
-                <li class="">
-                  <a href="/post?category=experience">Experience</a>
-                </li>
+              <li class="">
+                <a href="/post?category=experience">Experience</a>
+              </li>
 
-                <li class="">
-                  <a href="/post?category=etc">Etc</a>
-                </li>
-              </ul>
-            </li>
+              <li class="">
+                <a href="/post?category=etc">Etc</a>
+              </li>
+            </ul>
+          </li>
 
           <li class="" id="login_li">
             <a class="" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#login">로그인</a>
           </li>
 
-            <li class="" id="user_li">
-              <a class="" href="javascript:void(0)" id="userName">유저명</a>
-              <ul class="dropdown drop-up">
-                <li class="">
-                  <a href="/post/createform">버킷리스트 작성</a>
-                </li>
+          <li class="" id="user_li">
+            <a class="" href="javascript:void(0)" id="userName">유저명</a>
+            <ul class="dropdown drop-up">
+              <li class="">
+                <a href="/post/createform">버킷리스트 작성</a>
+              </li>
 
-                <li class="">
-                  <a href="/my/likes">좋아요</a>
-                </li>
+              <li class="">
+                <a href="/my/likes">좋아요</a>
+              </li>
 
-                <li class="">
-                  <a href="/my">마이 피드</a>
-                </li>
+              <li class="">
+                <a href="/my">마이 피드</a>
+              </li>
 
               <li class="">
                 <a href="index-3.html">마이페이지</a>
@@ -439,18 +604,19 @@
               <div style="width:400px; height:400px;" id="map_ma"></div>
 
               <!-- 이미지 출력 부분 -->
-              <div id="package-slider" class="owl-carousel owl-theme package-slider col-md-6">
+<!--              <div id="package-slider" class="owl-carousel owl-theme package-slider col-md-6">-->
+<!--              <div id="package-slider" class="owl-carousel owl-theme package-slider col-md-6">-->
                 <div class="item">
-                  <img class="lazyestload" data-src="/assets/img/packages/package-slider-03.jpg" src="/assets/img/packages/package-slider-03.jpg" alt="image">
+                  <img id="image_box" class="lazyestload" src="/assets/img/packages/package-slider-03.jpg" alt="image">
                 </div>
 
-                <div class="item">
-                  <img class="lazyestload" data-src="/assets/img/packages/package-slider-04.jpg" src="/assets/img/packages/package-slider-04.jpg" alt="image">
-                </div>
+<!--                <div class="item">-->
+<!--                  <img class="lazyestload" data-src="/assets/img/packages/package-slider-04.jpg" src="/assets/img/packages/package-slider-04.jpg" alt="image">-->
+<!--                </div>-->
 
-                <div class="item">
-                  <img class="lazyestload" data-src="/assets/img/packages/package-slider-05.jpg" src="/assets/img/packages/package-slider-05.jpg" alt="image">
-                </div>
+<!--                <div class="item">-->
+<!--                  <img class="lazyestload" data-src="/assets/img/packages/package-slider-05.jpg" src="/assets/img/packages/package-slider-05.jpg" alt="image">-->
+<!--                </div>-->
               </div>
             </div>
             <p class="my-6" id="content">설명 내용</p>
@@ -460,144 +626,36 @@
             <button type="button" class="btn btn-primary mb-2" onclick="goToApplication()">참가하기</button>
           </div>
 
+
+
+          <!-- ----------------------- 댓글 출력 부분 ----------------------- -->
           <div class="comment-box">
             <form class="">
-              <h3 class="text-uppercase mb-6">댓글 (댓글 수?)</h3>
+              <h3 class="text-uppercase mb-6" id="commentCount">댓글 (댓글 수?)</h3>
 
               <div class="form-group mb-2">
-                <textarea class="form-control border-0 bg-smoke" placeholder="Comment" rows="3"></textarea>
+                <textarea class="form-control border-0 bg-smoke" id="parentComment" placeholder="Comment" rows="3"></textarea>
               </div>
 
               <div style="display: flex; justify-content: right">
-                <button type="button" class="btn btn-outline-info-comment-button mb-2" style="padding: 8px 18px">
+                <button id="parentCommentButton" type="button" class="btn btn-outline-info-comment-button mb-2" style="padding: 8px 18px">
                   등록
                 </button>
               </div>
             </form>
 
             <ul class="comment-list">
-              <li class="comment-item" id="comment1">       <!-- id값 중복되면 안됨 -->
-                <a class="me-n4 comment-tool" id="navbarDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">. . .</a>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                  <li><a class="dropdown-item" href="#">수정</a></li>
-                  <li><a class="dropdown-item" href="#">삭제</a></li>
-                </ul>
-                <div>
-                  <div>
-                    <p class="comment-username">닉네임</p>
-                  </div>
-                  <div>
-                    <p class="comment-content">이름 : 댓글</p>
-                  </div>
-                  <div>
-                    <p class="comment-date">작성일자</p>
-                    <a class="comment-date" onclick="showCommentReply('comment1-1')">댓글쓰기</a>   <!-- 아래 id값과 같아야함-->
-                    <form class="comment-reply-form" id="comment1-1" style="display: none;">      <!-- comment1은 부모댓글과 같아야하고 그 뒤에 숫자는 한개씩 출력되야함 -->
-                      <div class="form-group mb-2">
-                        <textarea class="form-control border-0 bg-smoke" placeholder="Comment" rows="2"></textarea>
-                      </div>
-
-                      <div style="display: flex; justify-content: right">
-                        <button type="button" class="btn btn-outline-info-comment-button mb-2" style="padding: 8px 18px">
-                          등록
-                        </button>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </li>
-              <li class="comment-reply" id="comment2">
-                <a class="me-n4 comment-tool" id="navbarDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">. . .</a>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                  <li><a class="dropdown-item" href="#">수정</a></li>
-                  <li><a class="dropdown-item" href="#">삭제</a></li>
-                </ul>
-                <div>
-                  <div>
-                    <p class="comment-username">닉네임</p>
-                  </div>
-                  <div>
-                    <p class="comment-content">이름 : 댓글</p>
-                  </div>
-                  <div>
-                    <p class="comment-date">작성일자</p>
-                    <a class="comment-date" onclick="showCommentReply('comment2-1')">댓글쓰기</a>
-                    <form class="comment-reply-form" id="comment2-1" style="display: none;">
-                      <div class="form-group mb-2">
-                        <textarea class="form-control border-0 bg-smoke" placeholder="Comment" rows="2"></textarea>
-                      </div>
-
-                      <div style="display: flex; justify-content: right">
-                        <button type="button" class="btn btn-outline-info-comment-button mb-2" style="padding: 8px 18px">
-                          등록
-                        </button>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </li>
-              <li class="comment-item" id="comment3">
-                <a class="me-n4 comment-tool" id="navbarDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">. . .</a>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                  <li><a class="dropdown-item" href="#">수정</a></li>
-                  <li><a class="dropdown-item" href="#">삭제</a></li>
-                </ul>
-                <div>
-                  <div>
-                    <p class="comment-username">닉네임</p>
-                  </div>
-                  <div>
-                    <p class="comment-content">이름 : 댓글</p>
-                  </div>
-                  <div>
-                    <p class="comment-date">작성일자</p>
-                    <a class="comment-date" onclick="showCommentReply('comment3-1')">댓글쓰기</a>
-                    <form class="comment-reply-form" id="comment3-1" style="display: none;">
-                      <div class="form-group mb-2">
-                        <textarea class="form-control border-0 bg-smoke" placeholder="Comment" rows="2"></textarea>
-                      </div>
-
-                      <div style="display: flex; justify-content: right">
-                        <button type="button" class="btn btn-outline-info-comment-button mb-2" style="padding: 8px 18px">
-                          등록
-                        </button>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </li>
-              <li class="comment-item" id="comment4">
-                <a class="me-n4 comment-tool" id="navbarDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">. . .</a>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                  <li><a class="dropdown-item" href="#">수정</a></li>
-                  <li><a class="dropdown-item" href="#">삭제</a></li>
-                </ul>
-                <div>
-                  <div>
-                    <p class="comment-username">닉네임</p>
-                  </div>
-                  <div>
-                    <p class="comment-content">이름 : 댓글</p>
-                  </div>
-                  <div>
-                    <p class="comment-date">작성일자</p>
-                    <a class="comment-date" onclick="showCommentReply('comment4-1')">댓글쓰기</a>
-                    <form class="comment-reply-form" id="comment4-1" style="display: none;">
-                      <div class="form-group mb-2">
-                        <textarea class="form-control border-0 bg-smoke" placeholder="Comment" rows="2"></textarea>
-                      </div>
-
-                      <div style="display: flex; justify-content: right">
-                        <button type="button" class="btn btn-outline-info-comment-button mb-2" style="padding: 8px 18px">
-                          등록
-                        </button>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </li>
+              <div id="list_comment">
+                <!-- 댓글 리스트 출력 부분 -->
+              </div>
+              <div id="reply_list_comment">
+                <!-- 대댓글 리스트 출력 부분 -->
+              </div>
             </ul>
           </div>
+
+          <!-- ----------------------- 댓글 출력 부분 ----------------------- -->
+
         </div>
       </div>
     </div>
