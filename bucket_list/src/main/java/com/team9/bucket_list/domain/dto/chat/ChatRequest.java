@@ -39,6 +39,19 @@ public class ChatRequest {
                 .roomId(chatRoom.getId())
                 .lastModifiedAt(chatRoom.getLastMessageTime())
                 .chatType(ChatType.LIST)
+                .userName(chatRoom.getLastUserName())
+                .message(chatRoom.getLastMessage())
+                .build();
+    }
+
+    public static ChatRequest chatResponse(ChatRequest chatRequest) {
+        return ChatRequest.builder()
+                .roomId(chatRequest.getRoomId())
+                .memberId(chatRequest.getMemberId())
+                .userName(chatRequest.getUserName())
+                .lastModifiedAt(LocalDateTime.now())
+                .chatType(ChatType.CHAT)
+                .message(chatRequest.getMessage())
                 .build();
     }
 }

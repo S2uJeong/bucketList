@@ -37,7 +37,7 @@ public class ChatRestController {
     }
 
     //채팅방 생성
-    @PostMapping("/{bucketlistId}")
+    @PostMapping("/create-room/{bucketlistId}")
     public Response<ChatRoom> createChatRoom(@PathVariable Long bucketlistId, ChatRoomRequest chatRoomRequest) {
         return Response.success(chatService.createChatRoom(bucketlistId, chatRoomRequest));
     }
@@ -49,7 +49,6 @@ public class ChatRestController {
     }
 
     //메시지 내용 불러오기
-    //메시지와 로그인된 유저를 불러온다
     @GetMapping("/messages/{roomId}")
     public Response messages(@PathVariable Long roomId, @PageableDefault(size = 20) @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         return Response.success(chatService.messages(roomId, pageable));
