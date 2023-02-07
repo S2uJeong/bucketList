@@ -41,8 +41,8 @@ public class CommentService {
                 .orElseThrow(() -> new ApplicationException(ErrorCode.POST_NOT_FOUND));
     }
 
-    public Member memberDBCheck(String userName){
-        return memberRepository.findByUserName(userName)
+    public Member checkMember(Long memberId) {
+        return memberRepository.findById(memberId)
                 .orElseThrow(() -> new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED));
     }
 
@@ -51,9 +51,9 @@ public class CommentService {
                 .orElseThrow(() -> new ApplicationException(ErrorCode.COMMENT_NOT_FOUND));
     }
 
-//      Member와 합쳐지면 현재 유저의 권한이 관리자인지 아닌지 판단
-    public Boolean rolecheck(Member member, String userName){
-        if((member.getMemberRole() != MemberRole.ADMIN)&&(member.getUserName().equals(userName))) {      // 현재 토큰의 유저의 권한이 ADMIN이 아닐때
+    //      Member와 합쳐지면 현재 유저의 권한이 관리자인지 아닌지 판단
+    public Boolean rolecheck(Member member,Long memberId ){
+        if((member.getMemberRole() != MemberRole.ADMIN)&&(member.getId()!=memberId)) {      // 현재 토큰의 유저의 권한이 ADMIN이 아닐때
             throw new ApplicationException(ErrorCode.INVALID_PERMISSION);
         }
         return true;
@@ -71,8 +71,8 @@ public class CommentService {
 
     // 1. 댓글 생성
     @CacheEvict(value = "comments", key = "#postId")
-    public CommentCreateResponse commentCreate(Long postId, CommentCreateRequest request,String userName) {
-        Member member = memberDBCheck(userName);
+    public CommentCreateResponse commentCreate(Long postId, CommentCreateRequest request,Long memberId) {
+        Member member = checkMember(memberId);
 
         Post post = postDBCheck(postId);
 
@@ -83,7 +83,7 @@ public class CommentService {
 
         commentRepository.save(comment);
 
-        CommentCreateResponse response = new CommentCreateResponse(comment,userName);
+        CommentCreateResponse response = new CommentCreateResponse(comment,member.getUserName());
         return response;
     }
 
@@ -97,40 +97,37 @@ public class CommentService {
     // 3. 댓글 수정
     @CacheEvict(value = "comments", key = "#postId")                    // 값이 변경되므로 캐시 초기화
     @Transactional
-    public List<CommentListResponse> updateComment(Long postId,Long commentId, CommentCreateRequest request,String userName){
-        Member member = memberDBCheck(userName);            // 현재 유저가 존재하는지 확인
+    public void updateComment(Long postId,Long commentId, CommentCreateRequest request,Long memberId){
+        Member member = checkMember(memberId);            // 현재 유저가 존재하는지 확인
 
         postDBCheck(postId);   // 게시물 존재 확인
 
         Comment comment = commentDBCheck(commentId);        // Comment 존재 확인
 
-        rolecheck(member,userName);                 // 댓글 작성자와 현재 유저 비교
+        rolecheck(member,memberId);                 // 댓글 작성자와 현재 유저 비교
 
         if(!request.getContent().equals(comment.getContent())){     // 서버에 저장되어 있는 데이터와 유저가 새로 입력한 데이터가 다를경우 덮어씌움
             comment.update(request.getContent());      // Jpa 영속성을 활용한 update 기능 활용
         }
 
-
-        return structureChange(commentRepository.findCommentByPostId(postId));
     }
 
 
     // 4. 댓글 삭제
     @CacheEvict(value = "comments", key = "#postId")                        //  값이 변경되므로 캐시 초기화
     @Transactional
-    public List<CommentListResponse> deleteComment(Long postId,Long commentId,String userName){
-        Member member = memberDBCheck(userName);            // 현재 유저가 존재하는지 확인
-
+    public void deleteComment(Long postId,Long commentId,Long memberId){
+        Member member = checkMember(memberId);            // 현재 유저가 존재하는지 확인
+        log.info("member Id : "+member.getId());
         postDBCheck(postId);   // 게시물 존재 확인
 
         Comment comment =  commentRepository.findCommentByIdWithParent(commentId)           // 현재 comment Entity는 내부 매핑이 되어 있는 상태라 매핑으로 되어 있는 값까지 같이 찾아야함
                 .orElseThrow(() -> new ApplicationException(ErrorCode.COMMENT_NOT_FOUND));
 
-        rolecheck(member,userName);                 // 댓글 작성자와 현재 유저 비교
+        rolecheck(member,memberId);                 // 댓글 작성자와 현재 유저 비교
 
         commentRepository.delete(comment);              // soft Delete 실행
 
-        return structureChange(commentRepository.findCommentByPostId(postId));
     }
 
 
@@ -139,15 +136,15 @@ public class CommentService {
         List<CommentListResponse> result = new ArrayList<>();       // 댓글 전체를 담을 리스트
         Map<Long,CommentListResponse> map = new HashMap<>();        // 댓글과 대댓글을 연결시켜주기 위한 임시 map
         comments.stream().forEach(c -> {                            // Comment 형식으로 되어있는 댓글 전체 리스트를 stream.foreach를 통해 모든값을 CommentDto로 변환함
-            Member member = memberDBCheck(c.getMember().getUserName());
-            String userName = member.getUserName();
-            CommentListResponse dto = CommentListResponse.EntityToDto(c,userName);     // Comment에서 원하는 값만 추출하여 Dto로 변환함
-            map.put(c.getId(),dto);                                                    // map에 (commentId, dto) 형식으로 저장
-            if(c.getParent() != null)
-                map.get(c.getParent().getId()).getChildren().add(dto);                 // 만약 댓글 entity에 부모댓글이 null값이 아니라면 현재 comment의 parentId의 데이터를 가져와 연관맵핑 되어 있는 childcomment list에 넣어준다
-            else
-                result.add(dto);                                    // 부모id가 없는 댓글 즉, 대댓글이 아닌경우에만 result list에 넣는다.
-            }
+                    Member member = checkMember(c.getMember().getId());
+                    String userName = member.getUserName();
+                    CommentListResponse dto = CommentListResponse.EntityToDto(c,userName);     // Comment에서 원하는 값만 추출하여 Dto로 변환함
+                    map.put(c.getId(),dto);                                                    // map에 (commentId, dto) 형식으로 저장
+                    if(c.getParent() != null)
+                        map.get(c.getParent().getId()).getChildren().add(dto);                 // 만약 댓글 entity에 부모댓글이 null값이 아니라면 현재 comment의 parentId의 데이터를 가져와 연관맵핑 되어 있는 childcomment list에 넣어준다
+                    else
+                        result.add(dto);                                    // 부모id가 없는 댓글 즉, 대댓글이 아닌경우에만 result list에 넣는다.
+                }
         );
         return result;
     }

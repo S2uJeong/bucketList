@@ -6,6 +6,7 @@ import com.team9.bucket_list.domain.entity.Likes;
 import com.team9.bucket_list.domain.entity.Member;
 import com.team9.bucket_list.domain.entity.Post;
 import com.team9.bucket_list.domain.enumerate.MemberRole;
+import com.team9.bucket_list.domain.enumerate.PostStatus;
 import com.team9.bucket_list.execption.ApplicationException;
 import com.team9.bucket_list.execption.ErrorCode;
 import com.team9.bucket_list.repository.ApplicationRepository;
@@ -112,32 +113,40 @@ public class PostService {
 
     // 수정
     @Transactional
-    public void update(PostUpdateRequest request, Long postId) {
+    public void update(PostUpdateRequest request, Long postId,Long userId) {
 //        로그인 되어있는지 확인하고 아니면 에러던짐
 //        Member member = checkMember(memberId);
 //        post를 쓴 멤버와 로그인 되어 있는 member가 같은 멤버가 아니면 에러던짐
 //        checkPostMember(memberId, post.getId());
-
+        Member member = checkMember(userId);
         // postid에 해당하는 post가 DB에 없으면 에러던짐 - entity
         Post post = checkPost(postId);
+
+        PostStatus postStatus;
+        // 프론트에서 string 으로 입력 되므로 DB 저장용으로 다시 바꾸기 위해 PostStatus 클래스 형식으로 변환 시켜준다.
+        switch (request.getStatus()) {
+            case "모집중" -> postStatus = PostStatus.JOIN;
+            case "모집완료" -> postStatus = PostStatus.JOINCOMPLETE;
+            default -> postStatus = PostStatus.ERROR;
+        }
 
         log.info("🔴 post : {}", post.toString());
         log.info("🔴 post : {}", request.toString());
         // 수정 사항을 반영하여 변경한다.
-        postRepository.save(Post.update(post, request));
+        post.update(request,member,postStatus);
     }
 
     // 삭제
     @Transactional
-    public PostDeleteResponse delete(Long postId, Long userId) {
+    public void delete(Long postId, Long userId) {
         // 로그인 되어있는지 확인하고 아니면 에러던짐
         Member member = checkMember(userId);
         // postid에 해당하는 post가 DB에 없으면 에러던짐
         Post post = checkPost(postId);
         // post를 쓴 멤버와 로그인 되어 있는 member가 같은 멤버가 아니면 에러던짐
         checkPostMember(userId, post.getMember().getId());
-        postRepository.deleteById(post.getId());
-        return PostDeleteResponse.of(post);
+
+        postRepository.delete(post);
 
     }
 
