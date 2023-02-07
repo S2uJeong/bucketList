@@ -50,6 +50,11 @@ spring:
             user_name_attribute: response
   main:
     allow-bean-definition-overriding: true
+  devtools:
+    livereload:
+      enabled: true
+  thymeleaf:
+    cache: false
 
 google:
   map:

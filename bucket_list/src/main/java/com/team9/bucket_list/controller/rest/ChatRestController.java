@@ -2,7 +2,6 @@ package com.team9.bucket_list.controller.rest;
 
 import com.team9.bucket_list.domain.Response;
 import com.team9.bucket_list.domain.dto.chat.ChatInviteRequest;
-import com.team9.bucket_list.domain.dto.chat.ChatMessageResponse;
 import com.team9.bucket_list.domain.dto.chat.ChatRoomRequest;
 import com.team9.bucket_list.domain.dto.chat.ChatRoomResponse;
 import com.team9.bucket_list.domain.entity.ChatParticipant;
@@ -15,7 +14,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.SortDefault;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,36 +35,29 @@ public class ChatRestController {
     //auth 나중에 추가
     @GetMapping
     @Operation(summary = "채팅목록 조회", description = "memberId에 해당하는 채팅방 리스트를 출력합니다.")
-    public Page<ChatRoomResponse> getChatList(/*auth*/@Parameter(hidden = true) @PageableDefault(size = 20) /*제일 마지막에 채팅이 올라온 시간이 기준 @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC)*/ Pageable pageable) {
-        log.info("컨트롤러");
-        Long userId = 1L;
+    public Page<ChatRoomResponse> getChatList(@Parameter(hidden = true) @PageableDefault(size = 20) @SortDefault(sort = "lastMessageTime", direction = Sort.Direction.DESC) Pageable pageable, Authentication authentication) {
         //userId에 해당하는 채팅방 리스트를 가져온다
-        return chatService.getChatList(userId,pageable);
+        return chatService.getChatList(Long.valueOf(authentication.getName()),pageable);
     }
 
     //채팅방 생성
-    @PostMapping("/{bucketlistId}")
+    @PostMapping("/create-room/{bucketlistId}")
     @Operation(summary = "채팅방 생성", description = "채팅방을 생성합니다.")
-    public Response<ChatRoom> createChatRoom(@Parameter(name = "bucketlistId", description = "버킷리스트 id") @PathVariable Long bucketlistId,
-                                             @RequestBody ChatRoomRequest chatRoomRequest) {
+    public Response<ChatRoom> createChatRoom(@Parameter(name = "bucketlistId", description = "버킷리스트 id") @PathVariable Long bucketlistId, ChatRoomRequest chatRoomRequest) {
         return Response.success(chatService.createChatRoom(bucketlistId, chatRoomRequest));
     }
 
     //유저 초대
     @PostMapping("/{roomId}")
     @Operation(summary = "멤버 초대", description = "roomId를 이용하여 멤버를 초대합니다.")
-    public Response<List<ChatParticipant>> inviteMember(@Parameter(name = "roomId", description = "채팅방 id") @PathVariable Long roomId,
-                                                        @RequestBody ChatInviteRequest chatInviteRequest) {
+    public Response<List<ChatParticipant>> inviteMember(@Parameter(name = "roomId", description = "채팅방 id") @PathVariable Long roomId, ChatInviteRequest chatInviteRequest) {
         return Response.success(chatService.inviteMember(roomId, chatInviteRequest));
     }
 
     //메시지 내용 불러오기
-    //메시지와 로그인된 유저를 불러온다
     @GetMapping("/messages/{roomId}")
     @Operation(summary = "메시지(채팅) 조회", description = "roomId로 조회한 메시지 리스트를 출력합니다.")
-    public ChatMessageResponse messages(@Parameter(name = "roomId", description = "채팅방 id") @PathVariable Long roomId,
-                                        @Parameter(hidden = true) @PageableDefault(size = 20) Pageable pageable) {
-        String userName = "test1";
-        return ChatMessageResponse.success(chatService.messages(roomId, pageable), userName);
+    public Response messages(@Parameter(name = "roomId", description = "채팅방 id") @PathVariable Long roomId, @Parameter(hidden = true) @PageableDefault(size = 20) @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+        return Response.success(chatService.messages(roomId, pageable));
     }
 }
