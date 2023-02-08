@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,8 +30,9 @@ public class CommentController {
     @PostMapping("/{postId}")
     @Operation(summary = "댓글 작성", description = "id를 이용하여 user 레코드를 조회합니다.")
     public Response<CommentCreateResponse> commentCreate(@Parameter(name = "postId", description = "게시글 id") @PathVariable(name = "postId")Long id,
-                                                         @RequestBody CommentCreateRequest request){
-        Long userId = 1l;
+                                                         @RequestBody CommentCreateRequest request,Authentication authentication){
+        Long userId = Long.valueOf(authentication.getName());
+//        Long userId = 1l;
         log.info("댓글작성 username :"+userId);
         return Response.success(commentService.commentCreate(id,request,userId));
     }
@@ -48,8 +50,9 @@ public class CommentController {
     @Operation(summary = "댓글 수정", description = "댓글을 수정합니다.")
     public Response<List<CommentListResponse>> commentUpdate(@Parameter(name = "postId", description = "게시글 id") @PathVariable(name = "postId")Long postid,
                                                              @Parameter(name = "commentId", description = "댓글 id") @PathVariable(name="commentId")Long id,
-                                                             @RequestBody CommentCreateRequest request){
-        Long memberId = 1l;
+                                                             @RequestBody CommentCreateRequest request,Authentication authentication){
+        Long memberId = Long.valueOf(authentication.getName());
+//        Long memberId = 1l;
         List<CommentListResponse> commentList = commentService.updateComment(postid,id,request,memberId);
         return Response.success(commentList);
     }
@@ -58,9 +61,11 @@ public class CommentController {
     @DeleteMapping("{postId}/comments/{commentId}")
     @ResponseBody
     public Response<List<CommentListResponse>> commentDelete(@Parameter(name = "postId", description = "게시글 id") @PathVariable(name = "postId")Long postid,
-                                                             @Parameter(name = "commentId", description = "댓글 id") @PathVariable(name="commentId")Long id){
+                                                             @Parameter(name = "commentId", description = "댓글 id") @PathVariable(name="commentId")Long id
+            ,Authentication authentication){
         log.info("댓글 삭제");
-        Long memberId = 1l;
+        Long memberId = Long.valueOf(authentication.getName());
+//        Long memberId = 1l;
         List<CommentListResponse> commentList = commentService.deleteComment(postid,id,memberId);
         return Response.success(commentList);
     }
