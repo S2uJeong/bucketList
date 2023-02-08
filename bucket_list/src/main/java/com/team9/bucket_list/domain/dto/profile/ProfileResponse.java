@@ -19,7 +19,7 @@ public class ProfileResponse {
 //    알람을 어떤 방식으로 해야할지 모르겠다.
 //    private List<Alarm> alarm;
 
-    private String image;
+    private String postImageUrl;
     private Long memberId;
 
     private double rate;
@@ -28,7 +28,7 @@ public class ProfileResponse {
 
     public static List<ProfileResponse> response(List<Member> member, double rate) {
         List<ProfileResponse> result = (List<ProfileResponse>) member.stream().map(member1 -> ProfileResponse.builder()
-                .image(member1.getImage())
+                .postImageUrl(member1.getPostImageUrl())
                 .memberId(member1.getId())
                 .rate(rate)
                 .build());

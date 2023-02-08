@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum ErrorCode {
     DUPLICATED_EMAIL(HttpStatus.CONFLICT, "Email이 중복됩니다."),
+    DUPLICATED_USERNAME(HttpStatus.CONFLICT, "userName 이 중복됩니다."),
     INCORRECT_PASSWORD_CORRECT(HttpStatus.CONFLICT, "Email이 중복됩니다."),
     INVALID_PASSWORD(HttpStatus.NOT_FOUND, "패스워드가 잘못되었습니다."),
     USERNAME_NOT_FOUNDED(HttpStatus.NOT_FOUND, "해당 사용자는 없습니다."),
@@ -23,6 +24,12 @@ public enum ErrorCode {
     BUCKETLIST_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 버킷리스트가 없습니다."),
     APPLICATION_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 신청서가 없습니다"),
     ALARM_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 알람이 없습니다."),
+    // POST 관련
+    FILE_NOT_EXISTS(HttpStatus.NOT_FOUND, "빈 파일 입니다."),
+    EXCEED_ENTRANT_NUM(HttpStatus.CONFLICT, "참가자 수를 초과하였습니다."),
+
+    FILE_UPLOAD_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패했습니다."),
+    WRONG_FILE_FORMAT(HttpStatus.BAD_REQUEST, "파일 형식이 틀립니다.")
 
     ;
 

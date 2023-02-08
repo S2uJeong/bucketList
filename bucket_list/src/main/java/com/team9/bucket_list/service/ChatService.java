@@ -1,10 +1,9 @@
 package com.team9.bucket_list.service;
 
-import com.team9.bucket_list.domain.dto.chat.ChatInviteRequest;
-import com.team9.bucket_list.domain.dto.chat.ChatRequest;
-import com.team9.bucket_list.domain.dto.chat.ChatRoomRequest;
-import com.team9.bucket_list.domain.dto.chat.ChatRoomResponse;
+import com.team9.bucket_list.domain.dto.chat.*;
 import com.team9.bucket_list.domain.entity.*;
+import com.team9.bucket_list.execption.ApplicationException;
+import com.team9.bucket_list.execption.ErrorCode;
 import com.team9.bucket_list.repository.ChatParticipantRepository;
 import com.team9.bucket_list.repository.ChatRepository;
 import com.team9.bucket_list.repository.ChatRoomRepository;
@@ -14,16 +13,20 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 @EnableAsync
+@Transactional(readOnly = true)
 public class ChatService {
 
     private final ChatRoomRepository chatRoomRepository;
@@ -31,12 +34,14 @@ public class ChatService {
     private final MemberRepository memberRepository;
     private final ChatRepository chatRepository;
 
+    @Transactional
     public Page<ChatRoomResponse> getChatList(Long memberId, Pageable pageable) {
         List<ChatParticipant> chatParticipantList = chatParticipantRepository.findAllByMember_Id(memberId);
         log.info("서비스 참여 포스트 id" + chatParticipantList.get(0).getId());
         return ChatRoomResponse.pageList(chatRoomRepository.findAllByChatParticipantsIn(chatParticipantList,pageable));
     }
 
+    @Transactional
     public ChatRoom createChatRoom(Long bucketlistId, ChatRoomRequest chatRoomRequest) {
         /*bucketlist repository 나중에 생성*/
         Bucketlist bucketlist = null;
@@ -47,6 +52,7 @@ public class ChatService {
         return chatRoom;
     }
 
+    @Transactional
     public List<ChatParticipant> inviteMember(Long roomId, ChatInviteRequest chatInviteRequest) {
         //멤버 아이디로 멤버 리스트 찾기
         List<Member> members = memberRepository.findAllMemberIdIn(chatInviteRequest.getMembersId());
@@ -71,16 +77,37 @@ public class ChatService {
         return chatParticipantList;
     }
 
-    public Page<ChatParticipant> messages(Long roomId, Pageable pageable) {
-        return chatParticipantRepository.findAllByChatRoom_Id(roomId,pageable);
+    @Transactional
+    public Page<ChatMessagesResponse> messages(Long roomId, Pageable pageable) {
+        return ChatMessagesResponse.messageList(chatRepository.findAllByChatRoom_Id(roomId,pageable));
     }
 
     @Async
-    public void updateMessage(ChatRequest chatRequest) {
-        ChatRoom chatRoom = chatRoomRepository.findById(chatRequest.getRoomId()).orElseThrow(() -> new RuntimeException());
-        Member member = memberRepository.findById(chatRequest.getUserId()).orElseThrow(() -> new RuntimeException());
+    @Transactional
+    public CompletableFuture<ChatRequest> updateMessage(ChatRequest chatRequest) {
+        log.info(chatRequest.toString());
+        //채팅방이 존재하는지, 멤버가 존재하는지 확인
+        ChatRoom chatRoom = chatRoomRepository.findById(chatRequest.getRoomId()).orElseThrow(() -> new ApplicationException(ErrorCode.INVALID_PERMISSION));
+        Member member = memberRepository.findById(chatRequest.getMemberId()).orElseThrow(() -> new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED));
 
+        //채팅저장및 채팅방 업데이트 시간 저장
         chatRepository.save(Chat.save(chatRequest,chatRoom,member));
-        chatRoomRepository.save(ChatRoom.messageTimeUpdate(chatRoom));
+        ChatRoom savedChatRoom = chatRoomRepository.save(ChatRoom.messageTimeUpdate(chatRoom,chatRequest));
+        log.info("채팅 저장 완료");
+
+        return CompletableFuture.completedFuture(ChatRequest.chatListResponse(savedChatRoom));
+    }
+
+    @Transactional
+    public void checkParticipant(ChatRequest chatRequest) {
+        log.info("해당 참가자가 채팅방에 들어오는게 허용된 참가자인지 확인");
+        chatParticipantRepository.findByChatRoom_IdAndMember_Id(chatRequest.getRoomId(), chatRequest.getMemberId())
+                .orElseThrow(() -> new ApplicationException(ErrorCode.INVALID_PERMISSION));
+        log.info("채팅방에 등록된 사용자 확인완료");
+    }
+
+    @Transactional
+    public List<ChatParticipant> getChatPartipant(Long roomId) {
+        return chatParticipantRepository.findAllByChatRoom_Id(roomId);
     }
 }

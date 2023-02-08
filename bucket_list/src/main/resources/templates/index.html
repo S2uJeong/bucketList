@@ -44,14 +44,6 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
   </head>
-  <style>
-    #login_li{
-      display: none;
-    }
-    #user_li{
-      display: none;
-    }
-  </style>
   <script>
     let check = false;
     function showSearch() {
@@ -111,30 +103,34 @@
             </li>
 
             <li class="">
-              <a class="" href="/post">버킷리스트</a>
+              <a class="" href="javascript:void(0)">버킷리스트</a>
               <ul class="dropdown drop-up">
-                <li class=" active ">
-                  <a href="index.html">Travel</a>
+                <li class="">
+                  <a href="/post">All</a>
                 </li>
 
                 <li class="">
-                  <a href="/post/sports">Extreme</a>
+                  <a href="/post?category=travel">Travel</a>
                 </li>
 
                 <li class="">
-                  <a href="index-3.html">Study</a>
+                  <a href="/post?category=extreme">Extreme</a>
                 </li>
 
                 <li class="">
-                  <a href="index-3.html">Volunteer</a>
+                  <a href="/post?category=study">Study</a>
                 </li>
 
                 <li class="">
-                  <a href="index-3.html">Experience</a>
+                  <a href="/post?category=volunteer">Volunteer</a>
                 </li>
 
                 <li class="">
-                  <a href="index-3.html">Etc</a>
+                  <a href="/post?category=experience">Experience</a>
+                </li>
+
+                <li class="">
+                  <a href="/post?category=etc">Etc</a>
                 </li>
               </ul>
             </li>
@@ -146,16 +142,16 @@
             <li class="" id="user_li">
               <a class="" href="javascript:void(0)" id="userName">유저명</a>
               <ul class="dropdown drop-up">
-                <li class=" active ">
-                  <a href="/createform">버킷리스트 작성</a>
+                <li class="">
+                  <a href="/post/createform">버킷리스트 작성</a>
                 </li>
 
                 <li class="">
-                  <a href="/post/sports">좋아요</a>
+                  <a href="/my/likes">좋아요</a>
                 </li>
 
                 <li class="">
-                  <a href="index-3.html">마이 피드</a>
+                  <a href="/my">마이 피드</a>
                 </li>
 
                 <li class="">
@@ -273,7 +269,7 @@
     <div class="row grid">
       <div class="col-md-6 col-lg-4 element-item america">
         <div class="media media-hoverable justify-content-center mb-2 mb-md-4 mb-lg-6">
-          <a href="single-package-fullwidth.html" class="media-content">
+          <a href="/post?category=travel" class="media-content">
             <img class="media-img lazyestload" data-src="/assets/img/home/packages/packages-1.jpg" src="/assets/img/home/packages/packages-1.jpg" alt="Generic placeholder image">
             <div class="media-object">
               <h3 class="text-uppercase mb-0">Travel</h3>
@@ -286,7 +282,7 @@
       
       <div class="col-md-6 col-lg-4 element-item africa">
         <div class="media media-hoverable justify-content-center mb-2 mb-md-4 mb-lg-6">
-          <a href="single-package-fullwidth.html" class="media-content">
+          <a href="/post?category=extreme" class="media-content">
             <img class="media-img lazyestload" data-src="/assets/img/home/packages/packages-2.jpg" src="/assets/img/home/packages/packages-2.jpg" alt="Generic placeholder image">
             <div class="media-object">
               <h3 class="text-uppercase mb-0">Extreme</h3>
@@ -299,7 +295,7 @@
 
       <div class="col-md-6 col-lg-4 element-item asia america">
         <div class="media media-hoverable justify-content-center mb-2 mb-md-4 mb-lg-6">
-          <a href="single-package-fullwidth.html" class="media-content">
+          <a href="/post?category=study" class="media-content">
             <img class="media-img lazyestload" data-src="/assets/img/home/packages/packages-3.jpg" src="/assets/img/home/packages/packages-3.jpg" alt="Generic placeholder image">
             <div class="media-object">
               <h3 class="text-uppercase mb-0">Study</h3>
@@ -312,7 +308,7 @@
 
       <div class="col-md-6 col-lg-4 element-item asia africa">
         <div class="media media-hoverable justify-content-center mb-2 mb-md-4 mb-lg-0">
-          <a href="single-package-fullwidth.html" class="media-content">
+          <a href="/post?category=volunteer" class="media-content">
             <img class="media-img lazyestload" data-src="/assets/img/home/packages/packages-4.jpg" src="/assets/img/home/packages/packages-4.jpg" alt="Generic placeholder image">
             <div class="media-object">
               <h3 class="text-uppercase mb-0">Volunteer</h3>
@@ -325,7 +321,7 @@
 
       <div class="col-md-6 col-lg-4 element-item america">
         <div class="media media-hoverable justify-content-center mb-2 mb-md-0">
-          <a href="single-package-fullwidth.html" class="media-content">
+          <a href="/post?category=experience" class="media-content">
             <img class="media-img lazyestload" data-src="/assets/img/home/packages/packages-5.jpg" src="/assets/img/home/packages/packages-5.jpg" alt="Generic placeholder image">
             <div class="media-object">
               <h3 class="text-uppercase mb-0">Experience</h3>
@@ -338,7 +334,7 @@
 
       <div class="col-md-6 col-lg-4 element-item asia africa">
         <div class="media media-hoverable justify-content-center">
-          <a href="single-package-fullwidth.html" class="media-content">
+          <a href="/post?category=etc" class="media-content">
             <img class="media-img lazyestload" data-src="/assets/img/home/packages/packages-6.jpg" src="/assets/img/home/packages/packages-6.jpg" alt="Generic placeholder image">
             <div class="media-object">
               <h3 class="text-uppercase mb-0">Etc</h3>
@@ -579,33 +575,51 @@
           </div>
 
           <div class="modal-body">
-            <form class="" action="index.html" method="post">
+            <form onsubmit="join(); return false;">
               <div class="mb-3">
                 <div class="mb-3" style="display: flex">
-                  <input type="id" class="form-control bg-smoke" required="" placeholder="아이디">
-                  <button class="btn btn-facebook btn-block text-uppercase text-white" type="submit" style="width: 25%; padding: 0">중복확인</button>
+                  <input type="text" id="form_userName" class="form-control bg-smoke" required="" placeholder="닉네임">
+                  <button class="btn btn-facebook btn-block text-uppercase text-white" onclick="checkUserName()" style="width: 25%; padding: 0">중복확인</button>
                 </div>
+                  <p id="able_userName" style="display: none">사용 가능한 닉네임 입니다.</p>
+                  <p id="error_userName" style="display: none">중복되는 닉네임 입니다.</p>
               </div>
 
               <div class="mb-3">
-                <input type="password" class="form-control bg-smoke" required="" placeholder="비밀번호">
-                <input type="password" class="form-control bg-smoke" required="" placeholder="비밀번호 확인">
+                <input type="password" id="pw" class="form-control bg-smoke" required="" placeholder="비밀번호">
+                <input type="password" id="check_pw" onchange="checkPasswordCorrect()" class="form-control bg-smoke" required="" placeholder="비밀번호 확인">
+                <p id="error_passwordCorrect" style="display: none">일치하지 않습니다.</p>
               </div>
 
-              <div class="mb-3" style="display: flex">
-                <input style="flex: 1;" type="year" class="form-control bg-smoke" required="" placeholder="년(4자)">
-                <input style="flex: 1;" type="month1" class="form-control bg-smoke" required="" placeholder="월">
-                <input style="flex: 1;" type="day" class="form-control bg-smoke" required="" placeholder="일">
+              <div class="mb-3">
+                <select id="form_gender" class="form-control bg-smoke">
+                  <option value="">성별</option>
+                  <option value="MAN">남자</option>
+                  <option value="WOMAN">여자</option>
+                </select>
+                <p id="error_gender" style="display: none">성별을 선택 해주세요.</p>
               </div>
+
+              <div class="mb-3">
+                <input type="number" id="age" class="form-control bg-smoke" required="" placeholder="나이">
+              </div>
+<!--              <div class="mb-3" style="display: flex">-->
+<!--                <input style="flex: 1;" id="birth_year" type="year" class="form-control bg-smoke" required="" placeholder="년(4자)">-->
+<!--                <input style="flex: 1;" id="birth_month" type="month1" class="form-control bg-smoke" required="" placeholder="월">-->
+<!--                <input style="flex: 1;" id="birth_day" type="day" class="form-control bg-smoke" required="" placeholder="일">-->
+<!--              </div>-->
 
               <div class="mb-3">
                 <div style="display: flex">
-                  <input style="flex: auto;" type="email" class="form-control bg-smoke" required="" placeholder="이메일">
-                  <button class="btn btn-facebook btn-block text-uppercase text-white" type="submit" style="width: 25%; padding: 0">인증요청</button>
+                  <input style="flex: auto;" type="email" class="form-control bg-smoke" required="" placeholder="이메일" id="form_email">
+                  <button class="btn btn-facebook btn-block text-uppercase text-white" onclick="checkEmail()" style="width: 25%; padding: 0">인증요청</button>
                 </div>
-                <input type="emailCheck" class="form-control bg-smoke" required="" placeholder="인증번호">
+                <p id="error_email" style="display: none">중복된 이메일 입니다.</p>
+                <input type="emailCheck" id="code" class="form-control bg-smoke" required="" placeholder="인증번호">
+                <p id="error_code" style="display: none">인증 코드가 불일치 합니다.</p>
+
               </div>
-    
+
               <div class="mb-3 form-check mb-0">
                 <input type="checkbox" class="form-check-input" id="exampleCheck4">
                 <label class="form-check-label text-gray-color mb-3" for="exampleCheck4">
@@ -632,13 +646,13 @@
           </div>
 
           <div class="modal-body">
-            <form class="" action="index.html" method="post">
+            <form class="" onsubmit="return false;">
               <div class="mb-3">
-                <input type="email" class="form-control bg-smoke" required="" placeholder="이메일">
+                <input type="email" id="email" class="form-control bg-smoke" required="" placeholder="이메일">
               </div>
 
               <div class="mb-3">
-                <input type="password" class="form-control bg-smoke" required="" placeholder="비밀번호">
+                <input type="password" id="password" class="form-control bg-smoke" required="" placeholder="비밀번호">
               </div>
 
 <!--              <div class="mb-3 form-check mb-0">-->
@@ -648,9 +662,9 @@
 <!--                </label>-->
 <!--                <a class="pull-right" href="javascript:void(0)">Fogot Password?</a>-->
 <!--             </div>-->
-
+             <p id="login_error" style="display: none"></p>
              <div class="d-grid">
-              <button type="submit" class="btn btn-primary text-uppercase">Login</button>
+              <button class="btn btn-primary text-uppercase" onclick="login(); return false;">Login</button>
              </div>
 
               <div class="text-uppercase text-center py-3">Or</div>
@@ -723,15 +737,6 @@
     <script src="/assets/plugins/lazyestload/lazyestload.js"></script>
     <script src='/assets/plugins/dzsparallaxer/dzsparallaxer.js'></script>
 
-    <script>
-      const url = new URL(window.location.href)
-      const accessToken = url.searchParams.get('accessToken')
-
-      if(accessToken != null) {
-        localStorage.setItem('accessToken', accessToken)
-        window.location.href = '/';
-      }
-    </script>
     
     <script src='/assets/plugins/revolution/js/jquery.themepunch.tools.min.js'></script>
     <script src='/assets/plugins/revolution/js/jquery.themepunch.revolution.min.js'></script>
@@ -741,108 +746,8 @@
 
     <script src="/assets/js/custom.js"></script>
 
+    <script src="/js/axios.js"></script>
+    <script src="/js/header.js"></script>
   </body>
-
-  <script>
-    window.onload = function () {
-      const accessToken = localStorage.getItem("accessToken");
-
-      if (accessToken === null) {
-        $("#login_li").show();
-        $("#user_li").hide();
-      } else {
-        $("#login_li").hide();
-        $("#user_li").show();
-
-        const payload = accessToken.split('.')[1];
-        let userName = JSON.parse(atob(payload)).userName;
-        document.getElementById("userName").innerText = userName;
-      }
-
-    };
-  </script>
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  <script>
-    function click() {
-      console.log('click');
-      axios.get('/click')
-              .then((res) => {
-                console.log(res.data);
-              })
-              .catch((err) => {
-                console.log(err);
-              })
-    }
-    function logout() {
-      localStorage.clear();
-      window.location.href = '/';
-      // return axios.post('/logout')
-      //         .then((res) => {
-      //           localStorage.clear();
-      //           window.location.href = '/';
-      //         })
-    }
-    function login() {
-
-      let email = document.getElementById('email').value;
-      let pw = document.getElementById('password').value;
-
-      return fetch('/login', {
-        method: "POST",
-        headers: {
-          "Content-Type" : "application/json",
-          "Accept": "application/json"
-        },
-        body: JSON.stringify({
-          email: email,
-          password: pw,
-        })
-      })
-              .then(response => {
-                return response.json();
-              })
-              .then(json => {
-                localStorage.setItem("accessToken", json.result.accessToken);
-                window.location.href = '/';
-              })
-              .catch(err => {
-                console.log(err);
-              })
-    }
-
-    axios.interceptors.request.use(function(config) {
-      const accessToken = localStorage.getItem('accessToken');
-      if(accessToken) {
-        config.headers.Authorization = 'Bearer' + ' ' + accessToken
-      }
-      return config;
-    })
-
-    axios.interceptors.response.use(
-            success => success,
-            async(error) => {
-              console.log(error);
-              const status = error.response.status
-
-              if(status === 401) {
-                const originRequest = error.config
-
-                await axios.post('/reissue')
-                        .then(response => {
-                          console.log(response.data);
-                          localStorage.setItem("accessToken", response.data);
-                          originRequest.headers.authorization = 'Bearer ' + response.data;
-                          return axios(originRequest);
-                        })
-                        .catch(error => {
-                          console.log('재발급 실패, refresh token 만료');
-                          localStorage.removeItem('accessToken')
-                          window.location.href = '/';
-                        })
-                return Promise.reject(error)
-              }
-            }
-    )
-  </script>
 </html>
 

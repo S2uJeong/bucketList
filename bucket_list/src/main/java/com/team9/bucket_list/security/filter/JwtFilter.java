@@ -43,7 +43,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
                 //헤더 형식 확인
                 if (authorizationHeader == null) {
-                    log.info("header가 없는 요청입니다.");
+//                    log.info("header가 없는 요청입니다.");
                     SecurityContextHolder.getContext().setAuthentication(null);
                     filterChain.doFilter(request, response);
                     return;
@@ -84,7 +84,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private void setAuthentication(HttpServletRequest request) {
         //문 열어주기, Role 바인딩
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken("Test", null, List.of(new SimpleGrantedAuthority(MemberRole.USER.name())));
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(memberId, null, List.of(new SimpleGrantedAuthority(MemberRole.USER.name())));
         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }

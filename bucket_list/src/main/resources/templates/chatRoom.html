@@ -29,8 +29,7 @@
     let connectingElement = document.querySelector('.connecting');
 
 
-    let stompClient = null;
-    let username = null;
+    let stompClient = null;;
 
     let colors = [
         '#2196F3', '#32c787', '#00BCD4', '#ff5652',
@@ -41,24 +40,63 @@
     let roomId = url.get('roomId');
     roomId = 1;
 
-    //이전 채팅 기록을 불러오면서 userName도 같이 불러온다
-    username = "test1";
+    //토큰
+    const accessToken = localStorage.getItem("accessToken");
+
+    if(accessToken == null) {
+        location.href="/";
+    }
+
+    const payload = accessToken.split('.')[1];
+    const memberId = JSON.parse(atob(payload)).memberId;
+    const userName = JSON.parse(atob(payload)).userName;
+
+    let header = {
+        Authorization : "Bearer " + accessToken
+    };
 
     //서버 연결
-    let socket = new SockJS('/ws');
+    let socket = new SockJS('/ws', null, {headers: {'Authorization': header}});
     stompClient = Stomp.over(socket);
 
-    stompClient.connect({},onConnected,onError);
+
+    /*let socket2 = new SockJS('/ws/list');
+    let stompClient2 = Stomp.over(socket2);
+
+    stompClient2.connect(header,onConnected2(),onError());
+
+    function onConnected2() {
+        stompClient.subscribe('/sub/list/chat/room/'+roomId, onMessageReceived2,header);
+    }
+
+    function onMessageReceived2(payload) {
+        let data = JSON.parse(payload.body);
+        console.log("채팅 리스트"+data)
+    }
+
+    console.log(`header : ${header}`);*/
+
+    stompClient.connect(header,onConnected,onError);
 
     function onConnected() {
-        stompClient.subscribe('/sub/chat/room/'+roomId, onMessageReceived);
+        stompClient.subscribe('/sub/chat/room/'+roomId, onMessageReceived,header);
+
+        stompClient.subscribe('/sub/list/chat/room/'+roomId, onMessageReceived2,header);
+
         stompClient.send("/pub/chat/enter",
-            {},
+            header,
             JSON.stringify({
                 'roomId':roomId,
-                'userName':username,
+                'memberId':memberId,
+                'userName':userName,
                 'chatType':'JOIN'
             }));
+    }
+
+    function onMessageReceived2(payload) {
+        let data = JSON.parse(payload.body);
+        console.log("on message received2 : "+payload);
+        console.log("채팅 리스트"+data)
     }
 
     function onMessageReceived(payload) {
@@ -68,8 +106,11 @@
             console.log("입장");
         } else if (message.type === 'LEAVE') {
             console.log("퇴장");
+        } else if (message.type === 'LIST') {
+            console.log("채팅방 리스트 업데이트")
         } else {
-            $('#messageArea').append(message.message);
+            if(!(message.memberId === memberId))
+                $('#messageArea').append(message.message);
         }
 
     }
@@ -83,11 +124,12 @@
         if(messageContent && stompClient) {
             let chatMessage = {
                 'roomId':roomId,
-                userName: username,
+                'memberId':memberId,
+                'userName':userName,
                 'message': messageInput.value,
                 chatType: 'CHAT'
             };
-            stompClient.send("/pub/chat/sendMessage", {}, JSON.stringify(chatMessage));
+            stompClient.send("/pub/chat/sendMessage", header, JSON.stringify(chatMessage));
 
             $('#messageArea').append(messageInput.value);
 

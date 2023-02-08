@@ -6,6 +6,7 @@ import com.team9.bucket_list.domain.enumerate.PostStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -14,7 +15,9 @@ import java.util.List;
 @Getter
 @Builder
 public class PostReadResponse {
+
     private Long postId;
+    private String userName;    // 유저 아이디이름
     private String title; //제목
     private String content; //내용
     private int cost; //비용
@@ -27,6 +30,9 @@ public class PostReadResponse {
     private String eventEnd; //버킷 종료일
     private PostStatus status; //defalt = 모집중
     private String category; //카테고리
+    private String fileName; //S3에 저장된 이미지 파일이름
+    private Long permitNum;
+    private Long fileId;    // DB에 저장된 파일 ID
 //    private Member member; // 버킷리스트를 만든 member --> member_id, nickname
 //    private List<Application> applicationList; // 버킷리스트 참가자 목록
 //    private List<Likes> likeList; // 버킷리스트 좋아요 누른 사람 목록
@@ -36,6 +42,7 @@ public class PostReadResponse {
     public static PostReadResponse detailOf(Post post, Double lat, Double lng) {  // 위경도는 DB에 저장하지 않으므로 매개변수로 받아서 DTO화 시킨다.
         return PostReadResponse.builder()
                 .postId(post.getId())
+                .userName(post.getMember().getUserName())
                 .title(post.getTitle())
                 .content(post.getContent())
                 .cost(post.getCost())
@@ -48,6 +55,9 @@ public class PostReadResponse {
                 .eventEnd(post.getEventEnd())
                 .status(post.getStatus())
                 .category(post.getCategory())
+                .fileName(post.getPostFileList().get(0).getAwsS3FileName())
+                .permitNum(post.getPermitNum())
+                .fileId(post.getPostFileList().get(0).getId())
 //                .member(post.getMember())
 //                .applicationList(post.getApplicationList())
 //                .likeList(post.getLikesList())
@@ -66,6 +76,7 @@ public class PostReadResponse {
                 .untilRecruit(post.getUntilRecruit())
                 .eventStart(post.getEventStart())
                 .eventEnd(post.getEventEnd())
+                .fileName(post.getPostFileList().get(0).getAwsS3FileName())
 //                .applicationList(post.getApplicationList()) // 총 승인 인원 확인
                 .build()
         );

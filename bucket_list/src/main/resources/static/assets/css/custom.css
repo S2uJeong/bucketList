@@ -1,0 +1,167 @@
+a{
+    text-decoration:none; color:inherit; cursor: pointer;
+}
+.right_area .icon{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /*width: calc(100vw * (45 / 1920));*/
+    /*height: calc(100vw * (45 / 1920));*/
+    width: 26px;
+    height: 26px;
+
+    border-radius: 50%;
+    border: solid 2px #eaeaea;
+    background-color: #fff;
+}
+
+.icon.heart img{
+    /*width: calc(100vw * (24 / 1920));*/
+    /*height: calc(100vw * (24 / 1920));*/
+    width: 15px;
+    height: 15px;
+}
+
+.cntLike{
+    display: flex;
+    justify-content: center;
+    width: 50px;
+    height: 26px;
+
+    border-radius: 10px;
+    border: solid 2px #eaeaea;
+    background-color: #fff;
+    margin-left: 5px;
+}
+
+.icon.heart.fas{
+    color:red
+}
+.heart{
+    transform-origin: center;
+}
+.heart.active img{
+    animation: animateHeart .3s linear forwards;
+}
+
+@keyframes animateHeart{
+    0%{transform:scale(.2);}
+    40%{transform:scale(1.2);}
+    100%{transform:scale(1);}
+}
+
+.btn-outline-post-create {
+    color: #60a662;
+    border-color: #60a662;
+}
+
+.btn-outline-post-create:hover {
+    color: #FFF;
+    background-color: #60a662;
+    border-color: #60a662;
+}
+
+.btn-check:focus + .btn-outline-post-create, .btn-outline-post-create:focus {
+    box-shadow: 0 0 0 0.25rem rgba(96, 166, 98, 0.5);
+}
+
+.btn-check:checked + .btn-outline-post-create,
+.btn-check:active + .btn-outline-post-create, .btn-outline-post-create:active, .btn-outline-post-create.active, .btn-outline-post-create.dropdown-toggle.show {
+    color: #FFF;
+    background-color: #60a662;
+    border-color: #60a662;
+}
+
+.btn-check:checked + .btn-outline-post-create:focus,
+.btn-check:active + .btn-outline-post-create:focus, .btn-outline-post-create:active:focus, .btn-outline-post-create.active:focus, .btn-outline-post-create.dropdown-toggle.show:focus {
+    box-shadow: 0 0 0 0.25rem rgba(96, 166, 98, 0.5);
+}
+
+.btn-outline-post-create:disabled, .btn-outline-post-create.disabled {
+    color: #60a662;
+    background-color: transparent;
+}
+
+.btn-outline-info-comment-button {
+    color: #1ab3e8;
+    border-color: #1ab3e8;
+}
+
+.btn-outline-info-comment-button:hover {
+    color: #FFF;
+    background-color: #1ab3e8;
+    border-color: #1ab3e8;
+}
+
+.btn-check:focus + .btn-outline-info-comment-button, .btn-outline-info-comment-button:focus {
+    box-shadow: 0 0 0 0.25rem rgba(26, 179, 232, 0.5);
+}
+
+.btn-check:checked + .btn-outline-info-comment-button,
+.btn-check:active + .btn-outline-info-comment-button, .btn-outline-info-comment-button:active, .btn-outline-info-comment-button.active, .btn-outline-info-comment-button.dropdown-toggle.show {
+    color: #FFF;
+    background-color: #1ab3e8;
+    border-color: #1ab3e8;
+}
+
+.btn-check:checked + .btn-outline-info-comment-button:focus,
+.btn-check:active + .btn-outline-info-comment-button:focus, .btn-outline-info-comment-button:active:focus, .btn-outline-info-comment-button.active:focus, .btn-outline-info-comment-button.dropdown-toggle.show:focus {
+    box-shadow: 0 0 0 0.25rem rgba(26, 179, 232, 0.5);
+}
+
+.btn-outline-info-comment-button:disabled, .btn-outline-info-comment-button.disabled {
+    color: #1ab3e8;
+    background-color: transparent;
+}
+
+.comment-box {
+    border: 1px solid #ebecef;
+    border-radius: 6px;
+    padding: 29px 29px 0px 29px;
+}
+
+.comment-list{
+    list-style:none;
+    padding-left:0px;
+}
+
+.comment-item{
+    border-top: 1px solid #ebecef;
+    padding: 12px 23px 10px 0px;
+}
+
+.comment-tool{
+    float: right;
+    font-weight: 600
+}
+
+.comment-username{
+    margin-bottom: 2px;
+    font-weight: 600;
+    color: black;
+    font-size: 13px;
+}
+
+.comment-content{
+    margin-bottom: 3px;
+    color: black;
+    font-size: 13px;
+}
+
+.comment-date{
+    margin-bottom: 0px;
+    font-size: 10px;
+    color: #979797;
+    display:inline-block;
+    margin-right: 8px;
+}
+
+.comment-reply{
+    border-top: 1px solid #ebecef;
+    padding: 12px 23px 10px 46px;
+}
+
+.comment-reply-form{
+    border-top: 1px solid #ebecef;
+    padding: 12px 23px 0px 46px;
+}

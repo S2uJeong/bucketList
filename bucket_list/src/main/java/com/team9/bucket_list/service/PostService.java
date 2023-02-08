@@ -1,9 +1,17 @@
 package com.team9.bucket_list.service;
 
 import com.team9.bucket_list.domain.dto.post.*;
+import com.team9.bucket_list.domain.entity.Application;
+import com.team9.bucket_list.domain.entity.Likes;
+import com.team9.bucket_list.domain.entity.Member;
 import com.team9.bucket_list.domain.entity.Post;
+import com.team9.bucket_list.domain.enumerate.MemberRole;
+import com.team9.bucket_list.domain.enumerate.PostStatus;
 import com.team9.bucket_list.execption.ApplicationException;
 import com.team9.bucket_list.execption.ErrorCode;
+import com.team9.bucket_list.repository.ApplicationRepository;
+import com.team9.bucket_list.repository.LikesRepository;
+import com.team9.bucket_list.repository.MemberRepository;
 import com.team9.bucket_list.repository.PostRepository;
 import com.team9.bucket_list.utils.map.dto.GoogleMapResponse;
 import lombok.RequiredArgsConstructor;
@@ -17,9 +25,12 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
+// import java.util.Arrays;
+// import java.util.HashMap;
+// import java.util.Map;
+// import java.util.UUID;
 
 @Service
 @Transactional(readOnly = true)
@@ -28,22 +39,32 @@ import java.util.Map;
 public class PostService {
 
     private final PostRepository postRepository;
+    //
+    private final LikesRepository likesRepository;
+    private final ApplicationRepository applicationRepository;
+    private final AlarmService alarmService;
+    private final MemberRepository memberRepository;
+    // post에 파일 첨부하는 기능을 위한 의존성 주입
+
     // map
     @Value("${google.map.key}")
     private Object API_KEY;// 실제 서버에서 구동할때는 무조건 환경변수에 숨겨야함 절대 노출되면 안됨!!!
 
-//    // ========= 유효성검사 ===========
-//    // 1. findByMemberId : memberId로 member 찾아 로그인 되어있는지 확인 ->  error : 권한이 없습니다.
-//    public Member checkMember(Long memberId) {
-//        return memberRepository.findById(memberId)
-//                .orElseThrow(() -> new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED));
-//    }
-//    // 2. checkPostMember : post를 작성한 mem과 현재 로그인 된 mem 비교 -> INVALID_PERMISSION
-//    public void checkPostMember(Long memberId, Long postMemberId) {
-//        Member loginMember = checkMember(memberId);
-//        Member postMember = checkMember(postMemberId);
-//        if(!loginMember.equals(postMember)) throw new ApplicationException(ErrorCode.INVALID_PERMISSION);
-//    }
+
+    // ========= 유효성검사 ===========
+    // 1. findByMemberId : memberId로 member 찾아 로그인 되어있는지 확인 ->  error : 권한이 없습니다.
+    public Member checkMember(Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED));
+    }
+    // 2. checkPostMember : post를 작성한 mem과 현재 로그인 된 mem 비교 -> INVALID_PERMISSION
+    public void checkPostMember(Long userId, Long postMemberId) {
+        Member loginMember = checkMember(userId);
+        Member postMember = checkMember(postMemberId);
+        if((!loginMember.getMemberRole().equals(MemberRole.ADMIN))&&loginMember.getUserName().equals(postMember.getUserName()))
+            throw new ApplicationException(ErrorCode.INVALID_PERMISSION);
+    }
+
     // 3. findByPostId : postId에 따른 post가 DB에 잘 있는지 확인 -> error : 없는 게시물입니다. POST_NOT_FOUND
     public Post checkPost(Long postId) {
         return postRepository.findById(postId)
@@ -52,11 +73,11 @@ public class PostService {
 
     // 작성
     @Transactional
-    public PostCreateResponse create(PostCreateRequest request, String username) {
+    public PostCreateResponse create(PostCreateRequest request, Long userId) {
         // 로그인 되어있는지 확인하고 아니면 에러던짐
-//        Member member = checkMember(username);
+        Member member = checkMember(userId);
         // requestDTO 안의 toEntity 메서드를 이용해 post Entity 객체를 생성한다.
-        Post post = request.toEntity();
+        Post post = request.toEntity(member);
         // request를 통해 만들어진 post를 DB에 저장한다.
         Post savedPost = postRepository.save(post);
         return PostCreateResponse.of(savedPost);
@@ -73,6 +94,7 @@ public class PostService {
 
     // 상세조회
     public PostReadResponse read(Long postId) {
+
         // Entity
         Post post = checkPost(postId);
         // Dto
@@ -91,33 +113,40 @@ public class PostService {
 
     // 수정
     @Transactional
-    public void update(PostUpdateRequest request, Long postId) {
+    public void update(PostUpdateRequest request, Long postId,Long userId) {
 //        로그인 되어있는지 확인하고 아니면 에러던짐
 //        Member member = checkMember(memberId);
 //        post를 쓴 멤버와 로그인 되어 있는 member가 같은 멤버가 아니면 에러던짐
 //        checkPostMember(memberId, post.getId());
-
+        Member member = checkMember(userId);
         // postid에 해당하는 post가 DB에 없으면 에러던짐 - entity
         Post post = checkPost(postId);
+
+        PostStatus postStatus;
+        // 프론트에서 string 으로 입력 되므로 DB 저장용으로 다시 바꾸기 위해 PostStatus 클래스 형식으로 변환 시켜준다.
+        switch (request.getStatus()) {
+            case "모집중" -> postStatus = PostStatus.JOIN;
+            case "모집완료" -> postStatus = PostStatus.JOINCOMPLETE;
+            default -> postStatus = PostStatus.ERROR;
+        }
 
         log.info("🔴 post : {}", post.toString());
         log.info("🔴 post : {}", request.toString());
         // 수정 사항을 반영하여 변경한다.
-        postRepository.save(Post.update(post, request));
+        post.update(request,member,postStatus);
     }
-
 
     // 삭제
     @Transactional
-    public PostDeleteResponse delete(Long postId, Long memberId) {
+    public void delete(Long postId, Long userId) {
         // 로그인 되어있는지 확인하고 아니면 에러던짐
-//        Member member = checkMember(memberId);
+        Member member = checkMember(userId);
         // postid에 해당하는 post가 DB에 없으면 에러던짐
         Post post = checkPost(postId);
         // post를 쓴 멤버와 로그인 되어 있는 member가 같은 멤버가 아니면 에러던짐
-//        checkPostMember(memberId, post.getId());
-        postRepository.deleteById(post.getId());
-        return PostDeleteResponse.of(post);
+        checkPostMember(userId, post.getMember().getId());
+
+        postRepository.delete(post);
 
     }
 
@@ -144,6 +173,110 @@ public class PostService {
         locationNum.put("lng", lng);
 
         return locationNum;
+    }
+
+    // 버킷리스트 필터
+    public Page<PostReadResponse> filter(String category, Pageable pageable) {
+        Page<Post> filterPosts = postRepository.findByCategory(category, pageable);
+        Page<PostReadResponse> filterPostReadResponses = PostReadResponse.listOf(filterPosts);
+        return filterPostReadResponses;
+    }
+
+    //== 좋아요 ==//
+    // 좋아요 확인
+    public int checkLike(Long postId, Long memberId) {
+        //        로그인 되어있는지 확인하고 아니면 에러던짐 -> userName인지 memberId인지 확인하여 수정
+        Member member = checkMember(memberId);
+
+        // postid에 해당하는 post가 DB에 없으면 에러던짐 - entity
+        checkPost(postId);
+
+        Optional<Likes> savedLike = likesRepository.findByPost_IdAndMember_Id(postId, member.getId());
+
+        if (savedLike.isEmpty()){
+            return 0;
+        }else {
+            return 1;
+        }
+    }
+
+    // 좋아요 개수
+    public Long countLike(Long postId) {
+        // postid에 해당하는 post가 DB에 없으면 에러던짐 - entity
+        checkPost(postId);
+
+        return likesRepository.countByPostId(postId);
+    }
+
+    // 좋아요 누르기
+    @Transactional
+    public int clickLike(Long postId, Long memberId) {
+        //        로그인 되어있는지 확인하고 아니면 에러던짐 -> userName인지 memberId인지 확인하여 수정
+        Member member = checkMember(memberId);
+
+        // postid에 해당하는 post가 DB에 없으면 에러던짐 - entity
+        Post post = checkPost(postId);
+
+        Optional<Likes> savedLike = likesRepository.findByPost_IdAndMember_Id(postId, member.getId());
+
+        if (savedLike.isEmpty()){
+            Likes likes = Likes.builder()
+                    .member(member)
+                    .post(post)
+                    .build();
+            likesRepository.save(likes);
+
+            // 좋아요 됐을 경우, 알람 DB에 추가
+            alarmService.sendAlarm(member.getId(), post.getId(), (byte) 1);
+            return 1;
+        }else {
+            likesRepository.deleteByPost_IdAndMember_Id(postId, member.getId());
+            return 0;
+        }
+    }
+
+    //== 마이피드 ==//
+    // 작성한 포스트 리턴
+    public Page<PostReadResponse> myFeedCreate(Pageable pageable, Long memberId) {
+        //        로그인 되어있는지 확인하고 아니면 에러던짐 -> userName인지 memberId인지 확인하여 수정
+        Member member = checkMember(memberId);
+
+        // Entity
+        Page<Post> createPosts = postRepository.findByMember_Id(member.getId(), pageable);
+        // Dto
+        Page<PostReadResponse> createPostReadResponses = PostReadResponse.listOf(createPosts);
+
+        return createPostReadResponses;
+    }
+
+    // 신청한 포스트 리턴
+    public Page<PostReadResponse> myFeedApply(Pageable pageable, Long memberId) {
+        //        로그인 되어있는지 확인하고 아니면 에러던짐 -> userName인지 memberId인지 확인하여 수정
+        Member member = checkMember(memberId);
+
+        // Entity
+        Set<Application> applications = applicationRepository.findByMember_Id(member.getId());
+        Set<Long> postIds = applications.stream().map(Application::getPost).map(Post::getId).collect(Collectors.toSet());
+        Page<Post> applyPosts = postRepository.findByIdIn(postIds, pageable);
+        // Dto
+        Page<PostReadResponse> applyPostReadResponses = PostReadResponse.listOf(applyPosts);
+
+        return applyPostReadResponses;
+    }
+
+    // 좋아요한 포스트 리턴
+    public Page<PostReadResponse> myFeedLike(Pageable pageable, Long memberId) {
+        //        로그인 되어있는지 확인하고 아니면 에러던짐 -> userName인지 memberId인지 확인하여 수정
+        Member member = checkMember(memberId);
+
+        // Entity
+        Set<Likes> likes = likesRepository.findByMember_Id(member.getId());
+        Set<Long> postIds = likes.stream().map(Likes::getPost).map(Post::getId).collect(Collectors.toSet());
+        Page<Post> likePosts = postRepository.findByIdIn(postIds, pageable);
+        // Dto
+        Page<PostReadResponse> likePostReadResponses = PostReadResponse.listOf(likePosts);
+
+        return likePostReadResponses;
     }
 
 
