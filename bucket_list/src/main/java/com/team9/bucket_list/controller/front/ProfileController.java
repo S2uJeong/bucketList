@@ -2,6 +2,7 @@ package com.team9.bucket_list.controller.front;
 
 import com.team9.bucket_list.domain.entity.Member;
 import com.team9.bucket_list.domain.entity.MemberReview;
+import com.team9.bucket_list.domain.entity.Profile;
 import com.team9.bucket_list.service.ProfileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,16 +34,19 @@ public class ProfileController {
         Member member = Member.builder()
                 .userName("jihwan byeon")
                 .email("jihwan@naver.com")
-                .build();
-
-        List<MemberReview> memberReviewList = (List<MemberReview>) MemberReview.builder()
-                .member(member)
-                .rate(4.2)
+                .rate(4.5)
                 .build();
 
         model.addAttribute("member", member);
-        model.addAttribute("rev iew", memberReviewList);
         return "profile";
+    }
+
+    // 본인 프로필 수정 -> 수정된 페이지 확인
+    @PostMapping("/{memberId}/edit")
+    public String wrtieProfile(@PathVariable Long memberId, Authentication authentication, MultipartFile multipartFile) {
+        String userName = authentication.getName();
+        profileService.update(memberId, userName, multipartFile);
+        return "redirect:/profile/{memberId}"; // memberId 이렇게 적는 게 맞나?
     }
 
 
@@ -70,11 +74,5 @@ public class ProfileController {
 //        return "/Profile/ProfileUpdate";
 //    }
 
-    // 본인 프로필 수정 -> 수정된 페이지 확인
-    @PostMapping("/{memberId}/edit")
-    public String wrtieProfile(@PathVariable Long memberId, Authentication authentication, MultipartFile multipartFile) {
-        String userName = authentication.getName();
-        profileService.update(memberId, userName, multipartFile);
-        return "redirect:/profile/detail/{memberId}"; // memberId 이렇게 적는 게 맞나?
-    }
+
 }

@@ -462,14 +462,12 @@
                 <div class="row">
                     <div class="col-md-6 col-lg-5 col-xl-4">
                         <div class="mb-6 mb-md-0">
-<!--                            &lt;!&ndash; 수정 버튼 &ndash;&gt;-->
-<!--                            <div class="icon-setting pb-2">-->
-<!--                                <a th:href="@{/profile/{memberId}/edit (memberId=${memberId})}">-->
-<!--                                    <i class="fas fa-pencil-alt" aria-hidden="true"></i>-->
-<!--                                </a>-->
+                            <!-- 수정 버튼 -->
+                            <div class="icon-setting pb-2">
+                                <a th:href="@{/profile/{memberId}/edit (memberId=${memberId})}">
+                                    <i class="fas fa-pencil-alt" aria-hidden="true"></i>
+                                </a>
                             </div>
-
-
                             <!-- profile image -->
                             <img class="w-100 lazyestload" data-src="assets/img/dashboard/profile-img-01.jpg"
                                  src="assets/img/dashboard/profile-img-01.jpg" alt="Generic placeholder image">
@@ -1000,27 +998,6 @@
                     </div>
 
                     <button type="submit" class="btn btn-primary text-uppercase">Submit</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- image update IN MODAL -->
-<div class="modal fade" id="image-update" tabindex="-1" role="dialog" aria-label="image-update" aria-hidden="true">
-    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header rounded">
-                <h3 class="modal-title text-uppercase font-weight-bold">image-update</h3>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-
-            <div class="modal-body pb-3">
-                <form class="" action="index.html" method="post">
-                    <div class="mb-3">
-                        <input type="text" class="form-control bg-smoke" required="" placeholder="image">
-                    </div>
-                    <button type="submit" class="btn btn-primary text-uppercase">Update</button>
                 </form>
             </div>
         </div>

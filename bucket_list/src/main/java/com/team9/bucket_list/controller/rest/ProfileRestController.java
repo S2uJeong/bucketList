@@ -19,7 +19,7 @@ import java.util.List;
 @RequestMapping("/member/profile")
 @RequiredArgsConstructor
 @Tag(name = "멤버 프로필", description = "타인이 볼 수 있는 멤버의 프로필입니다. 멤버 평가가 표시됩니다.")
-public class ProfileController {
+public class ProfileRestController {
 
     private final ProfileService profileService;
 

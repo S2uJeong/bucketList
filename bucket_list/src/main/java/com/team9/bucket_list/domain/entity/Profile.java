@@ -16,13 +16,13 @@ public class Profile {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "profile_id")
     private Long id;
 
     private String uploadFileName; // 사용자가 설정한 파일 이름
     private String awsS3FileName; // DB에 저장된 파일의 URL
 
     @OneToOne
-    @JoinColumn(name = "member_id")
     private Member member;
 
     private double rate;

@@ -57,6 +57,7 @@ public class ProfileService {
     public List<ProfileResponse> detail(Long targetMemberId) {
         Member member = checkMemberId(targetMemberId);
         log.info("service의 detail입니다.");
+
         // 평점 평균
         // 람다로 표현 할 방법은 없을까?
         double avg = 0;
@@ -66,6 +67,8 @@ public class ProfileService {
         }
         avg = (avg / memberReviewList.size());
         avg = Math.round(avg * 100) / 100.0;
+
+        member.rateUpdate(avg);
 
         List<Member> memberProfile = new ArrayList<>();
 
@@ -81,7 +84,7 @@ public class ProfileService {
     private String uploadFolder;
 
     @Transactional
-    public ProfileResponse update(Long memberId, String userName, MultipartFile multipartFile) throws IOException {
+    public ProfileResponse update(Long memberId, String userName, MultipartFile multipartFile) {
 
         if (multipartFile.isEmpty()) {
             throw new ApplicationException(ErrorCode.FILE_NOT_EXISTS);
@@ -128,6 +131,7 @@ public class ProfileService {
         Profile profile = Profile.save(uploadFileName, key, member);
         profileRepository.save(profile);
         log.info("🔵 파일 등록 완료 ");
+
         return ProfileResponse.updateProfileImage(uploadFileName, awsS3FileName);
     }
 
