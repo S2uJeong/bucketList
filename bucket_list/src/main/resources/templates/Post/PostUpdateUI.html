@@ -111,7 +111,7 @@
             <a class="" href="javascript:void(0)" id="userName">유저명</a>
             <ul class="dropdown drop-up">
               <li class="">
-                <a href="/post/createform">버킷리스트 작성</a>
+                <a href="/post/createform">버킷리스트 수정</a>
               </li>
 
               <li class="">
@@ -150,7 +150,7 @@
           <div class="col-lg-6">
             <div class="page-title-content">
               <div class="title-border">
-                <h2 class="text-uppercase text-white font-weight-bold">버킷리스트 작성</h2>
+                <h2 class="text-uppercase text-white font-weight-bold">버킷리스트 수정</h2>
               </div>
               <p class="text-white mb-0"></p>
             </div>
@@ -182,37 +182,47 @@
         <div class="tab-content bg-smoke border border-light-gray border-top-0 rounded-bottom px-3 py-5" id="myTabContent">
           <div id="koreaBox" class="tab-pane fade show active" role="tabpanel" aria-labelledby="recent-tab">
             <div class="row">
+
+              <div class="form-group mb-5">
+                <label>모집상태</label>
+                <input type="text" name="post" placeholder="모집상태를 골라주세요." list = "postStatus2" >
+                <datalist id="postStatus2">
+                  <option value="모집중"></option>
+                  <option value="모집완료"></option>
+                </datalist>
+              </div>
+
               <div class="form-group mb-5">
                 <label>제목</label>
-                <input type="text" name="post" class="form-control border-0" placeholder="title">
+                <input type="text" name="post" class="form-control border-0" id="title" placeholder="title">
               </div>
 
               <div class="col-lg-4">
                 <div class="form-group">
                   <label>모집종료일</label>
-                  <input type="text" name="post" class="form-control border-0" placeholder="2023.01.25">
+                  <input type="text" name="post" class="form-control border-0" id="until" placeholder="2023.01.25">
                 </div>
               </div>
 
               <div class="col-lg-4">
                 <div class="form-group">
                   <label>버킷 시작일</label>
-                  <input type="text" name="post" class="form-control border-0" placeholder="2023.02.01">
+                  <input type="text" name="post" class="form-control border-0" id="start" placeholder="2023.02.01">
                 </div>
               </div>
 
               <div class="col-lg-4">
                 <div class="form-group">
                   <label>버킷 종료일</label>
-                  <input type="text" name="post" class="form-control border-0" placeholder="2023.02.08">
+                  <input type="text" name="post" class="form-control border-0" id="end" placeholder="2023.02.08">
                 </div>
               </div>
 
               <div class="col-lg-4">
                 <div class="form-group">
                   <label>카테고리 드롭박스</label>
-                  <input type="text" name="post" list="dl" class="form-control border-0">
-                  <datalist id = "dl">
+                  <input type="text" name="post" list="dl2" id="category" class="form-control border-0">
+                  <datalist id = "dl2">
                     <option value="TRAVEL">여행</option>
                     <option value="EXTREME">레저스포츠</option>
                     <option value="STUDY">공부</option>
@@ -226,14 +236,14 @@
               <div class="col-lg-4">
                 <div class="form-group">
                   <label>모집인원</label>
-                  <input type="number" name="post" class="form-control border-0" placeholder="3">
+                  <input type="number" name="post" id="member" class="form-control border-0" placeholder="3">
                 </div>
               </div>
 
               <div class="col-lg-4">
                 <div class="form-group">
                   <label>비용</label>
-                  <input type="text" name="post" class="form-control border-0" placeholder="3000000">
+                  <input type="text" name="post" id="cost" class="form-control border-0" placeholder="3000000">
                 </div>
               </div>
 
@@ -252,43 +262,52 @@
 
             <div class="form-group mb-5">
               <label>내용</label>
-              <textarea class="form-control border-0" name="post" rows="7"></textarea>
+              <textarea class="form-control border-0" id="content" name="post" rows="7"></textarea>
             </div>
           </div>
 
           <div id="worldBox" class="tab-pane fade show" role="tabpanel" aria-labelledby="recent-tab">
             <div class="row">
+
+              <div class="form-group mb-5">
+                <input type="text" name="post" placeholder="모집상태를 골라주세요." list = "postStatus" >
+                <datalist id = "postStatus">
+                  <option value="모집중"></option>
+                  <option value="모집완료"></option>
+                </datalist>
+              </div>
+
               <div class="form-group mb-5">
                 <label>제목</label>
-                <input type="text" name="post" class="form-control border-0" placeholder="title">
+                <input type="text" name="post" class="form-control border-0" id="title2" placeholder="title">
               </div>
 
               <div class="col-lg-4">
                 <div class="form-group">
                   <label>모집종료일</label>
-                  <input type="text" name="post" class="form-control border-0" placeholder="2023.01.25">
+                  <input type="text" name="post" class="form-control border-0" id="until2" placeholder="2023.01.25">
                 </div>
               </div>
 
               <div class="col-lg-4">
                 <div class="form-group">
                   <label>버킷 시작일</label>
-                  <input type="text" name="post" class="form-control border-0" placeholder="2023.02.01">
+                  <input type="text" name="post" class="form-control border-0" id="start2" placeholder="2023.02.01">
                 </div>
               </div>
 
               <div class="col-lg-4">
                 <div class="form-group">
                   <label>버킷 종료일</label>
-                  <input type="text" name="post" class="form-control border-0" placeholder="2023.02.08">
+                  <input type="text" name="post" class="form-control border-0" id="end2" placeholder="2023.02.08">
                 </div>
               </div>
 
               <div class="col-lg-4">
                 <div class="form-group">
                   <label>카테고리 드롭박스</label>
-                  <input type="text" name="post" list="dl2" class="form-control border-0">
-                  <datalist id = "dl2">
+                  <input type="text" name="post" list="dl1" id="category2" class="form-control border-0">
+                  <datalist id = "dl1">
                     <option value="TRAVEL">여행</option>
                     <option value="EXTREME">레저스포츠</option>
                     <option value="STUDY">공부</option>
@@ -302,14 +321,14 @@
               <div class="col-lg-4">
                 <div class="form-group">
                   <label>모집인원</label>
-                  <input type="number" name="post" class="form-control border-0" placeholder="3">
+                  <input type="number" name="post" id="member2" class="form-control border-0" placeholder="3">
                 </div>
               </div>
 
               <div class="col-lg-4">
                 <div class="form-group">
                   <label>비용</label>
-                  <input type="text" name="post" class="form-control border-0" placeholder="3000000">
+                  <input type="text" name="post" id="cost2" class="form-control border-0" placeholder="3000000">
                 </div>
               </div>
 
@@ -328,60 +347,8 @@
 
             <div class="form-group mb-5">
               <label>내용</label>
-              <textarea class="form-control border-0" name="post" rows="7"></textarea>
+              <textarea class="form-control border-0" id="content2" name="post" rows="7"></textarea>
             </div>
-            <!--            <div>-->
-            <!--              <label>사진첨부</label>-->
-            <!--              &lt;!&ndash; <form action="dropzone.js" name="fileUploader"> 스크립트 따로 빼면 작동 안함&ndash;&gt;-->
-            <!--              <form name="fileUploader">-->
-            <!--                <div class="dropzone" id="fileDropzone"></div> <button id="btn-upload-file">업로드</button>-->
-            <!--              </form>-->
-
-            <!--              <script>-->
-            <!--                //fileDropzone dropzone 설정할 태그의 id로 지정-->
-            <!--                Dropzone.options.fileDropzone = {-->
-            <!--                  url: 'http://localhost:8080/post/detailpost', //🔴 업로드할 url (ex)컨트롤러) 어디에 연결해야하지?-->
-            <!--                  method: 'post', // 기본 post로 request 감. put으로도 할수있음-->
-            <!--                  // headers: {-->
-            <!--                  //     Authorization: `Bearer` + token, // 🔴 Dropzone의 기본 설정은 파일을 올리는 순간 서버로 보내기에 header에 토큰을 붙여 보내야한다.-->
-            <!--                  // },-->
-
-            <!--                  init: function () {-->
-            <!--                    /* 최초 dropzone 설정시 init을 통해 호출 */-->
-            <!--                    var submitButton = document.querySelector("#btn-upload-file");-->
-            <!--                    var myDropzone = this; //closure-->
-            <!--                    submitButton.addEventListener("click", function () {-->
-            <!--                      console.log("🔵 업로드 성공"); //tell Dropzone to process all queued files-->
-            <!--                      myDropzone.processQueue();-->
-            <!--                    });-->
-            <!--                  },-->
-
-            <!--                  autoProcessQueue: false, // 자동업로드 여부 (true일 경우, 바로 업로드 되어지며, false일 경우, 서버에는 올라가지 않은 상태임 processQueue() 호출시 올라간다.)-->
-            <!--                  clickable: true, // 클릭가능여부-->
-            <!--                  paramName: 'image', // 서버에서 사용할 formdata 이름 설정 (default는 file)-->
-
-            <!--                  thumbnailHeight: 120, // Upload icon size-->
-            <!--                  thumbnailWidth: 120, // Upload icon size-->
-
-            <!--                  // maxFiles: 1, // 업로드 파일수-->
-            <!--                  maxFilesize: 10, // 최대업로드용량 : 10MB-->
-            <!--                  // parallelUploads: 1, // 동시파일업로드 수(이걸 지정한 수 만큼 여러파일을 한번에 컨트롤러에 넘긴다.)-->
-            <!--                  uploadMultiple: true, // 다중업로드 기능-->
-            <!--                  timeout: 300000, //커넥션 타임아웃 설정 -> 데이터가 클 경우 꼭 넉넉히 설정해주자-->
-
-            <!--                  addRemoveLinks: true, // 삭제버튼 표시 여부-->
-            <!--                  dictRemoveFile: '삭제', // 삭제버튼 표시 텍스트-->
-            <!--                  acceptedFiles: '.jpeg,.jpg,.png,.gif,.JPEG,.JPG,.PNG,.GIF' // 이미지 파일 포맷만 허용-->
-
-            <!--                };-->
-            <!--              </script>-->
-            <!--            </div>-->
-
-            <!--              <div class="text-center text-md-start text-lg-end">-->
-            <!--              <button type="submit" id="submit" onclick="location.href='booking-step-2.html';" class="btn btn-primary text-uppercase">-->
-            <!--                Next-->
-            <!--              </button>-->
-            <!--              </div>-->
           </div>
         </div>
 
@@ -799,6 +766,146 @@
   }
 
   $(document).ready(function(){
+
+    const temp = new URL(window.location.href).pathname.replace("/post/", "");
+    const postId = temp.split('/', 1);
+    console.log(postId);
+
+    let jsonState;        // Json 반환 상태(성공인지 에러인지)
+    let jsonResult;       // Json 반환 값 저장
+    let title;
+    let userName;    //  => writer로 사용 유저 아이디이름
+    let content;
+    let cost;
+    var location;
+    var lat;
+    var lng;
+    let untilRecruit;
+    let entrantNum;
+    let eventStart;
+    let eventEnd;
+    let status;
+    let category;
+    let filename;
+    let fileNum;
+
+    const getdata = async()=>{
+      try {
+        const response = await axios.get('/post/' + postId + '/json');
+        console.log(response);     // json 데이터 받아온거
+
+        jsonState = response.data.resultCode;
+
+        if (jsonState == "SUCCESS") {
+
+          jsonResult = response.data.result;
+
+          title = jsonResult.title;
+          userName = jsonResult.userName;
+          content = jsonResult.content;
+          cost = jsonResult.cost;
+          location = jsonResult.location;
+          lat = jsonResult.lat;
+          lng = jsonResult.lng;
+          untilRecruit = jsonResult.untilRecruit;
+          entrantNum = jsonResult.entrantNum;
+          eventStart = jsonResult.eventStart;
+          eventEnd = jsonResult.eventEnd;
+          status = jsonResult.status;
+          category = jsonResult.category;
+          filename = jsonResult.fileName;
+          fileNum = jsonResult.fileId;
+
+          console.log(location.charAt(0));
+          console.log("s".length);
+
+          <!-- 문자 BYTE 구하기 -->
+          String.prototype.byteLength = function() {
+            var l= 0;
+
+            for(var idx=0; idx < this.length; idx++) {
+              var c = escape(this.charAt(idx));
+
+              if( c.length==1 ) l ++;
+              else if( c.indexOf("%u")!=-1 ) l += 2;
+              else if( c.indexOf("%")!=-1 ) l += c.length/3;
+            }
+
+            return l;
+          };
+
+          var a = location.charAt(0).byteLength();
+          if (a == 2) {               // 주소의 첫번째 자리문자가 한글이면 Korea부분에 출력
+            var htmlentrantNum = document.getElementById("title");
+            htmlentrantNum.value = title;
+
+            var htmluntil = document.getElementById("until");
+            htmluntil.value = untilRecruit;
+
+            var htmlevent = document.getElementById("start");
+            htmlevent.value = eventStart;
+
+            var htmlevent = document.getElementById("end");
+            htmlevent.value = eventEnd;
+
+            var htmlevent = document.getElementById("category");
+            htmlevent.innerHTML = category;
+
+            var htmlevent = document.getElementById("member");
+            htmlevent.value = entrantNum;
+
+            var htmlcost = document.getElementById("cost");
+            htmlcost.value = cost;
+
+            var htmllocation = document.getElementById("address_kakao");
+            htmllocation.value = location;
+
+
+            // var htmllocation = document.getElementById("pic_file_kr");
+            // htmllocation.value = filename;
+
+            var htmlcontent = document.getElementById("content");
+            htmlcontent.value = content;
+          } else {
+
+            var htmlentrantNum = document.getElementById("title2");
+            htmlentrantNum.value = title;
+
+            var htmluntil = document.getElementById("until2");
+            htmluntil.value = untilRecruit;
+
+            var htmlevent = document.getElementById("start2");
+            htmlevent.value = eventStart;
+
+            var htmlevent = document.getElementById("end2");
+            htmlevent.value = eventEnd;
+
+            var htmlevent = document.getElementById("category");
+            htmlevent.innerHTML = category;
+
+            var htmlevent = document.getElementById("member2");
+            htmlevent.value = entrantNum;
+
+            var htmlcost = document.getElementById("cost2");
+            htmlcost.value = cost;
+
+            var htmllocation = document.getElementById("address");
+            htmllocation.value = location;
+
+            // var htmllocation = document.getElementById("pic_file_wd");
+            // htmllocation.value = filename;
+
+            var htmlcontent = document.getElementById("content2");
+            htmlcontent.value = content;
+          }
+        }
+        }catch(e){
+
+        }
+    }
+
+    getdata();
+
     $("#submit").click(function() {
 
       // 게시물 배열 선언
@@ -813,22 +920,23 @@
         arr.push($(item).val());
       });
 
-      let finddata = $("#address_kakao").val();   // 국내 주소 값 저장
+      var finddata = $("#address_kakao").val();   // 국내 주소 값 저장
 
       console.log(arr);
 
 
       if(finddata.length <1){     // 만약 국내 주소 값의 크기가 1보다 작을때, 즉 국내에서 데이터를 작성한 것이 아닐때
         const WorldData = {       // 해외 데이터
-          title : arr[8],       // 제목
-          untilRecruit : arr[9],    // 모집종료 날짜
-          eventStart : arr[10],       // 시작일
-          eventEnd : arr[11],          // 종료일
-          category : arr[12],       // 카테고리
-          entrantNum : arr[13],         // 모집인원
-          cost : arr[14],              // 비용
-          location : arr[15],        // 장소
-          content : arr[17],         // 내용
+          status:arr[9],
+          title : arr[10],       // 제목
+          untilRecruit : arr[11],    // 모집종료 날짜
+          eventStart : arr[12],       // 시작일
+          eventEnd : arr[13],          // 종료일
+          category : arr[14],       // 카테고리
+          entrantNum : arr[15],         // 모집인원
+          cost : arr[16],              // 비용
+          location : arr[17],        // 장소
+          content : arr[19],         // 내용
         }
         // axios header에 넣을 데이터
         const axiosConfig = {
@@ -842,19 +950,22 @@
             "Content-Type": "multipart/form-data"
           }
         }
+
         const data = async () => {
           try {
-            const response = await axios.post('/post/detailpost', JSON.stringify(WorldData), axiosConfig);
-            const post_id = response.data.result.postId;
+            const response = await axios.post('/post/'+postId+'/edit', JSON.stringify(WorldData), axiosConfig);
+            let url = "/post/" + postId;
+
 
             <!-- 사진 저장 -->
             let frm = new FormData();
             let photoFile = document.getElementById('pic_file_wd');
             frm.append("file", photoFile.files[0]);
 
-            await axios.post('/post/' + post_id + '/files/upload', frm, fileConfig);
+            await axios.delete('/post/'+postId+'/files/'+fileNum);
+            await axios.post('/post/' + postId + '/files/upload', frm, fileConfig);
 
-            let url = "/post/" + post_id;
+
             window.location.replace(url);
           } catch (error) {
             alert("실패");
@@ -866,15 +977,16 @@
 
       else{           // 국내에서 작성했을때
         const KoreaData = {         // 한국 데이터
-          title : arr[0],       // 제목
-          untilRecruit : arr[1],    // 모집종료 날짜
-          eventStart : arr[2],       // 시작일
-          eventEnd : arr[3],          // 종료일
-          category : arr[4],       // 카테고리
-          entrantNum : arr[5],         // 모집인원
-          cost : arr[6],              // 비용
-          location : arr[7],        // 장소
-          content : arr[16],         // 내용
+          status:arr[0],
+          title : arr[1],       // 제목
+          untilRecruit : arr[2],    // 모집종료 날짜
+          eventStart : arr[3],       // 시작일
+          eventEnd : arr[4],          // 종료일
+          category : arr[5],       // 카테고리
+          entrantNum : arr[6],         // 모집인원
+          cost : arr[7],              // 비용
+          location : arr[8],        // 장소
+          content : arr[18],         // 내용
         }
         console.log(KoreaData);
         // axios header에 넣을 데이터
@@ -884,27 +996,29 @@
             "Content-Type": "application/json"
           }
         }
+
         const fileConfig = {
           headers:{
             "Content-Type": "multipart/form-data"
           }
         }
 
+        const data = async () => {
+          try {
+            let posturl = "/post/"+postId+"/update";
+            await axios.post(posturl, JSON.stringify(KoreaData), axiosConfig);
+            let url = "/post/" + postId;
 
-        const data = async()=>{
-          try{
-            const response = await axios.post('/post/detailpost',JSON.stringify(KoreaData),axiosConfig);
-            const post_id = response.data.result.postId;
-
+            <!-- 사진 저장 -->
             let frm = new FormData();
             let photoFile = document.getElementById('pic_file_kr');
             frm.append("file", photoFile.files[0]);
 
-            await axios.post('/post/' + post_id + '/files/upload', frm, fileConfig);
+            await axios.delete('/post/'+postId+'/files/'+fileNum);
+            await axios.post('/post/' + postId + '/files/upload', frm, fileConfig);
 
-            let url = "/post/" + post_id;
             window.location.replace(url);
-          }catch (error){
+          } catch (error) {
             alert("실패");
           }
         }
@@ -917,3 +1031,4 @@
   });
 </script>
 </html>
+

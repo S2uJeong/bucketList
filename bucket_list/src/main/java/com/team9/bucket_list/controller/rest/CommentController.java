@@ -30,9 +30,9 @@ public class CommentController {
     @Operation(summary = "댓글 작성", description = "id를 이용하여 user 레코드를 조회합니다.")
     public Response<CommentCreateResponse> commentCreate(@Parameter(name = "postId", description = "게시글 id") @PathVariable(name = "postId")Long id,
                                                          @RequestBody CommentCreateRequest request){
-        String userName = "han";
-        log.info("댓글작성 username :"+userName);
-        return Response.success(commentService.commentCreate(id,request,userName));
+        Long userId = 1l;
+        log.info("댓글작성 username :"+userId);
+        return Response.success(commentService.commentCreate(id,request,userId));
     }
 
     // 댓글 리스트 전체 출력
@@ -49,8 +49,8 @@ public class CommentController {
     public Response<List<CommentListResponse>> commentUpdate(@Parameter(name = "postId", description = "게시글 id") @PathVariable(name = "postId")Long postid,
                                                              @Parameter(name = "commentId", description = "댓글 id") @PathVariable(name="commentId")Long id,
                                                              @RequestBody CommentCreateRequest request){
-        String userName = "han";
-        List<CommentListResponse> commentList = commentService.updateComment(postid,id,request,userName);
+        Long memberId = 1l;
+        List<CommentListResponse> commentList = commentService.updateComment(postid,id,request,memberId);
         return Response.success(commentList);
     }
 
@@ -59,8 +59,9 @@ public class CommentController {
     @ResponseBody
     public Response<List<CommentListResponse>> commentDelete(@Parameter(name = "postId", description = "게시글 id") @PathVariable(name = "postId")Long postid,
                                                              @Parameter(name = "commentId", description = "댓글 id") @PathVariable(name="commentId")Long id){
-        String userName = "han";
-        List<CommentListResponse> commentList = commentService.deleteComment(postid,id,userName);
+        log.info("댓글 삭제");
+        Long memberId = 1l;
+        List<CommentListResponse> commentList = commentService.deleteComment(postid,id,memberId);
         return Response.success(commentList);
     }
 }

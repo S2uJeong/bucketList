@@ -63,30 +63,35 @@ public class Post extends BaseTimeEntity{
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PostFile> postFileList = new ArrayList<>();
 
-    public static Post update(Post post, PostUpdateRequest request) {
+    public void update(PostUpdateRequest request,Member member,PostStatus status) {
+        this.title = request.getTitle();
+        this.content=request.getContent();
+        this.cost=request.getCost();
+        this.location=request.getLocation();
+        this.untilRecruit=request.getUntilRecruit();
+        this.entrantNum=request.getEntrantNum();
+        this.eventStart=request.getEventStart();
+        this.eventEnd=request.getEventEnd();
+        this.member= member;
+        this.status=status;
+        this.category=request.getCategory();
 
-        PostStatus postStatus = null;
-        // 프론트에서 string 으로 입력 되므로 DB 저장용으로 다시 바꾸기 위해 PostStatus 클래스 형식으로 변환 시켜준다.
-        switch (request.getStatus()) {
-            case "모집중" -> postStatus = PostStatus.JOIN;
-            case "모집완료" -> postStatus = PostStatus.JOINCOMPLETE;
-            default -> postStatus = PostStatus.ERROR;
-        }
-        // 변경요청한 내용대로 post Entity 내용을 바꿔서 빌더로 반환해준다.
-        return Post.builder()
-                .id(post.getId())
-                .title(request.getTitle())
-                .content(request.getContent())
-                .cost(request.getCost())
-                .location(request.getLocation())
-                .untilRecruit(request.getUntilRecruit())
-                .entrantNum(request.getEntrantNum())
-                .eventStart(request.getEventStart())
-                .eventEnd(request.getEventEnd())
-                .status(postStatus)
-                .category(request.getCategory())
-                .build();
+    }
 
+    // == 편의 메서드 == //
+
+    /**
+     * 확정된 인원 반환
+     */
+    public Long getPermitNum() {
+        return getApplicationList().stream()
+                .filter(a -> a.getStatus() == 1)
+                .peek(System.out::println)
+                .count() + 1;
+    }
+
+    public void setRecruitComplete() {
+        this.status = PostStatus.JOINCOMPLETE;
     }
 
     // ====== 지환님 필요 부분 ========

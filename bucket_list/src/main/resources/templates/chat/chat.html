@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> <!-- post.html 배껴옴 -->
 <html lang="en">
   
   <head>
@@ -24,11 +24,7 @@
     <link href='/assets/plugins/rateyo/jquery.rateyo.min.css' rel='stylesheet'>
     
     <link href='/assets/plugins/no-ui-slider/nouislider.min.css' rel='stylesheet'>
-    
-    
-    
-    
-    
+
 
     <!-- GOOGLE FONT -->
     <link href='https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700' rel='stylesheet'>
@@ -36,6 +32,7 @@
     <!-- CUSTOM CSS -->
     <link href="/assets/css/star.css" id="option_style" rel="stylesheet">
     <link href="/assets/css/custom.css" id="custom_style" rel="stylesheet">
+    <link href="/css/chat.css" rel="stylesheet">
 
 
     <!-- FAVICON -->
@@ -43,217 +40,144 @@
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
+    <!--[if lt IE 9] -->
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
+    <!--[endif]-->
 
   </head>     
 
 <body id="body" class="up-scroll">
 
-  <!-- ====================================
-  ——— HEADER
-  ===================================== -->
-  <header class="header" id="pageTop">
-    <!-- Menu Zord -->
-    <nav class="nav-menuzord navbar-sticky">
-      <div class="container clearfix">
-        <div id="menuzord" class="menuzord">
-          <a href="/" class="menuzord-brand">
-            <img class="lazyestload" data-src="/assets/img/logo-color-big.png" src="/assets/img/logo-color-big.png" alt="logo-img">
-          </a>
-
-          <ul class="menuzord-menu menuzord-right">
-            <li class="">
-              <a class="" href="javascript:void(0)">멤버십</a>
-            </li>
-
-            <li class="">
-              <a class="" href="javascript:void(0)">버킷리스트</a>
-              <ul class="dropdown drop-up">
-                <li class="">
-                  <a href="/post">All</a>
-                </li>
-
-                <li class="">
-                  <a href="/post?category=travel">Travel</a>
-                </li>
-
-                <li class="">
-                  <a href="/post?category=extreme">Extreme</a>
-                </li>
-
-                <li class="">
-                  <a href="/post?category=study">Study</a>
-                </li>
-
-                <li class="">
-                  <a href="/post?category=volunteer">Volunteer</a>
-                </li>
-
-                <li class="">
-                  <a href="/post?category=experience">Experience</a>
-                </li>
-
-                <li class="">
-                  <a href="/post?category=etc">Etc</a>
-                </li>
-              </ul>
-            </li>
-
-            <li class="" id="login_li">
-              <a class="" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#login">로그인</a>
-            </li>
-
-            <li class="" id="user_li">
-              <a class="" href="javascript:void(0)" id="userName">유저명</a>
-              <ul class="dropdown drop-up">
-                <li class="">
-                  <a href="/post/createform">버킷리스트 작성</a>
-                </li>
-
-                <li class="">
-                  <a href="/my/likes">좋아요</a>
-                </li>
-
-                <li class="">
-                  <a href="/my">마이 피드</a>
-                </li>
-
-                <li class="">
-                  <a href="index-3.html">마이페이지</a>
-                </li>
-
-                <li class="">
-                  <a href="#" onclick="logout(); return false;">로그아웃</a>
-                </li>
-              </ul>
-            </li>
-
-          </ul>
-        </div>
-      </div>
-    </nav>
-  </header>
-  <div class="main-wrapper packages-list-left-sidebar">
-
-
 <!-- ====================================
-———	PAGE TITLE
+——— HEADER
 ===================================== -->
-<section class="page-title">
-  <div class="page-title-img bg-img bg-overlay-darken" style="background-image: url(/assets/img/pages/page-title-bg6.jpg);">
-    <div class="container">
-      <div class="row align-items-center justify-content-center" style="height: 200px;">
-        <div class="col-lg-6">
-          <div class="page-title-content">
-            <div class="title-border">
-              <h2 class="text-uppercase text-white font-weight-bold">버킷리스트</h2>
-            </div>
-          </div>
-        </div>
+<header class="header" id="pageTop">
+  <!-- Menu Zord -->
+  <nav class="nav-menuzord navbar-sticky">
+    <div class="container clearfix">
+      <div id="menuzord" class="menuzord">
+        <a href="/" class="menuzord-brand">
+          <img class="lazyestload" data-src="/assets/img/logo-color-big.png" src="/assets/img/logo-color-big.png" alt="logo-img">
+        </a>
+
+        <ul class="menuzord-menu menuzord-right">
+          <li class="">
+            <a class="" href="javascript:void(0)">멤버십</a>
+          </li>
+
+          <li class="">
+            <a class="" href="javascript:void(0)">버킷리스트</a>
+            <ul class="dropdown drop-up">
+              <li class="">
+                <a href="/post">All</a>
+              </li>
+
+              <li class="">
+                <a href="/post?category=travel">Travel</a>
+              </li>
+
+              <li class="">
+                <a href="/post?category=extreme">Extreme</a>
+              </li>
+
+              <li class="">
+                <a href="/post?category=study">Study</a>
+              </li>
+
+              <li class="">
+                <a href="/post?category=volunteer">Volunteer</a>
+              </li>
+
+              <li class="">
+                <a href="/post?category=experience">Experience</a>
+              </li>
+
+              <li class="">
+                <a href="/post?category=etc">Etc</a>
+              </li>
+            </ul>
+          </li>
+
+          <li class="" id="login_li">
+            <a class="" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#login">로그인</a>
+          </li>
+
+          <li class="" id="user_li">
+            <a class="" href="javascript:void(0)" id="userName">유저명</a>
+            <ul class="dropdown drop-up">
+              <li class="">
+                <a href="/post/createform">버킷리스트 작성</a>
+              </li>
+
+              <li class="">
+                <a href="/my/likes">좋아요</a>
+              </li>
+
+              <li class="">
+                <a href="/my">마이 피드</a>
+              </li>
+
+              <li class="">
+                <a href="index-3.html">마이페이지</a>
+              </li>
+
+              <li class="">
+                <a href="#" onclick="logout(); return false;">로그아웃</a>
+              </li>
+            </ul>
+          </li>
+
+        </ul>
       </div>
     </div>
-  </div>
-</section>
+  </nav>
+</header>
 
 
 <!-- ====================================
-———	TOUR PACKAGES SECTION
+———	Chat List 만들 영역
 ===================================== -->
-<section class="bg-smoke py-10">
+<section class="bg-smoke py-7 chat-wrap-section">
   <div class="container">
-    <div class="row">
-      <div class="col-md-12 col-lg-3">
+    <div class="row chat-wrap-row">
+      <div class="col-md">
+        <div class="row chat-row">
+          <div class="col-md-6 col-lg-12 chat-box-wrap">
+            <div class="mb-6 bg-white p-3 border-top border-top-5 border-primary rounded list-group list-group-flush shadow chat-box" id="chat-list-box-wrap">
+              <h2 style="margin: 20px 0 10px 0">채팅방</h2>
+              <hr class="dropdown-divider" style="margin: 10px 0 30px 0" id="chat-list-hr">
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="col-md-7">
         <div class="row">
-          <div class="col-md-6 col-lg-12">
-            <div class="mb-6 bg-white p-3 border-top border-top-5 border-primary rounded">
-              <form class="" action="index.html" method="GET">
-                <h4 class="text-uppercase font-weight-bold">Search</h4>
-                
-                <div class="mb-5">
-                  <div class="select-default select-category-1">
-                    <select class="select-option">
-                      <option>Category</option>
-                      <option>Travel</option>
-                      <option>Extreme</option>
-                      <option>Study</option>
-                      <option>Volunteer</option>
-                      <option>Experience</option>
-                      <option>Etc</option>
-                    </select>
-                  </div>
-                </div>
-            
-                <div class="form-group form-group-icon form-group-icon-dark mb-5">
-                  <i class="far fa-calendar-alt" aria-hidden="true"></i>
-                  <input type="text" class="form-control daterange-picker sidebar-daterange-picker" autocomplete="off" name="dateRange" value=""
-                    placeholder="MM/DD/YYYY" />
-                </div>
-            
-                <div class="form-group form-group-icon form-group-icon-dark mb-5">
-                  <i class="far fa-calendar-alt" aria-hidden="true"></i>
-                  <input type="text" class="form-control daterange-picker sidebar-daterange-picker" autocomplete="off" name="dateRange" value=""
-                    placeholder="MM/DD/YYYY" />
-                </div>
+          <div class="col-md-6 col-lg-12 chat-box-wrap">
+            <div class="bg-white border-top border-top-5 border-primary rounded d-flex align-items-center chat-room-title-box">
+              <h3 class="chat-room-title" id="chat-room-name">&nbsp;</h3>
+              <input type="hidden" name="roomId" value="" id="chat-room-id">
+            </div>
+            <div class="mb-6 bg-white p-3 rounded list-group list-group-flush chat-room-box d-flex flex-column" id="chat-message-box-wrap">
 
-                <div class="d-grid">
-                  <button type="button" onclick="location.href='javascript:void(0)';"
-                  class="btn btn-xs btn-outline-secondary text-uppercase">Search</button>
-                </div>
-              </form>
+              <!--<div style="height:1000px"></div>-->
+              <!--<h2 style="margin: 20px 0 10px 0" id="chat-room-name"></h2>
+              <hr class="dropdown-divider" style="margin: 10px 0 30px 0">-->
+
+            </div>
+            <div class="mb-6 bg-white chat-text-box">
+              <textarea class="text-area" spellcheck = "false"></textarea>
+              <button type="button" class="btn btn-light send-button" onclick="sendMessage()">전송</button>
             </div>
           </div>
 
-          <div class="col-md-6 col-lg-12">
-            <div class="mb-6 bg-white p-3 border-top border-top-5 border-primary rounded overflow-hidden">
-              <h4 class="text-uppercase font-weight-bold">Price</h4>
-
-              <div class="price-range mt-5" id="price-range">
-                <div class="price-range-content mb-5">
-                  <span class="price-value" id="lower-value"></span>
-                  <span class="mx-3"><i class="fa fa-minus" aria-hidden="true"></i></span>
-                  <span class="price-value" id="upper-value"></span>
-                </div>
-
-                <div class="mb-6" id="slider-non-linear-step"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-lg-8 col-xl-9">
-        <div id="list_container" class="row">
-<!--          포스트 리스트 부분-->
-<!--          포스트 리스트 부분-->
-<!--          포스트 리스트 부분-->
         </div>
       </div>
     </div>
   </div>
-
-  <!-- ====================================
-———	PAGINATION
-===================================== -->
-<section class="pt-5 pt-md-7">
-  <div class="container">
-    <nav aria-label="Page navigation">
-      <ul class="pagination justify-content-center align-items-center">
-<!--          페이징 부분-->
-<!--          페이징 부분-->
-<!--          페이징 부분-->
-      </ul>
-    </nav>
-  </div>
 </section>
-
-</section>
-
-
-
-  </div><!-- element wrapper ends -->
 
     <!-- ====================================
     ——— FOOTER SECTION
@@ -464,10 +388,10 @@
       </script>
     </footer>
 
-  
-    <!-- ====================================
-    ——— MODAL SECTION
-    ===================================== -->
+
+  <!-- ====================================
+——— MODAL SECTION
+===================================== -->
   <!-- Signup Modal -->
   <div class="modal fade" id="signup" tabindex="-1" role="dialog" aria-label="signupModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
@@ -590,69 +514,64 @@
     </div>
   </div>
 
-    <!-- INQUIRY IN MODAL -->
-    <div class="modal fade" id="inquiry" tabindex="-1" role="dialog" aria-label="inquiryModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header rounded">
-            <h3 class="modal-title text-uppercase font-weight-bold">Inquiry about tour</h3>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
+  <!-- INQUIRY IN MODAL -->
+  <div class="modal fade" id="inquiry" tabindex="-1" role="dialog" aria-label="inquiryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header rounded">
+          <h3 class="modal-title text-uppercase font-weight-bold">Inquiry about tour</h3>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
 
-          <div class="modal-body pb-3">
-            <form class="" action="index.html" method="post">
-              <div class="mb-3">
-                <input type="text" class="form-control bg-smoke" required="" placeholder="Your Name">
-              </div>
+        <div class="modal-body pb-3">
+          <form class="" action="index.html" method="post">
+            <div class="mb-3">
+              <input type="text" class="form-control bg-smoke" required="" placeholder="Your Name">
+            </div>
 
-              <div class="mb-3">
-                <input type="email" class="form-control bg-smoke" required="" placeholder="Your Email">
-              </div>
-    
-              <div class="mb-3">
-                <input type="number" class="form-control bg-smoke" required="" placeholder="Phone Number">
-              </div>
+            <div class="mb-3">
+              <input type="email" class="form-control bg-smoke" required="" placeholder="Your Email">
+            </div>
 
-              <div class="mb-3">
-                <textarea class="form-control bg-smoke" rows="6" placeholder="Message"></textarea>
-              </div>
-    
-              <button type="submit" class="btn btn-primary text-uppercase">Submit</button>
-            </form>
-          </div>
+            <div class="mb-3">
+              <input type="number" class="form-control bg-smoke" required="" placeholder="Phone Number">
+            </div>
+
+            <div class="mb-3">
+              <textarea class="form-control bg-smoke" rows="6" placeholder="Message"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary text-uppercase">Submit</button>
+          </form>
         </div>
       </div>
     </div>
+  </div>
 
     <!-- Javascript -->
     <script src="/assets/plugins/jquery/jquery-3.4.1.min.js"></script>
     <script src="/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="/assets/plugins/menuzord/js/menuzord.js"></script>
-    
-    
-    
     <script src='/assets/plugins/fancybox/jquery.fancybox.min.js'></script>
-    
     <script src='/assets/plugins/selectric/jquery.selectric.min.js'></script>
     <script src='/assets/plugins/daterangepicker/js/moment.min.js'></script>
     <script src='/assets/plugins/daterangepicker/js/daterangepicker.min.js'></script>
     <script src='/assets/plugins/rateyo/jquery.rateyo.min.js'></script>
     <script src="/assets/plugins/lazyestload/lazyestload.js"></script>
-
-    
     <script src='/assets/plugins/no-ui-slider/nouislider.min.js'></script>
-
-
-
-
-    
     <script src="/assets/plugins/smoothscroll/SmoothScroll.js"></script>
-    
+    <script src="/assets/js/star.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script src="/assets/plugins/smoothscroll/SmoothScroll.js"></script>
+
     <script src="/assets/js/star.js"></script>
 
     <script src="/js/axios.js"></script>
     <script src="/js/header.js"></script>
-    <script src="/js/paging/postList.js"></script>
-  </body>
+    <script src="/js/chat.js"></script>
+
+</body>
 </html>
 

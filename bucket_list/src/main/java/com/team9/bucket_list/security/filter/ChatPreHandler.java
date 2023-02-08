@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.messaging.support.MessageHeaderAccessor;
@@ -35,6 +36,14 @@ public class ChatPreHandler implements ChannelInterceptor {
             StompHeaderAccessor headerAccessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
 
             String authorizationHeader = String.valueOf(headerAccessor.getNativeHeader("Authorization"));
+
+            StompCommand command = headerAccessor.getCommand();
+
+            log.info("stomp command : "+ command);
+
+            if(command.equals(StompCommand.UNSUBSCRIBE)) return message;
+            else if (command.equals(StompCommand.SEND)) return message;
+            else if (command.equals(StompCommand.MESSAGE)) return message;
 
             log.info("jwt : " + authorizationHeader);
 

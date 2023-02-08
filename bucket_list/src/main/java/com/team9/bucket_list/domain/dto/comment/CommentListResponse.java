@@ -28,7 +28,7 @@ public class CommentListResponse {
 
     public static CommentListResponse EntityToDto(Comment comment,String userName){
         return comment.getDeletedAt() != null ?
-                CommentListResponse.builder().id(comment.getId()).content("삭제된 댓글").createAt(comment.getCreatedAt()).userName(null).parentId(comment.getParent()!=null?comment.getParent().getId():null).build() :    // 삭제된 댓글일 경우
+                CommentListResponse.builder().id(comment.getId()).content("삭제된 댓글").createAt(comment.getCreatedAt()).userName("").parentId(comment.getParent()!=null?comment.getParent().getId():null).build() :    // 삭제된 댓글일 경우
                 CommentListResponse.builder().id(comment.getId()).content(comment.getContent()).createAt(comment.getCreatedAt()).userName(userName).parentId(comment.getParent()!=null?comment.getParent().getId():null).build();
     }
 }
