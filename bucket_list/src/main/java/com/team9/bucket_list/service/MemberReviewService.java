@@ -1,7 +1,6 @@
 package com.team9.bucket_list.service;
 
 import com.team9.bucket_list.domain.dto.memberReview.MemberReviewRequest;
-import com.team9.bucket_list.domain.entity.Alarm;
 import com.team9.bucket_list.domain.entity.Member;
 import com.team9.bucket_list.domain.entity.MemberReview;
 import com.team9.bucket_list.execption.ApplicationException;
@@ -15,7 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -68,8 +67,13 @@ public class MemberReviewService {
         Member targetMember = checkMemberId(memberReviewRequest.getTargetMemberId());
         Member fromMember = checkMemberId(memberId);
 
-        MemberReview memberReview = memberReviewRepository.save(memberReviewRequest.toEntity(targetMember, fromMember));
-        // 리뷰 작성하라는 알람 삭제
+        Optional<MemberReview> mem = memberReviewRepository.findByMember_IdAndWriterId(memberReviewRequest.getTargetMemberId(), memberId);
+        if(mem.isPresent()){
+//            throw new ApplicationException(ErrorCode.DUPLICATED_REVIEW);
+            return "duplicated";
+        }
+
+        memberReviewRepository.save(memberReviewRequest.toEntity(targetMember, fromMember));
 
         // alarmRepository.save(Alarm.of(targetMember, targetMember.getUserName()+"에 대한 리뷰가 작성 되었습니다."));
 

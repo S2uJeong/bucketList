@@ -12,6 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class BucketlistReviewService {
@@ -52,8 +54,13 @@ public class BucketlistReviewService {
         Post post = checkPost(bucketlistReviewRequest.getTargetPostId());
         Member member = checkMember(memberId);
 
+        Optional<BucketlistReview> bucket = bucketlistReviewRepository.findByWriterIdAndPost_Id(memberId, bucketlistReviewRequest.getTargetPostId());
+        if(bucket.isPresent()){
+//            throw new ApplicationException(ErrorCode.DUPLICATED_REVIEW);
+            return "duplicated";
+        }
+
         bucketlistReviewRepository.save(bucketlistReviewRequest.toEntity(post, member));
-        // 리뷰 작성하라는 알람 삭제
 
         // alarmRepository.save(Alarm.of(member, post.getTitle()+"에 대한 리뷰가 작성 되었습니다."));
 
