@@ -13,7 +13,7 @@ public class MemberReviewRequest {
 
     private String content;
     private Integer rate;
-    private Long targetMemberId;
+    private Long targetMemberName;
 
     public MemberReview toEntity(Member targetMember, Member fromMember) {
         return MemberReview.builder()

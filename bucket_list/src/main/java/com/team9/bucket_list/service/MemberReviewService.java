@@ -64,10 +64,10 @@ public class MemberReviewService {
 
     public String create(Long memberId, MemberReviewRequest memberReviewRequest) {
 
-        Member targetMember = checkMemberId(memberReviewRequest.getTargetMemberId());
+        Member targetMember = checkMemberId(memberReviewRequest.getTargetMemberName());
         Member fromMember = checkMemberId(memberId);
 
-        Optional<MemberReview> mem = memberReviewRepository.findByMember_IdAndWriterId(memberReviewRequest.getTargetMemberId(), memberId);
+        Optional<MemberReview> mem = memberReviewRepository.findByMember_IdAndWriterId(memberReviewRequest.getTargetMemberName(), memberId);
         if(mem.isPresent()){
 //            throw new ApplicationException(ErrorCode.DUPLICATED_REVIEW);
             return "duplicated";
