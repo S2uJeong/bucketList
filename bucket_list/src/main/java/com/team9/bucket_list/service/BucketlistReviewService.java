@@ -28,8 +28,8 @@ public class BucketlistReviewService {
                 .orElseThrow(() -> new ApplicationException(ErrorCode.POST_NOT_FOUND));
     }
 
-    public Member checkMember(String userName) {
-        return memberRepository.findByUserName(userName)
+    public Member checkMember(Long memberId) {
+        return memberRepository.findById(memberId)
                 .orElseThrow(() -> new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED));
     }
 
@@ -47,59 +47,15 @@ public class BucketlistReviewService {
         return bucketlistReviewRepository.findAllByPost(post, pageable);
     }
 
-    public String create(Long postId, String userName, BucketlistReviewRequest bucketlistReviewRequest) {
+    public String create(Long memberId, BucketlistReviewRequest bucketlistReviewRequest) {
 
-        Post post = checkPost(postId);
-        Member member = checkMember(userName);
-        Bucketlist bucketlist = bucketlistRepository.findByPostId(postId)
-                .orElseThrow(() -> new ApplicationException(ErrorCode.BUCKETLIST_NOT_FOUND));
+        Post post = checkPost(bucketlistReviewRequest.getTargetPostId());
+        Member member = checkMember(memberId);
 
-        if (!bucketlist.getMemberBucketlistList().contains(userName)) {
-            throw new ApplicationException(ErrorCode.INVALID_PERMISSION);
-        }
-
-//        BucketlistReview bucketlistReview = bucketlistReviewRepository.save(bucketlistReviewRequest.toEntity(member, bucketlist));
-        bucketlistReviewRepository.save(bucketlistReviewRequest.toEntity(member, bucketlist));
+        bucketlistReviewRepository.save(bucketlistReviewRequest.toEntity(post, member));
+        // 리뷰 작성하라는 알람 삭제
 
         // alarmRepository.save(Alarm.of(member, post.getTitle()+"에 대한 리뷰가 작성 되었습니다."));
-
-        return "true";
-    }
-
-    @Transactional
-    public String update(Long postId, Long reviewId, String userName, BucketlistReviewRequest bucketlistReviewRequest) {
-
-        Post post = checkPost(postId);
-        BucketlistReview bucketlistReview = checkBucketlistReview(reviewId);
-        Member member = checkMember(userName);
-
-        if (bucketlistReview.getWriterId() != member.getId()) {
-            throw new ApplicationException(ErrorCode.INVALID_PERMISSION);
-        }
-
-        bucketlistReview.update(bucketlistReviewRequest.getContent());
-        bucketlistReviewRepository.save(bucketlistReview);
-
-        // alarmRepository.save(Alarm.of(member, member.getUserName()+"에 대한 리뷰가 수정 되었습니다."));
-
-        return "true";
-    }
-
-    @Transactional
-    public String delete(Long postId, Long reviewId, String userName) {
-
-        Post post = checkPost(postId);
-        BucketlistReview bucketlistReview = checkBucketlistReview(reviewId);
-        Member member = checkMember(userName);
-
-        if (bucketlistReview.getWriterId() != member.getId()) {
-            throw new ApplicationException(ErrorCode.INVALID_PERMISSION);
-        }
-
-//        bucketlistRepository.deleteById(postId);
-        bucketlistReviewRepository.deleteById(postId);
-
-       // alarmRepository.save(Alarm.of(member, member.getUserName()+"에 대한 리뷰가 삭제 되었습니다."));
 
         return "true";
     }
