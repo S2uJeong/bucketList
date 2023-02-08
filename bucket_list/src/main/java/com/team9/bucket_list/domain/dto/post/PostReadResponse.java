@@ -77,12 +77,14 @@ public class PostReadResponse {
         return posts.map(post -> PostReadResponse.builder()
                 .postId(post.getId())
                 .title(post.getTitle())
-//                .member(post.getMember())
+                .userName(post.getMember().getUserName())
                 .status(post.getStatus())
                 .untilRecruit(post.getUntilRecruit())
                 .eventStart(post.getEventStart())
                 .eventEnd(post.getEventEnd())
-                .fileName(post.getPostFileList().get(0).getAwsS3FileName())
+                .location(post.getLocation())
+                .cost(post.getCost())
+                .fileName(post.getPostFileList().isEmpty()?  "noImage" : post.getPostFileList().get(0).getAwsS3FileName())
 //                .applicationList(post.getApplicationList()) // 총 승인 인원 확인
                 .build()
         );
