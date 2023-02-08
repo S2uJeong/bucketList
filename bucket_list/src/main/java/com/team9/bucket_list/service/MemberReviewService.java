@@ -69,6 +69,7 @@ public class MemberReviewService {
         Member fromMember = checkMemberId(memberId);
 
         MemberReview memberReview = memberReviewRepository.save(memberReviewRequest.toEntity(targetMember, fromMember));
+        // 리뷰 작성하라는 알람 삭제
 
         // alarmRepository.save(Alarm.of(targetMember, targetMember.getUserName()+"에 대한 리뷰가 작성 되었습니다."));
 
