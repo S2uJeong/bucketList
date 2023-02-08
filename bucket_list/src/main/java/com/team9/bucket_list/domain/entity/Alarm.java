@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Alarm {
+public class Alarm extends BaseTimeEntity{
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "alarm_id")
     private Long id;
@@ -27,14 +27,16 @@ public class Alarm {
     private Member member;
 
     private Long postId;
+    private String postTitle;
     private String senderName;
 
-    public static Alarm save(byte category, Member member, Long postId, String senderName) {
+    public static Alarm save(byte category, Member member, Long postId, String postName, String senderName) {
         return Alarm.builder()
                 .readStatus((byte) 0)
                 .category(category)
                 .member(member)
                 .postId(postId)
+                .postTitle(postName)
                 .senderName(senderName)
                 .build();
     }
@@ -47,6 +49,7 @@ public class Alarm {
                 .member(alarm.getMember())
                 .category(alarm.getCategory())
                 .postId(alarm.getPostId())
+                .postTitle(alarm.getPostTitle())
                 .build();
     }
 }
