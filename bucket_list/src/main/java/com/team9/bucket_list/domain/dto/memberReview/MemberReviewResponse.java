@@ -14,7 +14,7 @@ public class MemberReviewResponse {
 
     private Long id;
     private String content;
-    private Integer score;
+    private Double score;
     private Long writerId;
 
     public static MemberReviewResponse response(MemberReview memberReview) {
