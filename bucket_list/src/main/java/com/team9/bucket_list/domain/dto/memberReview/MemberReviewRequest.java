@@ -11,25 +11,16 @@ import lombok.NoArgsConstructor;
 @Getter
 public class MemberReviewRequest {
 
-    private String title;
-    private String message;
-    private Integer score;
+    private String content;
+    private Integer rate;
+    private Long targetMemberId;
 
     public MemberReview toEntity(Member targetMember, Member fromMember) {
         return MemberReview.builder()
                 .member(targetMember)
                 .writerId(fromMember.getId())
-                .content(this.message)
-                .rate(this.score)
-                .title(this.title)
-                .build();
-    }
-
-    public MemberReview update(MemberReviewRequest memberReviewRequest) {
-        return MemberReview.builder()
-                .content(memberReviewRequest.message)
-                .rate(memberReviewRequest.score)
-                .title(memberReviewRequest.title)
+                .content(this.content)
+                .rate(this.rate)
                 .build();
     }
 }

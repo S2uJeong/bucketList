@@ -10,6 +10,7 @@ import com.team9.bucket_list.repository.AlarmRepository;
 import com.team9.bucket_list.repository.MemberRepository;
 import com.team9.bucket_list.repository.MemberReviewRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MemberReviewService {
 
     private final MemberRepository memberRepository;
@@ -39,8 +41,8 @@ public class MemberReviewService {
                 .orElseThrow(() -> new ApplicationException(ErrorCode.REVIEW_NOT_FOUND));
     }
 
-    public Page<MemberReview> list (Long targetUserId, Pageable pageable) {
-        Member member = checkMemberId(targetUserId);
+    public Page<MemberReview> list (String targetUserName, Pageable pageable) {
+        Member member = checkMemberName(targetUserName);
         return memberReviewRepository.findAllByMember(member, pageable);
     }
 
@@ -61,56 +63,15 @@ public class MemberReviewService {
 //    }
 
 
-    public String create(Long targetUserId, String userName, MemberReviewRequest memberReviewRequest) {
+    public String create(Long memberId, MemberReviewRequest memberReviewRequest) {
 
-        Member targetMember = checkMemberId(targetUserId);
-        Member fromMember = checkMemberName(userName);
-
-        if(!targetMember.getMemberBucketlistList().contains(fromMember)) {
-            throw new ApplicationException(ErrorCode.INVALID_PERMISSION);
-        }
+        Member targetMember = checkMemberId(memberReviewRequest.getTargetMemberId());
+        Member fromMember = checkMemberId(memberId);
 
         MemberReview memberReview = memberReviewRepository.save(memberReviewRequest.toEntity(targetMember, fromMember));
 
         // alarmRepository.save(Alarm.of(targetMember, targetMember.getUserName()+"에 대한 리뷰가 작성 되었습니다."));
 
-
         return "true";
     }
-
-    public String update(Long targetUserId, Long reviewId, String userName, MemberReviewRequest memberReviewRequest) {
-
-        Member targetMember = checkMemberId(targetUserId);
-        Member fromMember = checkMemberName(userName);
-        MemberReview memberReview = checkMemberReview(reviewId);
-
-        if (memberReview.getWriterId() != fromMember.getId()) {
-            throw new ApplicationException(ErrorCode.INVALID_PERMISSION);
-        }
-
-        memberReviewRepository.save(memberReviewRequest.update(memberReviewRequest));
-
-        // alarmRepository.save(Alarm.of(targetMember, targetMember.getUserName()+"에 대한 리뷰가 수정 되었습니다."));
-
-        return "true";
-    }
-
-    public String delete(Long targetUserId, Long reviewId, String userName) {
-
-        Member targetMember = checkMemberId(targetUserId);
-        Member fromMember = checkMemberName(userName);
-        MemberReview memberReview = checkMemberReview(reviewId);
-
-        if (memberReview.getWriterId() != fromMember.getId()) {
-            throw new ApplicationException(ErrorCode.INVALID_PERMISSION);
-        }
-
-        // alarmRepository.save(Alarm.of(targetMember, targetMember.getUserName()+"에 대한 리뷰가 삭제 되었습니다."));
-
-        memberReviewRepository.deleteById(memberReview.getId());
-
-        return "true";
-    }
-
-
 }
