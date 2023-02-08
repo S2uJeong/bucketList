@@ -366,6 +366,7 @@
 
 
 
+
             <!-- 포스트 수정,삭제 버튼 게시물 작성자만 뜨도록 설정 -->
               // window.onload = function () {
                 let postUpdateButton = document.getElementById("postUpdateButton");
@@ -426,7 +427,17 @@
             var htmlcontent = document.getElementById("content");
             htmlcontent.innerHTML = content;
 
-            document.getElementById("image_box").src = 'https://bucketlist-post-image-bucket.s3.ap-northeast-2.amazonaws.com/' + fileName;
+
+            console.log(fileName);
+
+            <!-- 이미지 출력 경로 지정 -->
+            if(fileName == "noImage"){
+              document.getElementById("image_box").src = "/assets/img/noImage.png";
+            }else {
+              document.getElementById("image_box").src = 'https://bucketlist-post-image-bucket.s3.ap-northeast-2.amazonaws.com/' + fileName;
+            }
+
+
 
             const accessToken = localStorage.getItem("accessToken");
             const payload = accessToken.split('.')[1];
@@ -835,8 +846,8 @@
               <!--              <div id="package-slider" class="owl-carousel owl-theme package-slider col-md-6">-->
               <!--              <div id="package-slider" class="owl-carousel owl-theme package-slider col-md-6">-->
               <div class="item">
-                <!--                <img class="lazyestload" src="/assets/img/packages/package-slider-03.jpg" alt="image">-->
-                <img id="image_box" class="lazyestload" src="/assets/img/packages/package-slider-03.jpg" alt="image">
+<!--                                <img class="lazyestload" src="/assets/img/packages/package-slider-03.jpg" alt="image">-->
+                <img id="image_box" class="lazyestload" src="" alt="image">
               </div>
 
               <!--              <div class="item">-->
