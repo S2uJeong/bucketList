@@ -100,6 +100,16 @@
   <script type="text/javascript">
     $(document).ready(function() {
 
+
+
+     const accessToken = localStorage.getItem("accessToken");
+     const payload = accessToken.split('.')[1];
+     let accessName = JSON.parse(decodeURIComponent(escape(window.atob(payload)))).userName;
+
+     console.log(accessName);
+
+
+
       <!-- PostId에 따른 데이터 호출하기 -->
 
       const postId = new URL(window.location.href).pathname.replace("/post/", "");
@@ -236,17 +246,6 @@
                     "<div style='display: none' ></div>\n"+
                     "<a class=\"me-n4 comment-tool\" id=\"navbarDropdown\" href=\"#\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\">. . .</a>\n"+
                     "<ul class=\"dropdown-menu droclassName-menu-end\" aria-labelledby=\"navbarDropdown\">\n" +
-                    // "<li><a data-id=\"{대댓글 아이디}\" onclick='commentReplyUpdateButton(this)' class=\"dropdown-item\" hrclassName\">수정</a></li>\n"+
-                    <!-- 수정버튼 클릭시 글작성 칸 출력-->
-                    // "<form class=\"comment-reply-form\" id=\"{대댓글 노출}\" style=\"display: none;\">\n"+
-                    // "<div class=\"form-group mb-2\">\n"+
-                    // "<textarea class=\"form-control border-0 bg-smoke\" id =\"replyComment\"  placeholder=\"Comment\" rows=\"2\"></textarea>\n"+
-                    // "</div>\n"+
-                    // "<div style=\"display: flex; justify-content: right\">\n"+
-                    // "<button type=\"button\" data-id=\"{대댓글 아이디2}\" onclick=\"commentReplyButton(this)\"  class=\"btn btn-outline-info-comment-button mb-2\" style=\"padding: 8px 18px\">등록</button>\n"+
-                    // "</div>\n"+
-                    // "</form>\n"+
-                    <!-- 수정버튼 클릭시 글작성 칸 출력 종료 -->
                     "<li><a data-id=\"{대댓글 삭제}\" onclick=\'commentReplyDeleteButton(this)\' class=\"dropdown-item\" hrclassName\">삭제</a></li>\n"+
                     "</ul>\n"+
                     "<div>\n"+
@@ -291,11 +290,7 @@
                           .replace("{작성일자}", replycomment.createAt)
                           .replace("{내용}", replycomment.content)
                           .replace("{postId}",replycomment.parentId)
-                          // .replace("{대댓글 노출}",replycomment.id)
-                          // .replace("{대댓글 아이디}",replycomment.id)
-                          // .replace("{대댓글 아이디2}",replycomment.id)
                           .replace("{대댓글 삭제}",replycomment.id);
-                  // .replace("replyComment".value,replycomment.content);
                 });
 
                 let commentResult = document.getElementById('list_comment');          // 대댓글 html에 대댓글 갯수만큼 데이터를 넣어 저장한 후
@@ -337,7 +332,7 @@
                   let url = "/post/" + postId;
                   window.location.replace(url);
                 } catch (error) {
-                  alert("실패");
+                  alert("404 페이지");
                 }
               }
               sendData();
@@ -370,7 +365,31 @@
             permitNum = jsonResult.permitNum;
 
 
+
+            <!-- 포스트 수정,삭제 버튼 게시물 작성자만 뜨도록 설정 -->
+              // window.onload = function () {
+                let postUpdateButton = document.getElementById("postUpdateButton");
+                let postDeleteButton = document.getElementById("postDeleteButton");
+
+                console.log(postUpdateButton);
+                console.log(postDeleteButton);
+
+                console.log(accessName);
+                console.log(userName);
+                console.log(accessName == userName)
+                if (accessName == userName) {
+                  postUpdateButton.style.display = "block";
+                  postDeleteButton.style.display = "block";
+                } else {
+                  postUpdateButton.style.display = "none";
+                  postDeleteButton.style.display = "none";
+                }
+              // }
+              // onload();
+
+
             googlemap(lat, lng, location, title, content);
+
             console.log(lat);
             console.log(lng);
 
@@ -381,6 +400,8 @@
               htmlPostStatus.innerText = "모집완료";
             }
 
+
+            <!-- 포스트 데이터 출력 -->
             var htmlentrantNum = document.getElementById("entrantNum");
             htmlentrantNum.innerHTML = "현재 인원 :" + "(" + permitNum + "/" + entrantNum + ")";
 
@@ -503,13 +524,13 @@
               .catch((err) => {
                 console.log(err);
               });
-
-
     });
 
   </script>
 
   <script>
+
+
     <!-- 대댓글 댓글쓰기 누르면 댓글 작성창 띄움 -->
     function showCommentReply(commentReplyId) {
       console.log(commentReplyId);
@@ -565,46 +586,6 @@
       }
       sendData();
     }
-
-    <!-- 대댓글 수정 -->
-    // function commentReplyUpdateButton(comment) {
-    //
-    //   <!-- 이 부분부터 다시 작성, 현재 대댓글에 기존 댓글의 내용을 출력시켜야함 -->
-    //   let replycommentUpdate = $("#replyComment").val();   // 댓글 값 저장
-    //   const parentId = $(comment).data('id');
-    //   <!-- -->
-    //
-    //
-    //
-    //   console.log(replycommentUpdate);
-    //   console.log(parentId);
-    //   const CommentData = {       // 서버로 보낼 데이터
-    //     "content" : replycommentUpdate,         //  댓글 내용            comment
-    //     "parentId" : parentId // 부모댓글 ID가 들어가야함
-    //   }
-    //
-    //   console.log(CommentData);
-    //
-    //   // axios header에 넣을 데이터
-    //   const axiosConfig = {
-    //     headers: {
-    //       "Content-Type": "application/json"
-    //     }
-    //   }
-    //
-    //   const sendData = async () => {
-    //     try {
-    //
-    //       const response = await axios.put('/comment/'+postId+'/comments/'+parentId, JSON.stringify(CommentData), axiosConfig);
-    //       alert("전송 성공");
-    //       let url = "/post/" + postId;
-    //       window.location.replace(url);
-    //     } catch (error) {
-    //       alert("실패");
-    //     }
-    //   }
-    //   sendData();
-    // }
 
 
     <!-- 대댓글 삭제 -->
@@ -791,8 +772,8 @@
       <div class="row">
         <div class="col-md-12">
           <div class="mt-n7" style="float: right">
-            <button type="button" onclick="updatePost()" class="btn btn-outline-dark mb-2" style="padding: 8px 18px">수정</button>
-            <button type="button" onclick="deletePost()" class="btn btn-outline-dark mb-2" style="padding: 8px 18px">삭제</button>
+            <button type="button" id="postUpdateButton" onclick="updatePost()" class="btn btn-outline-dark mb-2" style="padding: 8px 18px; display: none">수정</button>
+            <button type="button" id="postDeleteButton" onclick="deletePost()" class="btn btn-outline-dark mb-2" style="padding: 8px 18px; display: none">삭제</button>
           </div>
           <div>
             <h2 class="text-uppercase mb-2" id="title"></h2>
@@ -1429,6 +1410,7 @@
 
 <script src="/assets/js/custom.js"></script>
 <script src="/js/header.js"></script>
+
 
 </body>
 </html>
