@@ -29,9 +29,6 @@ public class Bucketlist {
     @OneToMany(mappedBy = "bucketlist")
     private List<MemberBucketlist> memberBucketlistList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "bucketlist")
-    private List<BucketlistReview> bucketlistReviewList = new ArrayList<>();
-
     public void update(String content) {
         post.modifiedContent(content);
     }

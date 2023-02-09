@@ -12,13 +12,17 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BucketlistReviewRequest {
-    private String content;
 
-    public BucketlistReview toEntity(Member member, Bucketlist bucketlist) {
+    private String content;
+    private Integer rate;
+    private Long targetPostId;
+
+    public BucketlistReview toEntity(Post post, Member member) {
         return BucketlistReview.builder()
-                .content(this.content)
+                .post(post)
                 .writerId(member.getId())
-                .bucketlist(bucketlist)
+                .content(this.content)
+                .rate(this.rate)
                 .build();
     }
 }

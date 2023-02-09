@@ -12,4 +12,6 @@ import java.util.Optional;
 public interface BucketlistReviewRepository extends JpaRepository<BucketlistReview, Long> {
 //    Page<BucketlistReview> findAllBucketlist(Bucketlist bucketlist, Pageable pageable);
     Page<BucketlistReview> findAllByPost(Post post, Pageable pageable);
+
+    Optional<BucketlistReview> findByWriterIdAndPost_Id(Long fromMemberId, Long postId);
 }

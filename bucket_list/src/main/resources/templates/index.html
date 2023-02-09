@@ -618,6 +618,70 @@
       </div>
     </div>
 
+    <!-- MemberReview Modal -->
+    <div class="modal fade" id="memberReview" tabindex="-1" role="dialog" aria-label="loginModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header rounded">
+            <h3 class="modal-title text-uppercase font-weight-bold">멤버 리뷰</h3>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+
+          <div class="modal-body">
+            <div class="text-uppercase pb-3">멤버 : <span id="memberReview_id">4</span></div>
+
+            <form onsubmit="memberReviewSave(); return false;">
+              <div class="mb-3">
+                <input type="number" id="memberRate" class="form-control bg-smoke" required="" placeholder="0~10" min="0" max="10">
+              </div>
+
+              <div class="mb-3">
+                <textarea id="memberReviewContent" class="form-control bg-smoke" required="" rows="5" placeholder="리뷰 내용"></textarea>
+                <div id="memberReviewContent_cnt">(0 / 100)</div>
+              </div>
+
+              <div class="d-grid">
+                <button type="submit" class="btn btn-primary text-uppercase">제출</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- bucketReview Modal -->
+    <div class="modal fade" id="bucketReview" tabindex="-1" role="dialog" aria-label="loginModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header rounded">
+            <h3 class="modal-title text-uppercase font-weight-bold">버킷리스트 리뷰</h3>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+
+          <div class="modal-body">
+            <input id="memberReview_alarmId" type="hidden" value="">
+            <div class="text-uppercase pb-3">버킷리스트 : <span id="bucketReview_id" style="display: none;">3</span><span id="bucketReview_name">3번 버킷리스트명</span></div>
+
+            <form onsubmit="bucketReviewSave(); return false;">
+              <div class="mb-3">
+                <input type="number" id="bucketRate" class="form-control bg-smoke" required="" placeholder="0~10" min="0" max="10">
+              </div>
+
+              <div class="mb-3">
+                <textarea id="bucketReviewContent" class="form-control bg-smoke" required="" rows="5" placeholder="리뷰 내용"></textarea>
+                <div id="bucketReviewContent_cnt">(0 / 100)</div>
+              </div>
+
+              <div class="d-grid">
+                <button type="submit" class="btn btn-primary text-uppercase">제출</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+
     <!-- INQUIRY IN MODAL -->
     <div class="modal fade" id="inquiry" tabindex="-1" role="dialog" aria-label="inquiryModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
@@ -628,6 +692,7 @@
           </div>
 
           <div class="modal-body pb-3">
+            <input id="bucketReview_alarmId" type="hidden" value="">
             <form class="" action="index.html" method="post">
               <div class="mb-3">
                 <input type="text" class="form-control bg-smoke" required="" placeholder="Your Name">
@@ -675,10 +740,11 @@
     
     <script src="/assets/js/star.js"></script>
 
-    <script src="/assets/js/custom.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
 
     <script src="/js/axios.js"></script>
     <script src="/js/header.js"></script>
+    <script src="/js/reviewAlarm.js"></script>
   </body>
 </html>
 
