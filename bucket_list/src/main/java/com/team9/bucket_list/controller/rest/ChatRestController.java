@@ -41,10 +41,10 @@ public class ChatRestController {
     }
 
     //채팅방 생성
-    @PostMapping("/create-room/{bucketlistId}")
+    @PostMapping("/create-room/{postId}")
     @Operation(summary = "채팅방 생성", description = "채팅방을 생성합니다.")
-    public Response<ChatRoom> createChatRoom(@Parameter(name = "bucketlistId", description = "버킷리스트 id") @PathVariable Long bucketlistId, ChatRoomRequest chatRoomRequest) {
-        return Response.success(chatService.createChatRoom(bucketlistId, chatRoomRequest));
+    public Response<ChatRoom> createChatRoom(@Parameter(name = "postId", description = "게시글 id") @PathVariable Long postId, ChatRoomRequest chatRoomRequest) {
+        return Response.success(chatService.createChatRoom(postId, chatRoomRequest));
     }
 
     //유저 초대

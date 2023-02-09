@@ -5,11 +5,13 @@ import com.team9.bucket_list.domain.dto.application.ApplicationDecisionRequest;
 import com.team9.bucket_list.domain.dto.application.ApplicationListResponse;
 import com.team9.bucket_list.domain.dto.application.ApplicationRequest;
 import com.team9.bucket_list.domain.entity.Application;
+import com.team9.bucket_list.domain.entity.ChatParticipant;
 import com.team9.bucket_list.domain.entity.Member;
 import com.team9.bucket_list.domain.entity.Post;
 import com.team9.bucket_list.execption.ApplicationException;
 import com.team9.bucket_list.execption.ErrorCode;
 import com.team9.bucket_list.repository.ApplicationRepository;
+import com.team9.bucket_list.repository.ChatParticipantRepository;
 import com.team9.bucket_list.repository.MemberRepository;
 import com.team9.bucket_list.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +28,7 @@ import java.util.List;
 @Slf4j
 public class ApplicationService {
 
+    private final ChatParticipantRepository chatParticipantRepository;
     private final ApplicationRepository applicationRepository;
     private final MemberRepository memberRepository;
     private final PostRepository postRepository;
@@ -67,7 +70,6 @@ public class ApplicationService {
         //post존재 확인
         Post post = findPostById(postId);
 
-        log.info("permitnum ={}",post.getPermitNum());
         //확정된 인원 == 최대 인원 AND 수락 요청이면 예외 발생
         if ((post.getPermitNum() == post.getEntrantNum()) && (applicationDecisionRequest.getStatus()==1)) {
             throw new ApplicationException(ErrorCode.EXCEED_ENTRANT_NUM);
@@ -79,7 +81,16 @@ public class ApplicationService {
         //업데이트
         applicationRepository.save(Application.updateStatus(application,applicationDecisionRequest));
 
-        //
+        // 승인인 경우 chat_participant 추가
+        if (applicationDecisionRequest.getStatus() == 1) {
+            ChatParticipant chatParticipant = ChatParticipant.builder()
+                    .chatRoom(post.getChatRoom())
+                    .member(application.getMember())
+                    .build();
+            chatParticipantRepository.save(chatParticipant);
+        }
+
+        // 인원 꽉 차면 모집 완료로 업데이트
         if (post.getPermitNum() == post.getEntrantNum()) {
             post.setRecruitComplete();
         }

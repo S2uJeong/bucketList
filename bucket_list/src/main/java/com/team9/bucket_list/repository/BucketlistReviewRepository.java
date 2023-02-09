@@ -1,6 +1,5 @@
 package com.team9.bucket_list.repository;
 
-import com.team9.bucket_list.domain.entity.Bucketlist;
 import com.team9.bucket_list.domain.entity.BucketlistReview;
 import com.team9.bucket_list.domain.entity.Post;
 import org.springframework.data.domain.Page;
