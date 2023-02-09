@@ -63,6 +63,9 @@ public class Post extends BaseTimeEntity{
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PostFile> postFileList = new ArrayList<>();
 
+    @OneToOne(mappedBy = "post")
+    private ChatRoom chatRoom;
+
     public void update(PostUpdateRequest request,Member member,PostStatus status) {
         this.title = request.getTitle();
         this.content=request.getContent();
