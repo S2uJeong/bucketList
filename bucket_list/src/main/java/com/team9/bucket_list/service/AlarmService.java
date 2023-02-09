@@ -79,4 +79,12 @@ public class AlarmService {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED));
         return alarmRepository.readAllAlarm(memberId);
     }
+
+    //무한 좋아요 방지용
+    @Transactional
+    public int deleteAlarm(byte category, Long postId, Long memberId) {
+        postRepository.findById(postId).orElseThrow(() -> new ApplicationException(ErrorCode.POST_NOT_FOUND));
+        memberRepository.findById(memberId).orElseThrow(() -> new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED));
+        return alarmRepository.deleteAlarmByCategoryAndAndPostIdAndAndMember_Id(category,postId,memberId);
+    }
 }
