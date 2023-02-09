@@ -1,8 +1,6 @@
 package com.team9.bucket_list.controller.front;
 
 import com.team9.bucket_list.domain.entity.Member;
-import com.team9.bucket_list.domain.entity.MemberReview;
-import com.team9.bucket_list.domain.entity.Profile;
 import com.team9.bucket_list.service.ProfileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,11 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 @Slf4j
 @Controller
@@ -23,56 +17,41 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProfileController {
 
-    private ProfileService profileService;
+    private final ProfileService profileService;
 
-    // 프로필 조회
+    //=== 프로필 조회 ===//
     @GetMapping("/{memberId}")
-    public String profile(@PathVariable Long memberId, Model model) {
-
-//        db에 user가 없어서 임의로 member를 작성했습니다
-//        Member member = profileService.checkMemberId(memberId);
-        Member member = Member.builder()
-                .userName("jihwan byeon")
-                .email("jihwan@naver.com")
-                .rate(4.5)
+    public String readDetail(@PathVariable("memberId") Long memberId, Model model){
+        // 조회하려는 대상이 존재하는 member인지 확인한다.
+        Member member = profileService.checkMember(memberId);
+        member = Member.builder()
+                .userName(member.getUserName())
+                .email(member.getEmail())
+                .rate(member.getRate())
                 .build();
-
         model.addAttribute("member", member);
         return "profile";
     }
 
-    // 본인 프로필 수정 -> 수정된 페이지 확인
-    @PostMapping("/{memberId}/edit")
-    public String wrtieProfile(@PathVariable Long memberId, Authentication authentication, MultipartFile multipartFile) {
-        String userName = authentication.getName();
-        profileService.update(memberId, userName, multipartFile);
-        return "redirect:/profile/{memberId}"; // memberId 이렇게 적는 게 맞나?
+    //=== 프로필 수정 ===//
+        // edit 할 수 있는지 권한 확인 및 파일 올리는 화면으로 연결
+    @GetMapping("/{memberId}/edit") //1:1 매핑을 했으니 profileId말고 memnberId로 해도 되지 않을까?
+    public String updateProfile(@PathVariable("memberId") Long memberId,
+                                Authentication authentication) {
+        // 유효성 검사 : 로그인한 멤버와 수정 대상인 프로필의 memberId가 일치 한지 확인한다.
+        Long loginedMemberId =  Long.valueOf(authentication.getName());
+        profileService.checkAuthority(memberId, loginedMemberId);
+        return "profileUpdate"; // 파일 수정 뒤에 다시 profile 보게 가려고 하면 어떻게 하지?
     }
+        // 수정내용 불러 올 부분
+/*    @GetMapping(value = "/{memberId}/json", produces = "application/json")
+    @ResponseBody
+    // 사진 값만 들어있는 알맏은 Dto로 변경
+    public Response<ProfileReadResponse> jsonRead(@PathVariable(value = "memberId") Long memberId){
+        ProfileReadResponse response = profileService.detail(memberId); // Dto 변경해서 받으면 됨.
 
+        return Response.success(response);
 
-//    // 타인의 프로필 조회
-//    @GetMapping("/{memberId}")
-//    public String profile(@PathVariable Long memberId, Authentication authentication, Model model) {
-//        model.addAttribute("userName", authentication.getName());
-//        model.addAttribute("memberId", memberId);
-//        return "profile";
-//    }
-
-//    // 본인 프로필 조회 -> 수정
-//    @GetMapping("/{memberId}/edit")
-//    public String editMyProfile(@PathVariable Long memberId, Model model, Authentication authentication) {
-//
-//
-//        String userName = authentication.getName();
-//        Member member = profileService.checkMemberId(memberId);
-//
-//        profileService.update(memberId, userName, )
-//
-//        model.addAttribute("member", member);
-//        model.addAttribute("mypageEditRequest", new MyPageEditRequest());
-//
-//        return "/Profile/ProfileUpdate";
-//    }
-
+    }*/
 
 }

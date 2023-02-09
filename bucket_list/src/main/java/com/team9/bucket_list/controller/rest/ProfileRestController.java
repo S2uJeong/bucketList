@@ -30,14 +30,19 @@ public class ProfileRestController {
         return Response.success(result);
     }
 
-    @PutMapping(value = "/{memberId}",
+    /**
+     * 이미지 수정은 프론트에서 하므로 rest는 만들어 주지 않았다.
+     * 추후 시간이 된다면, 수정된 사진 url이 반환되는 rest Controller 구현 생각중
+     */
+
+/*    @PutMapping(value = "/{memberId}",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     @Operation(summary = "프로필 수정", description = "로그인된 멤버 본인의 프로필을 수정합니다.")
     public Response<ProfileResponse> updateProfileImage(@Parameter(name = "memberId", description = "로그인 한 멤버 id") @PathVariable Long memberId,
                                              Authentication authentication,
                                              @RequestPart(value="file",required = false) MultipartFile multipartFile) {
-        String userName = authentication.getName();
-        ProfileResponse profileResponse = profileService.update(memberId, userName, multipartFile);
+        Long loginedMemberId =  Long.valueOf(authentication.getName());
+        ProfileResponse profileResponse = profileService.update(memberId, loginedMemberId, multipartFile);
         return Response.success(profileResponse);
-    }
+    }*/
 }
