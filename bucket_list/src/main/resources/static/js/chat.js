@@ -71,6 +71,10 @@ function showChatRoom(roomId,roomName) {
     $('#chat-room-name').text(roomName);
     $('#chat-room-id').val(roomId);
 
+    //채팅 메뉴 초기화
+    $('#participant-list').children().remove();
+    participantCnt = 0;
+
     /*let chatRoomName = `<div class="chat-room-title-box">
                             <h2 style="margin: 20px 0 10px 0" id="chat-room-name">${roomName}</h2>
                           <hr class="dropdown-divider" style="margin: 10px 0 30px 0">
@@ -120,6 +124,11 @@ function showChatRoom(roomId,roomName) {
 
     //해당 채팅방의 stomp 연결
     messageOnConnected(roomId);
+
+    //메뉴 불러오기
+    getChatParticipant(roomId);
+    //나가기 버튼 설정
+    $('#room-out-btn').attr('onclick',`roomOut(${lsMemberId},${roomId},${0})`);
 }
 
 //해당 리스트를 클릭해서 방으로 입장했을때
@@ -225,3 +234,65 @@ $(".text-area").on("keyup",function(key){
         sendMessage();
     }
 });
+
+let participantCnt = 0;
+//채팅 참가자 리스트 받아오기
+function getChatParticipant(roomId) {
+    if(roomId == '') return;
+
+    let html = '', i = 0, out = '';
+    let data, host;
+
+    if(participantCnt == 0) {
+        axios({
+            method:"GET",
+            url: '/chat/participant/'+roomId,
+        }).then((res)=> {
+            console.log(res);
+            data = res.data.result;
+            host = res.data.host;
+
+            html += `<h5 class="chat-menu-participant-title">참가자</h5>`;
+
+            if(host.userName === lsUserName ) {
+                out = `<li><a class="dropdown-item" onclick="roomOut(${data[i].memberId},${roomId},${1})">강제퇴장</a></li>`;
+            }
+
+            for(i in data) {
+                if(data[i].memberId === lsMemberId) {
+                    html += `<div class="list-group-item-action chat-menu-participant-wrap" id="participant-${data[i].memberId}">
+                            <p class="chat-menu-participant" data-bs-toggle="dropdown" aria-expanded="false">${data[i].userName}(나)</p>
+                                <ul class="dropdown-menu dropdown-menu-start chat-menu-participant-list">
+                                    <li><a class="dropdown-item" href="#" target="_blank">프로필 확인</a></li>
+                                </ul>
+                        </div>
+                       `;
+                } else {
+
+                    html += `<div class="list-group-item-action chat-menu-participant-wrap" id="participant-${data[i].memberId}">
+                            <p class="chat-menu-participant" data-bs-toggle="dropdown" aria-expanded="false">${data[i].userName}</p>
+                                <ul class="dropdown-menu dropdown-menu-start chat-menu-participant-list">
+                                    <li><a class="dropdown-item" href="#" target="_blank">프로필 확인</a></li>
+                                    ${out} 
+                                </ul>
+                        </div>
+                       `;
+                }
+            }
+
+            $('#participant-list').append(html.replace('undefined',''));
+            participantCnt++;
+        }).catch(error => {
+
+        });
+    }
+
+}
+
+function roomOut(memberId, roomId, num) {
+    if(num == 0) {
+        alert("방을 퇴장하시겠습니까?");
+    } else if(num == 1) {
+        alert("강제퇴장 시키시겠습니까?");
+    }
+}
