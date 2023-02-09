@@ -3,6 +3,7 @@ package com.team9.bucket_list.controller.front;
 import com.team9.bucket_list.domain.dto.chat.ChatRequest;
 import com.team9.bucket_list.domain.dto.chat.ChatRoomListResponse;
 import com.team9.bucket_list.domain.entity.ChatParticipant;
+import com.team9.bucket_list.domain.enumerate.ChatType;
 import com.team9.bucket_list.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -58,19 +59,21 @@ public class ChatController {
     @MessageMapping("/chat/sendMessage")
     public void sendMessage(@Payload ChatRequest chatRequest) {
         //메시지 업데이트
-        CompletableFuture<ChatRequest> future = chatService.updateMessage(chatRequest);
+        if(!(chatRequest.getChatType().equals(ChatType.LEAVE)) || chatRequest.getMessage().equals(null)) {
+            CompletableFuture<ChatRequest> future = chatService.updateMessage(chatRequest);
 
-        //채팅방 업데이트
-        future.thenAccept(chatListResponse -> {
-            log.info("채팅방 리스트 업데이트 전송 " + chatListResponse.toString() + ", chat request : " + chatRequest.toString());
-            List<ChatParticipant> chatParticipants = chatService.getChatParticipant(chatListResponse.getRoomId());
+            //채팅방 업데이트
+            future.thenAccept(chatListResponse -> {
+                log.info("채팅방 리스트 업데이트 전송 " + chatListResponse.toString() + ", chat request : " + chatRequest.toString());
+                List<ChatParticipant> chatParticipants = chatService.getChatParticipant(chatListResponse.getRoomId());
 
-            chatParticipants.stream().forEach(chatParticipant ->
-                    template.convertAndSend("/sub/list/chat/room/"+chatParticipant.getId(), chatListResponse));
-        });
+                chatParticipants.stream().forEach(chatParticipant ->
+                        template.convertAndSend("/sub/list/chat/room/" + chatParticipant.getId(), chatListResponse));
+            });
 
-        ChatRequest chatResponse = ChatRequest.chatResponse(chatRequest);
-        template.convertAndSend("/sub/chat/room/"+chatRequest.getRoomId(), chatResponse);
-        log.info("메시지 구독자들에게 전송 완료");
+            ChatRequest chatResponse = ChatRequest.chatResponse(chatRequest);
+            template.convertAndSend("/sub/chat/room/"+chatRequest.getRoomId(), chatResponse);
+            log.info("메시지 구독자들에게 전송 완료");
+        }
     }
 }
