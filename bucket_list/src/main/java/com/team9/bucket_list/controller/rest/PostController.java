@@ -29,9 +29,9 @@ public class PostController {
     @PostMapping(value = "/detailpost" ,produces = "application/json")
     @ResponseBody
     @Operation(summary = "게시글 작성", description = "게시글을 작성합니다.")
-    public Response<PostIdResponse> getData(@RequestBody PostCreateRequest request){
-//        Long userId = Long.valueOf(authentication.getName());
-        Long userId = 1l;
+    public Response<PostIdResponse> getData(@RequestBody PostCreateRequest request,Authentication authentication){
+        Long userId = Long.valueOf(authentication.getName());
+//        Long userId = 1l;
 
         log.info("detailpost");
         String userName = "test";
@@ -68,10 +68,11 @@ public class PostController {
     }
 
     // 클라이언트에서 데이터 받아와서 수정
-    @PostMapping(value = "/{postId}/update" ,produces = "application/json")
-    public void updatePost( @PathVariable Long postId, @RequestBody PostUpdateRequest request)  {
+    @PutMapping(value = "/{postId}/update" ,produces = "application/json")
+    public void updatePost( @PathVariable Long postId, @RequestBody PostUpdateRequest request,Authentication authentication)  {
         // update 메서드를 통해 request 내용대로 수정해준다. 반환값 : post Entity
-        Long userId = 1l;
+        Long userId = Long.valueOf(authentication.getName());
+//        Long userId = 1l;
         log.info(request.toString());
         log.info("postId:"+postId);
         postService.update(request,postId,userId);
@@ -81,9 +82,9 @@ public class PostController {
     //== 삭제 ==//
     @DeleteMapping("/{postId}")
     @Operation(summary = "게시글 삭제", description = "postId에 따라 게시글을 삭제합니다.")
-    public Long deletePost(@Parameter(name = "postId", description = "게시글 id") @PathVariable("postId") long postId ) {
-//        Long userId = Long.valueOf(authentication.getName());
-        Long userId = 1l;
+    public Long deletePost(@Parameter(name = "postId", description = "게시글 id") @PathVariable("postId") long postId,Authentication authentication) {
+        Long userId = Long.valueOf(authentication.getName());
+//        Long userId = 1l;
         postService.delete(postId,userId);
         log.info("Post 삭제 성공");
         return 1l;
@@ -142,5 +143,23 @@ public class PostController {
                                                         Authentication authentication) {
         Page<PostReadResponse> applyPosts = postService.myFeedApply(pageable, Long.valueOf(authentication.getName()));
         return Response.success(applyPosts);
+    }
+
+    // 승낙받은
+    @GetMapping("/my/consent")
+    @Operation(summary = "마이피드 - 승낙 받은 글 조회", description = "로그인 되어 있는 멤버가 승낙 받은 Post 리스트를 출력합니다.")
+    public Response<Page<PostReadResponse>> myFeedConsent(@Parameter(hidden = true) @PageableDefault(size = 16, sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable,
+                                                        Authentication authentication) {
+        Page<PostReadResponse> consentPosts = postService.myFeedConsent(pageable, Long.valueOf(authentication.getName()));
+        return Response.success(consentPosts);
+    }
+
+    // 완료한
+    @GetMapping("/my/complete")
+    @Operation(summary = "마이피드 - 잔행 완료된 글 조회", description = "로그인 되어 있는 멤버가 완료한 Post 리스트를 출력합니다.")
+    public Response<Page<PostReadResponse>> myFeedComplete(@Parameter(hidden = true) @PageableDefault(size = 16, sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable,
+                                                        Authentication authentication) {
+        Page<PostReadResponse> completePosts = postService.myFeedComplete(pageable, Long.valueOf(authentication.getName()));
+        return Response.success(completePosts);
     }
 }

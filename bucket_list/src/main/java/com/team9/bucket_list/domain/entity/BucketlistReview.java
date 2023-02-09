@@ -18,16 +18,9 @@ public class BucketlistReview {
 
     private String content;
     private Long writerId;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "bucketlist_id")
-    private Bucketlist bucketlist;
+    private int rate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Post post;
-
-    public void update(String content) {
-        this.content = content;
-    }
 }
