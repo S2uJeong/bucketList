@@ -23,7 +23,6 @@ public class MemberReviewService {
 
     private final MemberRepository memberRepository;
     private final MemberReviewRepository memberReviewRepository;
-    private final AlarmRepository alarmRepository;
 
     public Member checkMemberId(Long targetUserId) {
         return memberRepository.findById(targetUserId)
@@ -64,18 +63,16 @@ public class MemberReviewService {
 
     public String create(Long memberId, MemberReviewRequest memberReviewRequest) {
 
-        Member targetMember = checkMemberId(memberReviewRequest.getTargetMemberName());
+        Member targetMember = checkMemberName(memberReviewRequest.getTargetMemberName());
         Member fromMember = checkMemberId(memberId);
 
-        Optional<MemberReview> mem = memberReviewRepository.findByMember_IdAndWriterId(memberReviewRequest.getTargetMemberName(), memberId);
+        Optional<MemberReview> mem = memberReviewRepository.findByMember_UserNameAndWriterId(memberReviewRequest.getTargetMemberName(), memberId);
         if(mem.isPresent()){
 //            throw new ApplicationException(ErrorCode.DUPLICATED_REVIEW);
             return "duplicated";
         }
 
         memberReviewRepository.save(memberReviewRequest.toEntity(targetMember, fromMember));
-
-        // alarmRepository.save(Alarm.of(targetMember, targetMember.getUserName()+"에 대한 리뷰가 작성 되었습니다."));
 
         return "true";
     }

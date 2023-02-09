@@ -16,5 +16,5 @@ public interface MemberReviewRepository extends JpaRepository<MemberReview, Long
 
     List<MemberReview> findAllByMember_Id(Long targetMemberId);
 
-    Optional<MemberReview> findByMember_IdAndWriterId(Long targetMemberId, Long fromMemberId);
+    Optional<MemberReview> findByMember_UserNameAndWriterId(String targetMemberName, Long fromMemberId);
 }

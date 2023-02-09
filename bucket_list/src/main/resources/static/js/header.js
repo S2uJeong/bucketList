@@ -303,10 +303,12 @@ function alarmHtml(data) {
     if(data.category == 4) {
         modal = `data-bs-toggle="modal" data-bs-target="#memberReview"`;
         text = data.senderName+''+alarmArr[data.category];
+        onclick = `onclick="memberReviewAlarm('${data.senderName}',${data.id})"`
     }
     else if(data.category == 5) {
         text = data.postTitle+''+alarmArr[data.category];
         modal = `data-bs-toggle="modal" data-bs-target="#bucketReview"`;
+        onclick = `onclick="postReviewAlarm(${data.postTitle},${data.postId},${data.id})"`
     } else {
         onclick = `onclick="readAlarm(${data.id},${data.postId})"`
         text = data.senderName+''+alarmArr[data.category];
@@ -315,6 +317,20 @@ function alarmHtml(data) {
                             ${text}
                             <small class="opacity-50 text-nowrap alarm-time">${getHoursMinTime(data.createdAt)}</small>
                             </a>`;
+}
+
+// 리뷰 modal 데이터 대체
+function memberReviewAlarm(senderName, alarmId) {
+    console.log("실행");
+    $('#memberReview_id').text(senderName);
+    $('#memberReview_alarmId').val(alarmId);
+}
+
+function postReviewAlarm(postTitle, postId, alarmId) {
+    console.log("실행2" + postTitle + " " + postId);
+    $('#bucketReview_id').text(postId);
+    $('#bucketReview_name').text(postTitle);
+    $('#bucketReview_alarmId').val(alarmId);
 }
 
 //알람 하나 읽기

@@ -19,10 +19,8 @@ import java.util.Optional;
 public class BucketlistReviewService {
 
     private final BucketlistReviewRepository bucketlistReviewRepository;
-    private final BucketlistRepository bucketlistRepository;
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
-    private final AlarmRepository alarmRepository;
 
     // 유효성 검사
     public Post checkPost(Long postId) {
@@ -61,8 +59,6 @@ public class BucketlistReviewService {
         }
 
         bucketlistReviewRepository.save(bucketlistReviewRequest.toEntity(post, member));
-
-        // alarmRepository.save(Alarm.of(member, post.getTitle()+"에 대한 리뷰가 작성 되었습니다."));
 
         return "true";
     }
