@@ -15,8 +15,14 @@ $(document).on('click', 'div.myFeed>button.myFeedBtn', function() {
 
     if(myFeedName == "작성한 버킷리스트"){
         postType = "create";
-    } else {
+    } else if(myFeedName == "좋아요한 버킷리스트") {
+        postType = "likes";
+    } else if(myFeedName == "신청한 버킷리스트"){
         postType = "apply";
+    } else if(myFeedName == "승낙받은 버킷리스트"){
+        postType = "consent";
+    } else {
+        postType = "complete";
     }
 
     const todosUrl = '/post/my/' + postType + urlSearch;
