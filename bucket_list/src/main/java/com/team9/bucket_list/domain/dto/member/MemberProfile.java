@@ -23,7 +23,7 @@ public class MemberProfile implements OAuth2User {      //Resource Server마다 
     public Member googleToMember(){
         return Member.builder()
                 .oauthId((String) this.attributes.get("oauthId"))
-                .userName(((String) this.attributes.get("email")).split("@")[0])
+                .userName(((String) this.attributes.get("email")).split("@")[0] + ("_g"))
                 .email((String) this.attributes.get("email"))
                 .memberRole(MemberRole.USER)
                 .postRemain(3)
@@ -33,7 +33,7 @@ public class MemberProfile implements OAuth2User {      //Resource Server마다 
     public Member naverToMember(){
         return Member.builder()
                 .oauthId((String) this.attributes.get("oauthId"))
-                .userName(((String) this.attributes.get("email")).split("@")[0])
+                .userName(((String) this.attributes.get("email")).split("@")[0] + ("_n"))
                 .email((String) this.attributes.get("email"))
                 .memberRole(MemberRole.USER)
                 .postRemain(3)
