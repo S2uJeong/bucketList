@@ -63,7 +63,7 @@ public class ChatController {
         //채팅방 업데이트
         future.thenAccept(chatListResponse -> {
             log.info("채팅방 리스트 업데이트 전송 " + chatListResponse.toString() + ", chat request : " + chatRequest.toString());
-            List<ChatParticipant> chatParticipants = chatService.getChatPartipant(chatListResponse.getRoomId());
+            List<ChatParticipant> chatParticipants = chatService.getChatParticipant(chatListResponse.getRoomId());
 
             chatParticipants.stream().forEach(chatParticipant ->
                     template.convertAndSend("/sub/list/chat/room/"+chatParticipant.getId(), chatListResponse));
