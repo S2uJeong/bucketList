@@ -105,11 +105,6 @@ public class PostService {
         return postReadResponse;
     }
 
-    // 내가 쓴 글만 조회 (마이피드)
-    // return을 뭘로 해야될지 모르겠음.. 나중에 마이페이지 생길 때까지 보류
-    public Page<PostReadResponse> findMine(Long memberId, Pageable pageable) {
-        return null;
-    }
 
     // 수정
     @Transactional

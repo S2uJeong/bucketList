@@ -17,14 +17,9 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class ProfileResponse {
-//    알람을 어떤 방식으로 해야할지 모르겠다.
-//    private List<Alarm> alarm;
-
     private String uploadFileName;
     private String awsS3FileName;
-
     private Long memberId;
-
     private double rate;
 
     private List<MemberReview> memberReviewList;
