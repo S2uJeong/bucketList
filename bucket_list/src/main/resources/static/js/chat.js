@@ -128,7 +128,7 @@ function showChatRoom(roomId,roomName) {
     //메뉴 불러오기
     getChatParticipant(roomId);
     //나가기 버튼 설정
-    $('#room-out-btn').attr('onclick',`roomOut(${lsMemberId},${roomId},${0})`);
+    $('#room-out-btn').attr('onclick',`roomOut(${lsMemberId},'${lsUserName}',${roomId},${0})`);
 }
 
 //해당 리스트를 클릭해서 방으로 입장했을때
@@ -180,12 +180,16 @@ function onMessageReceived(payload) {
                     <div class="alert alert-secondary join-message">
                         ${message.userName}님이 입장하셨습니다
                     </div>
-                </div>`
+                </div>`;
     } else if (message.chatType === 'LEAVE') {
-        console.log("퇴장");
+        html += `<div class="d-flex flex-column justify-content-end message-box-wrap join-message-wrap">
+                    <div class="alert alert-secondary join-message">
+                        ${message.userName}님이 퇴장하셨습니다 
+                    </div>
+                </div>`;
     } else if (message.chatType === 'LIST') {
 
-    } else if(message.chatType === 'CHAT' && message.message != '\n'){
+    } else if(message.chatType === 'CHAT' && message.message != '\n' && message.message != null){
         if(message.userName === lsUserName) {
             html += `<div class="d-flex flex-column justify-content-end message-box-wrap">
                             <div class="d-flex flex-row align-items-end justify-content-end">
@@ -254,11 +258,11 @@ function getChatParticipant(roomId) {
 
             html += `<h5 class="chat-menu-participant-title">참가자</h5>`;
 
-            if(host.userName === lsUserName ) {
-                out = `<li><a class="dropdown-item" onclick="roomOut(${data[i].memberId},${roomId},${1})">강제퇴장</a></li>`;
-            }
-
             for(i in data) {
+                if(host.userName === lsUserName ) {
+                    out = `<li><a class="dropdown-item" onclick="roomOut(${data[i].memberId},'${data[i].userName}',${roomId},${1})">강제퇴장</a></li>`;
+                }
+
                 if(data[i].memberId === lsMemberId) {
                     html += `<div class="list-group-item-action chat-menu-participant-wrap" id="participant-${data[i].memberId}">
                             <p class="chat-menu-participant" data-bs-toggle="dropdown" aria-expanded="false">${data[i].userName}(나)</p>
@@ -289,10 +293,49 @@ function getChatParticipant(roomId) {
 
 }
 
-function roomOut(memberId, roomId, num) {
+function roomOut(memberId,userName,roomId,num) {
+    let val;
+
     if(num == 0) {
-        alert("방을 퇴장하시겠습니까?");
+        val = confirm("방을 퇴장하시겠습니까?");
     } else if(num == 1) {
-        alert("강제퇴장 시키시겠습니까?");
+        val = confirm("강제퇴장 시키시겠습니까?");
     }
+
+    if(val == true) {
+        axios({
+            method:"DELETE",
+            url: '/chat/out',
+            data: {
+                'memberId':memberId,
+                'roomId':roomId
+            }
+        }).then((res)=> {
+            console.log(res);
+            if(res.data.result == 1) {
+                if(num == 0) {
+                    alert("방을 퇴장하였습니다.");
+                    leaveMessage(roomId,memberId,userName);
+                    location.href='/';
+                } else if(num == 1) {
+                    alert("성공적으로 퇴장시켰습니다.");
+                    $(`#participant-${memberId}`).remove();
+                    leaveMessage(roomId,memberId,userName);
+                }
+            }
+        }).catch(error => {
+
+        });
+    }
+}
+
+function leaveMessage(roomId,memberId,userName) {
+    let chatMessage = {
+        'roomId':roomId,
+        'memberId':memberId,
+        'userName':userName,
+        'message':'',
+        chatType: 'LEAVE'
+    };
+    stompClient.send("/pub/chat/sendMessage", messageHeader, JSON.stringify(chatMessage));
 }
