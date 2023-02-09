@@ -30,7 +30,7 @@ public class ProfileController {
                 .rate(member.getRate())
                 .build();
         model.addAttribute("member", member);
-        return "profile";
+        return "Profile/profile";
     }
 
     //=== 프로필 수정 ===//
@@ -41,7 +41,7 @@ public class ProfileController {
         // 유효성 검사 : 로그인한 멤버와 수정 대상인 프로필의 memberId가 일치 한지 확인한다.
         Long loginedMemberId =  Long.valueOf(authentication.getName());
         profileService.checkAuthority(memberId, loginedMemberId);
-        return "profileUpdate"; // 파일 수정 뒤에 다시 profile 보게 가려고 하면 어떻게 하지?
+        return "Profile/profileUpdate"; // 파일 수정 뒤에 다시 profile 보게 가려고 하면 어떻게 하지?
     }
         // 수정내용 불러 올 부분
 /*    @GetMapping(value = "/{memberId}/json", produces = "application/json")
