@@ -147,58 +147,19 @@
       const getdata = async()=>{
         try{
           const response = await axios.get('/post/'+postId+'/json');
-          const applicationResponse = await axios.get('/application-rest/' + postId);
           const commentresponse = await axios.get('/comment/'+postId+'/comments');
+          // const applicationResponse = await axios.get('/application-rest/' + postId);
           console.log(response);     // json 데이터 받아온거
 
 
           jsonState = response.data.resultCode;
           jsonCommentState = commentresponse.data.resultCode;
-          jsonApplicationState = applicationResponse.data.resultCode;
+          // jsonApplicationState = applicationResponse.data.resultCode;
 
           console.log(jsonState);
           console.log(jsonCommentState);
           console.log(jsonApplicationState);
 
-          if (jsonApplicationState == "SUCCESS") {
-            console.log(applicationResponse);
-
-            let application_html =
-                              "<form class=\"\">\n" +
-                    "            <h3 class=\"text-uppercase mb-3\" >{닉네임} / {나이} / {성별}</h3>\n" +
-                    "\n" +
-                    "            <div class=\"form-group mb-2\">\n" +
-                    "              <textarea readonly class=\"form-control border-0 bg-smoke\" rows=\"3\">{내용}</textarea>\n" +
-                    "            </div>\n" +
-                    "\n" +
-                    "            <div style=\"display: flex; justify-content: right\">\n" +
-                    "              <button type=\"button\" class=\"btn btn-outline-success mb-2 mx-2\" data-id=\"{신청서 아이디}\" onclick=\"permit(this)\" style=\"padding: 8px 18px\">\n" +
-                    "                수락\n" +
-                    "              </button>\n" +
-                    "              <button type=\"button\" class=\"btn btn-outline-danger mb-2 mx-2\" data-id=\"{신청서 아이디}\" onclick=\"reject(this)\" style=\"padding: 8px 18px\">\n" +
-                    "                거절\n" +
-                    "              </button>\n" +
-                    "            </div>\n" +
-                    "          </form>"
-            applicationResponse.data.result.list.forEach(function (application) {
-              let application_html_result = application_html.replace("{닉네임}", application.userName)
-                      .replace("{나이}", application.age)
-                      .replace("{내용}", application.content)
-                      .replace("{신청서 아이디}", application.id)
-                      .replace("{신청서 아이디}", application.id);
-
-              if (application.gender === 'MAN') {
-                application_html_result = application_html_result.replace("{성별}", "남")
-              } else {
-                application_html_result = application_html_result.replace("{성별}", "여")
-              }
-
-              let application_box = document.getElementById('application-box');
-              application_box.innerHTML += application_html_result;
-            })
-          } else {
-            console.log('asdasf');
-          }
 
           if(jsonCommentState == "SUCCESS") {
             console.log(commentresponse);
@@ -444,7 +405,58 @@
             let token_userName = JSON.parse(decodeURIComponent(escape(window.atob(payload)))).userName;
 
             if (userName === token_userName) {
+              try{
+                
+              
+              const applicationResponse = await axios.get('/application-rest/' + postId);
+              jsonApplicationState = applicationResponse.data.resultCode;
               document.getElementById("application_button").style.display = 'none';
+
+              if (jsonApplicationState == "SUCCESS") {
+                console.log(applicationResponse);
+
+                let application_html =
+                        "<form class=\"\">\n" +
+                        "            <h3 class=\"text-uppercase mb-3\" >{닉네임} / {나이} / {성별}</h3>\n" +
+                        "\n" +
+                        "            <div class=\"form-group mb-2\">\n" +
+                        "              <textarea readonly class=\"form-control border-0 bg-smoke\" rows=\"3\">{내용}</textarea>\n" +
+                        "            </div>\n" +
+                        "\n" +
+                        "            <div style=\"display: flex; justify-content: right\">\n" +
+                        "              <button type=\"button\" class=\"btn btn-outline-success mb-2 mx-2\" data-id=\"{신청서 아이디}\" onclick=\"permit(this)\" style=\"padding: 8px 18px\">\n" +
+                        "                수락\n" +
+                        "              </button>\n" +
+                        "              <button type=\"button\" class=\"btn btn-outline-danger mb-2 mx-2\" data-id=\"{신청서 아이디}\" onclick=\"reject(this)\" style=\"padding: 8px 18px\">\n" +
+                        "                거절\n" +
+                        "              </button>\n" +
+                        "            </div>\n" +
+                        "          </form>"
+                applicationResponse.data.result.list.forEach(function (application) {
+                  let application_html_result = application_html.replace("{닉네임}", application.userName)
+                          .replace("{나이}", application.age)
+                          .replace("{내용}", application.content)
+                          .replace("{신청서 아이디}", application.id)
+                          .replace("{신청서 아이디}", application.id);
+
+                  if (application.gender === 'MAN') {
+                    application_html_result = application_html_result.replace("{성별}", "남")
+                  } else {
+                    application_html_result = application_html_result.replace("{성별}", "여")
+                  }
+
+                  let application_box = document.getElementById('application-box');
+                  application_box.innerHTML += application_html_result;
+                })
+              } else {
+                console.log('asdasf');
+              }
+              }
+              catch (e) {
+
+              }
+
+
             }
             // }
             //
