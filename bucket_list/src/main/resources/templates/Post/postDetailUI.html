@@ -100,15 +100,15 @@
   <script type="text/javascript">
     $(document).ready(function() {
 
-
-
      const accessToken = localStorage.getItem("accessToken");
      let accessName;
 
       if (accessToken === null) {
+        console.log("accessToken === null")
         $("#login_li").show();
         $("#user_li").hide();
       } else {
+        console.log("accessToken !== null")
         $("#login_li").hide();
         $("#user_li").show();
 
@@ -420,7 +420,7 @@
               jsonApplicationState = applicationResponse.data.resultCode;
               document.getElementById("application_button").style.display = 'none';
 
-              if (jsonApplicationState == "SUCCESS") {
+              if (jsonApplicationState === "SUCCESS") {
                 console.log(applicationResponse);
 
                 let application_html =
