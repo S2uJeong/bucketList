@@ -48,6 +48,9 @@ public class Post extends BaseTimeEntity{
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @OneToOne(mappedBy = "post")
+    private ChatRoom chatRoom;
+
     @OneToMany(mappedBy = "post")
     private List<Application> applicationList = new ArrayList<>();
 
@@ -57,8 +60,8 @@ public class Post extends BaseTimeEntity{
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> commentList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "post")
-    private List<BucketlistReview> bucketlistReviewList = new ArrayList<>();
+//    @OneToMany(mappedBy = "post")
+//    private List<BucketlistReview> bucketlistReviewList = new ArrayList<>();
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PostFile> postFileList = new ArrayList<>();
