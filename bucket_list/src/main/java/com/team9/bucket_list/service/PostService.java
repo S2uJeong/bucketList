@@ -231,6 +231,7 @@ public class PostService {
             return 1;
         }else {
             likesRepository.deleteByPost_IdAndMember_Id(postId, member.getId());
+            alarmService.deleteAlarm((byte) 1, postId, member.getUserName());
             return 0;
         }
     }
