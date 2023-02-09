@@ -917,7 +917,8 @@
 
 
       $('textarea[name="post"]').each(function(index,item){ // textarea태그의 모든 값 배열에 저장
-        arr.push($(item).val());
+        var html = $(item).val().replace(/(?:\r\n|\r|\n)/g, '<br />');
+        arr.push(html);
       });
 
       var finddata = $("#address_kakao").val();   // 국내 주소 값 저장
@@ -957,6 +958,7 @@
             let url = "/post/" + postId;
 
 
+
             <!-- 사진 저장 -->
             let frm = new FormData();
             let photoFile = document.getElementById('pic_file_wd');
@@ -969,7 +971,6 @@
             }else if((photoFile.files[0] != null)&&(fileNum == 0)){
               await axios.post('/post/' + postId + '/files/upload', frm, fileConfig);
             }
-
 
 
             window.location.replace(url);
@@ -1029,6 +1030,7 @@
               await axios.post('/post/' + postId + '/files/upload', frm, fileConfig);
             }
 
+            alert("확인");
             window.location.replace(url);
           } catch (error) {
             alert("실패");
