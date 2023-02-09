@@ -48,6 +48,66 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
+    <script>
+      function searchfilter() {
+        const urlSearch = new URL(window.location.href).search;
+        console.log(urlSearch)
+
+        // 게시물 배열 선언
+        let arr = [];
+
+        $('[name="dateRange"]').each(function (index, item) { // input태그의 모든 값 배열에 저장
+          arr.push($(item).val().toString());
+        });
+        arr.push(document.getElementById('lower-value').innerText);
+        arr.push(document.getElementById('upper-value').innerText);
+
+
+        // axios header에 넣을 데이터
+        const axiosConfig = {
+          headers: {
+            "Content-Type": "application/json"
+          }
+        }
+
+        const data = async () => {
+          try {
+
+            if(urlSearch.includes("&eventStart=") == true){
+              let sch = location.search;    // 파라미터만 받아옴
+              console.log(sch);
+
+              let params = new URLSearchParams(sch);  // 객체 변환
+
+              // 파라미터 값만 변경
+              params.set('eventStart',arr[0]);
+              params.set('eventEnd',arr[1]);
+              params.set('lowCost',arr[2]);
+              params.set('upCost',arr[3]);
+
+              // 변경한 파라미터를 다시 URL에 합해줌
+              let url = window.location.protocol + window.location.pathname;
+
+              console.log(url);
+              alert("확인");
+              let result = url+"?"+params;
+              // location.replace(url);
+              location.replace(result);
+            }else {
+              let url = urlSearch + "&eventStart=" + arr[0] + "&eventEnd=" + arr[1] + "&lowCost=" + arr[2] + "&upCost=" + arr[3];
+              window.location.replace(url);
+            }
+
+
+
+
+          } catch (error) {
+            alert("실패");
+          }
+        }
+        data();
+      };
+    </script>
   </head>     
 
 <body id="body" class="up-scroll">
@@ -162,67 +222,77 @@
 <!-- ====================================
 ———	TOUR PACKAGES SECTION
 ===================================== -->
-<section class="bg-smoke py-10">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12 col-lg-3">
+    <section class="bg-smoke py-10">
+      <div class="container">
         <div class="row">
-          <div class="col-md-6 col-lg-12">
-            <div class="mb-6 bg-white p-3 border-top border-top-5 border-primary rounded">
-              <form class="" action="index.html" method="GET">
-                <h4 class="text-uppercase font-weight-bold">Search</h4>
-                
-                <div class="mb-5">
-                  <div class="select-default select-category-1">
-                    <select class="select-option">
-                      <option>Category</option>
-                      <option>Travel</option>
-                      <option>Extreme</option>
-                      <option>Study</option>
-                      <option>Volunteer</option>
-                      <option>Experience</option>
-                      <option>Etc</option>
-                    </select>
-                  </div>
-                </div>
-            
-                <div class="form-group form-group-icon form-group-icon-dark mb-5">
-                  <i class="far fa-calendar-alt" aria-hidden="true"></i>
-                  <input type="text" class="form-control daterange-picker sidebar-daterange-picker" autocomplete="off" name="dateRange" value=""
-                    placeholder="MM/DD/YYYY" />
-                </div>
-            
-                <div class="form-group form-group-icon form-group-icon-dark mb-5">
-                  <i class="far fa-calendar-alt" aria-hidden="true"></i>
-                  <input type="text" class="form-control daterange-picker sidebar-daterange-picker" autocomplete="off" name="dateRange" value=""
-                    placeholder="MM/DD/YYYY" />
-                </div>
+          <div class="col-md-12 col-lg-3">
+            <div class="row">
+              <div class="col-md-6 col-lg-12">
+                <div class="mb-6 bg-white p-3 border-top border-top-5 border-primary rounded">
+                  <form class="" action="index.html" method="GET">
+                    <h4 class="text-uppercase font-weight-bold">Search</h4>
 
-                <div class="d-grid">
-                  <button type="button" onclick="location.href='javascript:void(0)';"
-                  class="btn btn-xs btn-outline-secondary text-uppercase">Search</button>
+                    <!--                <div class="mb-5">-->
+                    <!--                  <div class="select-default select-category-1">-->
+                    <!--                    <select class="select-option">-->
+                    <!--                      <option>Category</option>-->
+                    <!--                      <option>Travel</option>-->
+                    <!--                      <option>Extreme</option>-->
+                    <!--                      <option>Study</option>-->
+                    <!--                      <option>Volunteer</option>-->
+                    <!--                      <option>Experience</option>-->
+                    <!--                      <option>Etc</option>-->
+                    <!--                    </select>-->
+                    <!--                  </div>-->
+                    <!--                </div>-->
+
+                    <div class="form-group form-group-icon form-group-icon-dark mb-5">
+                      <i class="far fa-calendar-alt" aria-hidden="true"></i>
+                      <input type="text" class="form-control daterange-picker sidebar-daterange-picker" autocomplete="off" name="dateRange" value=""
+                             placeholder="MM/DD/YYYY" />
+                    </div>
+
+                    <div class="form-group form-group-icon form-group-icon-dark mb-5">
+                      <i class="far fa-calendar-alt" aria-hidden="true"></i>
+                      <input type="text" class="form-control daterange-picker sidebar-daterange-picker" autocomplete="off" name="dateRange" value=""
+                             placeholder="MM/DD/YYYY" />
+                    </div>
+
+                    <div class="price-range mt-5" id="price-range">
+                      <div class="price-range-content mb-5">
+                        <span class="price-value" id="lower-value" name="lowvalue"></span>
+                        <span class="mx-3"><i class="fa fa-minus" aria-hidden="true"></i></span>
+                        <span class="price-value" id="upper-value" name="upvalue"></span>
+                      </div>
+
+                      <div class="mb-6" id="slider-non-linear-step" ></div>
+                    </div>
+
+                    <div class="d-grid">
+                      <button type="button" onclick="searchfilter()"
+                              class="btn btn-xs btn-outline-secondary text-uppercase">Search</button>
+                    </div>
+                  </form>
                 </div>
-              </form>
-            </div>
-          </div>
-
-          <div class="col-md-6 col-lg-12">
-            <div class="mb-6 bg-white p-3 border-top border-top-5 border-primary rounded overflow-hidden">
-              <h4 class="text-uppercase font-weight-bold">Price</h4>
-
-              <div class="price-range mt-5" id="price-range">
-                <div class="price-range-content mb-5">
-                  <span class="price-value" id="lower-value"></span>
-                  <span class="mx-3"><i class="fa fa-minus" aria-hidden="true"></i></span>
-                  <span class="price-value" id="upper-value"></span>
-                </div>
-
-                <div class="mb-6" id="slider-non-linear-step"></div>
               </div>
+
+              <!--          <div class="col-md-6 col-lg-12">-->
+              <!--            <div class="mb-6 bg-white p-3 border-top border-top-5 border-primary rounded overflow-hidden">-->
+              <!--              <h4 class="text-uppercase font-weight-bold">Price</h4>-->
+
+              <!--              <div class="price-range mt-5" id="price-range">-->
+              <!--                <div class="price-range-content mb-5">-->
+              <!--                  <span class="price-value" id="lower-value"></span>-->
+              <!--                  <span class="mx-3"><i class="fa fa-minus" aria-hidden="true"></i></span>-->
+              <!--                  <span class="price-value" id="upper-value"></span>-->
+              <!--                </div>-->
+
+              <!--                <div class="mb-6" id="slider-non-linear-step"></div>-->
+              <!--              </div>-->
+              <!--            </div>-->
+              <!--          </div>-->
             </div>
           </div>
-        </div>
-      </div>
 
       <div class="col-lg-8 col-xl-9">
         <div id="list_container" class="row">
