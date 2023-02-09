@@ -62,9 +62,10 @@ public class ApplicationService {
         checkMemberIdInPost(memberId);
         //post존재 확인
         Post post = findPostById(postId);
+
         log.info("permitnum ={}",post.getPermitNum());
-        //확정된 인원 == 최대 인원이면 예외 발생
-        if (post.getPermitNum() == post.getEntrantNum()) {
+        //확정된 인원 == 최대 인원 AND 수락 요청이면 예외 발생
+        if ((post.getPermitNum() == post.getEntrantNum()) && (applicationDecisionRequest.getStatus()==1)) {
             throw new ApplicationException(ErrorCode.EXCEED_ENTRANT_NUM);
         }
 
