@@ -27,8 +27,8 @@ public class ChatRoom {
     private String lastUserName;
 
     @OneToOne
-    @JoinColumn(name = "bucketlist_id")
-    private Bucketlist bucketlist;
+    @JoinColumn(name = "post_id")
+    private Post post;
 
     @JsonIgnore
     @OneToMany(mappedBy = "chatRoom")
@@ -39,10 +39,10 @@ public class ChatRoom {
     private final List<ChatParticipant> chatParticipants = new ArrayList<>();
 
 
-    public static ChatRoom save(ChatRoomRequest chatRoomRequest, Bucketlist bucketlist) {
+    public static ChatRoom save(ChatRoomRequest chatRoomRequest, Post post) {
         return ChatRoom.builder()
                 .roomName(chatRoomRequest.getRoomName())
-                .bucketlist(bucketlist)
+                .post(post)
                 .totalNum(chatRoomRequest.getTotalNum())
                 .lastMessage("")
                 .lastUserName("")
@@ -55,7 +55,7 @@ public class ChatRoom {
                 .id(chatRoom.getId())
                 .roomName(chatRoom.getRoomName())
                 .totalNum(chatRoom.getTotalNum())
-                .bucketlist(chatRoom.getBucketlist())
+                .post(chatRoom.getPost())
                 .lastMessage(chatRequest.getMessage())
                 .lastUserName(chatRequest.getUserName())
                 .lastMessageTime(LocalDateTime.now())

@@ -4,10 +4,7 @@ import com.team9.bucket_list.domain.dto.chat.*;
 import com.team9.bucket_list.domain.entity.*;
 import com.team9.bucket_list.execption.ApplicationException;
 import com.team9.bucket_list.execption.ErrorCode;
-import com.team9.bucket_list.repository.ChatParticipantRepository;
-import com.team9.bucket_list.repository.ChatRepository;
-import com.team9.bucket_list.repository.ChatRoomRepository;
-import com.team9.bucket_list.repository.MemberRepository;
+import com.team9.bucket_list.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -33,6 +30,7 @@ public class ChatService {
     private final ChatParticipantRepository chatParticipantRepository;
     private final MemberRepository memberRepository;
     private final ChatRepository chatRepository;
+    private final PostRepository postRepository;
 
     @Transactional
     public Page<ChatRoomResponse> getChatList(Long memberId, Pageable pageable) {
@@ -42,11 +40,11 @@ public class ChatService {
     }
 
     @Transactional
-    public ChatRoom createChatRoom(Long bucketlistId, ChatRoomRequest chatRoomRequest) {
-        /*bucketlist repository 나중에 생성*/
-        Bucketlist bucketlist = null;
+    public ChatRoom createChatRoom(Long postId, ChatRoomRequest chatRoomRequest) {
+        //postId로 post 엔티티 찾기
+        Post post = postRepository.findById(postId).orElseThrow(() -> new ApplicationException(ErrorCode.POST_NOT_FOUND));
 
-        ChatRoom chatRoom = chatRoomRepository.save(ChatRoom.save(chatRoomRequest,bucketlist));
+        ChatRoom chatRoom = chatRoomRepository.save(ChatRoom.save(chatRoomRequest, post));
 
         //성공 리턴
         return chatRoom;
