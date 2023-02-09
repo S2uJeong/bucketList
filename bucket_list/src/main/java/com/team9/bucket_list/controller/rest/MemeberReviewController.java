@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
-@RequestMapping("member/rating")
+@RequestMapping("/member/rating")
 @RequiredArgsConstructor
 @Tag(name = "멤버 평가", description = "버킷리스트에 참가했던 멤버를 평가할 수 있습니다. 해당 평가 평점은 프로필에 표시됩니다.")
 public class MemeberReviewController {
@@ -29,41 +29,18 @@ public class MemeberReviewController {
 
     @GetMapping("/{targerUserId}")
     @Operation(summary = "평가 조회", description = "특정 id의 멤버에 대한 평가를 조회합니다.")
-    public Page<MemberReviewResponse> list(@Parameter(name = "targetMemberId", description = "평가 대상 멤버의 id") @PathVariable Long targerUserId,
-                                           @Parameter(hidden = true) @PageableDefault(sort = "createdAt", size = 20, direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<MemberReviewResponse> memberReviewResponses = memberReviewService.list(targerUserId, pageable)
+    public Page<MemberReviewResponse> list(@Parameter(name = "targetMemberName", description = "평가 대상 멤버의 name") @PathVariable String targerUserName,
+                                           @Parameter(hidden = true) @PageableDefault(sort = "createdAt", size = 10, direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<MemberReviewResponse> memberReviewResponses = memberReviewService.list(targerUserName, pageable)
                 .map(memberReview -> MemberReviewResponse.response(memberReview));
         return memberReviewResponses;
     }
 
-    @PostMapping("/{userId}")
+    @PostMapping()
     @Operation(summary = "평가 작성", description = "특정 id의 멤버에 대한 평가를 작성합니다.")
-    public Response<String> createRating(@Parameter(name = "targetMemberId", description = "평가 대상 멤버의 id") @PathVariable(name = "userId") Long targetUserId,
-                                         Authentication authentication,
-                                         @RequestBody MemberReviewRequest memberReviewRequest) {
-        String userName = authentication.getName();
-        String result = memberReviewService.create(targetUserId, userName, memberReviewRequest);
-        return Response.success(result);
-    }
-
-    @PutMapping("/{userId}/{ratingId}")
-    @Operation(summary = "평가 수정", description = "특정 id의 멤버에 대한 특정 평가를 수정합니다.")
-    public Response<String> updateRating(@Parameter(name = "targetMemberId", description = "평가 대상 멤버의 id") @PathVariable(name = "userId") Long targetUserId,
-                                         @Parameter(name = "ratingId", description = "평가 id") @PathVariable(name = "ratingId") Long reviewId,
-                                         Authentication authentication,
-                                         @RequestBody MemberReviewRequest memberReviewRequest) {
-        String userName = authentication.getName();
-        String result = memberReviewService.update(targetUserId, reviewId, userName, memberReviewRequest);
-        return Response.success(result);
-    }
-
-    @DeleteMapping("/{userId}/{ratingId}")
-    @Operation(summary = "평가 삭제", description = "특정 id의 멤버에 대한 특정 평가를 삭제합니다.")
-    public Response<String> deleteRating(@Parameter(name = "targetMemberId", description = "평가 대상 멤버의 id") @PathVariable(name = "userId") Long targetUserId,
-                                         @Parameter(name = "ratingId", description = "평가 id") @PathVariable(name = "ratingId") Long reviewId,
-                                         Authentication authentication) {
-        String userName = authentication.getName();
-        String result = memberReviewService.delete(targetUserId, reviewId, userName);
+    public Response<String> createRating(Authentication authentication, @RequestBody MemberReviewRequest memberReviewRequest) {
+        Long memberId = Long.valueOf(authentication.getName());
+        String result = memberReviewService.create(memberId, memberReviewRequest);
         return Response.success(result);
     }
 

@@ -37,6 +37,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         MemberProfile memberProfile = (MemberProfile) authentication.getPrincipal();
         String email = (String) memberProfile.getAttributes().get("email");
+        email = email.replace("jr.", "");
 
         Optional<Member> duplicatedMember = memberRepository.findByEmailAndOauthIdIsNull(email);
         if(duplicatedMember.isPresent()){

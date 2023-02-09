@@ -166,7 +166,21 @@ public class PostController {
         return Response.success(applyPosts);
     }
 
+    // 승낙받은
+    @GetMapping("/my/consent")
+    @Operation(summary = "마이피드 - 승낙 받은 글 조회", description = "로그인 되어 있는 멤버가 승낙 받은 Post 리스트를 출력합니다.")
+    public Response<Page<PostReadResponse>> myFeedConsent(@Parameter(hidden = true) @PageableDefault(size = 16, sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable,
+                                                        Authentication authentication) {
+        Page<PostReadResponse> consentPosts = postService.myFeedConsent(pageable, Long.valueOf(authentication.getName()));
+        return Response.success(consentPosts);
+    }
 
-
-
+    // 완료한
+    @GetMapping("/my/complete")
+    @Operation(summary = "마이피드 - 잔행 완료된 글 조회", description = "로그인 되어 있는 멤버가 완료한 Post 리스트를 출력합니다.")
+    public Response<Page<PostReadResponse>> myFeedComplete(@Parameter(hidden = true) @PageableDefault(size = 16, sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable,
+                                                        Authentication authentication) {
+        Page<PostReadResponse> completePosts = postService.myFeedComplete(pageable, Long.valueOf(authentication.getName()));
+        return Response.success(completePosts);
+    }
 }

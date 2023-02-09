@@ -2,6 +2,7 @@ package com.team9.bucket_list.repository;
 
 import com.team9.bucket_list.domain.entity.Post;
 
+import com.team9.bucket_list.domain.enumerate.PostStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -22,6 +23,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Page<Post> findByMember_Id(Long memberId, Pageable pageable);
 
     Page<Post> findByIdIn(Set<Long> postId, Pageable pageable);
+
+    Page<Post> findByIdInAndStatus(Set<Long> postId, PostStatus status, Pageable pageable);
 
     Page<Post> findByCategory(String category, Pageable pageable);
 

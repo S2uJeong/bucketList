@@ -6,8 +6,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public interface ApplicationRepository extends JpaRepository<Application, Long> {
@@ -26,5 +28,11 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
 
     int countByPost_IdAndStatusContains(Long postId, byte status);
 
-    Set<Application> findByMember_Id(Long memberId);
+    Set<Application> findByMember_IdAndStatus(Long memberId, byte status);
+
+    @Modifying(clearAutomatically = true)
+    @Query(value = "update application a set a.status = 2 where a.member_id = :memberId and a.post_id = :postId and a.status = 1 ;",nativeQuery = true)
+    int updateRejectApplication(@Param("memberId") Long memberId, @Param("postId") Long postId);
+
+    Optional<Application> findByMember_IdAndPost_Id(Long memberId, Long postId);
 }
