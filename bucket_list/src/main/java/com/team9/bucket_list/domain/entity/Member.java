@@ -31,9 +31,12 @@ public class Member {
     private String userName;
     private int age;
     private int postRemain;
+    private double rate;
 
-//    // profile에 이미지 넣는 거 구현중
-//    private String image;
+    public void rateUpdate(double avg) {
+        rate = avg;
+    }
+
 
     // 프로필 사진
     // 사진을 서버의 특정 폴더에 저장
@@ -88,14 +91,17 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<Alarm> alarmList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member")
-    private List<MemberBucketlist> memberBucketlistList = new ArrayList<>();
+//    @OneToMany(mappedBy = "member")
+//    private List<MemberBucketlist> memberBucketlistList = new ArrayList<>();
 
     @OneToMany(mappedBy = "member")
     private List<ChatParticipant> chatParticipants = new ArrayList<>();
 
     @OneToMany(mappedBy = "member")
     private List<Comment> comments = new ArrayList<>();
+
+    @OneToOne(mappedBy = "member")
+    private Profile profile;
 
     public MemberDto toDto() {
         return MemberDto.builder()
@@ -113,7 +119,7 @@ public class Member {
                 .likesList(likesList)
                 .memberReviewList(memberReviewList)
                 .alarmList(alarmList)
-                .memberBucketlistList(memberBucketlistList)
                 .build();
     }
+
 }

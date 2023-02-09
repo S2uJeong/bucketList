@@ -13,9 +13,11 @@ window.onload = function () {
 
     if (accessToken === null) {
         $("#login_li").show();
+        $(".alarm-btn-box-li").hide();
         $("#user_li").hide();
     } else {
         $("#login_li").hide();
+        $(".alarm-btn-box-li").show();
         $("#user_li").show();
 
         const payload = accessToken.split('.')[1];
@@ -176,3 +178,196 @@ axios.interceptors.response.use(
         return Promise.reject(error);
     }
 )
+
+
+//알람 관련
+let alarmCnt = 1;
+let checkAlarmCnt = 0;
+let alarmArr = ['님이 회원님의 게시글에 댓글을 남겼습니다.  ','님이 회원님의 게시글을 좋아합니다.  ','님이 신청서를 작성하셨습니다.  ','님이 회원님의 신청서를 승낙하셨습니다.  ','님의 리뷰를 작성해주세요.  ',' 버킷리스트의 리뷰를 작성해주세요.  ','기타'];
+
+function getAlarmList() {
+    let html, i;
+    let data;
+
+    if(alarmCnt === 1 || checkAlarmCnt === 1) {
+        axios({
+            method:"GET",
+            url: '/alarm',
+        }).then((res) => {
+            data = res.data.result.content;
+            if(data.length == 0) {
+                if(checkAlarmCnt !== 1)
+                    html += `<div class="text-secondary alarm-none">알림이 없습니다</div>`
+            } else {
+                for (i in data) {
+                    html += alarmHtml(data[i]);
+                }
+            }
+            $("#alarm-list").append(html.replace('undefined', ''));
+        }).catch((error) => {
+
+        });
+        alarmCnt++;
+    } else if(alarmCnt > 1) {
+        let firstIdText = ($('.alarm-text').first()).attr('id');
+
+        if(firstIdText == undefined) {
+            checkAlarmCnt = 1;
+            return;
+        }
+
+        let firstIdArr = firstIdText.split('-');
+        let firstId = firstIdArr[1];
+        let newHtml, j;
+
+        axios({
+            method:"GET",
+            url: '/alarm/new',
+            params:{'id':firstId}
+        }).then((newRes) => {
+            data = newRes.data.result.content;
+            if(data.length == 0) {
+               $('.alarm-none').css('display','block');
+            } else {
+                $('.alarm-none').css('display','none');
+                for (j in data) {
+                    newHtml += alarmHtml(data[j]);
+                }
+            }
+            $("#alarm-list").prepend(newHtml.replace('undefined',''));
+        }).catch((error) => {
+
+        });
+    }
+}
+
+function getHoursMinTime(time) {
+    let date = new Date(time);
+    /*let nowDate = new Date();
+
+    let dateDif = Math.abs((nowDate.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
+    if(dateDif == 0) {*/
+        let hours = ('0' + date.getHours()).slice(-2);
+        let minutes = ('0' + date.getMinutes()).slice(-2);
+        return hours+':'+minutes;
+    /*} else if(dateDif > 0) {
+        let month = ('0' + (date.getMonth() + 1)).slice(-2);
+        let day = ('0' + date.getDate()).slice(-2);
+        return month+'/'+day;
+    }*/
+}
+
+//스크롤
+$("#alarm-list").scroll(function (){
+    let scrollTop = $(this).scrollTop();
+    let innerHeight = $(this).innerHeight();
+    let scrollHeight = $(this).prop('scrollHeight');
+
+    if(scrollTop + innerHeight >= scrollHeight) {
+        newScrollAlarm();
+    }
+});
+
+//스크롤시 새로운 알람 가져오기
+function newScrollAlarm() {
+    let lastIdText = ($('.alarm-text').last()).attr('id');
+    let lastIdArr = lastIdText.split('-');
+    let lastId = lastIdArr[1];
+    let html, i;
+    let data;
+
+    if(lastId == 1) return;
+
+    axios({
+        method:"GET",
+        url: '/alarm/new/scroll',
+        params:{'id':lastId}
+    }).then((res) => {
+        data = res.data.result.content;
+        if(data.length == 0) return;
+        for(i=0; i<data.length; i++) {
+            html += alarmHtml(data[i]);
+        }
+        $("#alarm-list").append(html.replace('undefined',''));
+    }).catch((error) => {
+
+    });
+}
+
+//알람 html 메서드
+function alarmHtml(data) {
+    let text = '';
+    let modal = '';
+    let onclick = '';
+
+    if(data.category == 4) {
+        modal = `data-bs-toggle="modal" data-bs-target="#memberReview"`;
+        text = data.senderName+''+alarmArr[data.category];
+        onclick = `onclick="memberReviewAlarm('${data.senderName}',${data.id})"`
+    }
+    else if(data.category == 5) {
+        text = data.postTitle+''+alarmArr[data.category];
+        modal = `data-bs-toggle="modal" data-bs-target="#bucketReview"`;
+        onclick = `onclick="postReviewAlarm(${data.postTitle},${data.postId},${data.id})"`
+    } else {
+        onclick = `onclick="readAlarm(${data.id},${data.postId})"`
+        text = data.senderName+''+alarmArr[data.category];
+    }
+    return `<a href="javascript:void(0)" class="list-group-item list-group-item-action alarm-text" id="alarm-${data.id}" ${modal} ${onclick}>
+                            ${text}
+                            <small class="opacity-50 text-nowrap alarm-time">${getHoursMinTime(data.createdAt)}</small>
+                            </a>`;
+}
+
+// 리뷰 modal 데이터 대체
+function memberReviewAlarm(senderName, alarmId) {
+    console.log("실행");
+    $('#memberReview_id').text(senderName);
+    $('#memberReview_alarmId').val(alarmId);
+}
+
+function postReviewAlarm(postTitle, postId, alarmId) {
+    console.log("실행2" + postTitle + " " + postId);
+    $('#bucketReview_id').text(postId);
+    $('#bucketReview_name').text(postTitle);
+    $('#bucketReview_alarmId').val(alarmId);
+}
+
+//알람 하나 읽기
+function readAlarm(id,postId) {
+    let data;
+
+    axios({
+        method:"POST",
+        url: '/alarm/read',
+        params: {'alarmId':id}
+    }).then((res) => {
+        data = res.data.result;
+        if(data >= 1) {
+            console.log("읽음처리 완료");
+            location.href='/post/'+postId;
+        }
+    }).catch((error) => {
+
+    });
+}
+
+//알람 모두 읽기
+function readAllAlarm() {
+    let data;
+
+    axios({
+        method:"POST",
+        url: '/alarm/read-all',
+    }).then((res) => {
+        data = res.data.result;
+        if(data >= 1) {
+            alert("모두 읽음 처리 되었습니다.")
+            $('#alarm-list').children().remove();
+            let html = `<div class="text-secondary alarm-none">알림이 없습니다</div>`;
+            $("#alarm-list").append(html);
+        }
+    }).catch((error) => {
+
+    });
+}

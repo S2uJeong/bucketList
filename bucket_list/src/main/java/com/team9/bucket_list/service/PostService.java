@@ -105,11 +105,6 @@ public class PostService {
         return postReadResponse;
     }
 
-    // 내가 쓴 글만 조회 (마이피드)
-    // return을 뭘로 해야될지 모르겠음.. 나중에 마이페이지 생길 때까지 보류
-    public Page<PostReadResponse> findMine(Long memberId, Pageable pageable) {
-        return null;
-    }
 
     // 수정
     @Transactional
@@ -231,6 +226,7 @@ public class PostService {
             return 1;
         }else {
             likesRepository.deleteByPost_IdAndMember_Id(postId, member.getId());
+            alarmService.deleteAlarm((byte) 1, postId, member.getUserName());
             return 0;
         }
     }
@@ -255,7 +251,7 @@ public class PostService {
         Member member = checkMember(memberId);
 
         // Entity
-        Set<Application> applications = applicationRepository.findByMember_Id(member.getId());
+        Set<Application> applications = applicationRepository.findByMember_IdAndStatus(member.getId(), (byte) 0);
         Set<Long> postIds = applications.stream().map(Application::getPost).map(Post::getId).collect(Collectors.toSet());
         Page<Post> applyPosts = postRepository.findByIdIn(postIds, pageable);
         // Dto
@@ -279,5 +275,33 @@ public class PostService {
         return likePostReadResponses;
     }
 
+    // 승낙받은 포스트 리턴
+    public Page<PostReadResponse> myFeedConsent(Pageable pageable, Long memberId) {
+        //        로그인 되어있는지 확인하고 아니면 에러던짐 -> userName인지 memberId인지 확인하여 수정
+        Member member = checkMember(memberId);
 
+        // Entity
+        Set<Application> applications = applicationRepository.findByMember_IdAndStatus(member.getId(), (byte) 1);
+        Set<Long> postIds = applications.stream().map(Application::getPost).map(Post::getId).collect(Collectors.toSet());
+        Page<Post> consentPosts = postRepository.findByIdIn(postIds, pageable);
+        // Dto
+        Page<PostReadResponse> consentPostReadResponses = PostReadResponse.listOf(consentPosts);
+
+        return consentPostReadResponses;
+    }
+
+    // 완료한 포스트 리턴
+    public Page<PostReadResponse> myFeedComplete(Pageable pageable, Long memberId) {
+        //        로그인 되어있는지 확인하고 아니면 에러던짐 -> userName인지 memberId인지 확인하여 수정
+        Member member = checkMember(memberId);
+
+        // Entity
+        Set<Application> applications = applicationRepository.findByMember_IdAndStatus(member.getId(), (byte) 1);
+        Set<Long> postIds = applications.stream().map(Application::getPost).map(Post::getId).collect(Collectors.toSet());
+        Page<Post> completePosts = postRepository.findByIdInAndStatus(postIds, PostStatus.COMPLETE, pageable);
+        // Dto
+        Page<PostReadResponse> completePostReadResponses = PostReadResponse.listOf(completePosts);
+
+        return completePostReadResponses;
+    }
 }

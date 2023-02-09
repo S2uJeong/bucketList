@@ -18,6 +18,8 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @EnableAsync
@@ -30,12 +32,20 @@ public class AlarmService {
     private final PostRepository postRepository;
 
     public Page<AlarmListResponse> alarmList(Pageable pageable, Long memberId) {
-        return AlarmListResponse.toList(alarmRepository.findAllByMember_IdAndReadStatusContains(memberId,pageable, (byte)0));
+        return AlarmListResponse.toList(alarmRepository.findAllByMember_IdAndReadStatusOrderByIdDesc(memberId,(byte)0,pageable));
+    }
+
+    public Page<AlarmListResponse> newAlarmList(Pageable pageable, Long memberId, Long id) {
+        return AlarmListResponse.toList(alarmRepository.findAllByMember_IdAndReadStatusAndIdGreaterThanOrderByIdDesc(pageable,memberId,(byte)0,id));
+    }
+
+    public Page<AlarmListResponse> newAlarmListScroll(Pageable pageable, Long memberId, Long id) {
+        return AlarmListResponse.toList(alarmRepository.findAllByMember_IdAndReadStatusAndIdLessThanOrderByIdDesc(pageable,memberId,(byte)0,id));
     }
 
     //sender : 댓글이나 좋아요, 신청서를 작성한 사람, 알람을 보내는 사람의 아이디
     //postId : 해당 포스트
-    //카테고리 :  0:댓글, 1:좋아요, 2:참가자가 신청서 작성, 3:신청서 승낙, 4:기타
+    //카테고리 :  0:댓글, 1:좋아요, 2:참가자가 신청서 작성, 3:신청서 승낙, 4:멤버 리뷰, 5:버킷리스트 리뷰 , 6:기타
     @Async
     @Transactional
     public void sendAlarm(Long senderId, Long postId, byte category) {
@@ -45,7 +55,9 @@ public class AlarmService {
 
         Member member = memberRepository.findById(post.getMember().getId()).orElseThrow( () -> new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED));
 
-        alarmRepository.save(Alarm.save(category,member,postId, sender.getUserName()));
+        Optional<Alarm> alarm = alarmRepository.findBySenderNameAndPostIdAndCategory(sender.getUserName(),postId,category);
+
+        if(alarm.isEmpty()) alarmRepository.save(Alarm.save(category,member,postId, post.getTitle(), sender.getUserName()));
     }
 
 
@@ -53,12 +65,24 @@ public class AlarmService {
         return alarmRepository.countByMember_Id(memberId);
     }
 
-    @Async
     @Transactional
     public int alarmRead(Long memberId, Long alarmId) {
+        log.info("알람 한개 읽기 memberId: "+memberId +", alarmId: "+alarmId);
         Alarm alarm = alarmRepository.findById(alarmId).orElseThrow(() -> new ApplicationException(ErrorCode.ALARM_NOT_FOUND));
         if(memberId != alarm.getMember().getId()) throw new ApplicationException(ErrorCode.INVALID_PERMISSION);
-        alarmRepository.save(Alarm.updateRead(alarm,(byte)1));
-        return 1;
+        return alarmRepository.readAlarm(memberId,alarmId);
+    }
+
+    @Transactional
+    public int realAllAlarm(Long memberId) {
+        log.info("알람 모두읽기 실행 memberId : " + memberId);
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED));
+        return alarmRepository.readAllAlarm(memberId);
+    }
+
+    //무한 좋아요 방지용
+    @Transactional
+    public int deleteAlarm(byte category, Long postId, String senderName) {
+        return alarmRepository.deleteAlarmByCategoryAndPostIdAndSenderName(category,postId,senderName);
     }
 }

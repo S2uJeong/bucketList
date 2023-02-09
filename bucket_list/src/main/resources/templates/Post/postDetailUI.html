@@ -100,6 +100,26 @@
   <script type="text/javascript">
     $(document).ready(function() {
 
+     const accessToken = localStorage.getItem("accessToken");
+     let accessName;
+
+      if (accessToken === null) {
+        console.log("accessToken === null")
+        $("#login_li").show();
+        $("#user_li").hide();
+      } else {
+        console.log("accessToken !== null")
+        $("#login_li").hide();
+        $("#user_li").show();
+
+        const payload = accessToken.split('.')[1];
+        accessName = JSON.parse(decodeURIComponent(escape(window.atob(payload)))).userName;
+        document.getElementById("userName").innerText = accessName;
+      }
+     console.log(accessName);
+
+
+
       <!-- PostId에 따른 데이터 호출하기 -->
 
       const postId = new URL(window.location.href).pathname.replace("/post/", "");
@@ -137,58 +157,19 @@
       const getdata = async()=>{
         try{
           const response = await axios.get('/post/'+postId+'/json');
-          const applicationResponse = await axios.get('/application-rest/' + postId);
           const commentresponse = await axios.get('/comment/'+postId+'/comments');
+          // const applicationResponse = await axios.get('/application-rest/' + postId);
           console.log(response);     // json 데이터 받아온거
 
 
           jsonState = response.data.resultCode;
           jsonCommentState = commentresponse.data.resultCode;
-          jsonApplicationState = applicationResponse.data.resultCode;
+          // jsonApplicationState = applicationResponse.data.resultCode;
 
           console.log(jsonState);
           console.log(jsonCommentState);
           console.log(jsonApplicationState);
 
-          if (jsonApplicationState == "SUCCESS") {
-            console.log(applicationResponse);
-
-            let application_html =
-                              "<form class=\"\">\n" +
-                    "            <h3 class=\"text-uppercase mb-3\" >{닉네임} / {나이} / {성별}</h3>\n" +
-                    "\n" +
-                    "            <div class=\"form-group mb-2\">\n" +
-                    "              <textarea readonly class=\"form-control border-0 bg-smoke\" rows=\"3\">{내용}</textarea>\n" +
-                    "            </div>\n" +
-                    "\n" +
-                    "            <div style=\"display: flex; justify-content: right\">\n" +
-                    "              <button type=\"button\" class=\"btn btn-outline-success mb-2 mx-2\" data-id=\"{신청서 아이디}\" onclick=\"permit(this)\" style=\"padding: 8px 18px\">\n" +
-                    "                수락\n" +
-                    "              </button>\n" +
-                    "              <button type=\"button\" class=\"btn btn-outline-danger mb-2 mx-2\" data-id=\"{신청서 아이디}\" onclick=\"reject(this)\" style=\"padding: 8px 18px\">\n" +
-                    "                거절\n" +
-                    "              </button>\n" +
-                    "            </div>\n" +
-                    "          </form>"
-            applicationResponse.data.result.list.forEach(function (application) {
-              let application_html_result = application_html.replace("{닉네임}", application.userName)
-                      .replace("{나이}", application.age)
-                      .replace("{내용}", application.content)
-                      .replace("{신청서 아이디}", application.id)
-                      .replace("{신청서 아이디}", application.id);
-
-              if (application.gender === 'MAN') {
-                application_html_result = application_html_result.replace("{성별}", "남")
-              } else {
-                application_html_result = application_html_result.replace("{성별}", "여")
-              }
-
-              let application_box = document.getElementById('application-box');
-              application_box.innerHTML += application_html_result;
-            })
-          } else {
-            console.log('asdasf');
-          }
 
           if(jsonCommentState == "SUCCESS") {
             console.log(commentresponse);
@@ -236,17 +217,6 @@
                     "<div style='display: none' ></div>\n"+
                     "<a class=\"me-n4 comment-tool\" id=\"navbarDropdown\" href=\"#\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\">. . .</a>\n"+
                     "<ul class=\"dropdown-menu droclassName-menu-end\" aria-labelledby=\"navbarDropdown\">\n" +
-                    // "<li><a data-id=\"{대댓글 아이디}\" onclick='commentReplyUpdateButton(this)' class=\"dropdown-item\" hrclassName\">수정</a></li>\n"+
-                    <!-- 수정버튼 클릭시 글작성 칸 출력-->
-                    // "<form class=\"comment-reply-form\" id=\"{대댓글 노출}\" style=\"display: none;\">\n"+
-                    // "<div class=\"form-group mb-2\">\n"+
-                    // "<textarea class=\"form-control border-0 bg-smoke\" id =\"replyComment\"  placeholder=\"Comment\" rows=\"2\"></textarea>\n"+
-                    // "</div>\n"+
-                    // "<div style=\"display: flex; justify-content: right\">\n"+
-                    // "<button type=\"button\" data-id=\"{대댓글 아이디2}\" onclick=\"commentReplyButton(this)\"  class=\"btn btn-outline-info-comment-button mb-2\" style=\"padding: 8px 18px\">등록</button>\n"+
-                    // "</div>\n"+
-                    // "</form>\n"+
-                    <!-- 수정버튼 클릭시 글작성 칸 출력 종료 -->
                     "<li><a data-id=\"{대댓글 삭제}\" onclick=\'commentReplyDeleteButton(this)\' class=\"dropdown-item\" hrclassName\">삭제</a></li>\n"+
                     "</ul>\n"+
                     "<div>\n"+
@@ -291,11 +261,7 @@
                           .replace("{작성일자}", replycomment.createAt)
                           .replace("{내용}", replycomment.content)
                           .replace("{postId}",replycomment.parentId)
-                          // .replace("{대댓글 노출}",replycomment.id)
-                          // .replace("{대댓글 아이디}",replycomment.id)
-                          // .replace("{대댓글 아이디2}",replycomment.id)
                           .replace("{대댓글 삭제}",replycomment.id);
-                  // .replace("replyComment".value,replycomment.content);
                 });
 
                 let commentResult = document.getElementById('list_comment');          // 대댓글 html에 대댓글 갯수만큼 데이터를 넣어 저장한 후
@@ -337,7 +303,7 @@
                   let url = "/post/" + postId;
                   window.location.replace(url);
                 } catch (error) {
-                  alert("실패");
+                  alert("404 페이지");
                 }
               }
               sendData();
@@ -369,8 +335,35 @@
             fileName = jsonResult.fileName;
             permitNum = jsonResult.permitNum;
 
+            if (status !== 'JOIN') {
+              document.getElementById("application_button").style.display = 'none';
+            }
+
+
+            <!-- 포스트 수정,삭제 버튼 게시물 작성자만 뜨도록 설정 -->
+              // window.onload = function () {
+                let postUpdateButton = document.getElementById("postUpdateButton");
+                let postDeleteButton = document.getElementById("postDeleteButton");
+
+                console.log(postUpdateButton);
+                console.log(postDeleteButton);
+
+                console.log(accessName);
+                console.log(userName);
+                console.log(accessName == userName)
+                if (accessName == userName) {
+                  postUpdateButton.style.display = "block";
+                  postDeleteButton.style.display = "block";
+                } else {
+                  postUpdateButton.style.display = "none";
+                  postDeleteButton.style.display = "none";
+                }
+              // }
+              // onload();
+
 
             googlemap(lat, lng, location, title, content);
+
             console.log(lat);
             console.log(lng);
 
@@ -381,6 +374,8 @@
               htmlPostStatus.innerText = "모집완료";
             }
 
+
+            <!-- 포스트 데이터 출력 -->
             var htmlentrantNum = document.getElementById("entrantNum");
             htmlentrantNum.innerHTML = "현재 인원 :" + "(" + permitNum + "/" + entrantNum + ")";
 
@@ -405,14 +400,71 @@
             var htmlcontent = document.getElementById("content");
             htmlcontent.innerHTML = content;
 
-            document.getElementById("image_box").src = 'https://bucketlist-post-image-bucket.s3.ap-northeast-2.amazonaws.com/' + fileName;
+
+            console.log(fileName);
+
+            <!-- 이미지 출력 경로 지정 -->
+            if(fileName == "noImage"){
+              document.getElementById("image_box").src = "/assets/img/noImage.png";
+            }else {
+              document.getElementById("image_box").src = 'https://bucketlist-post-image-bucket.s3.ap-northeast-2.amazonaws.com/' + fileName;
+            }
 
             const accessToken = localStorage.getItem("accessToken");
             const payload = accessToken.split('.')[1];
             let token_userName = JSON.parse(decodeURIComponent(escape(window.atob(payload)))).userName;
 
             if (userName === token_userName) {
+              try{
+              const applicationResponse = await axios.get('/application-rest/' + postId);
+              jsonApplicationState = applicationResponse.data.resultCode;
               document.getElementById("application_button").style.display = 'none';
+
+              if (jsonApplicationState === "SUCCESS") {
+                console.log(applicationResponse);
+
+                let application_html =
+                        "<form class=\"\">\n" +
+                        "            <h3 class=\"text-uppercase mb-3\" >{닉네임} / {나이} / {성별}</h3>\n" +
+                        "\n" +
+                        "            <div class=\"form-group mb-2\">\n" +
+                        "              <textarea readonly class=\"form-control border-0 bg-smoke\" rows=\"3\">{내용}</textarea>\n" +
+                        "            </div>\n" +
+                        "\n" +
+                        "            <div style=\"display: flex; justify-content: right\">\n" +
+                        "              <button type=\"button\" class=\"btn btn-outline-success mb-2 mx-2\" data-id=\"{신청서 아이디}\" onclick=\"permit(this)\" style=\"padding: 8px 18px\">\n" +
+                        "                수락\n" +
+                        "              </button>\n" +
+                        "              <button type=\"button\" class=\"btn btn-outline-danger mb-2 mx-2\" data-id=\"{신청서 아이디}\" onclick=\"reject(this)\" style=\"padding: 8px 18px\">\n" +
+                        "                거절\n" +
+                        "              </button>\n" +
+                        "            </div>\n" +
+                        "          </form>"
+                applicationResponse.data.result.list.forEach(function (application) {
+                  let application_html_result = application_html.replace("{닉네임}", application.userName)
+                          .replace("{나이}", application.age)
+                          .replace("{내용}", application.content)
+                          .replace("{신청서 아이디}", application.id)
+                          .replace("{신청서 아이디}", application.id);
+
+                  if (application.gender === 'MAN') {
+                    application_html_result = application_html_result.replace("{성별}", "남")
+                  } else {
+                    application_html_result = application_html_result.replace("{성별}", "여")
+                  }
+
+                  let application_box = document.getElementById('application-box');
+                  application_box.innerHTML += application_html_result;
+                })
+              } else {
+                console.log('asdasf');
+              }
+              }
+              catch (e) {
+
+              }
+
+
             }
             // }
             //
@@ -503,13 +555,13 @@
               .catch((err) => {
                 console.log(err);
               });
-
-
     });
 
   </script>
 
   <script>
+
+
     <!-- 대댓글 댓글쓰기 누르면 댓글 작성창 띄움 -->
     function showCommentReply(commentReplyId) {
       console.log(commentReplyId);
@@ -565,46 +617,6 @@
       }
       sendData();
     }
-
-    <!-- 대댓글 수정 -->
-    // function commentReplyUpdateButton(comment) {
-    //
-    //   <!-- 이 부분부터 다시 작성, 현재 대댓글에 기존 댓글의 내용을 출력시켜야함 -->
-    //   let replycommentUpdate = $("#replyComment").val();   // 댓글 값 저장
-    //   const parentId = $(comment).data('id');
-    //   <!-- -->
-    //
-    //
-    //
-    //   console.log(replycommentUpdate);
-    //   console.log(parentId);
-    //   const CommentData = {       // 서버로 보낼 데이터
-    //     "content" : replycommentUpdate,         //  댓글 내용            comment
-    //     "parentId" : parentId // 부모댓글 ID가 들어가야함
-    //   }
-    //
-    //   console.log(CommentData);
-    //
-    //   // axios header에 넣을 데이터
-    //   const axiosConfig = {
-    //     headers: {
-    //       "Content-Type": "application/json"
-    //     }
-    //   }
-    //
-    //   const sendData = async () => {
-    //     try {
-    //
-    //       const response = await axios.put('/comment/'+postId+'/comments/'+parentId, JSON.stringify(CommentData), axiosConfig);
-    //       alert("전송 성공");
-    //       let url = "/post/" + postId;
-    //       window.location.replace(url);
-    //     } catch (error) {
-    //       alert("실패");
-    //     }
-    //   }
-    //   sendData();
-    // }
 
 
     <!-- 대댓글 삭제 -->
@@ -791,8 +803,8 @@
       <div class="row">
         <div class="col-md-12">
           <div class="mt-n7" style="float: right">
-            <button type="button" onclick="updatePost()" class="btn btn-outline-dark mb-2" style="padding: 8px 18px">수정</button>
-            <button type="button" onclick="deletePost()" class="btn btn-outline-dark mb-2" style="padding: 8px 18px">삭제</button>
+            <button type="button" id="postUpdateButton" onclick="updatePost()" class="btn btn-outline-dark mb-2" style="padding: 8px 18px; display: none">수정</button>
+            <button type="button" id="postDeleteButton" onclick="deletePost()" class="btn btn-outline-dark mb-2" style="padding: 8px 18px; display: none">삭제</button>
           </div>
           <div>
             <h2 class="text-uppercase mb-2" id="title"></h2>
@@ -854,8 +866,8 @@
               <!--              <div id="package-slider" class="owl-carousel owl-theme package-slider col-md-6">-->
               <!--              <div id="package-slider" class="owl-carousel owl-theme package-slider col-md-6">-->
               <div class="item">
-                <!--                <img class="lazyestload" src="/assets/img/packages/package-slider-03.jpg" alt="image">-->
-                <img id="image_box" class="lazyestload" src="/assets/img/packages/package-slider-03.jpg" alt="image">
+<!--                                <img class="lazyestload" src="/assets/img/packages/package-slider-03.jpg" alt="image">-->
+                <img id="image_box" class="lazyestload" src="" alt="image">
               </div>
 
               <!--              <div class="item">-->
@@ -927,35 +939,101 @@
   <div class="footer-bg-color py-9">
     <div class="container">
       <div class="row">
-        <div class="col-md-6 col-lg-3 mb-7 mb-lg-0">
+        <div class="col-md-6 col-lg-3 mb-5 mb-lg-0 mx-5">
           <a class="d-inline-block" href="index.html">
-            <img class="w-100 mb-6 lazyestload" data-src="/assets/img/logo-color-sm.png" src="/assets/img/logo-color-sm.png" alt="img">
+            <img class="w-100 mb-6 lazyestload" data-src="/assets/img/logo-color-sm.png"
+                 src="/assets/img/logo-color-sm.png" alt="img">
           </a>
-          <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute</p>
+          <p class="mb-0">멋쟁이 사자처럼 백엔드 스쿨 2기에서 진행한 팀프로젝트입니다.
+            버킷리스트를 주제로 비슷한 목표를 가진 사람들이 모여 값진 경험을 할 수 있는 사이트를 구현했습니다.
+            글을 작성하여 사람을 모집할 수 있으며 버킷리스트 개설자는 참가 신청한 참가자를 허가/거부할 수 있습니다.
+            모집이 완료되면 채팅이 활성화되고 일정을 마친 후에 참가자는 버킷리스트와 호스트에 대해서 평가할 수 있습니다.
+          </p>
         </div>
 
-        <div class="col-md-6 col-lg-3 mt-md-4 mb-7 mb-lg-0">
+        <!--각자 깃랩 링크 걸건지?-->
+        <div class="col-md-6 col-lg-3 mt-md-4 mb-5 mb-lg-0 mx-7">
           <div class="title-tag">
-            <h6>Contact us</h6>
+            <h6>Team9 : WEB (WE are Best)</h6>
           </div>
-
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit sed do eiusmod.</p>
           <ul class="list-unstyled mb-0">
             <li class="media mb-2">
               <div class="me-3">
-                <i class="fa fa-home" aria-hidden="true"></i>
+                <i class="fa-regular fa-user"></i>
               </div>
               <div class="media-body">
-                <a href="contact.html">61 Park Street, Fifth Avenue, NY</a>
+                <a href="#" target="_blank">PM : 최수정</a>
+              </div>
+            </li>
+            <li class="media mb-2">
+              <div class="me-3">
+                <i class="fa-regular fa-user"></i>
+              </div>
+              <div class="media-body">
+                <a href="#" target="_blank">CTO : 정재현</a>
               </div>
             </li>
 
             <li class="media mb-2">
               <div class="me-3">
-                <i class="fas fa-phone-alt" aria-hidden="true"></i>
+                <i class="fa-regular fa-user"></i>
               </div>
               <div class="media-body">
-                <a href="tel:88657524332">[88] 657 524 332</a>
+                <a href="#" target="_blank">개발 : 고관운</a>
+              </div>
+            </li>
+
+            <li class="media mb-2">
+              <div class="me-3">
+                <i class="fa-regular fa-user"></i>
+              </div>
+              <div class="media-body">
+                <a href="#" target="_blank">개발 : 박은빈</a>
+              </div>
+            </li>
+
+            <li class="media mb-2">
+              <div class="me-3">
+                <i class="fa-regular fa-user"></i>
+              </div>
+              <div class="media-body">
+                <a href="#" target="_blank">개발 : 배지원</a>
+              </div>
+            </li>
+
+            <li class="media mb-2">
+              <div class="me-3">
+                <i class="fa-regular fa-user"></i>
+              </div>
+              <div class="media-body">
+                <a href="#" target="_blank">개발 : 변지환</a>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="col-md-6 col-lg-3 mt-md-4 mb-5 mb-lg-0 mx-5">
+          <div class="title-tag">
+            <h6>Contact us</h6>
+          </div>
+          <ul class="list-unstyled mb-0">
+            <li class="media mb-2">
+              <div class="me-3">
+                <i class="fa-brands fa-gitlab"></i>
+              </div>
+              <div class="media-body">
+                <a href="https://gitlab.com/S2uJeong1/bucketlist" target="_blank">team project
+                  gitlab</a>
+              </div>
+            </li>
+
+            <li class="media mb-2">
+              <div class="me-3">
+                <i class="fa-regular fa-file"></i>
+              </div>
+              <div class="media-body">
+                <a href="https://ringed-suggestion-46f.notion.site/ceff928e9f1f4e2482f07387b997f593"
+                   target="_blank">team project notion</a>
               </div>
             </li>
 
@@ -963,126 +1041,9 @@
               <div class="me-3">
                 <i class="far fa-envelope" aria-hidden="true"></i>
               </div>
-              <div class="media-body">
-                <a href="mailTo:info@star-travel.com">info@star-travel.com</a>
-              </div>
-            </li>
-          </ul>
-        </div>
-
-        <div class="col-md-6 col-lg-3 mt-lg-4 mb-7 mb-md-0">
-          <div class="title-tag pb-1">
-            <h6>Gallery</h6>
-          </div>
-
-          <div class="row me-auto gallery mb-2 mb-md-0">
-            <div class="col-4 mb-3">
-              <div class="media media-hover">
-                <div class="content w-100">
-                  <img class="media-img lazyestload" data-src="/assets/img/home/gallery/thumb-gallery-1.jpg"
-                       src="/assets/img/home/gallery/thumb-gallery-1.jpg" alt="gallery-img">
-                  <a class="media-img-overlay" data-fancybox="footer-gallery" href="/assets/img/home/gallery/gallery-1.jpg"></a>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-4 mb-3">
-              <div class="media media-hover">
-                <div class="content w-100">
-                  <img class="media-img lazyestload" data-src="/assets/img/home/gallery/thumb-gallery-2.jpg"
-                       src="/assets/img/home/gallery/thumb-gallery-2.jpg" alt="gallery-img">
-                  <a class="media-img-overlay" data-fancybox="footer-gallery" href="/assets/img/home/gallery/gallery-2.jpg"></a>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-4 mb-3">
-              <div class="media media-hover">
-                <div class="content w-100">
-                  <img class="media-img lazyestload" data-src="/assets/img/home/gallery/thumb-gallery-3.jpg"
-                       src="/assets/img/home/gallery/thumb-gallery-3.jpg" alt="gallery-img">
-                  <a class="media-img-overlay" data-fancybox="footer-gallery" href="/assets/img/home/gallery/gallery-3.jpg"></a>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-4">
-              <div class="media media-hover">
-                <div class="content w-100">
-                  <img class="media-img lazyestload" data-src="/assets/img/home/gallery/thumb-gallery-4.jpg"
-                       src="/assets/img/home/gallery/thumb-gallery-4.jpg" alt="gallery-img">
-                  <a class="media-img-overlay" data-fancybox="footer-gallery" href="/assets/img/home/gallery/gallery-4.jpg"></a>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-4">
-              <div class="media media-hover">
-                <div class="content w-100">
-                  <img class="media-img lazyestload" data-src="/assets/img/home/gallery/thumb-gallery-5.jpg"
-                       src="/assets/img/home/gallery/thumb-gallery-5.jpg" alt="gallery-img">
-                  <a class="media-img-overlay" data-fancybox="footer-gallery" href="/assets/img/home/gallery/gallery-5.jpg"></a>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-4">
-              <div class="media media-hover">
-                <div class="content w-100">
-                  <img class="media-img lazyestload" data-src="/assets/img/home/gallery/thumb-gallery-6.jpg"
-                       src="/assets/img/home/gallery/thumb-gallery-6.jpg" alt="gallery-img">
-                  <a class="media-img-overlay" data-fancybox="footer-gallery" href="/assets/img/home/gallery/gallery-6.jpg"></a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-6 col-lg-3 mt-lg-4">
-          <div class="title-tag">
-            <h6>Newsletter</h6>
-          </div>
-
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit sed do.</p>
-
-          <form class="mb-6" action="index.html" method="post">
-            <div class="input-group input-group-sm">
-              <input type="email" class="form-control form-control-sm form-transparent" required="" placeholder="Enter your email" aria-label="Enter your email">
-              <button class="btn border-0 btn btn-append hover-bg-primary" type="submit">
-                <i class="fas fa-long-arrow-alt-right text-white ltr" aria-hidden="true"></i>
-              </button>
-            </div>
-          </form>
-
-          <ul class="list-inline d-flex mb-0">
-            <li class="me-3 me-lg-2 me-xl-3">
-              <a class="icon-default icon-border rounded-circle hover-bg-primary" href="javascript:void(0)">
-                <i class="fab fa-facebook-f text-white" aria-hidden="true"></i>
-              </a>
-            </li>
-
-            <li class="me-3 me-lg-2 me-xl-3">
-              <a class="icon-default icon-border rounded-circle hover-bg-primary" href="javascript:void(0)">
-                <i class="fab fa-twitter text-white" aria-hidden="true"></i>
-              </a>
-            </li>
-
-            <li class="me-3 me-lg-2 me-xl-3">
-              <a class="icon-default icon-border rounded-circle hover-bg-primary" href="javascript:void(0)">
-                <i class="fab fa-google-plus-g text-white" aria-hidden="true"></i>
-              </a>
-            </li>
-
-            <li class="me-3 me-lg-2 me-xl-3">
-              <a class="icon-default icon-border rounded-circle hover-bg-primary" href="javascript:void(0)">
-                <i class="fab fa-pinterest-p text-white" aria-hidden="true"></i>
-              </a>
-            </li>
-
-            <li class="">
-              <a class="icon-default icon-border rounded-circle hover-bg-primary" href="javascript:void(0)">
-                <i class="fab fa-vimeo-v text-white" aria-hidden="true"></i>
-              </a>
+              <!--                            <div class="media-body">-->
+              <!--                                <a href="mailTo:info@star-travel.com">이메일 넣을까 말까</a>-->
+              <!--                            </div>-->
             </li>
           </ul>
         </div>
@@ -1094,41 +1055,14 @@
     <div class="container">
       <div class="row align-items-center">
         <div class="col-md-6 order-1 order-md-0">
-          <p class="mb-0 mb-md-0 text-md-start">Copyright &copy; <span id="copy-year"></span> All Rights Reserved by
+          <p class="mb-0 mb-md-0 text-md-start">Copyright &copy; <span id="copy-year"></span> All Rights
+            Reserved by
             <a href="http://www.iamabdus.com/" target="_blank">Abdus</a>
           </p>
-        </div>
-
-        <div class="col-md-6">
-          <ul class="list-inline text-capitalize d-flex align-items-center justify-content-md-end justify-content-center mb-md-0">
-            <li class="me-3">
-              <a href="setting.html">Privacy policy</a>
-            </li>
-
-            <li class="me-3">
-              <a href="about-us.html">About us</a>
-            </li>
-
-            <li class="me-3">
-              <a href="contact.html">Support</a>
-            </li>
-
-            <li class="">
-              <a href="blog-single-right-sidebar.html">Blog</a>
-            </li>
-          </ul>
         </div>
       </div>
     </div>
   </div>
-
-  <script>
-    var d = new Date();
-    var year = d.getFullYear();
-    document.getElementById("copy-year").innerHTML = year;
-  </script>
-</footer>
-
 
 <!-- ====================================
 ——— MODAL SECTION
@@ -1429,6 +1363,7 @@
 
 <script src="/assets/js/custom.js"></script>
 <script src="/js/header.js"></script>
+
 
 </body>
 </html>
