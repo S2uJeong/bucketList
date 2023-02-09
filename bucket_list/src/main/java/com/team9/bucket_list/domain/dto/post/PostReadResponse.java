@@ -6,6 +6,7 @@ import com.team9.bucket_list.domain.enumerate.PostStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 
@@ -14,6 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Builder
+@Slf4j
 public class PostReadResponse {
 
     private Long postId;
@@ -40,6 +42,8 @@ public class PostReadResponse {
 
     // 글 하나 상세볼 때 사용하는 메서드
     public static PostReadResponse detailOf(Post post, Double lat, Double lng) {  // 위경도는 DB에 저장하지 않으므로 매개변수로 받아서 DTO화 시킨다.
+        log.info("post.getfile :"+post.getPostFileList().isEmpty());
+        log.info("post.getfileId :"+post.getPostFileList().isEmpty());
         return PostReadResponse.builder()
                 .postId(post.getId())
                 .userName(post.getMember().getUserName())
@@ -55,9 +59,9 @@ public class PostReadResponse {
                 .eventEnd(post.getEventEnd())
                 .status(post.getStatus())
                 .category(post.getCategory())
-                .fileName(post.getPostFileList().get(0).getAwsS3FileName())
+                .fileName(post.getPostFileList().isEmpty()?  "noImage" : post.getPostFileList().get(0).getAwsS3FileName())
                 .permitNum(post.getPermitNum())
-                .fileId(post.getPostFileList().get(0).getId())
+                .fileId(post.getPostFileList().isEmpty()? 0 : post.getPostFileList().get(0).getId() )
 //                .member(post.getMember())
 //                .applicationList(post.getApplicationList())
 //                .likeList(post.getLikesList())
@@ -65,18 +69,22 @@ public class PostReadResponse {
                 .build();
     }
 
+
+
     // list로 볼 때 사용하는 메서드
     // builder로 구성된 것은 조회 시, 제목처럼 한 줄에 나와있을 내용을 나열한 것이다.
     public static Page<PostReadResponse> listOf(Page<Post> posts) {
         return posts.map(post -> PostReadResponse.builder()
                 .postId(post.getId())
                 .title(post.getTitle())
-//                .member(post.getMember())
+                .userName(post.getMember().getUserName())
                 .status(post.getStatus())
                 .untilRecruit(post.getUntilRecruit())
                 .eventStart(post.getEventStart())
                 .eventEnd(post.getEventEnd())
-                .fileName(post.getPostFileList().get(0).getAwsS3FileName())
+                .location(post.getLocation())
+                .cost(post.getCost())
+                .fileName(post.getPostFileList().isEmpty()?  "noImage" : post.getPostFileList().get(0).getAwsS3FileName())
 //                .applicationList(post.getApplicationList()) // 총 승인 인원 확인
                 .build()
         );
