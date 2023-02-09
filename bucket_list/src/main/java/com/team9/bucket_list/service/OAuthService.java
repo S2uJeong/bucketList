@@ -38,6 +38,7 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
         MemberProfile memberProfile = OAuthAttributes.extract(registrationId, oAuth2User); /**attribute만 넘기도록 리팩토링 필요**/
 
         String email = (String) memberProfile.getAttributes().get("email");
+        email = email.replace(".jr", "");
 
         // 기존 email로 회원가입한 사람 있는지 확인
         Optional<Member> duplicatedMember = memberRepository.findByEmailAndOauthIdIsNull(email);
