@@ -45,7 +45,7 @@ public class AlarmService {
 
     //sender : 댓글이나 좋아요, 신청서를 작성한 사람, 알람을 보내는 사람의 아이디
     //postId : 해당 포스트
-    //카테고리 :  0:댓글, 1:좋아요, 2:참가자가 신청서 작성, 3:신청서 승낙, 4:기타
+    //카테고리 :  0:댓글, 1:좋아요, 2:참가자가 신청서 작성, 3:신청서 승낙, 4:멤버 리뷰, 5:버킷리스트 리뷰 , 6:기타
     @Async
     @Transactional
     public void sendAlarm(Long senderId, Long postId, byte category) {
@@ -78,5 +78,13 @@ public class AlarmService {
         log.info("알람 모두읽기 실행 memberId : " + memberId);
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED));
         return alarmRepository.readAllAlarm(memberId);
+    }
+
+    //무한 좋아요 방지용
+    @Transactional
+    public int deleteAlarm(byte category, Long postId, Long memberId) {
+        postRepository.findById(postId).orElseThrow(() -> new ApplicationException(ErrorCode.POST_NOT_FOUND));
+        memberRepository.findById(memberId).orElseThrow(() -> new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED));
+        return alarmRepository.deleteAlarmByCategoryAndAndPostIdAndAndMember_Id(category,postId,memberId);
     }
 }
