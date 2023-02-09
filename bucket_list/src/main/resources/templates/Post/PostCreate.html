@@ -852,7 +852,9 @@
             let photoFile = document.getElementById('pic_file_wd');
             frm.append("file", photoFile.files[0]);
 
-            await axios.post('/post/' + post_id + '/files/upload', frm, fileConfig);
+            if(photoFile.files[0] != null){
+              await axios.post('/post/' + post_id + '/files/upload', frm, fileConfig);
+            }
 
             let url = "/post/" + post_id;
             window.location.replace(url);
@@ -900,7 +902,10 @@
             let photoFile = document.getElementById('pic_file_kr');
             frm.append("file", photoFile.files[0]);
 
-            await axios.post('/post/' + post_id + '/files/upload', frm, fileConfig);
+            if(photoFile.files[0] != null){
+              await axios.post('/post/' + post_id + '/files/upload', frm, fileConfig);
+            }
+
 
             let url = "/post/" + post_id;
             window.location.replace(url);

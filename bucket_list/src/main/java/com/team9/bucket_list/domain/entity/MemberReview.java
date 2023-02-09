@@ -6,8 +6,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
-
 @Entity
 @Builder
 @NoArgsConstructor
@@ -20,7 +18,7 @@ public class MemberReview {
 
     private String content;
     private Long writerId;
-    private int rate;
+    private double rate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")

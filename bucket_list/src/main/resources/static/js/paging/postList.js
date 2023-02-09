@@ -54,8 +54,8 @@ function setTable() {
         "                </h6>\n" +
         "                <p class=\"mb-1\">모집 기간 : ~ {모집 마감 날짜}</p>\n" +
         "                <p class=\"mb-1\">일정 : {일정 시작 날짜} ~ {일정 종료 날짜}</p>\n" +
-        "                <p class=\"mb-1\">{장소}</p>\n" +
-        "                <p class=\"mb-1\">{비용}</p>\n" +
+        "                <p class=\"mb-1\">비용 : {비용}</p>\n" +
+        "                <p class=\"mb-1\">장소 : {장소}</p>\n" +
         "              </div>\n" +
         "            </div>\n" +
         "          </div>";
@@ -64,14 +64,23 @@ function setTable() {
     parent.innerHTML = "";
 
     post_list.forEach(function (post) {
+        let postImage;
+        <!-- 이미지 출력 경로 지정 -->
+        if(post.fileName == "noImage"){
+            postImage = "/assets/img/noImage.png";
+        }else {
+            postImage = 'https://bucketlist-post-image-bucket.s3.ap-northeast-2.amazonaws.com/' + post.fileName;
+        }
+
         let html_result = html.replace("{제목}", post.title)
             .replaceAll("{포스트 아이디}", post.postId)
+            .replace("{주최자 이름}", post.userName)
             .replace("{비용}", post.cost)
             .replace("{장소}", post.location)
             .replace("{일정 시작 날짜}", post.eventStart)
             .replace("{일정 종료 날짜}", post.eventEnd)
             .replace("{모집 마감 날짜}", post.untilRecruit)
-            .replace("{이미지 URL}", "https://bucketlist-post-image-bucket.s3.ap-northeast-2.amazonaws.com/" + post.fileName);
+            .replace("{이미지 URL}", postImage);
 
         if (post.status === 'JOIN') {
             html_result = html_result.replace("{모집상태}", '모집중')

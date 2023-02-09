@@ -62,9 +62,53 @@
     #map_ma {width:100%; height:400px; clear:both; border:solid 1px red;}
   </style>
 
+  <script>
+    const post_id = new URL(window.location.href).pathname.replace("/post/", "");
+    const config = { "Content-Type": "application/json" }
 
+    async function permit(identifier) {
+      try{
+        const application_id = $(identifier).data('id')
+        let body = {"applicationId" : application_id, "status" : 1}
+
+        await axios.put('/application-rest/' + post_id, body, config);
+
+        window.location.reload();
+        return false;
+      } catch (e) {
+        console.log(e.response.data.result.errorCode);
+        if (e.response.data.result.errorCode === "EXCEED_ENTRANT_NUM") {
+          alert('참가 인원 수를 초과하였습니다.');
+        }
+      }
+    }
+
+    async function reject(identifier) {
+      try{
+        const application_id = $(identifier).data('id')
+        let body = {"applicationId" : application_id, "status" : 2}
+
+        await axios.put('/application-rest/' + post_id, body, config);
+
+        window.location.reload();
+        return false;
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  </script>
   <script type="text/javascript">
     $(document).ready(function() {
+
+
+
+     const accessToken = localStorage.getItem("accessToken");
+     const payload = accessToken.split('.')[1];
+     let accessName = JSON.parse(decodeURIComponent(escape(window.atob(payload)))).userName;
+
+     console.log(accessName);
+
+
 
       <!-- PostId에 따른 데이터 호출하기 -->
 
@@ -82,6 +126,7 @@
       let jsonResult;       // Json 반환 값 저장
       let jsonCommentState;        // Json 댓글 반환 상태(성공인지 에러인지)
       let jsonCommentResult;       // Json 댓글 반환 값 저장
+      let jsonApplicationState;
       let title;
       let userName;    //  => writer로 사용 유저 아이디이름
       let content;
@@ -96,20 +141,64 @@
       let status;
       let category;
       let fileName;
+      let permitNum;
 
 
       const getdata = async()=>{
         try{
           const response = await axios.get('/post/'+postId+'/json');
+          const applicationResponse = await axios.get('/application-rest/' + postId);
           const commentresponse = await axios.get('/comment/'+postId+'/comments');
           console.log(response);     // json 데이터 받아온거
 
 
           jsonState = response.data.resultCode;
           jsonCommentState = commentresponse.data.resultCode;
+          jsonApplicationState = applicationResponse.data.resultCode;
 
           console.log(jsonState);
           console.log(jsonCommentState);
+          console.log(jsonApplicationState);
+
+          if (jsonApplicationState == "SUCCESS") {
+            console.log(applicationResponse);
+
+            let application_html =
+                              "<form class=\"\">\n" +
+                    "            <h3 class=\"text-uppercase mb-3\" >{닉네임} / {나이} / {성별}</h3>\n" +
+                    "\n" +
+                    "            <div class=\"form-group mb-2\">\n" +
+                    "              <textarea readonly class=\"form-control border-0 bg-smoke\" rows=\"3\">{내용}</textarea>\n" +
+                    "            </div>\n" +
+                    "\n" +
+                    "            <div style=\"display: flex; justify-content: right\">\n" +
+                    "              <button type=\"button\" class=\"btn btn-outline-success mb-2 mx-2\" data-id=\"{신청서 아이디}\" onclick=\"permit(this)\" style=\"padding: 8px 18px\">\n" +
+                    "                수락\n" +
+                    "              </button>\n" +
+                    "              <button type=\"button\" class=\"btn btn-outline-danger mb-2 mx-2\" data-id=\"{신청서 아이디}\" onclick=\"reject(this)\" style=\"padding: 8px 18px\">\n" +
+                    "                거절\n" +
+                    "              </button>\n" +
+                    "            </div>\n" +
+                    "          </form>"
+            applicationResponse.data.result.list.forEach(function (application) {
+              let application_html_result = application_html.replace("{닉네임}", application.userName)
+                      .replace("{나이}", application.age)
+                      .replace("{내용}", application.content)
+                      .replace("{신청서 아이디}", application.id)
+                      .replace("{신청서 아이디}", application.id);
+
+              if (application.gender === 'MAN') {
+                application_html_result = application_html_result.replace("{성별}", "남")
+              } else {
+                application_html_result = application_html_result.replace("{성별}", "여")
+              }
+
+              let application_box = document.getElementById('application-box');
+              application_box.innerHTML += application_html_result;
+            })
+          } else {
+            console.log('asdasf');
+          }
 
           if(jsonCommentState == "SUCCESS") {
             console.log(commentresponse);
@@ -125,7 +214,7 @@
                     "<div style='display: none' data-id=\"{댓글 아이디}\"></div>\n"+
                     "<a class=\"me-n4 comment-tool\" id=\"navbarDropdown\" href=\"#\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\">. . .</a>\n"+
                     "<ul class=\"dropdown-menu droclassName-menu-end\" aria-labelledby=\"navbarDropdown\">\n" +
-                    "<li><a  class=\"dropdown-item\" hrclassName\">수정</a></li>\n"+
+                    // "<li><a  class=\"dropdown-item\" hrclassName\">수정</a></li>\n"+
                     "<li><a data-id=\"{댓글 삭제}\" onclick=\'commentReplyDeleteButton(this)\' class=\"dropdown-item\" hrclassName\">삭제</a></li>\n"+
                     "</ul>\n"+
                     "<div>\n"+
@@ -141,7 +230,7 @@
                     "<a class=\"comment-date\" data-id=\"{댓글 노출}\" onclick=\"showCommentReply(this)\">댓글쓰기</a>\n"+
                     "<form class=\"comment-reply-form\" id=\"{댓글 노출2}\" style=\"display: none;\">\n"+
                     "<div class=\"form-group mb-2\">\n"+
-                    "<textarea class=\"form-control border-0 bg-smoke\" id =\"replyComment\" placeholder=\"Comment\" rows=\"2\"></textarea>\n"+
+                    "<textarea class=\"form-control border-0 bg-smoke\" id =\"{대댓글 작성}\" placeholder=\"Comment\" rows=\"2\"></textarea>\n"+
                     "</div>\n"+
                     "<div style=\"display: flex; justify-content: right\">\n"+
                     "<button type=\"button\" data-id=\"{댓글 아이디2}\" onclick=\"commentReplyButton(this)\"  class=\"btn btn-outline-info-comment-button mb-2\" style=\"padding: 8px 18px\">등록</button>\n"+
@@ -157,18 +246,7 @@
                     "<div style='display: none' ></div>\n"+
                     "<a class=\"me-n4 comment-tool\" id=\"navbarDropdown\" href=\"#\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\">. . .</a>\n"+
                     "<ul class=\"dropdown-menu droclassName-menu-end\" aria-labelledby=\"navbarDropdown\">\n" +
-                    "<li><a data-id=\"{대댓글 아이디}\" onclick='commentReplyUpdateButton(this)' class=\"dropdown-item\" hrclassName\">수정</a></li>\n"+
-                    <!-- 수정버튼 클릭시 글작성 칸 출력-->
-                    "<form class=\"comment-reply-form\" id=\"{대댓글 노출}\" style=\"display: none;\">\n"+
-                    "<div class=\"form-group mb-2\">\n"+
-                    "<textarea class=\"form-control border-0 bg-smoke\" id =\"replyComment\"  placeholder=\"Comment\" rows=\"2\"></textarea>\n"+
-                    "</div>\n"+
-                    "<div style=\"display: flex; justify-content: right\">\n"+
-                    "<button type=\"button\" data-id=\"{대댓글 아이디2}\" onclick=\"commentReplyButton(this)\"  class=\"btn btn-outline-info-comment-button mb-2\" style=\"padding: 8px 18px\">등록</button>\n"+
-                    "</div>\n"+
-                    "</form>\n"+
-                    <!-- 수정버튼 클릭시 글작성 칸 출력 종료 -->
-                    "<li><a data-id=\"{대댓글 아이디3}\" onclick=\'commentReplyDeleteButton(this)\' class=\"dropdown-item\" hrclassName\">삭제</a></li>\n"+
+                    "<li><a data-id=\"{대댓글 삭제}\" onclick=\'commentReplyDeleteButton(this)\' class=\"dropdown-item\" hrclassName\">삭제</a></li>\n"+
                     "</ul>\n"+
                     "<div>\n"+
                     "<div>\n"+
@@ -199,7 +277,8 @@
                       .replace("{댓글 아이디2}",comment.id)
                       .replace("{댓글 노출}",'comment'+comment.id+'-'+comment.id)
                       .replace("{댓글 노출2}",'comment'+comment.id+'-'+comment.id)
-                      .replace("{댓글 삭제}",comment.id);
+                      .replace("{댓글 삭제}",comment.id)
+                      .replace("{대댓글 작성}",'replyComment'+comment.id);
 
               let html_reply_result;
               if (comment.children.length != 0) {                     // 만약 대댓글이 있다면
@@ -211,11 +290,7 @@
                           .replace("{작성일자}", replycomment.createAt)
                           .replace("{내용}", replycomment.content)
                           .replace("{postId}",replycomment.parentId)
-                          .replace("{대댓글 노출}",replycomment.id)
-                          .replace("{대댓글 아이디}",replycomment.id)
-                          .replace("{대댓글 아이디2}",replycomment.id)
-                          .replace("{대댓글 아이디3}",replycomment.id)
-                          .replace("replyComment".value,replycomment.content);
+                          .replace("{대댓글 삭제}",replycomment.id);
                 });
 
                 let commentResult = document.getElementById('list_comment');          // 대댓글 html에 대댓글 갯수만큼 데이터를 넣어 저장한 후
@@ -257,16 +332,18 @@
                   let url = "/post/" + postId;
                   window.location.replace(url);
                 } catch (error) {
-                  alert("실패");
+                  alert("404 페이지");
                 }
               }
               sendData();
             });
 
-          }else
+          }else {
             alert("서버 반환값 Error임 404페이지 이동");
+            console.log("댓글 없음");
+          }
 
-          if(jsonState == "SUCCESS") {
+          if (jsonState == "SUCCESS") {
 
             jsonResult = response.data.result;
             console.log(jsonResult);
@@ -285,18 +362,49 @@
             status = jsonResult.status;
             category = jsonResult.category;
             fileName = jsonResult.fileName;
+            permitNum = jsonResult.permitNum;
 
 
-            googlemap(lat,lng,location,title,content);
+
+
+            <!-- 포스트 수정,삭제 버튼 게시물 작성자만 뜨도록 설정 -->
+              // window.onload = function () {
+                let postUpdateButton = document.getElementById("postUpdateButton");
+                let postDeleteButton = document.getElementById("postDeleteButton");
+
+                console.log(postUpdateButton);
+                console.log(postDeleteButton);
+
+                console.log(accessName);
+                console.log(userName);
+                console.log(accessName == userName)
+                if (accessName == userName) {
+                  postUpdateButton.style.display = "block";
+                  postDeleteButton.style.display = "block";
+                } else {
+                  postUpdateButton.style.display = "none";
+                  postDeleteButton.style.display = "none";
+                }
+              // }
+              // onload();
+
+
+            googlemap(lat, lng, location, title, content);
+
             console.log(lat);
             console.log(lng);
 
+            var htmlPostStatus = document.getElementById("postStatus");
+            if (status === "JOIN") {
+              htmlPostStatus.innerText = "모집중";
+            } else if (status === "JOINCOMPLETE") {
+              htmlPostStatus.innerText = "모집완료";
+            }
 
-            var htmlentrantNum = document.getElementById("status");
-            htmlentrantNum.innerHTML = status;
 
+            <!-- 포스트 데이터 출력 -->
             var htmlentrantNum = document.getElementById("entrantNum");
-            htmlentrantNum.innerHTML = "현재 인원 :" + "("+entrantNum +"/"+entrantNum+")";
+            htmlentrantNum.innerHTML = "현재 인원 :" + "(" + permitNum + "/" + entrantNum + ")";
 
             var htmltitle = document.getElementById("title");
             htmltitle.innerHTML = title;
@@ -305,10 +413,10 @@
             htmluserName.innerHTML = userName;
 
             var htmluntil = document.getElementById("untilRecruit");
-            htmluntil.innerHTML = "모집기간 : "+ untilRecruit;
+            htmluntil.innerHTML = "모집기간 : " + untilRecruit;
 
             var htmlevent = document.getElementById("eventStart");
-            htmlevent.innerHTML = "일정 : "+eventStart +" ~ "+eventEnd;
+            htmlevent.innerHTML = "일정 : " + eventStart + " ~ " + eventEnd;
 
             var htmlcost = document.getElementById("cost");
             htmlcost.innerHTML = "비용 : " + cost;
@@ -319,14 +427,34 @@
             var htmlcontent = document.getElementById("content");
             htmlcontent.innerHTML = content;
 
-            document.getElementById("image_box").src = 'https://bucketlist-post-image-bucket.s3.ap-northeast-2.amazonaws.com/' + fileName;
+
+            console.log(fileName);
+
+            <!-- 이미지 출력 경로 지정 -->
+            if(fileName == "noImage"){
+              document.getElementById("image_box").src = "/assets/img/noImage.png";
+            }else {
+              document.getElementById("image_box").src = 'https://bucketlist-post-image-bucket.s3.ap-northeast-2.amazonaws.com/' + fileName;
+            }
+
+
+
+            const accessToken = localStorage.getItem("accessToken");
+            const payload = accessToken.split('.')[1];
+            let token_userName = JSON.parse(decodeURIComponent(escape(window.atob(payload)))).userName;
+
+            if (userName === token_userName) {
+              document.getElementById("application_button").style.display = 'none';
+            }
             // }
             //
             // onload();
 
             console.log(location);
-          }else
+          } else {
             alert("서버 반환값 Error임 404페이지 이동");
+            console.log("1개조회 실패")
+          }
 
 
         }catch (ERROR){
@@ -407,13 +535,13 @@
               .catch((err) => {
                 console.log(err);
               });
-
-
     });
 
   </script>
 
   <script>
+
+
     <!-- 대댓글 댓글쓰기 누르면 댓글 작성창 띄움 -->
     function showCommentReply(commentReplyId) {
       console.log(commentReplyId);
@@ -432,14 +560,18 @@
 
     <!-- 대댓글 작성 -->
     function commentReplyButton(comment) {
-
-      let replycomment = $("#replyComment").val();   // 댓글 값 저장
       const parentId = $(comment).data('id')
 
-      console.log(replycomment);
+      let str = 'replyComment'+parentId;
+      let name = document.getElementById(str);
+      console.log(name);
+
+      let temp = $("#"+str).val();
+
+      console.log(temp);
       console.log(parentId);
       const CommentData = {       // 서버로 보낼 데이터
-        "content" : replycomment,         //  댓글 내용            comment
+        "content" : temp,         //  댓글 내용            comment
         "parentId" : parentId // 부모댓글 ID가 들어가야함
       }
 
@@ -456,46 +588,6 @@
         try {
 
           const response = await axios.post('/comment/'+postId, JSON.stringify(CommentData), axiosConfig);
-          alert("전송 성공");
-          let url = "/post/" + postId;
-          window.location.replace(url);
-        } catch (error) {
-          alert("실패");
-        }
-      }
-      sendData();
-    }
-
-    <!-- 대댓글 수정 -->
-    function commentReplyUpdateButton(comment) {
-
-      <!-- 이 부분부터 다시 작성, 현재 대댓글에 기존 댓글의 내용을 출력시켜야함 -->
-      let replycommentUpdate = $("#replyComment").val();   // 댓글 값 저장
-      const parentId = $(comment).data('id');
-      <!-- -->
-
-
-
-      console.log(replycommentUpdate);
-      console.log(parentId);
-      const CommentData = {       // 서버로 보낼 데이터
-        "content" : replycommentUpdate,         //  댓글 내용            comment
-        "parentId" : parentId // 부모댓글 ID가 들어가야함
-      }
-
-      console.log(CommentData);
-
-      // axios header에 넣을 데이터
-      const axiosConfig = {
-        headers: {
-          "Content-Type": "application/json"
-        }
-      }
-
-      const sendData = async () => {
-        try {
-
-          const response = await axios.put('/comment/'+postId+'/comments/'+parentId, JSON.stringify(CommentData), axiosConfig);
           alert("전송 성공");
           let url = "/post/" + postId;
           window.location.replace(url);
@@ -664,7 +756,7 @@
           <div class="col-lg-6">
             <div class="page-title-content">
               <div class="title-border">
-                <h2 class="text-uppercase text-white font-weight-bold" id="status">모집중</h2>
+                <h2 class="text-uppercase text-white font-weight-bold" id="postStatus">모집중</h2>
               </div>
               <p class="text-white mb-0" id="entrantNum">현재 인원 : (3 / 5)</p>
               <div class="right_area pt-2" style="display: flex; justify-content: center">
@@ -691,8 +783,8 @@
       <div class="row">
         <div class="col-md-12">
           <div class="mt-n7" style="float: right">
-            <button type="button" onclick="updatePost()" class="btn btn-outline-dark mb-2" style="padding: 8px 18px">수정</button>
-            <button type="button" onclick="deletePost()" class="btn btn-outline-dark mb-2" style="padding: 8px 18px">삭제</button>
+            <button type="button" id="postUpdateButton" onclick="updatePost()" class="btn btn-outline-dark mb-2" style="padding: 8px 18px; display: none">수정</button>
+            <button type="button" id="postDeleteButton" onclick="deletePost()" class="btn btn-outline-dark mb-2" style="padding: 8px 18px; display: none">삭제</button>
           </div>
           <div>
             <h2 class="text-uppercase mb-2" id="title"></h2>
@@ -753,14 +845,14 @@
               <!-- 이미지 출력 부분 -->
               <!--              <div id="package-slider" class="owl-carousel owl-theme package-slider col-md-6">-->
               <!--              <div id="package-slider" class="owl-carousel owl-theme package-slider col-md-6">-->
-                <div class="item">
-                  <img class="lazyestload" src="/assets/img/packages/package-slider-03.jpg" alt="image">
-                  <img id="image_box" class="lazyestload" src="/assets/img/packages/package-slider-03.jpg" alt="image">
-                </div>
+              <div class="item">
+<!--                                <img class="lazyestload" src="/assets/img/packages/package-slider-03.jpg" alt="image">-->
+                <img id="image_box" class="lazyestload" src="" alt="image">
+              </div>
 
-<!--              <div class="item">-->
-<!--                <img id="image_box" class="lazyestload" src="/assets/img/packages/package-slider-03.jpg" alt="image">-->
-<!--              </div>-->
+              <!--              <div class="item">-->
+              <!--                <img id="image_box" class="lazyestload" src="/assets/img/packages/package-slider-03.jpg" alt="image">-->
+              <!--              </div>-->
 
               <!--                <div class="item">-->
               <!--                  <img class="lazyestload" data-src="/assets/img/packages/package-slider-04.jpg" src="/assets/img/packages/package-slider-04.jpg" alt="image">-->
@@ -774,11 +866,16 @@
           <p class="my-6" id="content">설명 내용</p>
         </div>
 
-        <div class="mb-5" style="display: flex; justify-content: center">
-          <button type="button" class="btn btn-primary mb-2" onclick="goToApplication()">참가하기</button>
+          <div class="mb-5" style="display: flex; justify-content: center">
+            <button id="application_button" type="button" class="btn btn-primary mb-2" onclick="goToApplication()">참가하기</button>
+          </div>
+
+          <!-- ----------------------- 신청서 출력 부분 ----------------------- -->
+        <div id="application-box">
+          <h2 class="text-uppercase mb-6">신청 현황</h2>
+          <!-- 신청서 리스트 출력 부분 -->
+          <!-- 신청서 리스트 출력 부분 -->
         </div>
-
-
 
         <!-- ----------------------- 댓글 출력 부분 ----------------------- -->
         <div class="comment-box">
@@ -810,8 +907,7 @@
 
       </div>
     </div>
-</div>
-</section>
+  </section>
 
 
 </div><!-- element wrapper ends -->
@@ -1301,8 +1397,9 @@
                         localStorage.removeItem('accessToken')
                         window.location.href = '/';
                       })
-              return Promise.reject(error)
+              return Promise.reject(error);
             }
+            return Promise.reject(error);
           }
   )
 </script>
@@ -1324,6 +1421,7 @@
 
 <script src="/assets/js/custom.js"></script>
 <script src="/js/header.js"></script>
+
 
 </body>
 </html>

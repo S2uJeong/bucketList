@@ -42,6 +42,8 @@ public class ChatPreHandler implements ChannelInterceptor {
             log.info("stomp command : "+ command);
 
             if(command.equals(StompCommand.UNSUBSCRIBE)) return message;
+            else if (command.equals(StompCommand.SEND)) return message;
+            else if (command.equals(StompCommand.MESSAGE)) return message;
 
             log.info("jwt : " + authorizationHeader);
 

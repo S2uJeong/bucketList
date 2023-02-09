@@ -737,22 +737,22 @@
 <!-- 주소 검색 api 사용-->
 <script>
   window.onload = function(){
-    // const accessToken = localStorage.getItem("accessToken");
-    //
-    // if (accessToken === null) {
-    //   alert('로그인이 필요한 서비스 입니다.');
-    //   window.history.back();
-    //   $("#login_li").show();
-    //   $("#user_li").hide();
-    // } else {
-    //   $("#login_li").hide();
-    //   $("#user_li").show();
-    //
-    //   const payload = accessToken.split('.')[1];
-    //   let userName = JSON.parse(decodeURIComponent(escape(window.atob(payload)))).userName;
-    //   console.log(userName);
-    //   document.getElementById("userName").innerText = userName;
-    // }
+    const accessToken = localStorage.getItem("accessToken");
+
+    if (accessToken === null) {
+      alert('로그인이 필요한 서비스 입니다.');
+      window.history.back();
+      $("#login_li").show();
+      $("#user_li").hide();
+    } else {
+      $("#login_li").hide();
+      $("#user_li").show();
+
+      const payload = accessToken.split('.')[1];
+      let userName = JSON.parse(decodeURIComponent(escape(window.atob(payload)))).userName;
+      console.log(userName);
+      document.getElementById("userName").innerText = userName;
+    }
 
     document.getElementById("address_kakao").addEventListener("click", function(){ //주소입력칸을 클릭하면
       //카카오 지도 발생
@@ -849,7 +849,7 @@
             htmlevent.value = eventEnd;
 
             var htmlevent = document.getElementById("category");
-            htmlevent.innerHTML = category;
+            htmlevent.value = category;
 
             var htmlevent = document.getElementById("member");
             htmlevent.value = entrantNum;
@@ -881,7 +881,7 @@
             htmlevent.value = eventEnd;
 
             var htmlevent = document.getElementById("category");
-            htmlevent.innerHTML = category;
+            htmlevent.value = category;
 
             var htmlevent = document.getElementById("member2");
             htmlevent.value = entrantNum;
@@ -953,7 +953,7 @@
 
         const data = async () => {
           try {
-            const response = await axios.post('/post/'+postId+'/edit', JSON.stringify(WorldData), axiosConfig);
+            const response = await axios.put('/post/'+postId+'/edit', JSON.stringify(WorldData), axiosConfig);
             let url = "/post/" + postId;
 
 
@@ -962,8 +962,14 @@
             let photoFile = document.getElementById('pic_file_wd');
             frm.append("file", photoFile.files[0]);
 
-            await axios.delete('/post/'+postId+'/files/'+fileNum);
-            await axios.post('/post/' + postId + '/files/upload', frm, fileConfig);
+
+            if((photoFile.files[0] != null)&&(fileNum != 0)){
+              await axios.delete('/post/'+postId+'/files/'+fileNum);
+              await axios.post('/post/' + postId + '/files/upload', frm, fileConfig);
+            }else if((photoFile.files[0] != null)&&(fileNum == 0)){
+              await axios.post('/post/' + postId + '/files/upload', frm, fileConfig);
+            }
+
 
 
             window.location.replace(url);
@@ -1006,7 +1012,7 @@
         const data = async () => {
           try {
             let posturl = "/post/"+postId+"/update";
-            await axios.post(posturl, JSON.stringify(KoreaData), axiosConfig);
+            await axios.put(posturl, JSON.stringify(KoreaData), axiosConfig);
             let url = "/post/" + postId;
 
             <!-- 사진 저장 -->
@@ -1014,8 +1020,14 @@
             let photoFile = document.getElementById('pic_file_kr');
             frm.append("file", photoFile.files[0]);
 
-            await axios.delete('/post/'+postId+'/files/'+fileNum);
-            await axios.post('/post/' + postId + '/files/upload', frm, fileConfig);
+
+
+            if((photoFile.files[0] != null)&&(fileNum != 0)){
+              await axios.delete('/post/'+postId+'/files/'+fileNum);
+              await axios.post('/post/' + postId + '/files/upload', frm, fileConfig);
+            }else if((photoFile.files[0] != null)&&(fileNum == 0)){
+              await axios.post('/post/' + postId + '/files/upload', frm, fileConfig);
+            }
 
             window.location.replace(url);
           } catch (error) {
