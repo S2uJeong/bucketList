@@ -29,11 +29,15 @@ public class ApplicationService {
     private final ApplicationRepository applicationRepository;
     private final MemberRepository memberRepository;
     private final PostRepository postRepository;
+    private final AlarmService alarmService;
 
     public void getApplication(ApplicationRequest applicationRequest,Long memberId) {
         Post post = findPostById(applicationRequest.getPostId());
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED));
         applicationRepository.save(Application.save(applicationRequest,post,member));
+
+        //알람 발생
+        alarmService.sendAlarm(member.getId(),post.getId(),(byte)2);
     }
 
     public List<ApplicationListResponse> getNotDicisionList(Long postId, Long memberId) {
@@ -78,6 +82,11 @@ public class ApplicationService {
         if (post.getPermitNum() == post.getEntrantNum()) {
             post.setRecruitComplete();
         }
+
+        //알람 발생
+        if(applicationDecisionRequest.getStatus() == (byte)1)
+            alarmService.sendAlarm(memberId,post.getId(),(byte)3);
+
         return 1;
     }
 
