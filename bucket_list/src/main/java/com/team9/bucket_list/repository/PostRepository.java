@@ -24,4 +24,16 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Page<Post> findByIdIn(Set<Long> postId, Pageable pageable);
 
     Page<Post> findByCategory(String category, Pageable pageable);
+
+    Page<Post> findByTitleContaining(String keyword,Pageable pageable);
+
+    Page<Post> findByCategoryAndTitleContaining(String category,String keyword,Pageable pageable);
+
+    Page<Post> findByCategoryAndEventStartBetweenAndEventEndBetweenAndCostBetween( String category, String eventStart, String eventmax, String eventmin, String eventEnd, Integer lowCost, Integer upCost,Pageable pageable);
+
+    Page<Post> findByTitleContainingAndEventStartBetweenAndEventEndBetweenAndCostBetween( String keyword, String eventStart, String eventmax, String eventmin, String eventEnd, Integer lowCost, Integer upCost,Pageable pageable);
+
+    Page<Post> findByEventStartBetweenAndEventEndBetweenAndCostBetween(String eventStart, String eventmax, String eventmin, String eventEnd, Integer lowCost, Integer upCost,Pageable pageable);
+
+    Page<Post> findByCategoryAndTitleContainingAndEventStartBetweenAndEventEndBetweenAndCostBetween( String category, String keyword, String eventStart, String eventmax, String eventmin, String eventEnd, Integer lowCost, Integer upCost,Pageable pageable);
 }
