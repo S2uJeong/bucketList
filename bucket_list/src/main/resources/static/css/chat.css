@@ -88,3 +88,68 @@
 .chat-room-title {
     padding-left: 12px;
 }
+
+
+
+.chat-menu-btn{
+    background-color: transparent;
+    border: none;
+}
+
+.chat-menu {
+    transition: 0.3s;
+}
+
+.chat-menu:hover{
+    color: #ff891f;
+}
+
+.chat-menu-box {
+    width: 400px;
+    height: 600px;
+    padding: 20px 0;
+    margin: 100px auto;
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px;
+}
+
+.chat-menu-participant-title{
+    padding-left: 20px;
+}
+.chat-menu-participant-wrap {
+    padding-left: 24px;
+    height: 50px;
+}
+
+.chat-menu-participant{
+    cursor: pointer;
+    line-height: 50px;
+    font-size: 18px;
+}
+
+.chat-menu-participant-list{
+    border-radius: 10px;
+}
+
+.chat-out-box {
+    position: absolute;
+    width: 400px;
+    height: 60px;
+    padding-left: 20px;
+    background-color: #efefef;
+    bottom: 0;
+}
+
+.chat-out-btn {
+    background-color: transparent;
+    border: none;
+}
+
+.chat-out-btn-img {
+    transition: 0.3s;
+}
+
+.chat-out-btn:hover .chat-out-btn-img {
+    color: #ff891f;
+}
