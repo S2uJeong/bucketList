@@ -156,9 +156,35 @@
       <div class="col-md-7">
         <div class="row">
           <div class="col-md-6 col-lg-12 chat-box-wrap">
-            <div class="bg-white border-top border-top-5 border-primary rounded d-flex align-items-center chat-room-title-box">
+            <div class="bg-white border-top border-top-5 border-primary rounded d-flex align-items-center justify-content-between chat-room-title-box">
               <h3 class="chat-room-title" id="chat-room-name">&nbsp;</h3>
               <input type="hidden" name="roomId" value="" id="chat-room-id">
+
+              <div class="dropdown" id="chat-menu">
+                <button class="chat-menu-btn" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" onclick="getChatParticipant()">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-list chat-menu" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+                  </svg>
+                </button>
+
+                <div class="chat-menu-box shadow dropdown-menu dropdown-menu-end">
+                    <div class="d-flex flex-column mb-3 list-group" id="participant-list">
+
+
+                      <!--참가자 목록-->
+
+                    </div>
+                    <div class="chat-out-box d-flex align-items-center">
+                      <button class="chat-out-btn" onclick="" id="room-out-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-box-arrow-left chat-out-btn-img" viewBox="0 0 16 16">
+                          <path fill-rule="evenodd" d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0v2z"/>
+                          <path fill-rule="evenodd" d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z"/>
+                        </svg>
+                      </button>
+                    </div>
+                </div>
+              </div>
+
             </div>
             <div class="mb-6 bg-white p-3 rounded list-group list-group-flush chat-room-box d-flex flex-column" id="chat-message-box-wrap">
 
@@ -301,6 +327,7 @@
       </div>
     </div>
   </div>
+</footer>
 
   <!-- ====================================
 ——— MODAL SECTION
@@ -472,9 +499,6 @@
     <script src='/assets/plugins/rateyo/jquery.rateyo.min.js'></script>
     <script src="/assets/plugins/lazyestload/lazyestload.js"></script>
     <script src='/assets/plugins/no-ui-slider/nouislider.min.js'></script>
-    <script src="/assets/plugins/smoothscroll/SmoothScroll.js"></script>
-    <script src="/assets/js/star.js"></script>
-
     <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
     <script src="/assets/plugins/smoothscroll/SmoothScroll.js"></script>
