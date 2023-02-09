@@ -23,8 +23,6 @@ public class Bucketlist {
     @JoinColumn(name = "post_id")
     private Post post;
 
-    @OneToOne(mappedBy = "bucketlist")
-    private ChatRoom chatRoom;
 
     @OneToMany(mappedBy = "bucketlist")
     private List<MemberBucketlist> memberBucketlistList = new ArrayList<>();
