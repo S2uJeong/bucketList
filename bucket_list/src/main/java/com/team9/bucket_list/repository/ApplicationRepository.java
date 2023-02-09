@@ -26,5 +26,5 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
 
     int countByPost_IdAndStatusContains(Long postId, byte status);
 
-    Set<Application> findByMember_Id(Long memberId);
+    Set<Application> findByMember_IdAndStatus(Long memberId, byte status);
 }
