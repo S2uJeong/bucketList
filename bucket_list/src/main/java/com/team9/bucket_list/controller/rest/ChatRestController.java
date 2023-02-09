@@ -65,4 +65,10 @@ public class ChatRestController {
         List<ChatParticipant> participants = chatService.getChatParticipant(roomId);
         return ChatParticipantResponseSuccess.success(ChatParticipantResponse.memberList(participants),ChatParticipantResponse.getHost(participants));
     }
+
+    @DeleteMapping("/out")
+    @Operation(summary = "채팅방 나가기", description = "roomId와 memberId를 이용해 채팅방을 나갑니다")
+    public Response outChatRoom(@RequestBody ChatOutRequest chatOutRequest) {
+        return Response.success(chatService.outChatRoom(chatOutRequest));
+    }
 }
