@@ -33,16 +33,13 @@
     <link href="/assets/css/star.css" id="option_style" rel="stylesheet">
     <link href="/assets/css/custom.css" id="custom_style" rel="stylesheet">
 
-
     <!-- FAVICON -->
     <link rel="shortcut icon" type="image/png" href="/assets/img/favicon.png"/>
 
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
+    <!-- 커스텀 css -->
+    <link href="css/profile.css" rel="stylesheet">
+
+
 </head>
 
 <style>
@@ -81,7 +78,7 @@
             $("#login-li").hide();
             $("#user-name-li").show();
 
-            // paylosd는 디코딩 가능한 부분 + username이랑 또 머드라.. 그걸 재현 님이 넣어두심
+            // payload는 디코딩 가능한 부분 + username이랑 또 머드라.. 그걸 재현 님이 넣어두심
             // .을 기준으로 split해서 배열에 담고 1번째 배열의 값을 payload에 대입
             const payload = accessToken.split('.')[1];
             // let: 지역변수
@@ -233,225 +230,6 @@
 </header>
 <div class="main-wrapper packages-list-left-sidebar">
 
-
-    <!-- Header dashboard -->
-    <section class="section-top">
-        <nav class="navbar navbar-expand-md navbar-light navbar-dark-light">
-            <div class="container">
-                <button class="navbar-toggler me-0 ms-3" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#navbarTogglerDemo01"
-                        aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="navbar-nav-right d-md-none me-6 pe-1">
-                    <ul class="list-unstyled d-flex align-items-center mb-0">
-                        <li class="nav-item dropdown nav-item-left">
-                            <a href="#" class="nav-link" id="navbarDropdown01" data-bs-toggle="dropdown" role="button"
-                               aria-haspopup="true"
-                               aria-expanded="false">
-                                <i class="fa fa-bell text-gray-color icon" aria-hidden="true"></i> <span
-                                    class="badge-pill bg-primary text-white">2</span>
-                            </a>
-
-                            <div class="dropdown-menu dropdown-menu-end dropdown-left">
-                                <ul class="list-unstyled list-group list-group-flush">
-                                    <li class="">
-                                        <a href="javascript:void(0)"
-                                           class="list-group-item rounded-0 border-bottom first-child">
-                                            <h3 class="text-dark mb-0">Information</h3>
-                                        </a>
-                                    </li>
-
-                                    <li>
-                                        <a href="javascript:void(0)"
-                                           class="list-group-item border-bottom border-off-white rounded-0">
-                                            <h5 class="fon-size-15 text-dark">Maldive Tour Packages</h5>
-                                            <small class="text-gray-color">6 Hours Ago</small>
-                                        </a>
-                                    </li>
-
-                                    <li>
-                                        <a href="javascript:void(0)"
-                                           class="list-group-item border-bottom border-off-white rounded-0">
-                                            <h5 class="fon-size-15 text-dark">London Tour Booking</h5>
-                                            <small class="text-gray-color">15 Hours Ago</small>
-                                        </a>
-                                    </li>
-
-                                    <li class="">
-                                        <a href="javascript:void(0)"
-                                           class="list-group-item border-off-white border-bottom-0 rounded-0 last-child">
-                                            <h5 class="fon-size-15 text-dark">Paris Tour Booking</h5>
-                                            <small class="text-gray-color">15 Hours Ago</small>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-
-                        <li class="nav-item dropdown nav-item-left me-0">
-                            <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" role="button"
-                               aria-haspopup="true"
-                               aria-expanded="false">
-                                <img src="assets/img/dashboard/dash-user.jpg"
-                                     data-src="assets/img/dashboard/dash-user.jpg" alt="Generic placeholder image"
-                                     class="w-100 rounded-circle me-1 lazyestload">
-                            </a>
-
-                            <div class="dropdown-menu dropdown-menu-end dropdown-left">
-                                <ul class="list-unstyled list-group list-group-flush">
-                                    <li class="">
-                                        <a href="profile.html"
-                                           class="list-group-item rounded-0 border-bottom first-child">
-                                            <h5 class="fon-size-15 text-dark">Profile</h5>
-                                        </a>
-                                    </li>
-
-                                    <li>
-                                        <a href="setting.html"
-                                           class="list-group-item border-bottom border-off-white rounded-0">
-                                            <h5 class="fon-size-15 text-dark text-capitalize">Account setting</h5>
-                                        </a>
-                                    </li>
-
-                                    <li class="">
-                                        <a href="javascript:void(0)"
-                                           class="list-group-item border-off-white border-bottom-0 rounded-0 last-child">
-                                            <h5 class="fon-size-15 text-dark">Log out</h5>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-
-                <!--        <div class="collapse navbar-collapse" id="navbarTogglerDemo01">-->
-                <!--          <ul class="navbar-nav me-auto">-->
-                <!--            <li class="nav-item dropdown">-->
-                <!--              <a class="nav-link " href="dashboard.html">-->
-                <!--                <i class="fas fa-tachometer-alt" aria-hidden="true"></i>-->
-                <!--                <span>Dashboard</span>-->
-                <!--              </a>-->
-                <!--            </li>-->
-
-                <!--            <li class="nav-item dropdown">-->
-                <!--              <a class="nav-link  active " href="profile.html">-->
-                <!--                <i class="fa fa-user" aria-hidden="true"></i>-->
-                <!--                <span>Profile</span>-->
-                <!--              </a>-->
-                <!--            </li>-->
-
-                <!--            <li class="nav-item dropdown">-->
-                <!--              <a class="nav-link " href="booking.html">-->
-                <!--                <i class="fa fa-cube" aria-hidden="true"></i>-->
-                <!--                <span>Booking</span>-->
-                <!--              </a>-->
-                <!--            </li>-->
-
-                <!--            <li class="nav-item dropdown">-->
-                <!--              <a class="nav-link " href="setting.html">-->
-                <!--                <i class="fa fa-cogs" aria-hidden="true"></i>-->
-                <!--                <span>Settings</span>-->
-                <!--              </a>-->
-                <!--            </li>-->
-                <!--          </ul>-->
-
-                <div class="navbar-nav-right d-none d-md-block">
-
-                </div>
-            </div>
-        </nav>
-    </section>
-
-    <!--    &lt;!&ndash; ====================================-->
-    <!--  ———	SEARCH SECTION-->
-    <!--  ===================================== &ndash;&gt;-->
-    <!--    <div class="bg-dark-light py-7"></div>-->
-    <!--    <section class="bg-dark-light py-search" id="search-wrapper" style="display: none">-->
-    <!--        <div class="container">-->
-    <!--            <div class="row align-items-center">-->
-    <!--                <div class="col-xl-3">-->
-    <!--                    <div class="section-title-bg mb-1 mb-lg-3 mb-xl-0">-->
-    <!--                        <h1 class="text-white text-uppercase mb-0">Search</h1>-->
-    <!--                        <h2 class="text-white text-uppercase font-weight-bold mb-0"><span class="text-primary">bucketlist</span>-->
-    <!--                        </h2>-->
-    <!--                    </div>-->
-    <!--                </div>-->
-
-    <!--                <div class="col-xl-9">-->
-    <!--                    <form class="" action="../index.html" method="GET">-->
-    <!--                        <div class="row">-->
-    <!--                            <div class="col-lg-10">-->
-    <!--                                <div class="row">-->
-    <!--                                    <div class="col-md-6 col-lg-3">-->
-    <!--                                        <div class="select-dropdown">-->
-    <!--                                            <div class="mb-3 mb-lg-0">-->
-    <!--                                                <div class="select-default select-search-box">-->
-    <!--                                                    <select class="select-option">-->
-    <!--                                                        <option>Category</option>-->
-    <!--                                                        <option>Travel</option>-->
-    <!--                                                        <option>Extreme</option>-->
-    <!--                                                        <option>Study</option>-->
-    <!--                                                        <option>Volunteer</option>-->
-    <!--                                                        <option>Experience</option>-->
-    <!--                                                        <option>Etc</option>-->
-    <!--                                                    </select>-->
-    <!--                                                </div>-->
-    <!--                                            </div>-->
-    <!--                                        </div>-->
-    <!--                                    </div>-->
-
-    <!--                                    <div class="col-md-6 col-lg-3">-->
-    <!--                                        <div class="mb-3 form-group-icon mb-lg-0">-->
-    <!--                                            <i class="far fa-calendar-alt" aria-hidden="true"></i>-->
-    <!--                                            <input type="text" class="form-control daterange-picker" autocomplete="off"-->
-    <!--                                                   name="dateRange" value=""-->
-    <!--                                                   placeholder="MM/DD/YYYY"/>-->
-    <!--                                        </div>-->
-    <!--                                    </div>-->
-
-    <!--                                    <div class="col-md-6 col-lg-3">-->
-    <!--                                        <div class="mb-3 form-group-icon mb-lg-0">-->
-    <!--                                            <i class="far fa-calendar-alt" aria-hidden="true"></i>-->
-    <!--                                            <input type="text" class="form-control daterange-picker" autocomplete="off"-->
-    <!--                                                   name="dateRange" value=""-->
-    <!--                                                   placeholder="MM/DD/YYYY"/>-->
-    <!--                                        </div>-->
-    <!--                                    </div>-->
-
-    <!--                                    <div class="col-md-6 col-lg-3">-->
-    <!--                                        <div class="select-dropdown">-->
-    <!--                                            <div class="mb-3 mb-lg-0">-->
-    <!--                                                <div class="select-default select-search-box">-->
-    <!--                                                    <select class="select-option">-->
-    <!--                                                        <option>$1000 - $1200</option>-->
-    <!--                                                        <option>$1200 - $1400</option>-->
-    <!--                                                        <option>$1400 - $1600</option>-->
-    <!--                                                        <option>$1600 - $1800</option>-->
-    <!--                                                    </select>-->
-    <!--                                                </div>-->
-    <!--                                            </div>-->
-    <!--                                        </div>-->
-    <!--                                    </div>-->
-    <!--                                </div>-->
-    <!--                            </div>-->
-
-    <!--                            <div class="col-lg-2">-->
-    <!--                                <button class="btn btn-primary text-uppercase" type="button"-->
-    <!--                                        onclick="location.href='javascript:void(0)';">-->
-    <!--                                    Search-->
-    <!--                                </button>-->
-    <!--                            </div>-->
-    <!--                        </div>-->
-    <!--                    </form>-->
-    <!--                </div>-->
-    <!--            </div>-->
-    <!--        </div>-->
-    <!--    </section>-->
-
-
     <!-- ====================================
     ——— PROFILE SECTION
     ===================================== -->
@@ -460,35 +238,40 @@
             <div class="hover-profile mb-7 mb-lg-9">
                 <div class="row">
                     <div class="col-md-6 col-lg-5 col-xl-4">
-                        <div class="mb-6 mb-md-0">
-                            <!--                            &lt;!&ndash; 수정 버튼 &ndash;&gt;-->
-                            <!--                            <div class="icon-setting pb-2">-->
-                            <!--                                <a th:href="@{/profile/{memberId}/edit (memberId=${memberId})}">-->
-                            <!--                                    <i class="fas fa-pencil-alt" aria-hidden="true"></i>-->
-                            <!--                                </a>-->
-                        </div>
-                        <!-- 프로필 이미지 -->
-                        <img class="w-100 lazyestload" data-src="assets/img/dashboard/profile-img-01.jpg"
-                             src="assets/img/dashboard/profile-img-01.jpg" alt="Generic placeholder image">
-                    </div>
-                    <!--                    <div class="container-membr-info-table">-->
-                    <!--                        <table class="board-list">-->
-                    <!--                            <colgroup>-->
-                    <!--                                <col width="15%"/>-->
-                    <!--                                <col width="15%"/>-->
-                    <!--                                <col width="15%"/>-->
-                    <!--                            </colgroup>-->
-                    <!--                            <thead class="thead">-->
-                    <!--                            <tr>-->
-                    <!--                                <th scope="col">이름</th>-->
-                    <!--                                <th scope="col">이메일</th>-->
-                    <!--                                <th scope="col">평점</th>-->
-                    <!--                            </tr>-->
-                    <!--                            </thead>-->
-                    <!--                        </table>-->
-                    <!--                    </div>-->
+                        <div class="left-image">
+                            <!-- 모달 창 띄우기 위한 수정 버튼 및 사진 출력-->
+                            <div class="pic-wrap">
+                                <button id="pic-btn" class="pic-btn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                                         class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                        <path
+                                                d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                        <path fill-rule="evenodd"
+                                              d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+                                    </svg>
+                                </button>
 
-                    <div class="col-md-6 col-lg-7 col-xl-8">
+                                <!-- 실제로 수정이 이루어지는 모달 창 -->
+                                <div id="myModal" class="modal">
+                                    <div class="modal-content">
+                                        <span class="close">&times;</span>
+                                        <div class="container">
+                                            <h2>Put your wonderful Image</h2>
+                                            <div class="form-group">
+                                                <input type="file" id="fileInput" multiple>
+                                                <div id="imagePreview"></div>
+                                                <br><br>
+
+                                            </div>
+                                            <button id="uploadBtn">Upload</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                        </div>
+                    </div>
+
+                        <div class="right-information">
                         <div class="d-flex justify-content-between align-items-baseline">
                             <div class="mb-6 mb-md-4 mb-lg-6">
                                 <h2 class="text-uppercase font-weight-bold" th:text="${member.getUserName()}"></h2>
@@ -514,33 +297,10 @@
 
 
                         </ul>
-
-                        <!--            <ul class="list-inline d-flex mb-0">-->
-                        <!--              <li class="me-3 me-lg-2 me-xl-3">-->
-                        <!--                <a class="icon-default icon-light-border rounded-circle hover-bg-primary" href="javascript:void(0)">-->
-                        <!--                  <i class="fab fa-facebook-f" aria-hidden="true"></i>-->
-                        <!--                </a>-->
-                        <!--              </li>-->
-
-                        <!--              <li class="me-3 me-lg-2 me-xl-3">-->
-                        <!--                <a class="icon-default icon-light-border rounded-circle hover-bg-primary" href="javascript:void(0)">-->
-                        <!--                  <i class="fab fa-twitter" aria-hidden="true"></i>-->
-                        <!--                </a>-->
-                        <!--              </li>-->
-                        <!--              <li class="me-3 me-lg-2 me-xl-3">-->
-                        <!--                <a class="icon-default icon-light-border rounded-circle hover-bg-primary" href="javascript:void(0)">-->
-                        <!--                  <i class="fas fa-rss" aria-hidden="true"></i>-->
-                        <!--                </a>-->
-                        <!--              </li>-->
-
-                        <!--              <li class="">-->
-                        <!--                <a class="icon-default icon-light-border rounded-circle hover-bg-primary" href="javascript:void(0)">-->
-                        <!--                  <i class="fab fa-vimeo-v" aria-hidden="true"></i>-->
-                        <!--                </a>-->
-                        <!--              </li>-->
-                        <!--            </ul>-->
                     </div>
-                </div>
+                        <div class="distance"></div>
+
+                    </div>
 
                 <!-- Contact Section -->
                 <div class="bg-smoke p-2 mb-7 mb-lg-9" style="height: 470px">
@@ -558,9 +318,8 @@
             </div>
         </div>
 
-
+        </div>
     </section>
-
 
 </div><!-- element wrapper ends -->
 
@@ -571,127 +330,130 @@
     <div class="footer-bg-color py-9">
         <div class="container">
             <div class="row">
-                <div class="col-md-6 col-lg-3 mb-5 mb-lg-0 mx-5">
-                    <a class="d-inline-block" href="index.html">
-                        <img class="w-100 mb-6 lazyestload" data-src="/assets/img/logo-color-sm.png"
-                             src="/assets/img/logo-color-sm.png" alt="img">
+                <div class="col-md-6 col-lg-3 mb-7 mb-lg-0">
+                    <a class="d-inline-block" href="../index.html">
+                        <div class="col-md-6 col-lg-3 mb-5 mb-lg-0 mx-5">
+                            <a class="d-inline-block" href="index.html">
+                                <img class="w-100 mb-6 lazyestload" data-src="/assets/img/logo-color-sm.png"
+                                     src="/assets/img/logo-color-sm.png" alt="img">
+                            </a>
+                            <p class="mb-0">멋쟁이 사자처럼 백엔드 스쿨 2기에서 진행한 팀프로젝트입니다.
+                                버킷리스트를 주제로 비슷한 목표를 가진 사람들이 모여 값진 경험을 할 수 있는 사이트를 구현했습니다.
+                                글을 작성하여 사람을 모집할 수 있으며 버킷리스트 개설자는 참가 신청한 참가자를 허가/거부할 수 있습니다.
+                                모집이 완료되면 채팅이 활성화되고 일정을 마친 후에 참가자는 버킷리스트와 호스트에 대해서 평가할 수 있습니다.
+                            </p>
+                        </div>
+
+                        <!--각자 깃랩 링크 걸건지?-->
+                        <div class="col-md-6 col-lg-3 mt-md-4 mb-5 mb-lg-0 mx-7">
+                            <div class="title-tag">
+                                <h6>Team9 : WEB (WE are Best)</h6>
+                            </div>
+                            <ul class="list-unstyled mb-0">
+                                <li class="media mb-2">
+                                    <div class="me-3">
+                                        <i class="fa-regular fa-user"></i>
+                                    </div>
+                                    <div class="media-body">
+                                        <a href="#" target="_blank">PM : 최수정</a>
+                                    </div>
+                                </li>
+                                <li class="media mb-2">
+                                    <div class="me-3">
+                                        <i class="fa-regular fa-user"></i>
+                                    </div>
+                                    <div class="media-body">
+                                        <a href="#" target="_blank">CTO : 정재현</a>
+                                    </div>
+                                </li>
+
+                                <li class="media mb-2">
+                                    <div class="me-3">
+                                        <i class="fa-regular fa-user"></i>
+                                    </div>
+                                    <div class="media-body">
+                                        <a href="#" target="_blank">개발 : 고관운</a>
+                                    </div>
+                                </li>
+
+                                <li class="media mb-2">
+                                    <div class="me-3">
+                                        <i class="fa-regular fa-user"></i>
+                                    </div>
+                                    <div class="media-body">
+                                        <a href="#" target="_blank">개발 : 박은빈</a>
+                                    </div>
+                                </li>
+
+                                <li class="media mb-2">
+                                    <div class="me-3">
+                                        <i class="fa-regular fa-user"></i>
+                                    </div>
+                                    <div class="media-body">
+                                        <a href="#" target="_blank">개발 : 배지원</a>
+                                    </div>
+                                </li>
+
+                                <li class="media mb-2">
+                                    <div class="me-3">
+                                        <i class="fa-regular fa-user"></i>
+                                    </div>
+                                    <div class="media-body">
+                                        <a href="#" target="_blank">개발 : 변지환</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="col-md-6 col-lg-3 mt-md-4 mb-5 mb-lg-0 mx-5">
+                            <div class="title-tag">
+                                <h6>Contact us</h6>
+                            </div>
+                            <ul class="list-unstyled mb-0">
+                                <li class="media mb-2">
+                                    <div class="me-3">
+                                        <i class="fa-brands fa-gitlab"></i>
+                                    </div>
+                                    <div class="media-body">
+                                        <a href="https://gitlab.com/S2uJeong1/bucketlist" target="_blank">team project
+                                            gitlab</a>
+                                    </div>
+                                </li>
+
+                                <li class="media mb-2">
+                                    <div class="me-3">
+                                        <i class="fa-regular fa-file"></i>
+                                    </div>
+                                    <div class="media-body">
+                                        <a href="https://ringed-suggestion-46f.notion.site/ceff928e9f1f4e2482f07387b997f593"
+                                           target="_blank">team project notion</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+
+        <div class="copyright py-6">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-6 order-1 order-md-0">
+                        <p class="mb-0 mb-md-0 text-md-start">Copyright &copy; <span id="copy-year"></span> All Rights
+                            Reserved by
+                            <a href="http://www.iamabdus.com/" target="_blank">Abdus</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
                     </a>
-                    <p class="mb-0">멋쟁이 사자처럼 백엔드 스쿨 2기에서 진행한 팀프로젝트입니다.
-                        버킷리스트를 주제로 비슷한 목표를 가진 사람들이 모여 값진 경험을 할 수 있는 사이트를 구현했습니다.
-                        글을 작성하여 사람을 모집할 수 있으며 버킷리스트 개설자는 참가 신청한 참가자를 허가/거부할 수 있습니다.
-                        모집이 완료되면 채팅이 활성화되고 일정을 마친 후에 참가자는 버킷리스트와 호스트에 대해서 평가할 수 있습니다.
-                    </p>
-                </div>
-
-                <!--각자 깃랩 링크 걸건지?-->
-                <div class="col-md-6 col-lg-3 mt-md-4 mb-5 mb-lg-0 mx-7">
-                    <div class="title-tag">
-                        <h6>Team9 : WEB (WE are Best)</h6>
-                    </div>
-                    <ul class="list-unstyled mb-0">
-                        <li class="media mb-2">
-                            <div class="me-3">
-                                <i class="fa-regular fa-user"></i>
-                            </div>
-                            <div class="media-body">
-                                <a href="#" target="_blank">PM : 최수정</a>
-                            </div>
-                        </li>
-                        <li class="media mb-2">
-                            <div class="me-3">
-                                <i class="fa-regular fa-user"></i>
-                            </div>
-                            <div class="media-body">
-                                <a href="#" target="_blank">CTO : 정재현</a>
-                            </div>
-                        </li>
-
-                        <li class="media mb-2">
-                            <div class="me-3">
-                                <i class="fa-regular fa-user"></i>
-                            </div>
-                            <div class="media-body">
-                                <a href="#" target="_blank">개발 : 고관운</a>
-                            </div>
-                        </li>
-
-                        <li class="media mb-2">
-                            <div class="me-3">
-                                <i class="fa-regular fa-user"></i>
-                            </div>
-                            <div class="media-body">
-                                <a href="#" target="_blank">개발 : 박은빈</a>
-                            </div>
-                        </li>
-
-                        <li class="media mb-2">
-                            <div class="me-3">
-                                <i class="fa-regular fa-user"></i>
-                            </div>
-                            <div class="media-body">
-                                <a href="#" target="_blank">개발 : 배지원</a>
-                            </div>
-                        </li>
-
-                        <li class="media mb-2">
-                            <div class="me-3">
-                                <i class="fa-regular fa-user"></i>
-                            </div>
-                            <div class="media-body">
-                                <a href="#" target="_blank">개발 : 변지환</a>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="col-md-6 col-lg-3 mt-md-4 mb-5 mb-lg-0 mx-5">
-                    <div class="title-tag">
-                        <h6>Contact us</h6>
-                    </div>
-                    <ul class="list-unstyled mb-0">
-                        <li class="media mb-2">
-                            <div class="me-3">
-                                <i class="fa-brands fa-gitlab"></i>
-                            </div>
-                            <div class="media-body">
-                                <a href="https://gitlab.com/S2uJeong1/bucketlist" target="_blank">team project
-                                    gitlab</a>
-                            </div>
-                        </li>
-
-                        <li class="media mb-2">
-                            <div class="me-3">
-                                <i class="fa-regular fa-file"></i>
-                            </div>
-                            <div class="media-body">
-                                <a href="https://ringed-suggestion-46f.notion.site/ceff928e9f1f4e2482f07387b997f593"
-                                   target="_blank">team project notion</a>
-                            </div>
-                        </li>
-                    </ul>
                 </div>
             </div>
         </div>
     </div>
-
-    <div class="copyright py-6">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-md-6 order-1 order-md-0">
-                    <p class="mb-0 mb-md-0 text-md-start">Copyright &copy; <span id="copy-year"></span> All Rights
-                        Reserved by
-                        <a href="http://www.iamabdus.com/" target="_blank">Abdus</a>
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        var d = new Date();
-        var year = d.getFullYear();
-        document.getElementById("copy-year").innerHTML = year;
-    </script>
+        <script>
+            var d = new Date();
+            var year = d.getFullYear();
+            document.getElementById("copy-year").innerHTML = year;
+        </script>
 </footer>
 
 
@@ -1000,49 +762,85 @@
     )
 </script>
 
-<!--테이블 형식으로 이름, 이메일, 평점 가져 오려고 만들었던 로직-->
-<!--<script>-->
-<!--    $(function () {-->
-<!--        axios.get('/profile/', { // /profile/{memberId} 형식은 어떻게 가져오는가?-->
-<!--        })-->
-<!--            .then(function (response) {-->
-<!--                let tb = $("<tbody/>");-->
-<!--                console.log(response)-->
-<!--                for (var i in response.data) {-->
-<!--                    console.log(response.data)-->
+<!-- 프로필 수정 부분 -->
+<script>
+    // Get the modal
+    var modal = document.getElementById("myModal");
 
-<!--                    let $memberName = response.data[i].name-->
-<!--                    let $memberEmail = response.data[i].email-->
-<!--                    let $rate = response.data[i].rate-->
+    // Get the button that opens the modal
+    var btn = document.getElementById("pic-btn");
 
-<!--                    var row = $("<tr/>").append(-->
-<!--                        '<td>' + $memberName + '</td>' +-->
-<!--                        '<td>' + $memberEmail + '</td>' +-->
-<!--                        '<td>' + $rate + '</td>'-->
-<!--                    )-->
-<!--                    tb.append(row);-->
-<!--                }-->
-<!--                $(".thad").after(tb);-->
-<!--            })-->
-<!--            .catch(function (error) {-->
-<!--                console.log(error);-->
-<!--            })-->
-<!--            .finally(function () {-->
-<!--                // 항상 실행 되어야 할 부분-->
-<!--            });-->
-<!--    })-->
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
 
-<!--얘들은 왜 있는거지?-->
-<!--    // function click() {-->
-<!--    //     console.log('click');-->
-<!--    //     axios.get('/click')-->
-<!--    //         .then((res) => {-->
-<!--    //             console.log(res.data);-->
-<!--    //         })-->
-<!--    //         .catch((err) => {-->
-<!--    //             console.log(err);-->
-<!--    //         })-->
-<!--    // }-->
-<!--</script>-->
+    // When the user clicks the button, open the modal
+    btn.onclick = function () {
+        modal.style.display = "block";
+    }
 
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function () {
+        modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+    <!-- 이미지 파일 넣는 부분 (모달창 내부) -->
+    // Get elements
+    var fileInput = document.getElementById("fileInput");
+    var uploadBtn = document.getElementById("uploadBtn");
+    var imagePreview = document.getElementById("imagePreview");
+
+    // Handle file input change
+    fileInput.addEventListener("change", function () {
+        // Get selected files
+        var files = fileInput.files;
+
+        // Clear preview
+        imagePreview.innerHTML = "";
+
+        // Display thumbnails
+        for (var i = 0; i < files.length; i++) {
+            // Only process image files
+            if (!files[i].type.startsWith("image")) {
+                continue;
+            }
+
+            // Create thumbnail
+            var thumbnail = document.createElement("div");
+            thumbnail.classList.add("thumbnail");
+            var image = document.createElement("img");
+            image.src = URL.createObjectURL(files[i]);
+            thumbnail.appendChild(image);
+            imagePreview.appendChild(thumbnail);
+        }
+    });
+
+    // Handle upload button click
+    uploadBtn.addEventListener("click", function () {
+        // Get selected files
+        var files = fileInput.files;
+
+        // Check if files were selected
+        if (files.length === 0) {
+            alert("Please select some files to upload.");
+            return;
+        }
+
+        // Upload files here (using fetch, XHR, or any other method)
+        // ...
+
+        // Clear file input
+        fileInput.value = "";
+
+        // Clear preview
+        imagePreview.innerHTML = "";
+    });
+
+</script>
 </html>

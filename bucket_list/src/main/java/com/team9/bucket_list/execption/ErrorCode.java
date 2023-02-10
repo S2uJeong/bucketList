@@ -29,7 +29,9 @@ public enum ErrorCode {
     EXCEED_ENTRANT_NUM(HttpStatus.CONFLICT, "참가자 수를 초과하였습니다."),
 
     FILE_UPLOAD_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패했습니다."),
-    WRONG_FILE_FORMAT(HttpStatus.BAD_REQUEST, "파일 형식이 틀립니다.")
+    WRONG_FILE_FORMAT(HttpStatus.BAD_REQUEST, "파일 형식이 틀립니다."),
+
+    PROFILE_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 프로필이 없습니다.")
 
     ;
 
