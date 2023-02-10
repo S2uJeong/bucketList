@@ -80,7 +80,7 @@ function setTable() {
             .replace("{일정 시작 날짜}", post.eventStart)
             .replace("{일정 종료 날짜}", post.eventEnd)
             .replace("{모집 마감 날짜}", post.untilRecruit)
-            .replace("{이미지 URL}", postImage);
+            .replaceAll("{이미지 URL}", postImage);
 
         if (post.status === 'JOIN') {
             html_result = html_result.replace("{모집상태}", '모집중')
