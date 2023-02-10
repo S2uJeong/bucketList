@@ -3,6 +3,8 @@
 
   <head>
 
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
     <!-- SITE TITTLE -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -43,6 +45,12 @@
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
+    <style>
+      .search-bar {
+        width: 300px;
+      }
+    </style>
+
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
@@ -261,14 +269,26 @@
                     </div>
                   </div>
                 </div>
-    
-                <div class="col-md-6 col-lg-3">
-                  <div class="mb-3 mb-lg-0">
-                    <div class="select-default select-search-box">
-                    <input type="text" name="searchData" placeholder="검색어를 입력해주세요"/>
-                    </div>
-                  </div>
-                </div>
+
+<!--                <div class="col-md-6 col-lg-3">-->
+<!--                  <div class="mb-3 mb-lg-0">-->
+                    <form action="https://www.google.com/search" method="GET">
+                      <div class="mx-auto mt-5 search-bar input-group mb-3">
+                        <input name="searchData" type="text" class="form-control rounded-pill" placeholder="검색어를 입력해주세요" aria-label="Recipient's username" aria-describedby="button-addon2">
+                        <div class="input-group-append">
+                        </div>
+                      </div>
+                    </form>
+<!--                  </div>-->
+<!--                </div>-->
+
+<!--                <div class="col-md-6 col-lg-3">-->
+<!--                  <div class="mb-3 mb-lg-0">-->
+<!--                    <div class="select-default select-search-box">-->
+<!--                    <input type="text" name="searchData" placeholder="검색어를 입력해주세요"/>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
     
 <!--                <div class="col-md-6 col-lg-3">-->
 <!--                  <div class="mb-3 form-group-icon mb-lg-0">-->
@@ -702,7 +722,7 @@
         </div>
       </div>
     </div>
-    </div>
+    </footer>
 
     <!-- INQUIRY IN MODAL -->
     <div class="modal fade" id="inquiry" tabindex="-1" role="dialog" aria-label="inquiryModalLabel" aria-hidden="true">
