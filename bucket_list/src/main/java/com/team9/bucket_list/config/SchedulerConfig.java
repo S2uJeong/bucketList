@@ -40,18 +40,17 @@ public class SchedulerConfig {
             post.setStatus(PostStatus.COMPLETE);
             postRepository.save(post);
 
-//            Set<Application> applications = applicationRepository.findMemberByPost_IdAndStatus(post.getId(), (byte) 1);
-//            Set<Long> joinMembersId1 = applications.stream().map(Application::getMember).map(Member::getId).collect(Collectors.toSet());
-//            Set<Long> joinMembersId2 = applications.stream().map(Application::getMember).map(Member::getId).collect(Collectors.toSet());
-//            for (Long memberId1 : joinMembersId1) {
-//                for (Long memberId2 : joinMembersId2) {
-//                    if(memberId1 == memberId2) {
-//                        alarmService.sendAlarm(memberId1, post.getId(), (byte) 5);
-//                    } else{
-//                        alarmService.sendAlarm(memberId1, memberId2, (byte) 4);
-//                    }
-//                }
-//            }
+            Set<Application> applications = applicationRepository.findByPost_IdAndStatus(post.getId(), (byte) 1);
+            Set<Long> joinMembersId = applications.stream().map(Application::getMember).map(Member::getId).collect(Collectors.toSet());
+            for (Long memberId1 : joinMembersId) {
+                for (Long memberId2 : joinMembersId) {
+                    if(memberId1 == memberId2) {
+                        alarmService.sendAlarm(memberId1, post.getId(), (byte) 5);
+                    } else{
+                        alarmService.sendAlarm(memberId1, memberId2, (byte) 4);
+                    }
+                }
+            }
         }
 
         log.info("complete");

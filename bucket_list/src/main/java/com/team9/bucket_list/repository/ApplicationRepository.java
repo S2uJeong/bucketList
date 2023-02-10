@@ -35,7 +35,5 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
     @Query(value = "update application a set a.status = 2 where a.member_id = :memberId and a.post_id = :postId and a.status = 1 ;",nativeQuery = true)
     int updateRejectApplication(@Param("memberId") Long memberId, @Param("postId") Long postId);
 
-    Optional<Application> findByMember_IdAndPost_Id(Long memberId, Long postId);
-
-    Set<Application> findMemberByPost_IdAndStatus(Long postId, byte status);
+    Set<Application> findByPost_IdAndStatus(Long postId, byte status);
 }

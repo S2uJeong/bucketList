@@ -51,7 +51,7 @@ public class AlarmService {
         버킷리뷰 : senderId(리뷰 하는사람), postId(포스트 아이디)
 
     * */
-    @Async
+//    @Async
     @Transactional
     public void sendAlarm(Long senderId, Long getterId, byte category) {
         Post post = null;
@@ -69,8 +69,7 @@ public class AlarmService {
             receiver = memberRepository.findById(getterId).orElseThrow( () -> new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED));
         }
 
-        Alarm alarm = alarmRepository.findBySenderNameAndPostIdAndCategory(sender.getUserName(),getterId,category).orElseThrow(() -> new ApplicationException(ErrorCode.ALARM_NOT_FOUND));
-
+//        Alarm alarm = alarmRepository.findBySenderNameAndPostIdAndCategory(sender.getUserName(),getterId,category).orElseThrow(() -> new ApplicationException(ErrorCode.ALARM_NOT_FOUND));
 
 
         if(category == (byte) 4)
