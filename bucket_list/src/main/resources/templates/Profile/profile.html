@@ -162,27 +162,76 @@
 </header>
 <div class="main-wrapper packages-list-left-sidebar">
 
+<!-- ====================================
+ ——— PROFILE SECTION
+===================================== -->
+<section class="py-9 menu-section-wrap">
+    <div class="container">
+        <div class="hover-profile mb-7 mb-lg-9">
+            <div class="row">
+                <div class="col-md-6 col-lg-5 col-xl-4">
+                    <div class="mb-6 mb-md-0">
+                        <!-- 수정 버튼 -->
+                        <div class="icon-setting pb-2">
+                            <a th:href="@{/profile/{memberId}/edit (memberId=${memberId})}">
+                                <i class="fas fa-pencil-alt" aria-hidden="true"></i>
+                            </a>
+                        </div>
+
+                        <!-- profile image -->
+                        <img class="w-100 lazyestload" data-src="assets/img/dashboard/profile-img-01.jpg"
+                             src="assets/img/dashboard/profile-img-01.jpg" alt="Generic placeholder image">
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-7 col-xl-8">
+                    <div class="d-flex justify-content-between align-items-baseline">
+                        <div class="mb-6 mb-md-4 mb-lg-6">
+                            <h2 class="text-uppercase font-weight-bold" th:text="${member.getUserName()}"></h2>
+                        </div>
+                    </div>
+
+                    <ul class="list-unstyled">
+
+                        <li class="media media-profile-list">
+                            <strong>이메일 : </strong>
+                        </li>
+                    </ul>
     <!-- ====================================
-     ——— PROFILE SECTION
+    ——— PROFILE SECTION
     ===================================== -->
-    <section class="py-9 menu-section-wrap">
+    <section class="py-9">
         <div class="container">
             <div class="hover-profile mb-7 mb-lg-9">
                 <div class="row">
                     <div class="col-md-6 col-lg-5 col-xl-4">
                         <div class="mb-6 mb-md-0">
-                            <!-- 수정 버튼 -->
-                            <div class="icon-setting pb-2">
-                                <a th:href="@{/profile/{memberId}/edit (memberId=${memberId})}">
-                                    <i class="fas fa-pencil-alt" aria-hidden="true"></i>
-                                </a>
-                            </div>
-
-                            <!-- profile image -->
-                            <img class="w-100 lazyestload" data-src="assets/img/dashboard/profile-img-01.jpg"
-                                 src="assets/img/dashboard/profile-img-01.jpg" alt="Generic placeholder image">
+                            <!--                            &lt;!&ndash; 수정 버튼 &ndash;&gt;-->
+                            <!--                            <div class="icon-setting pb-2">-->
+                            <!--                                <a th:href="@{/profile/{memberId}/edit (memberId=${memberId})}">-->
+                            <!--                                    <i class="fas fa-pencil-alt" aria-hidden="true"></i>-->
+                            <!--                                </a>-->
                         </div>
+                        <!-- 프로필 이미지 -->
+                        <img class="w-100 lazyestload" data-src="assets/img/dashboard/profile-img-01.jpg"
+                             src="assets/img/dashboard/profile-img-01.jpg" alt="Generic placeholder image">
                     </div>
+                    <!--                    <div class="container-membr-info-table">-->
+                    <!--                        <table class="board-list">-->
+                    <!--                            <colgroup>-->
+                    <!--                                <col width="15%"/>-->
+                    <!--                                <col width="15%"/>-->
+                    <!--                                <col width="15%"/>-->
+                    <!--                            </colgroup>-->
+                    <!--                            <thead class="thead">-->
+                    <!--                            <tr>-->
+                    <!--                                <th scope="col">이름</th>-->
+                    <!--                                <th scope="col">이메일</th>-->
+                    <!--                                <th scope="col">평점</th>-->
+                    <!--                            </tr>-->
+                    <!--                            </thead>-->
+                    <!--                        </table>-->
+                    <!--                    </div>-->
 
                     <div class="col-md-6 col-lg-7 col-xl-8">
                         <div class="d-flex justify-content-between align-items-baseline">
@@ -190,336 +239,287 @@
                                 <h2 class="text-uppercase font-weight-bold" th:text="${member.getUserName()}"></h2>
                             </div>
                         </div>
-
                         <ul class="list-unstyled">
-
                             <li class="media media-profile-list">
                                 <strong>이메일 : </strong>
-                            </li>
-                        </ul>
-                        <!-- ====================================
-                        ——— PROFILE SECTION
-                        ===================================== -->
-                        <section class="py-9">
-                            <div class="container">
-                                <div class="hover-profile mb-7 mb-lg-9">
-                                    <div class="row">
-                                        <div class="col-md-6 col-lg-5 col-xl-4">
-                                            <div class="mb-6 mb-md-0">
-                                                <!--                            &lt;!&ndash; 수정 버튼 &ndash;&gt;-->
-                                                <!--                            <div class="icon-setting pb-2">-->
-                                                <!--                                <a th:href="@{/profile/{memberId}/edit (memberId=${memberId})}">-->
-                                                <!--                                    <i class="fas fa-pencil-alt" aria-hidden="true"></i>-->
-                                                <!--                                </a>-->
-                                            </div>
-                                            <!-- 프로필 이미지 -->
-                                            <img class="w-100 lazyestload" data-src="assets/img/dashboard/profile-img-01.jpg"
-                                                 src="assets/img/dashboard/profile-img-01.jpg" alt="Generic placeholder image">
-                                        </div>
-                                        <!--                    <div class="container-membr-info-table">-->
-                                        <!--                        <table class="board-list">-->
-                                        <!--                            <colgroup>-->
-                                        <!--                                <col width="15%"/>-->
-                                        <!--                                <col width="15%"/>-->
-                                        <!--                                <col width="15%"/>-->
-                                        <!--                            </colgroup>-->
-                                        <!--                            <thead class="thead">-->
-                                        <!--                            <tr>-->
-                                        <!--                                <th scope="col">이름</th>-->
-                                        <!--                                <th scope="col">이메일</th>-->
-                                        <!--                                <th scope="col">평점</th>-->
-                                        <!--                            </tr>-->
-                                        <!--                            </thead>-->
-                                        <!--                        </table>-->
-                                        <!--                    </div>-->
 
-                                        <div class="col-md-6 col-lg-7 col-xl-8">
-                                            <div class="d-flex justify-content-between align-items-baseline">
-                                                <div class="mb-6 mb-md-4 mb-lg-6">
-                                                    <h2 class="text-uppercase font-weight-bold" th:text="${member.getUserName()}"></h2>
-                                                </div>
-                                            </div>
-                                            <ul class="list-unstyled">
-                                                <li class="media media-profile-list">
-                                                    <strong>이메일 : </strong>
-
-                                                    <div class="media-body ms-2">
-                                                        <p class="text-gray-color hover-text-primary"
-                                                           th:text="${member.getEmail()}"></p>
-                                                    </div>
-                                                </li>
-
-                                                <li class="media media-profile-list">
-                                                    <strong>평점 : </strong>
-                                                    <div class="media-body ms-2">
-                                                        <p class="text-gray-color hover-text-primary" th:text="${member.getRate()}"></p>
-                                                    </div>
-                                                </li>
-
-                                            </ul>
-                                        </div>
-                                        <!-- 리뷰 Section -->
-                                        <div class="bg-smoke p-2 mb-7 mb-lg-9" style="height: 470px">
-                                            <div class="mb-7 mb-lg-9 h-100">
-                                                <h3 class="text-uppercase font-weight-bold mb-4">리뷰</h3>
-                                                <p class="line-height-26 mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-                                                    eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-                                                    nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                                                    irure
-                                                    dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                                                    sintoccaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
-                                                    laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="media-body ms-2">
+                                <p class="text-gray-color hover-text-primary"
+                                   th:text="${member.getEmail()}"></p>
                             </div>
-                        </section>
+                        </li>
 
-
-                    </div><!-- element wrapper ends -->
-
-                    <!-- ====================================
-                    ——— FOOTER SECTION
-                    ===================================== -->
-                    <footer class="footer">
-                        <div class="footer-bg-color py-1">
-                            <div class="container">
-                                <div class="mb-0 mt-1 mb-lg-0 mx-5">
-                                    <a class="d-inline-block" href="/">
-                                        <img class="w-100 mb-6 lazyestload" data-src="/assets/img/logo-color-sm.png"
-                                             src="/assets/img/logo-color-sm.png" alt="img">
-                                    </a>
-                                    <p class="mb-0">
-                                        WEB(We arE Best) : 고관운, 배지원, 박은빈, 변지환, 정재현, 최수정 |
-                                        프로젝트 깃랩 : <a class="text-secondary" href="https://gitlab.com/S2uJeong1/bucketlist" target="_blank">gitlab</a> |
-                                        프로젝트 노션 : <a class="text-secondary" href="https://ringed-suggestion-46f.notion.site/ceff928e9f1f4e2482f07387b997f593" target="_blank">notion</a>
-                                    </p>
-                                    <p class="mt-2">
-                                        버킷리스트를 주제로 모임을 개설할 수 있도록 도와주는 사이트입니다.
-                                    </p>
-                                </div>
+                        <li class="media media-profile-list">
+                            <strong>평점 : </strong>
+                            <div class="media-body ms-2">
+                                <p class="text-gray-color hover-text-primary" th:text="${member.getRate()}"></p>
                             </div>
-                        </div>
+                        </li>
 
-                        <!-- 저작권 표시 -->
-                        <div class="copyright py-1">
-                            <div class="container">
-                                <div class="row align-items-center">
-                                    <div class="col-md-6 order-1 order-md-0">
-                                        <p class="mb-0 mb-md-0 text-md-start">Copyright &copy; <span id="copy-year"></span> All Rights
-                                            Reserved by
-                                            <a class="text-secondary" href="http://www.iamabdus.com/" target="_blank">Abdus</a>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </footer>
+                    </ul>
+                </div>
+                <!-- 리뷰 Section -->
+                <div class="bg-smoke p-2 mb-7 mb-lg-9" style="height: 470px">
+                    <div class="mb-7 mb-lg-9 h-100">
+                        <h3 class="text-uppercase font-weight-bold mb-4">리뷰</h3>
+                        <p class="line-height-26 mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+                            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+                            nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
+                            irure
+                            dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                            sintoccaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
+                            laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+</section>
 
-                    <script>
-                        var d = new Date();
-                        var year = d.getFullYear();
-                        document.getElementById("copy-year").innerHTML = year;
-                    </script>
+
+</div><!-- element wrapper ends -->
+
+<!-- ====================================
+——— FOOTER SECTION
+===================================== -->
+<footer class="footer">
+    <div class="footer-bg-color py-1">
+        <div class="container">
+            <div class="mb-0 mt-1 mb-lg-0 mx-5">
+                <a class="d-inline-block" href="/">
+                    <img class="w-100 mb-6 lazyestload" data-src="/assets/img/logo-color-sm.png"
+                         src="/assets/img/logo-color-sm.png" alt="img">
+                </a>
+                <p class="mb-0">
+                    WEB(We arE Best) : 고관운, 배지원, 박은빈, 변지환, 정재현, 최수정 |
+                    프로젝트 깃랩 : <a class="text-secondary" href="https://gitlab.com/S2uJeong1/bucketlist" target="_blank">gitlab</a> |
+                    프로젝트 노션 : <a class="text-secondary" href="https://ringed-suggestion-46f.notion.site/ceff928e9f1f4e2482f07387b997f593" target="_blank">notion</a>
+                </p>
+                <p class="mt-2">
+                    버킷리스트를 주제로 모임을 개설할 수 있도록 도와주는 사이트입니다.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 저작권 표시 -->
+    <div class="copyright py-1">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6 order-1 order-md-0">
+                    <p class="mb-0 mb-md-0 text-md-start">Copyright &copy; <span id="copy-year"></span> All Rights
+                        Reserved by
+                        <a class="text-secondary" href="http://www.iamabdus.com/" target="_blank">Abdus</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script>
+    var d = new Date();
+    var year = d.getFullYear();
+    document.getElementById("copy-year").innerHTML = year;
+</script>
 
 
-                    <!-- ====================================
-                    ——— MODAL SECTION
-                    ===================================== -->
-                    <!-- Signup Modal -->
-                    <div class="modal fade" id="signup" tabindex="-1" role="dialog" aria-label="signupModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header rounded">
-                                    <h3 class="modal-title text-uppercase font-weight-bold">회원가입</h3>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
+<!-- ====================================
+——— MODAL SECTION
+===================================== -->
+<!-- Signup Modal -->
+<div class="modal fade" id="signup" tabindex="-1" role="dialog" aria-label="signupModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header rounded">
+                <h3 class="modal-title text-uppercase font-weight-bold">회원가입</h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
 
-                                <div class="modal-body">
-                                    <form class="" action="index.html" method="post">
-                                        <div class="mb-3">
-                                            <div class="mb-3" style="display: flex">
-                                                <input type="id" class="form-control bg-smoke" required="" placeholder="아이디">
-                                                <button class="btn btn-facebook btn-block text-uppercase text-white" type="submit"
-                                                        style="width: 25%; padding: 0">중복확인
-                                                </button>
-                                            </div>
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <input type="password" class="form-control bg-smoke" required="" placeholder="비밀번호">
-                                            <input type="password" class="form-control bg-smoke" required="" placeholder="비밀번호 확인">
-                                        </div>
-
-                                        <div class="mb-3" style="display: flex">
-                                            <input style="flex: 1;" type="year" class="form-control bg-smoke" required=""
-                                                   placeholder="년(4자)">
-                                            <input style="flex: 1;" type="month1" class="form-control bg-smoke" required="" placeholder="월">
-                                            <input style="flex: 1;" type="day" class="form-control bg-smoke" required="" placeholder="일">
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <div style="display: flex">
-                                                <input style="flex: auto;" type="email" class="form-control bg-smoke" required=""
-                                                       placeholder="이메일">
-                                                <button class="btn btn-facebook btn-block text-uppercase text-white" type="submit"
-                                                        style="width: 25%; padding: 0">인증요청
-                                                </button>
-                                            </div>
-                                            <input type="emailCheck" class="form-control bg-smoke" required="" placeholder="인증번호">
-                                        </div>
-
-                                        <div class="mb-3 form-check mb-0">
-                                            <input type="checkbox" class="form-check-input" id="exampleCheck4">
-                                            <label class="form-check-label text-gray-color mb-3" for="exampleCheck4">
-                                                I agree to the terms of use and privacy.
-                                            </label>
-                                        </div>
-
-                                        <div class="d-grid">
-                                            <button type="submit" class="btn btn-primary btn-block text-uppercase">가입하기</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
+            <div class="modal-body">
+                <form class="" action="index.html" method="post">
+                    <div class="mb-3">
+                        <div class="mb-3" style="display: flex">
+                            <input type="id" class="form-control bg-smoke" required="" placeholder="아이디">
+                            <button class="btn btn-facebook btn-block text-uppercase text-white" type="submit"
+                                    style="width: 25%; padding: 0">중복확인
+                            </button>
                         </div>
                     </div>
 
-                    <!-- Login Modal -->
-                    <div class="modal fade" id="login" tabindex="-1" role="dialog" aria-label="loginModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header rounded">
-                                    <h3 class="modal-title text-uppercase font-weight-bold">로그인</h3>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-
-                                <div class="modal-body">
-                                    <form class="" action="index.html" method="post">
-                                        <div class="mb-3">
-                                            <input type="email" class="form-control bg-smoke" required="" placeholder="이메일">
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <input type="password" class="form-control bg-smoke" required="" placeholder="비밀번호">
-                                        </div>
-
-                                        <!--              <div class="mb-3 form-check mb-0">-->
-                                        <!--                <input type="checkbox" class="form-check-input" id="exampleCheck5">-->
-                                        <!--                <label class="form-check-label text-gray-color mb-3" for="exampleCheck5">-->
-                                        <!--                  Remember me-->
-                                        <!--                </label>-->
-                                        <!--                <a class="pull-right" href="javascript:void(0)">Fogot Password?</a>-->
-                                        <!--             </div>-->
-
-                                        <div class="d-grid">
-                                            <button type="submit" class="btn btn-primary text-uppercase">Login</button>
-                                        </div>
-
-                                        <div class="text-uppercase text-center py-3">Or</div>
-
-                                        <div style="display: flex;">
-                                            <div style="flex: 1;">
-                                                <a href="/login/google"><img src="/assets/img/google-button.png"
-                                                                             style="width: 95%; margin-left: 5%"></a>
-                                            </div>
-                                            <div style="flex: 1;">
-                                                <a href="/login/naver"><img src="/assets/img/naver-button.png"
-                                                                            style="width: 85%; float: right; margin-right: 10%"></a>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-
-                                <div class="modal-footer justify-content-center">
-                                    <p class="mb-1">Don’t have an Account? <a href="javascript:void(0)" data-bs-dismiss="modal"
-                                                                              data-bs-toggle="modal" data-bs-target="#signup">Sign up</a>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="mb-3">
+                        <input type="password" class="form-control bg-smoke" required="" placeholder="비밀번호">
+                        <input type="password" class="form-control bg-smoke" required="" placeholder="비밀번호 확인">
                     </div>
 
-                    <!-- INQUIRY IN MODAL -->
-                    <div class="modal fade" id="inquiry" tabindex="-1" role="dialog" aria-label="inquiryModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header rounded">
-                                    <h3 class="modal-title text-uppercase font-weight-bold">Inquiry about tour</h3>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-
-                                <div class="modal-body pb-3">
-                                    <form class="" action="index.html" method="post">
-                                        <div class="mb-3">
-                                            <input type="text" class="form-control bg-smoke" required="" placeholder="Your Name">
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <input type="email" class="form-control bg-smoke" required="" placeholder="Your Email">
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <input type="number" class="form-control bg-smoke" required="" placeholder="Phone Number">
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <textarea class="form-control bg-smoke" rows="6" placeholder="Message"></textarea>
-                                        </div>
-
-                                        <button type="submit" class="btn btn-primary text-uppercase">Submit</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="mb-3" style="display: flex">
+                        <input style="flex: 1;" type="year" class="form-control bg-smoke" required=""
+                               placeholder="년(4자)">
+                        <input style="flex: 1;" type="month1" class="form-control bg-smoke" required="" placeholder="월">
+                        <input style="flex: 1;" type="day" class="form-control bg-smoke" required="" placeholder="일">
                     </div>
 
-                    <!-- image update IN MODAL -->
-                    <div class="modal fade" id="image-update" tabindex="-1" role="dialog" aria-label="image-update" aria-hidden="true">
-                        <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header rounded">
-                                    <h3 class="modal-title text-uppercase font-weight-bold">image-update</h3>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-
-                                <div class="modal-body pb-3">
-                                    <form class="" action="index.html" method="post">
-                                        <div class="mb-3">
-                                            <input type="text" class="form-control bg-smoke" required="" placeholder="image">
-                                        </div>
-                                        <button type="submit" class="btn btn-primary text-uppercase">Update</button>
-                                    </form>
-                                </div>
-                            </div>
+                    <div class="mb-3">
+                        <div style="display: flex">
+                            <input style="flex: auto;" type="email" class="form-control bg-smoke" required=""
+                                   placeholder="이메일">
+                            <button class="btn btn-facebook btn-block text-uppercase text-white" type="submit"
+                                    style="width: 25%; padding: 0">인증요청
+                            </button>
                         </div>
+                        <input type="emailCheck" class="form-control bg-smoke" required="" placeholder="인증번호">
                     </div>
 
-                    <!-- Javascript -->
-                    <script src="/assets/plugins/jquery/jquery-3.4.1.min.js"></script>
-                    <script src="/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-                    <script src="/assets/plugins/menuzord/js/menuzord.js"></script>
+                    <div class="mb-3 form-check mb-0">
+                        <input type="checkbox" class="form-check-input" id="exampleCheck4">
+                        <label class="form-check-label text-gray-color mb-3" for="exampleCheck4">
+                            I agree to the terms of use and privacy.
+                        </label>
+                    </div>
 
-                    <script src='/assets/plugins/isotope/isotope.min.js'></script>
-                    <script src='/assets/plugins/images-loaded/js/imagesloaded.pkgd.min.js'></script>
-                    <script src='/assets/plugins/fancybox/jquery.fancybox.min.js'></script>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-block text-uppercase">가입하기</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
-                    <script src='/assets/plugins/selectric/jquery.selectric.min.js'></script>
-                    <script src='/assets/plugins/daterangepicker/js/moment.min.js'></script>
-                    <script src='/assets/plugins/daterangepicker/js/daterangepicker.min.js'></script>
+<!-- Login Modal -->
+<div class="modal fade" id="login" tabindex="-1" role="dialog" aria-label="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header rounded">
+                <h3 class="modal-title text-uppercase font-weight-bold">로그인</h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
 
-                    <script src="/assets/plugins/lazyestload/lazyestload.js"></script>
-                    <script src='/assets/plugins/dzsparallaxer/dzsparallaxer.js'></script>
+            <div class="modal-body">
+                <form class="" action="index.html" method="post">
+                    <div class="mb-3">
+                        <input type="email" class="form-control bg-smoke" required="" placeholder="이메일">
+                    </div>
+
+                    <div class="mb-3">
+                        <input type="password" class="form-control bg-smoke" required="" placeholder="비밀번호">
+                    </div>
+
+                    <!--              <div class="mb-3 form-check mb-0">-->
+                    <!--                <input type="checkbox" class="form-check-input" id="exampleCheck5">-->
+                    <!--                <label class="form-check-label text-gray-color mb-3" for="exampleCheck5">-->
+                    <!--                  Remember me-->
+                    <!--                </label>-->
+                    <!--                <a class="pull-right" href="javascript:void(0)">Fogot Password?</a>-->
+                    <!--             </div>-->
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary text-uppercase">Login</button>
+                    </div>
+
+                    <div class="text-uppercase text-center py-3">Or</div>
+
+                    <div style="display: flex;">
+                        <div style="flex: 1;">
+                            <a href="/login/google"><img src="/assets/img/google-button.png"
+                                                         style="width: 95%; margin-left: 5%"></a>
+                        </div>
+                        <div style="flex: 1;">
+                            <a href="/login/naver"><img src="/assets/img/naver-button.png"
+                                                        style="width: 85%; float: right; margin-right: 10%"></a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer justify-content-center">
+                <p class="mb-1">Don’t have an Account? <a href="javascript:void(0)" data-bs-dismiss="modal"
+                                                          data-bs-toggle="modal" data-bs-target="#signup">Sign up</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- INQUIRY IN MODAL -->
+<div class="modal fade" id="inquiry" tabindex="-1" role="dialog" aria-label="inquiryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header rounded">
+                <h3 class="modal-title text-uppercase font-weight-bold">Inquiry about tour</h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body pb-3">
+                <form class="" action="index.html" method="post">
+                    <div class="mb-3">
+                        <input type="text" class="form-control bg-smoke" required="" placeholder="Your Name">
+                    </div>
+
+                    <div class="mb-3">
+                        <input type="email" class="form-control bg-smoke" required="" placeholder="Your Email">
+                    </div>
+
+                    <div class="mb-3">
+                        <input type="number" class="form-control bg-smoke" required="" placeholder="Phone Number">
+                    </div>
+
+                    <div class="mb-3">
+                        <textarea class="form-control bg-smoke" rows="6" placeholder="Message"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary text-uppercase">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- image update IN MODAL -->
+<div class="modal fade" id="image-update" tabindex="-1" role="dialog" aria-label="image-update" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header rounded">
+                <h3 class="modal-title text-uppercase font-weight-bold">image-update</h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body pb-3">
+                <form class="" action="index.html" method="post">
+                    <div class="mb-3">
+                        <input type="text" class="form-control bg-smoke" required="" placeholder="image">
+                    </div>
+                    <button type="submit" class="btn btn-primary text-uppercase">Update</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Javascript -->
+<script src="/assets/plugins/jquery/jquery-3.4.1.min.js"></script>
+<script src="/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/assets/plugins/menuzord/js/menuzord.js"></script>
+
+<script src='/assets/plugins/isotope/isotope.min.js'></script>
+<script src='/assets/plugins/images-loaded/js/imagesloaded.pkgd.min.js'></script>
+<script src='/assets/plugins/fancybox/jquery.fancybox.min.js'></script>
+
+<script src='/assets/plugins/selectric/jquery.selectric.min.js'></script>
+<script src='/assets/plugins/daterangepicker/js/moment.min.js'></script>
+<script src='/assets/plugins/daterangepicker/js/daterangepicker.min.js'></script>
+
+<script src="/assets/plugins/lazyestload/lazyestload.js"></script>
+<script src='/assets/plugins/dzsparallaxer/dzsparallaxer.js'></script>
 
 
-                    <script src='/assets/plugins/revolution/js/jquery.themepunch.tools.min.js'></script>
-                    <script src='/assets/plugins/revolution/js/jquery.themepunch.revolution.min.js'></script>
-                    <script src="/assets/plugins/smoothscroll/SmoothScroll.js"></script>
+<script src='/assets/plugins/revolution/js/jquery.themepunch.tools.min.js'></script>
+<script src='/assets/plugins/revolution/js/jquery.themepunch.revolution.min.js'></script>
+<script src="/assets/plugins/smoothscroll/SmoothScroll.js"></script>
 
-                    <script src="/assets/js/star.js"></script>
+<script src="/assets/js/star.js"></script>
 
-                    <script src="/assets/js/custom.js"></script>
+<script src="/assets/js/custom.js"></script>
 
 </body>
 

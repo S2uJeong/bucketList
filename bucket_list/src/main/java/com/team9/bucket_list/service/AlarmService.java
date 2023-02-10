@@ -45,19 +45,40 @@ public class AlarmService {
 
     //sender : 댓글이나 좋아요, 신청서를 작성한 사람, 알람을 보내는 사람의 아이디
     //postId : 해당 포스트
-    //카테고리 :  0:댓글, 1:좋아요, 2:참가자가 신청서 작성, 3:신청서 승낙, 4:멤버 리뷰, 5:버킷리스트 리뷰 , 6:기타
+    //카테고리 :  0:댓글, 1:좋아요, 2:참가자가 신청서 작성, 3:신청서 승낙, 4:멤버 리뷰, 5:버킷리스트 리뷰, 6:기타
+    /*
+        멤버리뷰 : senderId(리뷰 요청하는사람), postId(리뷰를 하는사람)
+        버킷리뷰 : senderId(리뷰 하는사람), postId(포스트 아이디)
+
+    * */
     @Async
     @Transactional
-    public void sendAlarm(Long senderId, Long postId, byte category) {
-        Member sender = memberRepository.findById(senderId).orElseThrow( () -> new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED));
+    public void sendAlarm(Long senderId, Long getterId, byte category) {
+        Post post = null;
+        Member sender = null;
+        Member receiver = null;
 
-        Post post = postRepository.findById(postId).orElseThrow( () -> new ApplicationException(ErrorCode.POST_NOT_FOUND));
+        if(category != (byte) 5)
+            sender = memberRepository.findById(senderId).orElseThrow( () -> new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED));
+        else
+            receiver = memberRepository.findById(senderId).orElseThrow( () -> new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED));
 
-        Member member = memberRepository.findById(post.getMember().getId()).orElseThrow( () -> new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED));
+        if(category != (byte) 4)
+            post = postRepository.findById(getterId).orElseThrow( () -> new ApplicationException(ErrorCode.POST_NOT_FOUND));
+        else {
+            receiver = memberRepository.findById(getterId).orElseThrow( () -> new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED));
+        }
 
-        Optional<Alarm> alarm = alarmRepository.findBySenderNameAndPostIdAndCategory(sender.getUserName(),postId,category);
+        Alarm alarm = alarmRepository.findBySenderNameAndPostIdAndCategory(sender.getUserName(),getterId,category).orElseThrow(() -> new ApplicationException(ErrorCode.ALARM_NOT_FOUND));
 
-        if(alarm.isEmpty()) alarmRepository.save(Alarm.save(category,member,postId, post.getTitle(), sender.getUserName()));
+
+
+        if(category == (byte) 4)
+            alarmRepository.save(Alarm.save(category,receiver,null,null, sender.getUserName()));
+        else if(category == (byte) 5)
+            alarmRepository.save(Alarm.save(category,receiver,post.getId(), post.getTitle(), post.getMember().getUserName()));
+        else
+            alarmRepository.save(Alarm.save(category,post.getMember(),post.getId(), post.getTitle(),sender.getUserName()));
     }
 
 

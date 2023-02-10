@@ -59,10 +59,8 @@ public class PostService {
                 .orElseThrow(() -> new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED));
     }
     // 2. checkPostMember : post를 작성한 mem과 현재 로그인 된 mem 비교 -> INVALID_PERMISSION
-    public void checkPostMember(Long userId, Long postMemberId) {
-        Member loginMember = checkMember(userId);
-        Member postMember = checkMember(postMemberId);
-        if((!loginMember.getMemberRole().equals(MemberRole.ADMIN))&&loginMember.getUserName().equals(postMember.getUserName()))
+    public void checkPostMember(Member member, Post post) {
+        if((member.getMemberRole() != MemberRole.ADMIN)&&(!member.getUserName().equals(post.getMember().getUserName())))
             throw new ApplicationException(ErrorCode.INVALID_PERMISSION);
     }
 
@@ -96,10 +94,16 @@ public class PostService {
     // 카테고리별 포스트 전체 출력
     public Page<PostReadResponse> postList(Pageable pageable, String category, String eventStart, String eventEnd, String lowCost, String upCost){
 
+        log.info("서비스 category :"+category);
         // 카테고리별 포스트 리스트(필터링 적용 전)
-        if((eventStart == null)&&(eventEnd == null)&&(lowCost == null)&&(upCost == null)) {
+        if((category !=null)&&(eventStart == null)&&(eventEnd == null)&&(lowCost == null)&&(upCost == null)) {
+            log.info("1");
             return filter(category, pageable);
-        }else {                                     // 필터링 적용
+        }else if((category == null)&&(eventStart == null)&&(eventEnd == null)&&(lowCost == null)&&(upCost == null)){                   // 카테고리 없이 전체 포스트 리스트 출력
+            log.info("모두 값없음");
+            return readAll(pageable);
+        }else{                          // 필터링 적용
+            log.info("2");
             return dateFilterSearchData(pageable,category,"",eventStart,eventEnd,lowCost,upCost);
         }
     }
@@ -123,13 +127,13 @@ public class PostService {
     // 수정
     @Transactional
     public void update(PostUpdateRequest request, Long postId,Long userId) {
-//        로그인 되어있는지 확인하고 아니면 에러던짐
-//        Member member = checkMember(memberId);
-//        post를 쓴 멤버와 로그인 되어 있는 member가 같은 멤버가 아니면 에러던짐
-//        checkPostMember(memberId, post.getId());
+    //    로그인 되어있는지 확인하고 아니면 에러던짐
         Member member = checkMember(userId);
         // postid에 해당하는 post가 DB에 없으면 에러던짐 - entity
         Post post = checkPost(postId);
+
+        //    post를 쓴 멤버와 로그인 되어 있는 member가 같은 멤버가 아니면 에러던짐
+        checkPostMember(member,post);
 
         log.info("statues: "+request.getStatus());
         log.info("poststatues: "+post.getStatus());
@@ -173,7 +177,7 @@ public class PostService {
         // postid에 해당하는 post가 DB에 없으면 에러던짐
         Post post = checkPost(postId);
         // post를 쓴 멤버와 로그인 되어 있는 member가 같은 멤버가 아니면 에러던짐
-        checkPostMember(userId, post.getMember().getId());
+        checkPostMember(member,post);
 
         postRepository.delete(post);
 
@@ -401,23 +405,28 @@ public class PostService {
         log.info("eventStart:"+eventStart);
         log.info("eventEnd:"+eventEnd);
 
-        if(upper ==1){
+        log.info("category test:"+category);
 
-        }else if(upper ==2){
-
+        if(category == null){
+            log.info("hello");
+            Page<Post> posts = postRepository.findByEventStartBetweenAndEventEndBetweenAndCostBetween(eventStart,eventmax,eventmin,eventEnd,low,upper,pageable);
+            return PostReadResponse.listOf(posts);
         }
-
         // category,keyword,eventStart,eventmax,eventmin,eventEnd,low,upper,pageable
-        if(category.equals("Category")){                         // 모두 비었을 경우
+        if((category.equals("Category"))&&(keyword.isEmpty() == true)){                         // 카테고리, 키워드 모두 비었을 경우
+            log.info("1");
             Page<Post> posts = postRepository.findByEventStartBetweenAndEventEndBetweenAndCostBetween(eventStart,eventmax,eventmin,eventEnd,low,upper,pageable);
             return PostReadResponse.listOf(posts);
         } else if(keyword.isEmpty() == true){                    // 키워드가 비었을 경우
+            log.info("2");
             Page<Post> posts = postRepository.findByCategoryAndEventStartBetweenAndEventEndBetweenAndCostBetween(category,eventStart,eventmax,eventmin,eventEnd,low,upper,pageable);
             return PostReadResponse.listOf(posts);
         }else if((category.equals("Category")) && (keyword.isEmpty() == false)){        // 카테고리만 비었을 경우
+            log.info("3");
             Page<Post> posts = postRepository.findByTitleContainingAndEventStartBetweenAndEventEndBetweenAndCostBetween(keyword,eventStart,eventmax,eventmin,eventEnd,low,upper,pageable);
             return PostReadResponse.listOf(posts);
         }else{                                                  // 카테고리, 키워드, 필터 전부 있는 경우
+            log.info("4");
             Page<Post> posts = postRepository.findByCategoryAndTitleContainingAndEventStartBetweenAndEventEndBetweenAndCostBetween(category,keyword,eventStart,eventmax,eventmin,eventEnd,low,upper,pageable);
             return PostReadResponse.listOf(posts);
         }

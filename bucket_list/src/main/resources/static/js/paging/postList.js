@@ -63,6 +63,25 @@ function setTable() {
     let parent = document.getElementById('list_container');
     parent.innerHTML = "";
 
+
+
+    // js에서 css를 하기 위해서 만든 부분
+    function getImgBackgroundForm() {
+        const props = "--background-image";
+
+        const root = document.documentElement; // html의 모든 요소를 root에 저장
+        const rootStyle = getComputedStyle(root); // root에 있던 style의 :root에 있는 객체를 rootStyle에 저장
+
+        return rootStyle; // --background-image
+    }
+
+    function setImgBackgroundForm() {
+        const postImage = document.querySelector("#list_container");
+        postImage.style.backgroundImage = getImgBackgroundForm();
+    }
+
+
+
     post_list.forEach(function (post) {
         let postImage;
         <!-- 이미지 출력 경로 지정 -->
@@ -112,7 +131,7 @@ function setPaging(pageNum) {
     let start = Math.floor((currentPage - 1) / showPageCnt) * showPageCnt + 1;
     let sPagesHtml = '';
     sPagesHtml += "<li class=\"page-item\">\n" +
-    "    <a id=\"first_page\" class=\"page-link-i\">\n" +
+        "    <a id=\"first_page\" class=\"page-link-i\">\n" +
         "        <i class=\"fas fa-angle-double-left d-none d-md-inline-block me-md-1\"\n" +
         "           aria-hidden=\"true\"></i>\n" +
         "</a>\n" +
@@ -127,8 +146,8 @@ function setPaging(pageNum) {
     for (const end = start + showPageCnt; start < end && start <= totalPage; start++) {
         console.log("start : ", start, "currentPage : ", currentPage, start == currentPage)
         sPagesHtml += "<li class=\"page-item\">\n" +
-        "    <a class=\"page-link " + (start == currentPage ? 'active' : '') + "\" href='/post" + url_href + (start - 1) + "'>" + start + "</a>\n" +
-        "</li>\n";
+            "    <a class=\"page-link " + (start == currentPage ? 'active' : '') + "\" href='/post" + url_href + (start - 1) + "'>" + start + "</a>\n" +
+            "</li>\n";
     }
 
     sPagesHtml += "<li class=\"page-item\">\n" +
@@ -189,7 +208,6 @@ $(document).on('click', 'ul.pagination>li.page-item>a', function() {
         $(this).parent().parent().find('li.page-item>a.active').removeClass('active');
         $(this).addClass('active');
         console.log(Number($(this).text()));
-
         setTable();
     }
 });
