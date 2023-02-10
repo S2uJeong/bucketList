@@ -73,7 +73,7 @@
         const data = async () => {
           try {
 
-            if(urlSearch.includes("&eventStart=") == true){
+            if(urlSearch.includes("&eventEnd=") == true){
               let sch = location.search;    // 파라미터만 받아옴
               console.log(sch);
 
@@ -94,8 +94,19 @@
               // location.replace(url);
               location.replace(result);
             }else {
-              let url = urlSearch + "&eventStart=" + arr[0] + "&eventEnd=" + arr[1] + "&lowCost=" + arr[2] + "&upCost=" + arr[3];
-              window.location.replace(url);
+              console.log(urlSearch);
+
+              if (urlSearch.length == 0) {
+                let url = "/post" + "?eventStart=" + arr[0] + "&eventEnd=" + arr[1] + "&lowCost=" + arr[2] + "&upCost=" + arr[3];
+                console.log(url);
+                alert("확인");
+                window.location.replace(url);
+              } else{
+                let url = urlSearch + "&eventStart=" + arr[0] + "&eventEnd=" + arr[1] + "&lowCost=" + arr[2] + "&upCost=" + arr[3];
+                console.log(url);
+                alert("확인");
+                window.location.replace(url);
+              }
             }
 
 
