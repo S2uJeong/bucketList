@@ -47,23 +47,6 @@ public class MemberReviewService {
         return memberReviews;
     }
 
-//    public void score (Long targetUserId) {
-//        MemberReview memberReview = memberReviewRepository.findByUserId(targetUserId)
-//                .orElseThrow(() -> new ApplicationException(ErrorCode.REVIEW_NOT_FOUND));
-//
-//        double avg = 0;
-//        List<MemberReview> memberReviewList = memberReviewRepository.findAllByUserId(targetUserId);
-//        for ( MemberReview m : memberReviewList) {
-//            avg += m.getRate();
-//        }
-//        avg = (avg / memberReviewList.size());
-//        avg = Math.round(avg*100)/100.0;
-//
-////        memberReviewRepository.findByUserId(targetUserId);
-//
-//    }
-
-
     public String create(Long memberId, MemberReviewRequest memberReviewRequest) {
 
         Member targetMember = checkMemberName(memberReviewRequest.getTargetMemberName());
@@ -79,4 +62,20 @@ public class MemberReviewService {
 
         return "true";
     }
+
+//    public void score (Long targetUserId) {
+//        MemberReview memberReview = memberReviewRepository.findByUserId(targetUserId)
+//                .orElseThrow(() -> new ApplicationException(ErrorCode.REVIEW_NOT_FOUND));
+//
+//        double avg = 0;
+//        List<MemberReview> memberReviewList = memberReviewRepository.findAllByUserId(targetUserId);
+//        for ( MemberReview m : memberReviewList) {
+//            avg += m.getRate();
+//        }
+//        avg = (avg / memberReviewList.size());
+//        avg = Math.round(avg*100)/100.0;
+//
+////        memberReviewRepository.findByUserId(targetUserId);
+//
+//    }
 }
