@@ -83,7 +83,7 @@ uploadBtn.addEventListener("click", function () {
 });
 
 function uploadPic() {
-    const FileElement = document.querySelector('#fileInput');
+/*    const FileElement = document.querySelector('#fileInput');
 
     const getData = async () => {
         try{
@@ -101,15 +101,17 @@ function uploadPic() {
         catch (error){
             console.error(error);
         }
-    }
- /*   $('#file-form').attr("action", `/profile/${lsMemberId}/edit`);
-    $('#file-form').submit();*/
+    }*/
+    $('#file-form').attr("action", `/profile/${lsMemberId}/edit`);
+    $('#file-form').submit();
 }
 
+/*
 $('#fileInput').change(function (){
     let files = $('#fileInput')[0].files[0];
     console.log(files);
 });
+*/
 
 
 
