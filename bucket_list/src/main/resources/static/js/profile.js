@@ -88,12 +88,14 @@ function uploadPic() {
     const getData = async () => {
         try{
             const formData = new FormData();
+            const header = { "Content-Type": "multipart/form-data"} ;
 
             formData.append("file", FileElement.files[0]);
 
             const url = `/profile/${lsMemberId}/edit`;
 
-            const response = await axios.post(url, formData);
+            const response = await axios.post(url, formData, header);
+
             console.log(response)
         }
         catch (error){
