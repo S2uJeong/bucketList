@@ -1,6 +1,7 @@
 package com.team9.bucket_list.service;
 
 import com.team9.bucket_list.domain.dto.memberReview.MemberReviewRequest;
+import com.team9.bucket_list.domain.dto.memberReview.MemberReviewResponse;
 import com.team9.bucket_list.domain.entity.Member;
 import com.team9.bucket_list.domain.entity.MemberReview;
 import com.team9.bucket_list.execption.ApplicationException;
@@ -39,9 +40,11 @@ public class MemberReviewService {
                 .orElseThrow(() -> new ApplicationException(ErrorCode.REVIEW_NOT_FOUND));
     }
 
-    public Page<MemberReview> list (String targetUserName, Pageable pageable) {
-        Member member = checkMemberName(targetUserName);
-        return memberReviewRepository.findAllByMember(member, pageable);
+    public Page<MemberReviewResponse> list (Long targetUserId, Pageable pageable) {
+        Member member = checkMemberId(targetUserId);
+        Page<MemberReviewResponse> memberReviews = memberReviewRepository.findAllByMember(member, pageable)
+                .map(memberReview -> MemberReviewResponse.response(memberReview, memberReview.getMember().getUserName()));
+        return memberReviews;
     }
 
 //    public void score (Long targetUserId) {
