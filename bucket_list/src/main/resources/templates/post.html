@@ -26,6 +26,10 @@
     <link href='/assets/plugins/no-ui-slider/nouislider.min.css' rel='stylesheet'>
 
 
+
+
+
+
     <!-- GOOGLE FONT -->
     <link href='https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700' rel='stylesheet'>
 
@@ -45,77 +49,77 @@
     <![endif]-->
 
     <script>
-      function searchfilter() {
-        const urlSearch = new URL(window.location.href).search;
-        console.log(urlSearch)
+        function searchfilter() {
+            const urlSearch = new URL(window.location.href).search;
+            console.log(urlSearch)
 
-        // 게시물 배열 선언
-        let arr = [];
+            // 게시물 배열 선언
+            let arr = [];
 
-        $('[name="dateRange"]').each(function (index, item) { // input태그의 모든 값 배열에 저장
-          arr.push($(item).val().toString());
-        });
-        arr.push(document.getElementById('lower-value').innerText);
-        arr.push(document.getElementById('upper-value').innerText);
+            $('[name="dateRange"]').each(function (index, item) { // input태그의 모든 값 배열에 저장
+                arr.push($(item).val().toString());
+            });
+            arr.push(document.getElementById('lower-value').innerText);
+            arr.push(document.getElementById('upper-value').innerText);
 
 
-        // axios header에 넣을 데이터
-        const axiosConfig = {
-          headers: {
-            "Content-Type": "application/json"
-          }
-        }
-
-        const data = async () => {
-          try {
-
-            if(urlSearch.includes("&eventEnd=") == true){
-              let sch = location.search;    // 파라미터만 받아옴
-              console.log(sch);
-
-              let params = new URLSearchParams(sch);  // 객체 변환
-
-              // 파라미터 값만 변경
-              params.set('eventStart',arr[0]);
-              params.set('eventEnd',arr[1]);
-              params.set('lowCost',arr[2]);
-              params.set('upCost',arr[3]);
-
-              // 변경한 파라미터를 다시 URL에 합해줌
-              let url = window.location.protocol + window.location.pathname;
-
-              console.log(url);
-              alert("확인");
-              let result = url+"?"+params;
-              // location.replace(url);
-              location.replace(result);
-            }else {
-              console.log(urlSearch);
-
-              if (urlSearch.length == 0) {
-                let url = "/post" + "?eventStart=" + arr[0] + "&eventEnd=" + arr[1] + "&lowCost=" + arr[2] + "&upCost=" + arr[3];
-                console.log(url);
-                alert("확인");
-                window.location.replace(url);
-              } else{
-                let url = urlSearch + "&eventStart=" + arr[0] + "&eventEnd=" + arr[1] + "&lowCost=" + arr[2] + "&upCost=" + arr[3];
-                console.log(url);
-                alert("확인");
-                window.location.replace(url);
-              }
+            // axios header에 넣을 데이터
+            const axiosConfig = {
+                headers: {
+                    "Content-Type": "application/json"
+                }
             }
 
+            const data = async () => {
+                try {
+
+                    if(urlSearch.includes("&eventEnd=") == true){
+                        let sch = location.search;    // 파라미터만 받아옴
+                        console.log(sch);
+
+                        let params = new URLSearchParams(sch);  // 객체 변환
+
+                        // 파라미터 값만 변경
+                        params.set('eventStart',arr[0]);
+                        params.set('eventEnd',arr[1]);
+                        params.set('lowCost',arr[2]);
+                        params.set('upCost',arr[3]);
+
+                        // 변경한 파라미터를 다시 URL에 합해줌
+                        let url = window.location.protocol + window.location.pathname;
+
+                        console.log(url);
+                        alert("확인");
+                        let result = url+"?"+params;
+                        // location.replace(url);
+                        location.replace(result);
+                    }else {
+                        console.log(urlSearch);
+
+                        if (urlSearch.length == 0) {
+                            let url = "/post" + "?eventStart=" + arr[0] + "&eventEnd=" + arr[1] + "&lowCost=" + arr[2] + "&upCost=" + arr[3];
+                            console.log(url);
+                            alert("확인");
+                            window.location.replace(url);
+                        } else{
+                            let url = urlSearch + "&eventStart=" + arr[0] + "&eventEnd=" + arr[1] + "&lowCost=" + arr[2] + "&upCost=" + arr[3];
+                            console.log(url);
+                            alert("확인");
+                            window.location.replace(url);
+                        }
+                    }
 
 
 
-          } catch (error) {
-            alert("실패");
-          }
-        }
-        data();
-      };
+
+                } catch (error) {
+                    alert("실패");
+                }
+            }
+            data();
+        };
     </script>
-  </head>     
+</head>
 
 <body id="body" class="up-scroll">
 
@@ -128,8 +132,7 @@
         <div class="container clearfix">
             <div id="menuzord" class="menuzord">
                 <a href="/" class="menuzord-brand">
-                    <img class="lazyestload" data-src="/assets/img/logo-color-big.png"
-                         src="/assets/img/logo-color-big.png" alt="logo-img">
+                    <img class="lazyestload" data-src="/assets/img/logo-color-big.png" src="/assets/img/logo-color-big.png" alt="logo-img">
                 </a>
 
                 <ul class="menuzord-menu menuzord-right">
@@ -211,8 +214,7 @@
     ———	PAGE TITLE
     ===================================== -->
     <section class="page-title">
-        <div class="page-title-img bg-img bg-overlay-darken"
-             style="background-image: url(/assets/img/pages/page-title-bg6.jpg);">
+        <div class="page-title-img bg-img bg-overlay-darken" style="background-image: url(/assets/img/pages/page-title-bg6.jpg);">
             <div class="container">
                 <div class="row align-items-center justify-content-center" style="height: 200px;">
                     <div class="col-lg-6">
@@ -228,80 +230,90 @@
     </section>
 
 
-<!-- ====================================
-———	TOUR PACKAGES SECTION
-===================================== -->
+    <!-- ====================================
+    ———	TOUR PACKAGES SECTION
+    ===================================== -->
     <section class="bg-smoke py-10">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12 col-lg-3">
+        <div class="container">
             <div class="row">
-              <div class="col-md-6 col-lg-12">
-                <div class="mb-6 bg-white p-3 border-top border-top-5 border-primary rounded">
-                  <form class="" action="index.html" method="GET">
-                    <h4 class="text-uppercase font-weight-bold">Search</h4>
+                <div class="col-md-12 col-lg-3">
+                    <div class="row">
+                        <div class="col-md-6 col-lg-12">
+                            <div class="mb-6 bg-white p-3 border-top border-top-5 border-primary rounded">
+                                <form class="" action="index.html" method="GET">
+                                    <h4 class="text-uppercase font-weight-bold">Search</h4>
 
-                    <!--                <div class="mb-5">-->
-                    <!--                  <div class="select-default select-category-1">-->
-                    <!--                    <select class="select-option">-->
-                    <!--                      <option>Category</option>-->
-                    <!--                      <option>Travel</option>-->
-                    <!--                      <option>Extreme</option>-->
-                    <!--                      <option>Study</option>-->
-                    <!--                      <option>Volunteer</option>-->
-                    <!--                      <option>Experience</option>-->
-                    <!--                      <option>Etc</option>-->
-                    <!--                    </select>-->
-                    <!--                  </div>-->
-                    <!--                </div>-->
+                                    <!--                <div class="mb-5">-->
+                                    <!--                  <div class="select-default select-category-1">-->
+                                    <!--                    <select class="select-option">-->
+                                    <!--                      <option>Category</option>-->
+                                    <!--                      <option>Travel</option>-->
+                                    <!--                      <option>Extreme</option>-->
+                                    <!--                      <option>Study</option>-->
+                                    <!--                      <option>Volunteer</option>-->
+                                    <!--                      <option>Experience</option>-->
+                                    <!--                      <option>Etc</option>-->
+                                    <!--                    </select>-->
+                                    <!--                  </div>-->
+                                    <!--                </div>-->
 
-                    <div class="form-group form-group-icon form-group-icon-dark mb-5">
-                      <i class="far fa-calendar-alt" aria-hidden="true"></i>
-                      <input type="text" class="form-control daterange-picker sidebar-daterange-picker" autocomplete="off" name="dateRange" value=""
-                             placeholder="MM/DD/YYYY" />
+                                    <div class="form-group form-group-icon form-group-icon-dark mb-5">
+                                        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+                                        <input type="text" class="form-control daterange-picker sidebar-daterange-picker" autocomplete="off" name="dateRange" value=""
+                                               placeholder="MM/DD/YYYY" />
+                                    </div>
+
+                                    <div class="form-group form-group-icon form-group-icon-dark mb-5">
+                                        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+                                        <input type="text" class="form-control daterange-picker sidebar-daterange-picker" autocomplete="off" name="dateRange" value=""
+                                               placeholder="MM/DD/YYYY" />
+                                    </div>
+
+                                    <div class="price-range mt-5" id="price-range">
+                                        <div class="price-range-content mb-5">
+                                            <span class="price-value" id="lower-value" name="lowvalue"></span>
+                                            <span class="mx-3"><i class="fa fa-minus" aria-hidden="true"></i></span>
+                                            <span class="price-value" id="upper-value" name="upvalue"></span>
+                                        </div>
+
+                                        <div class="mb-6" id="slider-non-linear-step" ></div>
+                                    </div>
+
+                                    <div class="d-grid">
+                                        <button type="button" onclick="searchfilter()"
+                                                class="btn btn-xs btn-outline-secondary text-uppercase">Search</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <!--          <div class="col-md-6 col-lg-12">-->
+                        <!--            <div class="mb-6 bg-white p-3 border-top border-top-5 border-primary rounded overflow-hidden">-->
+                        <!--              <h4 class="text-uppercase font-weight-bold">Price</h4>-->
+
+                        <!--              <div class="price-range mt-5" id="price-range">-->
+                        <!--                <div class="price-range-content mb-5">-->
+                        <!--                  <span class="price-value" id="lower-value"></span>-->
+                        <!--                  <span class="mx-3"><i class="fa fa-minus" aria-hidden="true"></i></span>-->
+                        <!--                  <span class="price-value" id="upper-value"></span>-->
+                        <!--                </div>-->
+
+                        <!--                <div class="mb-6" id="slider-non-linear-step"></div>-->
+                        <!--              </div>-->
+                        <!--            </div>-->
+                        <!--          </div>-->
                     </div>
-
-                    <div class="form-group form-group-icon form-group-icon-dark mb-5">
-                      <i class="far fa-calendar-alt" aria-hidden="true"></i>
-                      <input type="text" class="form-control daterange-picker sidebar-daterange-picker" autocomplete="off" name="dateRange" value=""
-                             placeholder="MM/DD/YYYY" />
-                    </div>
-
-                    <div class="price-range mt-5" id="price-range">
-                      <div class="price-range-content mb-5">
-                        <span class="price-value" id="lower-value" name="lowvalue"></span>
-                        <span class="mx-3"><i class="fa fa-minus" aria-hidden="true"></i></span>
-                        <span class="price-value" id="upper-value" name="upvalue"></span>
-                      </div>
-
-                      <div class="mb-6" id="slider-non-linear-step" ></div>
-                    </div>
-
-                    <div class="d-grid">
-                      <button type="button" onclick="searchfilter()"
-                              class="btn btn-xs btn-outline-secondary text-uppercase">Search</button>
-                    </div>
-                  </form>
                 </div>
-              </div>
 
-              <!--          <div class="col-md-6 col-lg-12">-->
-              <!--            <div class="mb-6 bg-white p-3 border-top border-top-5 border-primary rounded overflow-hidden">-->
-              <!--              <h4 class="text-uppercase font-weight-bold">Price</h4>-->
-
-              <!--              <div class="price-range mt-5" id="price-range">-->
-              <!--                <div class="price-range-content mb-5">-->
-              <!--                  <span class="price-value" id="lower-value"></span>-->
-              <!--                  <span class="mx-3"><i class="fa fa-minus" aria-hidden="true"></i></span>-->
-              <!--                  <span class="price-value" id="upper-value"></span>-->
-              <!--                </div>-->
-
-              <!--                <div class="mb-6" id="slider-non-linear-step"></div>-->
-              <!--              </div>-->
-              <!--            </div>-->
-              <!--          </div>-->
+                <div class="col-lg-8 col-xl-9">
+                    <div id="list_container" class="row">
+                        <!--          포스트 리스트 부분-->
+                        <!--          포스트 리스트 부분-->
+                        <!--          포스트 리스트 부분-->
+                    </div>
+                </div>
             </div>
-          </div>
+        </div>
 
         <!-- ====================================
       ———	PAGINATION
@@ -317,10 +329,9 @@
                 </nav>
             </div>
         </section>
-        </div>
-      </div>
 
     </section>
+
 
 
 </div><!-- element wrapper ends -->
@@ -435,7 +446,6 @@
         </div>
     </div>
 
-
     <div class="copyright py-6">
         <div class="container">
             <div class="row align-items-center">
@@ -448,14 +458,13 @@
             </div>
         </div>
     </div>
-</footer>
 
     <script>
         var d = new Date();
         var year = d.getFullYear();
         document.getElementById("copy-year").innerHTML = year;
     </script>
-
+</footer>
 
 
 <!-- ====================================
@@ -474,11 +483,8 @@
                 <form onsubmit="join(); return false;">
                     <div class="mb-3">
                         <div class="mb-3" style="display: flex">
-                            <input type="text" id="form_userName" class="form-control bg-smoke" required=""
-                                   placeholder="닉네임">
-                            <button class="btn btn-facebook btn-block text-uppercase text-white"
-                                    onclick="checkUserName()" style="width: 25%; padding: 0">중복확인
-                            </button>
+                            <input type="text" id="form_userName" class="form-control bg-smoke" required="" placeholder="닉네임">
+                            <button class="btn btn-facebook btn-block text-uppercase text-white" onclick="checkUserName()" style="width: 25%; padding: 0">중복확인</button>
                         </div>
                         <p id="able_userName" style="display: none">사용 가능한 닉네임 입니다.</p>
                         <p id="error_userName" style="display: none">중복되는 닉네임 입니다.</p>
@@ -486,8 +492,7 @@
 
                     <div class="mb-3">
                         <input type="password" id="pw" class="form-control bg-smoke" required="" placeholder="비밀번호">
-                        <input type="password" id="check_pw" onchange="checkPasswordCorrect()"
-                               class="form-control bg-smoke" required="" placeholder="비밀번호 확인">
+                        <input type="password" id="check_pw" onchange="checkPasswordCorrect()" class="form-control bg-smoke" required="" placeholder="비밀번호 확인">
                         <p id="error_passwordCorrect" style="display: none">일치하지 않습니다.</p>
                     </div>
 
@@ -511,11 +516,8 @@
 
                     <div class="mb-3">
                         <div style="display: flex">
-                            <input style="flex: auto;" type="email" class="form-control bg-smoke" required=""
-                                   placeholder="이메일" id="form_email">
-                            <button class="btn btn-facebook btn-block text-uppercase text-white" onclick="checkEmail()"
-                                    style="width: 25%; padding: 0">인증요청
-                            </button>
+                            <input style="flex: auto;" type="email" class="form-control bg-smoke" required="" placeholder="이메일" id="form_email">
+                            <button class="btn btn-facebook btn-block text-uppercase text-white" onclick="checkEmail()" style="width: 25%; padding: 0">인증요청</button>
                         </div>
                         <p id="error_email" style="display: none">중복된 이메일 입니다.</p>
                         <input type="emailCheck" id="code" class="form-control bg-smoke" required="" placeholder="인증번호">
@@ -555,8 +557,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <input type="password" id="password" class="form-control bg-smoke" required=""
-                               placeholder="비밀번호">
+                        <input type="password" id="password" class="form-control bg-smoke" required="" placeholder="비밀번호">
                     </div>
 
                     <!--              <div class="mb-3 form-check mb-0">-->
@@ -575,21 +576,17 @@
 
                     <div style="display: flex;">
                         <div style="flex: 1;">
-                            <a href="/login/google"><img src="/assets/img/google-button.png"
-                                                         style="width: 95%; margin-left: 5%"></a>
+                            <a href="/login/google"><img src="/assets/img/google-button.png" style="width: 95%; margin-left: 5%"></a>
                         </div>
                         <div style="flex: 1;">
-                            <a href="/login/naver"><img src="/assets/img/naver-button.png"
-                                                        style="width: 85%; float: right; margin-right: 10%"></a>
+                            <a href="/login/naver"><img src="/assets/img/naver-button.png" style="width: 85%; float: right; margin-right: 10%"></a>
                         </div>
                     </div>
                 </form>
             </div>
 
             <div class="modal-footer justify-content-center">
-                <p class="mb-1">Don’t have an Account? <a href="javascript:void(0)" data-bs-dismiss="modal"
-                                                          data-bs-toggle="modal" data-bs-target="#signup">Sign up</a>
-                </p>
+                <p class="mb-1">Don’t have an Account? <a href="javascript:void(0)" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#signup">Sign up</a></p>
             </div>
         </div>
     </div>
@@ -635,6 +632,7 @@
 <script src="/assets/plugins/menuzord/js/menuzord.js"></script>
 
 
+
 <script src='/assets/plugins/fancybox/jquery.fancybox.min.js'></script>
 
 <script src='/assets/plugins/selectric/jquery.selectric.min.js'></script>
@@ -645,6 +643,9 @@
 
 
 <script src='/assets/plugins/no-ui-slider/nouislider.min.js'></script>
+
+
+
 
 
 <script src="/assets/plugins/smoothscroll/SmoothScroll.js"></script>
