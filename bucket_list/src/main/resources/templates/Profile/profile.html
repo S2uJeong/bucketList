@@ -34,6 +34,10 @@
     <link href="/assets/css/custom.css" id="custom_style" rel="stylesheet">
     <link href="/css/profile.css" rel="stylesheet">
 
+    <!-- POST CSS -->
+    <link href="/assets/css/post.css" id="post_css" rel="stylesheet" type="text/css"/>
+
+
     <!-- FAVICON -->
     <link rel="shortcut icon" type="image/png" href="/assets/img/favicon.png"/>
 
@@ -156,6 +160,7 @@
         </div>
     </nav>
 </header>
+<div class="main-wrapper packages-list-left-sidebar">
 
 <!-- ====================================
  ——— PROFILE SECTION
@@ -190,6 +195,8 @@
 
                         <li class="media media-profile-list">
                             <strong>이메일 : </strong>
+                        </li>
+                    </ul>
     <!-- ====================================
     ——— PROFILE SECTION
     ===================================== -->
@@ -266,10 +273,11 @@
                 </div>
             </div>
         </div>
-
-
+        </div>
 </section>
 
+
+</div><!-- element wrapper ends -->
 
 <!-- ====================================
 ——— FOOTER SECTION
@@ -278,8 +286,6 @@
     <div class="footer-bg-color py-9">
         <div class="container">
             <div class="row">
-                <div class="col-md-6 col-lg-3 mb-7 mb-lg-0">
-                    <a class="d-inline-block" href="../index.html">
                 <div class="col-md-6 col-lg-3 mb-5 mb-lg-0 mx-5">
                     <a class="d-inline-block" href="index.html">
                         <img class="w-100 mb-6 lazyestload" data-src="/assets/img/logo-color-sm.png"
@@ -383,25 +389,25 @@
         </div>
     </div>
 
-        <div class="copyright py-6">
-            <div class="container">
-                <div class="row align-items-center">
-                    <div class="col-md-6 order-1 order-md-0">
-                        <p class="mb-0 mb-md-0 text-md-start">Copyright &copy; <span id="copy-year"></span> All Rights
-                            Reserved by
-                            <a href="http://www.iamabdus.com/" target="_blank">Abdus</a>
-                        </p>
-                    </div>
+    <div class="copyright py-6">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6 order-1 order-md-0">
+                    <p class="mb-0 mb-md-0 text-md-start">Copyright &copy; <span id="copy-year"></span> All Rights
+                        Reserved by
+                        <a href="http://www.iamabdus.com/" target="_blank">Abdus</a>
+                    </p>
                 </div>
             </div>
         </div>
-
-    <script>
-        var d = new Date();
-        var year = d.getFullYear();
-        document.getElementById("copy-year").innerHTML = year;
-    </script>
+    </div>
 </footer>
+
+<script>
+    var d = new Date();
+    var year = d.getFullYear();
+    document.getElementById("copy-year").innerHTML = year;
+</script>
 
 
 <!-- ====================================
@@ -575,6 +581,31 @@
         </div>
     </div>
 </div>
+
+<!-- Javascript -->
+<script src="/assets/plugins/jquery/jquery-3.4.1.min.js"></script>
+<script src="/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/assets/plugins/menuzord/js/menuzord.js"></script>
+
+<script src='/assets/plugins/isotope/isotope.min.js'></script>
+<script src='/assets/plugins/images-loaded/js/imagesloaded.pkgd.min.js'></script>
+<script src='/assets/plugins/fancybox/jquery.fancybox.min.js'></script>
+
+<script src='/assets/plugins/selectric/jquery.selectric.min.js'></script>
+<script src='/assets/plugins/daterangepicker/js/moment.min.js'></script>
+<script src='/assets/plugins/daterangepicker/js/daterangepicker.min.js'></script>
+
+<script src="/assets/plugins/lazyestload/lazyestload.js"></script>
+<script src='/assets/plugins/dzsparallaxer/dzsparallaxer.js'></script>
+
+
+<script src='/assets/plugins/revolution/js/jquery.themepunch.tools.min.js'></script>
+<script src='/assets/plugins/revolution/js/jquery.themepunch.revolution.min.js'></script>
+<script src="/assets/plugins/smoothscroll/SmoothScroll.js"></script>
+
+<script src="/assets/js/star.js"></script>
+
+<script src="/assets/js/custom.js"></script>
 
 </body>
 
