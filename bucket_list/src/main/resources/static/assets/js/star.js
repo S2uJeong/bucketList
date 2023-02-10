@@ -615,10 +615,10 @@
   if (nonLinearStepSlider) {
     noUiSlider.create(nonLinearStepSlider, {
       connect: true,
-      start: [125, 750],
+      start: [0, 10000],
       range: {
         'min': [0],
-        'max': [1000]
+        'max': [10000]
       }
     });
   }

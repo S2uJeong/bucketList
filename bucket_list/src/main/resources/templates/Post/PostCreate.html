@@ -187,24 +187,51 @@
                 <input type="text" name="post" class="form-control border-0" placeholder="title">
               </div>
 
-              <div class="col-lg-4">
-                <div class="form-group">
+<!--              <div class="col-lg-4">-->
+<!--                <div class="form-group">-->
+<!--                  <label>모집종료일</label>-->
+<!--                  <input type="text" name="post" class="form-control border-0" placeholder="2023.01.25">-->
+<!--                </div>-->
+<!--              </div>-->
+
+<!--              <div class="col-lg-4">-->
+<!--                <div class="form-group">-->
+<!--                  <label>버킷 시작일</label>-->
+<!--                  <input type="text" name="post" class="form-control border-0" placeholder="2023.02.01">-->
+<!--                </div>-->
+<!--              </div>-->
+
+<!--              <div class="col-lg-4">-->
+<!--                <div class="form-group">-->
+<!--                  <label>버킷 종료일</label>-->
+<!--                  <input type="text" name="post" class="form-control border-0" placeholder="2023.02.08">-->
+<!--                </div>-->
+<!--              </div>-->
+
+              <div class="col-md-6 col-lg-3">
+                <div class="mb-3 form-group-icon mb-lg-0">
                   <label>모집종료일</label>
-                  <input type="text" name="post" class="form-control border-0" placeholder="2023.01.25">
+                  <i class="far fa-calendar-alt" aria-hidden="true"></i>
+                  <input type="text" class="form-control daterange-picker; form-control border-0" autocomplete="off" name="dateRange" value=""
+                         placeholder="MM/DD/YYYY"/>
                 </div>
               </div>
 
-              <div class="col-lg-4">
-                <div class="form-group">
+              <div class="col-md-6 col-lg-3">
+                <div class="mb-3 form-group-icon mb-lg-0">
                   <label>버킷 시작일</label>
-                  <input type="text" name="post" class="form-control border-0" placeholder="2023.02.01">
+                  <i class="far fa-calendar-alt" aria-hidden="true"></i>
+                  <input type="text" class="form-control daterange-picker; form-control border-0" autocomplete="off" name="dateRange" value=""
+                         placeholder="MM/DD/YYYY"/>
                 </div>
               </div>
 
-              <div class="col-lg-4">
-                <div class="form-group">
+              <div class="col-md-6 col-lg-3">
+                <div class="mb-3 form-group-icon mb-lg-0">
                   <label>버킷 종료일</label>
-                  <input type="text" name="post" class="form-control border-0" placeholder="2023.02.08">
+                  <i class="far fa-calendar-alt" aria-hidden="true"></i>
+                  <input type="text" class="form-control daterange-picker; form-control border-0" autocomplete="off" name="dateRange" value=""
+                         placeholder="MM/DD/YYYY"/>
                 </div>
               </div>
 
@@ -222,6 +249,7 @@
                   </datalist>
                 </div>
               </div>
+
 
               <div class="col-lg-4">
                 <div class="form-group">
@@ -252,7 +280,7 @@
 
             <div class="form-group mb-5">
               <label>내용</label>
-              <textarea class="form-control border-0" name="post" rows="7"></textarea>
+              <textarea id="textarea" class="form-control border-0" name="post" rows="7"></textarea>
             </div>
           </div>
 
@@ -263,24 +291,30 @@
                 <input type="text" name="post" class="form-control border-0" placeholder="title">
               </div>
 
-              <div class="col-lg-4">
-                <div class="form-group">
+              <div class="col-md-6 col-lg-3">
+                <div class="mb-3 form-group-icon mb-lg-0">
                   <label>모집종료일</label>
-                  <input type="text" name="post" class="form-control border-0" placeholder="2023.01.25">
+                  <i class="far fa-calendar-alt" aria-hidden="true"></i>
+                  <input type="text" class="form-control daterange-picker; form-control border-0" autocomplete="off" name="dateRange" value=""
+                         placeholder="MM/DD/YYYY"/>
                 </div>
               </div>
 
-              <div class="col-lg-4">
-                <div class="form-group">
+              <div class="col-md-6 col-lg-3">
+                <div class="mb-3 form-group-icon mb-lg-0">
                   <label>버킷 시작일</label>
-                  <input type="text" name="post" class="form-control border-0" placeholder="2023.02.01">
+                  <i class="far fa-calendar-alt" aria-hidden="true"></i>
+                  <input type="text" class="form-control daterange-picker; form-control border-0" autocomplete="off" name="dateRange" value=""
+                         placeholder="MM/DD/YYYY"/>
                 </div>
               </div>
 
-              <div class="col-lg-4">
-                <div class="form-group">
+              <div class="col-md-6 col-lg-3">
+                <div class="mb-3 form-group-icon mb-lg-0">
                   <label>버킷 종료일</label>
-                  <input type="text" name="post" class="form-control border-0" placeholder="2023.02.08">
+                  <i class="far fa-calendar-alt" aria-hidden="true"></i>
+                  <input type="text" class="form-control daterange-picker; form-control border-0" autocomplete="off" name="dateRange" value=""
+                         placeholder="MM/DD/YYYY"/>
                 </div>
               </div>
 
@@ -731,9 +765,17 @@
         arr.push($(item).val());
       });
 
+      $('[name="dateRange"]').each(function(index,item){ // name=dataRange 모든 값 배열에 저장
+        arr.push($(item).val().toString());
+      });
+
+      console.log(arr);
+
+      alert("test");
 
       $('textarea[name="post"]').each(function(index,item){ // textarea태그의 모든 값 배열에 저장
-        arr.push($(item).val());
+        var html = $(item).val().replace(/(?:\r\n|\r|\n)/g, '<br />');
+        arr.push(html);
       });
 
       let finddata = $("#address_kakao").val();   // 국내 주소 값 저장
@@ -743,14 +785,14 @@
 
       if(finddata.length <1){     // 만약 국내 주소 값의 크기가 1보다 작을때, 즉 국내에서 데이터를 작성한 것이 아닐때
         const WorldData = {       // 해외 데이터
-          title : arr[8],       // 제목
-          untilRecruit : arr[9],    // 모집종료 날짜
-          eventStart : arr[10],       // 시작일
-          eventEnd : arr[11],          // 종료일
-          category : arr[12],       // 카테고리
-          entrantNum : arr[13],         // 모집인원
-          cost : arr[14],              // 비용
-          location : arr[15],        // 장소
+          title : arr[5],       // 제목
+          untilRecruit : arr[13],    // 모집종료 날짜
+          eventStart : arr[14],       // 시작일
+          eventEnd : arr[15],          // 종료일
+          category : arr[6],       // 카테고리
+          entrantNum : arr[7],         // 모집인원
+          cost : arr[8],              // 비용
+          location : arr[9],        // 장소
           content : arr[17],         // 내용
         }
         // axios header에 넣을 데이터
@@ -792,13 +834,13 @@
       else{           // 국내에서 작성했을때
         const KoreaData = {         // 한국 데이터
           title : arr[0],       // 제목
-          untilRecruit : arr[1],    // 모집종료 날짜
-          eventStart : arr[2],       // 시작일
-          eventEnd : arr[3],          // 종료일
-          category : arr[4],       // 카테고리
-          entrantNum : arr[5],         // 모집인원
-          cost : arr[6],              // 비용
-          location : arr[7],        // 장소
+          untilRecruit : arr[10],    // 모집종료 날짜
+          eventStart : arr[11],       // 시작일
+          eventEnd : arr[12],          // 종료일
+          category : arr[1],       // 카테고리
+          entrantNum : arr[2],         // 모집인원
+          cost : arr[3],              // 비용
+          location : arr[4],        // 장소
           content : arr[16],         // 내용
         }
         console.log(KoreaData);

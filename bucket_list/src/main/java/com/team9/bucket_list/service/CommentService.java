@@ -31,8 +31,9 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
-
     private final MemberRepository memberRepository;
+
+    private final AlarmService alarmService;
 
     // -------------- 예외처리 ------------------
 
@@ -84,6 +85,9 @@ public class CommentService {
         commentRepository.save(comment);
 
         CommentCreateResponse response = new CommentCreateResponse(comment,member.getUserName());
+
+        alarmService.sendAlarm(memberId,postId, (byte) 0);
+
         return response;
     }
 
