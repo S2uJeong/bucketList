@@ -1,5 +1,6 @@
 package com.team9.bucket_list.service;
 
+import com.team9.bucket_list.domain.dto.application.ApplicationDecisionRequest;
 import com.team9.bucket_list.domain.dto.chat.*;
 import com.team9.bucket_list.domain.entity.*;
 import com.team9.bucket_list.execption.ApplicationException;
@@ -31,6 +32,7 @@ public class ChatService {
     private final MemberRepository memberRepository;
     private final ChatRepository chatRepository;
     private final PostRepository postRepository;
+    private final ApplicationRepository applicationRepository;
 
     @Transactional
     public Page<ChatRoomResponse> getChatList(Long memberId, Pageable pageable) {
@@ -105,7 +107,27 @@ public class ChatService {
     }
 
     @Transactional
-    public List<ChatParticipant> getChatPartipant(Long roomId) {
+    public List<ChatParticipant> getChatParticipant(Long roomId) {
         return chatParticipantRepository.findAllByChatRoom_Id(roomId);
+    }
+
+    @Transactional
+    public int outChatRoom(ChatOutRequest chatOutRequest) {
+        ChatRoom chatRoom = chatRoomRepository.findById(chatOutRequest.getRoomId()).orElseThrow(() -> new ApplicationException(ErrorCode.CHAT_ROOM_NOT_FOUNT));
+        ChatParticipant chatParticipant = chatParticipantRepository.findByChatRoom_IdAndMember_Id(chatOutRequest.getRoomId(), chatOutRequest.getMemberId()).orElseThrow(() -> new ApplicationException(ErrorCode.CHAT_ROOM_NOT_FOUNT));
+        //Application application = applicationRepository.findByMember_IdAndPost_Id(chatOutRequest.getMemberId(), chatRoom.getPost().getId()).orElseThrow(() -> new ApplicationException(ErrorCode.APPLICATION_NOT_FOUND));
+
+        //채팅방 퇴장
+        log.info(chatOutRequest.getMemberId() + ", " + chatOutRequest.getRoomId());
+        log.info("채팅방 나가기");
+        chatParticipantRepository.deleteById(chatParticipant.getId());
+        //신청서 거절로 변경
+
+        log.info("신청서 거절로 변경");
+        /*ApplicationDecisionRequest applicationDecisionRequest = ApplicationDecisionRequest.builder().status((byte) 2).build();
+        applicationRepository.save(Application.updateStatus(application,applicationDecisionRequest));*/
+        applicationRepository.updateRejectApplication(chatOutRequest.getMemberId(), chatRoom.getPost().getId());
+
+        return 1;
     }
 }
