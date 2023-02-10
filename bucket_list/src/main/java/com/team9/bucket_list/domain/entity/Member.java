@@ -91,8 +91,8 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<Alarm> alarmList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member")
-    private List<MemberBucketlist> memberBucketlistList = new ArrayList<>();
+//    @OneToMany(mappedBy = "member")
+//    private List<MemberBucketlist> memberBucketlistList = new ArrayList<>();
 
     @OneToMany(mappedBy = "member")
     private List<ChatParticipant> chatParticipants = new ArrayList<>();
@@ -119,7 +119,6 @@ public class Member {
                 .likesList(likesList)
                 .memberReviewList(memberReviewList)
                 .alarmList(alarmList)
-                .memberBucketlistList(memberBucketlistList)
                 .build();
     }
 

@@ -1,6 +1,5 @@
 package com.team9.bucket_list.domain.dto.bucketlistReview;
 
-import com.team9.bucket_list.domain.entity.Bucketlist;
 import com.team9.bucket_list.domain.entity.BucketlistReview;
 import com.team9.bucket_list.domain.entity.Member;
 import com.team9.bucket_list.domain.entity.Post;

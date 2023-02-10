@@ -46,6 +46,46 @@
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+<script>
+    function Totalsearch() {
+
+      // 게시물 배열 선언
+      let arr = [];
+
+      $('[name="searchData"]').each(function (index, item) { // input태그의 모든 값 배열에 저장
+        arr.push($(item).val());
+      });
+
+
+      console.log(arr);
+      console.log(arr[0]);
+      console.log(arr[1]);
+
+        const searchData = {       // 검색 값
+          category: arr[0],       // 카테고리
+          keyword: arr[1],       // 시작일
+          // eventEnd: arr[2],          // 종료일
+        }
+        // axios header에 넣을 데이터
+        const axiosConfig = {
+          headers: {
+            "Content-Type": "application/json"
+          }
+        }
+
+        const data = async () => {
+          try {
+
+            let url = "/post/search?category="+arr[0]+"&keyword="+arr[1];
+
+            window.location.replace(url);
+          } catch (error) {
+            alert("실패");
+          }
+        }
+        data();
+    };
+    </script>
   </head>
   <script>
     let check = false;
@@ -208,55 +248,40 @@
                   <div class="select-dropdown">
                     <div class="mb-3 mb-lg-0">
                       <div class="select-default select-search-box">
-                        <select class="select-option">
-                          <option>Category</option>
-                          <option>Travel</option>
-                          <option>Extreme</option>
-                          <option>Study</option>
-                          <option>Volunteer</option>
-                          <option>Experience</option>
-                          <option>Etc</option>
-                        </select>
+                          <select class="select-option" name="searchData">
+                            <option>Category</option>
+                            <option>Travel</option>
+                            <option>Extreme</option>
+                            <option>Study</option>
+                            <option>Volunteer</option>
+                            <option>Experience</option>
+                            <option>Etc</option>
+                          </select>
                       </div>
                     </div>
                   </div>
                 </div>
     
                 <div class="col-md-6 col-lg-3">
-                  <div class="mb-3 form-group-icon mb-lg-0">
-                    <i class="far fa-calendar-alt" aria-hidden="true"></i>
-                    <input type="text" class="form-control daterange-picker" autocomplete="off" name="dateRange" value=""
-                      placeholder="MM/DD/YYYY" />
-                  </div>
-                </div>
-    
-                <div class="col-md-6 col-lg-3">
-                  <div class="mb-3 form-group-icon mb-lg-0">
-                    <i class="far fa-calendar-alt" aria-hidden="true"></i>
-                    <input type="text" class="form-control daterange-picker" autocomplete="off" name="dateRange" value=""
-                      placeholder="MM/DD/YYYY" />
-                  </div>
-                </div>
-    
-                <div class="col-md-6 col-lg-3">
-                  <div class="select-dropdown">
-                    <div class="mb-3 mb-lg-0">
-                      <div class="select-default select-search-box">
-                        <select class="select-option">
-                          <option>$1000 - $1200</option>
-                          <option>$1200 - $1400</option>
-                          <option>$1400 - $1600</option>
-                          <option>$1600 - $1800</option>
-                        </select>
-                      </div>
+                  <div class="mb-3 mb-lg-0">
+                    <div class="select-default select-search-box">
+                    <input type="text" name="searchData" placeholder="검색어를 입력해주세요"/>
                     </div>
                   </div>
                 </div>
+    
+<!--                <div class="col-md-6 col-lg-3">-->
+<!--                  <div class="mb-3 form-group-icon mb-lg-0">-->
+<!--                    <i class="far fa-calendar-alt" aria-hidden="true"></i>-->
+<!--                    <input type="text" class="form-control daterange-picker" autocomplete="off" name="dateRange" value=""-->
+<!--                      placeholder="MM/DD/YYYY" />-->
+<!--                  </div>-->
+<!--                </div>-->
               </div>
             </div>
     
             <div class="col-lg-2">
-              <button class="btn btn-primary text-uppercase" type="button" onclick="location.href='javascript:void(0)';">
+              <button class="btn btn-primary text-uppercase" type="button" onclick="Totalsearch()">
                 Search
               </button>
             </div>
@@ -488,6 +513,7 @@
         </div>
       </div>
     </div>
+  </footer>
 
     <!-- ====================================
     ——— MODAL SECTION

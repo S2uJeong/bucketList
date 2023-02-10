@@ -1,5 +1,6 @@
 package com.team9.bucket_list.service;
 
+import com.team9.bucket_list.domain.Response;
 import com.team9.bucket_list.domain.dto.post.*;
 import com.team9.bucket_list.domain.entity.Application;
 import com.team9.bucket_list.domain.entity.Likes;
@@ -92,6 +93,17 @@ public class PostService {
         return postReadResponses;
     }
 
+    // 카테고리별 포스트 전체 출력
+    public Page<PostReadResponse> postList(Pageable pageable, String category, String eventStart, String eventEnd, String lowCost, String upCost){
+
+        // 카테고리별 포스트 리스트(필터링 적용 전)
+        if((eventStart == null)&&(eventEnd == null)&&(lowCost == null)&&(upCost == null)) {
+            return filter(category, pageable);
+        }else {                                     // 필터링 적용
+            return dateFilterSearchData(pageable,category,"",eventStart,eventEnd,lowCost,upCost);
+        }
+    }
+
     // 상세조회
     public PostReadResponse read(Long postId) {
 
@@ -106,6 +118,8 @@ public class PostService {
     }
 
 
+
+
     // 수정
     @Transactional
     public void update(PostUpdateRequest request, Long postId,Long userId) {
@@ -117,13 +131,33 @@ public class PostService {
         // postid에 해당하는 post가 DB에 없으면 에러던짐 - entity
         Post post = checkPost(postId);
 
+        log.info("statues: "+request.getStatus());
+        log.info("poststatues: "+post.getStatus());
+
         PostStatus postStatus;
-        // 프론트에서 string 으로 입력 되므로 DB 저장용으로 다시 바꾸기 위해 PostStatus 클래스 형식으로 변환 시켜준다.
-        switch (request.getStatus()) {
-            case "모집중" -> postStatus = PostStatus.JOIN;
-            case "모집완료" -> postStatus = PostStatus.JOINCOMPLETE;
-            default -> postStatus = PostStatus.ERROR;
+
+        if(request.getStatus().isEmpty()){
+            String name = post.getStatus().name();
+            if(name.equals("JOINCOMPLETE")){
+                name = "모집완료";
+            }else {
+                name = "모집중";
+            }
+            switch (name) {
+                case "모집중" -> postStatus = PostStatus.JOIN;
+                case "모집완료" -> postStatus = PostStatus.JOINCOMPLETE;
+                default -> postStatus = PostStatus.ERROR;
+            }
+        }else{
+            switch (request.getStatus()) {
+                case "모집중" -> postStatus = PostStatus.JOIN;
+                case "모집완료" -> postStatus = PostStatus.JOINCOMPLETE;
+                default -> postStatus = PostStatus.ERROR;
+            }
         }
+
+        // 프론트에서 string 으로 입력 되므로 DB 저장용으로 다시 바꾸기 위해 PostStatus 클래스 형식으로 변환 시켜준다.
+
 
         log.info("🔴 post : {}", post.toString());
         log.info("🔴 post : {}", request.toString());
@@ -304,4 +338,90 @@ public class PostService {
 
         return completePostReadResponses;
     }
+
+    // ------------------------------ 검색 기능 ------------------------------------
+
+    // 검색기능         category,keyword,eventStart,eventEnd,lowCost,upCost
+    public Page<PostReadResponse> search(Pageable pageable, String category, String keyword, String eventStart, String eventEnd, String lowCost, String upCost){
+
+
+        // 필터링 적용 전(검색만 사용했을때)
+        if((eventStart == null)&&(eventEnd == null)&&(lowCost == null)&&(upCost == null)) {
+            return onlySearchData(pageable,category,keyword);
+        }else {                                     // 검색 후 필터링 적용
+            return dateFilterSearchData(pageable,category,keyword,eventStart,eventEnd,lowCost,upCost);
+        }
+    }
+
+    // 검색 기능만 사용
+    public Page<PostReadResponse> onlySearchData(Pageable pageable, String category, String keyword){
+        if ((category.equals("Category")) && (keyword.isEmpty() == true)) {          // 검색어 없이 검색 눌렀을 경우
+            return readAll(pageable);
+
+        } else if ((category.equals("Category")) && (keyword.isEmpty() == false)) {                        // 키워드만 입력했을 경우
+            Page<Post> posts = postRepository.findByTitleContaining(keyword, pageable);
+            log.info("posts.size():" + posts.getSize());
+            log.info("onlykeword keyword:" + keyword);
+            return PostReadResponse.listOf(posts);
+
+        } else if (keyword.isEmpty() == true) {                                // 카테고리만 입력했을 경우
+            return filter(category, pageable);
+
+        } else {                                                    // 카테고리 키워드 모두 입력했을 경우
+            Page<Post> posts = postRepository.findByCategoryAndTitleContaining(category, keyword, pageable);
+
+            return PostReadResponse.listOf(posts);
+        }
+    }
+
+    // 검색 필터 같이 사용
+    public Page<PostReadResponse> dateFilterSearchData(Pageable pageable, String category, String keyword, String eventStart, String eventEnd, String lowCost, String upCost){
+
+        String lowtemp ="";
+        String uppertemp ="";
+        int low = 0;
+        int upper = 0;
+        String eventmin ="01/01/2023";
+        String eventmax ="12/31/2999";
+
+        lowtemp = lowCost.substring(1);                 // 제일 앞에 $ 삭제
+        uppertemp = upCost.substring(1);
+
+        low = Integer.parseInt(lowtemp) * 1260;                 // 프론트에서는 달러로 입력받기 때문에 환율적용
+        upper = Integer.parseInt(uppertemp) * 1260;
+
+
+        if((eventStart.equals("")&&(eventEnd.equals("")))){             //  비용만 필터링 했을경우(날짜는 모든 값이 출력되도록 설정)
+            eventStart = "01/01/2023";
+            eventEnd = "12/31/2999";
+        }
+
+        log.info("low:"+low);
+        log.info("upper:"+upper);
+        log.info("eventStart:"+eventStart);
+        log.info("eventEnd:"+eventEnd);
+
+        if(upper ==1){
+
+        }else if(upper ==2){
+
+        }
+
+        // category,keyword,eventStart,eventmax,eventmin,eventEnd,low,upper,pageable
+        if(category.equals("Category")){                         // 모두 비었을 경우
+            Page<Post> posts = postRepository.findByEventStartBetweenAndEventEndBetweenAndCostBetween(eventStart,eventmax,eventmin,eventEnd,low,upper,pageable);
+            return PostReadResponse.listOf(posts);
+        } else if(keyword.isEmpty() == true){                    // 키워드가 비었을 경우
+            Page<Post> posts = postRepository.findByCategoryAndEventStartBetweenAndEventEndBetweenAndCostBetween(category,eventStart,eventmax,eventmin,eventEnd,low,upper,pageable);
+            return PostReadResponse.listOf(posts);
+        }else if((category.equals("Category")) && (keyword.isEmpty() == false)){        // 카테고리만 비었을 경우
+            Page<Post> posts = postRepository.findByTitleContainingAndEventStartBetweenAndEventEndBetweenAndCostBetween(keyword,eventStart,eventmax,eventmin,eventEnd,low,upper,pageable);
+            return PostReadResponse.listOf(posts);
+        }else{                                                  // 카테고리, 키워드, 필터 전부 있는 경우
+            Page<Post> posts = postRepository.findByCategoryAndTitleContainingAndEventStartBetweenAndEventEndBetweenAndCostBetween(category,keyword,eventStart,eventmax,eventmin,eventEnd,low,upper,pageable);
+            return PostReadResponse.listOf(posts);
+        }
+    }
+
+
 }

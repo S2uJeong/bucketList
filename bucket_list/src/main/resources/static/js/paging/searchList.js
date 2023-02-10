@@ -9,7 +9,7 @@ console.log(urlSearch)
 let url_href = urlHref(urlSearch);  // 페이지 넘버의 href를 정할 수 있도록 "page="을 붙임
 
 // 화면이 로딩되면 실행되는 부분
-const todosUrl = '/post/list' + urlSearch;
+const todosUrl = '/post/search/list' + urlSearch;
 console.log("todosUrl " + todosUrl)
 axios.get(todosUrl)
     .then(res => {
@@ -36,7 +36,7 @@ axios.get(todosUrl)
 function setTable() {
     let html = "<div class=\"col-md-6 col-xl-4 mb-5\">\n" +
         "            <div class=\"card card-hover\">\n" +
-        "              <a href=\"post/{포스트 아이디}\" class=\"position-relative\">\n" +
+        "              <a href=\"{포스트 아이디}\" class=\"position-relative\">\n" +
         "                <img class=\"card-img-top lazyestload\" data-src=\"{이미지 URL}\" src=\"{이미지 URL}\" alt=\"Card image cap\">\n" +
         "                <div class=\"card-img-overlay card-hover-overlay rounded-top d-flex flex-column\">\n" +
         "                  <div class=\"badge {배경색} badge-rounded-circle\">\n" +
@@ -47,7 +47,7 @@ function setTable() {
         "\n" +
         "              <div class=\"card-body px-4\">\n" +
         "                <h5>\n" +
-        "                  <a href=\"post/{포스트 아이디}\" class=\"card-title text-uppercase\">{제목}</a>\n" +
+        "                  <a href=\"{포스트 아이디}\" class=\"card-title text-uppercase\">{제목}</a>\n" +
         "                </h5>\n" +
         "                <h6 class=\"mt-n2\">\n" +
         "                  {주최자 이름}\n" +
@@ -62,25 +62,6 @@ function setTable() {
 
     let parent = document.getElementById('list_container');
     parent.innerHTML = "";
-
-
-
-    // js에서 css를 하기 위해서 만든 부분
-    function getImgBackgroundForm() {
-        const props = "--background-image";
-
-        const root = document.documentElement; // html의 모든 요소를 root에 저장
-        const rootStyle = getComputedStyle(root); // root에 있던 style의 :root에 있는 객체를 rootStyle에 저장
-
-        return rootStyle; // --background-image
-    }
-
-    function setImgBackgroundForm() {
-        const postImage = document.querySelector("#list_container");
-        postImage.style.backgroundImage = getImgBackgroundForm();
-    }
-
-
 
     post_list.forEach(function (post) {
         let postImage;
@@ -99,7 +80,7 @@ function setTable() {
             .replace("{일정 시작 날짜}", post.eventStart)
             .replace("{일정 종료 날짜}", post.eventEnd)
             .replace("{모집 마감 날짜}", post.untilRecruit)
-            .replaceAll("{이미지 URL}", postImage);
+            .replace("{이미지 URL}", postImage);
 
         if (post.status === 'JOIN') {
             html_result = html_result.replace("{모집상태}", '모집중')
@@ -208,6 +189,7 @@ $(document).on('click', 'ul.pagination>li.page-item>a', function() {
         $(this).parent().parent().find('li.page-item>a.active').removeClass('active');
         $(this).addClass('active');
         console.log(Number($(this).text()));
+
         setTable();
     }
 });
@@ -218,7 +200,7 @@ $(document).on('click', 'ul.pagination>li.page-item>a.page-link-i', function() {
     console.log("id" + id);
 
     if (id == 'first_page') {
-        window.location.href = "/post" + url_href + 0;
+        window.location.href = "/post/search" + url_href + 0;
     } else if (id == 'prev_page') {
         let arrPages = [];
         $('li.page-item>a.page-link').each(function(idx, item) {
@@ -226,7 +208,7 @@ $(document).on('click', 'ul.pagination>li.page-item>a.page-link-i', function() {
         });
         const prevPage = Math.min(...arrPages) - showPageCnt;
         console.log("prevPage" + prevPage);
-        window.location.href = "/post" + url_href + (prevPage - 1);
+        window.location.href = "/post/search" + url_href + (prevPage - 1);
     } else if (id == 'next_page') {
         let arrPages = [];
         $('li.page-item>a.page-link').each(function(idx, item) {
@@ -236,10 +218,10 @@ $(document).on('click', 'ul.pagination>li.page-item>a.page-link-i', function() {
 
         const nextPage = Math.max(...arrPages) + 1;
         console.log("nextPage" + nextPage);
-        window.location.href = "/post" + url_href + (nextPage - 1);
+        window.location.href = "/post/search" + url_href + (nextPage - 1);
     } else if (id == 'last_page') {
         const lastPage = Math.floor((totalPage - 1) / showPageCnt) * showPageCnt + 1;
         console.log("lastPage" + lastPage);
-        window.location.href = "/post" + url_href + (lastPage - 1);
+        window.location.href = "/post/search" + url_href + (lastPage - 1);
     }
 });

@@ -1,9 +1,7 @@
 package com.team9.bucket_list.controller.rest;
 
 import com.team9.bucket_list.domain.Response;
-import com.team9.bucket_list.domain.dto.chat.ChatInviteRequest;
-import com.team9.bucket_list.domain.dto.chat.ChatRoomRequest;
-import com.team9.bucket_list.domain.dto.chat.ChatRoomResponse;
+import com.team9.bucket_list.domain.dto.chat.*;
 import com.team9.bucket_list.domain.entity.ChatParticipant;
 import com.team9.bucket_list.domain.entity.ChatRoom;
 import com.team9.bucket_list.service.ChatService;
@@ -41,10 +39,10 @@ public class ChatRestController {
     }
 
     //채팅방 생성
-    @PostMapping("/create-room/{bucketlistId}")
+    @PostMapping("/create-room/{postId}")
     @Operation(summary = "채팅방 생성", description = "채팅방을 생성합니다.")
-    public Response<ChatRoom> createChatRoom(@Parameter(name = "bucketlistId", description = "버킷리스트 id") @PathVariable Long bucketlistId, ChatRoomRequest chatRoomRequest) {
-        return Response.success(chatService.createChatRoom(bucketlistId, chatRoomRequest));
+    public Response<ChatRoom> createChatRoom(@Parameter(name = "postId", description = "게시글 id") @PathVariable Long postId, ChatRoomRequest chatRoomRequest) {
+        return Response.success(chatService.createChatRoom(postId, chatRoomRequest));
     }
 
     //유저 초대
@@ -59,5 +57,18 @@ public class ChatRestController {
     @Operation(summary = "메시지(채팅) 조회", description = "roomId로 조회한 메시지 리스트를 출력합니다.")
     public Response messages(@Parameter(name = "roomId", description = "채팅방 id") @PathVariable Long roomId, @Parameter(hidden = true) @PageableDefault(size = 20) @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         return Response.success(chatService.messages(roomId, pageable));
+    }
+
+    @GetMapping("/participant/{roomId}")
+    @Operation(summary = "채팅방 참가자 조회", description = "roomId로 조회한 메시지 리스트를 출력합니다.")
+    public ChatParticipantResponseSuccess getChatParticipant(@Parameter(name = "roomId", description = "채팅방 id") @PathVariable Long roomId) {
+        List<ChatParticipant> participants = chatService.getChatParticipant(roomId);
+        return ChatParticipantResponseSuccess.success(ChatParticipantResponse.memberList(participants),ChatParticipantResponse.getHost(participants));
+    }
+
+    @DeleteMapping("/out")
+    @Operation(summary = "채팅방 나가기", description = "roomId와 memberId를 이용해 채팅방을 나갑니다")
+    public Response outChatRoom(@RequestBody ChatOutRequest chatOutRequest) {
+        return Response.success(chatService.outChatRoom(chatOutRequest));
     }
 }
