@@ -32,6 +32,8 @@ public enum ErrorCode {
     WRONG_FILE_FORMAT(HttpStatus.BAD_REQUEST, "파일 형식이 틀립니다."),
 
     PROFILE_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 프로필이 없습니다.")
+    WRONG_FILE_FORMAT(HttpStatus.BAD_REQUEST, "파일 형식이 틀립니다."),
+    CHAT_ROOM_NOT_FOUNT(HttpStatus.NOT_FOUND,"채팅방을 찾을 수 없습니다")
 
     ;
 

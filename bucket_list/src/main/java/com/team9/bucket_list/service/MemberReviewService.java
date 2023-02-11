@@ -1,6 +1,7 @@
 package com.team9.bucket_list.service;
 
 import com.team9.bucket_list.domain.dto.memberReview.MemberReviewRequest;
+import com.team9.bucket_list.domain.dto.memberReview.MemberReviewResponse;
 import com.team9.bucket_list.domain.entity.Member;
 import com.team9.bucket_list.domain.entity.MemberReview;
 import com.team9.bucket_list.execption.ApplicationException;
@@ -40,24 +41,12 @@ public class MemberReviewService {
                 .orElseThrow(() -> new ApplicationException(ErrorCode.REVIEW_NOT_FOUND));
     }
 
-    public Page<MemberReview> list (String targetUserName, Pageable pageable) {
-        Member member = checkMemberName(targetUserName);
-        return memberReviewRepository.findAllByMember(member, pageable);
+    public Page<MemberReviewResponse> list (Long targetUserId, Pageable pageable) {
+        Member member = checkMemberId(targetUserId);
+        Page<MemberReviewResponse> memberReviews = memberReviewRepository.findAllByMember(member, pageable)
+                .map(memberReview -> MemberReviewResponse.response(memberReview, memberReview.getMember().getUserName()));
+        return memberReviews;
     }
-
-    public double calaulateScore (Long memberId) {
-        MemberReview memberReview = memberReviewRepository.findByMember_Id(memberId)
-                .orElseThrow(() -> new ApplicationException(ErrorCode.REVIEW_NOT_FOUND));
-
-        double avg = 0;
-        List<MemberReview> memberReviewList = memberReviewRepository.findAllByMember_Id(memberId);
-        for ( MemberReview m : memberReviewList) {
-            avg += m.getRate();
-        }
-        avg = (avg / memberReviewList.size());
-        return Math.round(avg*10)/10.0;
-    }
-
 
     public String create(Long memberId, MemberReviewRequest memberReviewRequest) {
 
@@ -74,4 +63,18 @@ public class MemberReviewService {
 
         return "true";
     }
+
+    public double calaulateScore (Long memberId) {
+        MemberReview memberReview = memberReviewRepository.findByMember_Id(memberId)
+                .orElseThrow(() -> new ApplicationException(ErrorCode.REVIEW_NOT_FOUND));
+
+        double avg = 0;
+        List<MemberReview> memberReviewList = memberReviewRepository.findAllByMember_Id(memberId);
+        for ( MemberReview m : memberReviewList) {
+            avg += m.getRate();
+        }
+        avg = (avg / memberReviewList.size());
+        return Math.round(avg*10)/10.0;
+    }
+
 }

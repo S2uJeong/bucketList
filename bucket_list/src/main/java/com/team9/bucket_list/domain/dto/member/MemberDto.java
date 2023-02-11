@@ -31,5 +31,5 @@ public class MemberDto {
     private List<Likes> likesList;
     private List<MemberReview> memberReviewList;
     private List<Alarm> alarmList;
-    private List<MemberBucketlist> memberBucketlistList;
+//    private List<MemberBucketlist> memberBucketlistList;
 }

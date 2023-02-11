@@ -31,8 +31,9 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
-
     private final MemberRepository memberRepository;
+
+    private final AlarmService alarmService;
 
     // -------------- 예외처리 ------------------
 
@@ -84,6 +85,9 @@ public class CommentService {
         commentRepository.save(comment);
 
         CommentCreateResponse response = new CommentCreateResponse(comment,member.getUserName());
+
+        alarmService.sendAlarm(memberId,postId, (byte) 0);
+
         return response;
     }
 
@@ -140,7 +144,8 @@ public class CommentService {
         comments.stream().forEach(c -> {                            // Comment 형식으로 되어있는 댓글 전체 리스트를 stream.foreach를 통해 모든값을 CommentDto로 변환함
                     Member member = checkMember(c.getMember().getId());
                     String userName = member.getUserName();
-                    CommentListResponse dto = CommentListResponse.EntityToDto(c,userName);     // Comment에서 원하는 값만 추출하여 Dto로 변환함
+                    Long userId = member.getId();
+                    CommentListResponse dto = CommentListResponse.EntityToDto(c,userName,userId);     // Comment에서 원하는 값만 추출하여 Dto로 변환함
                     map.put(c.getId(),dto);                                                    // map에 (commentId, dto) 형식으로 저장
                     if(c.getParent() != null)
                         map.get(c.getParent().getId()).getChildren().add(dto);                 // 만약 댓글 entity에 부모댓글이 null값이 아니라면 현재 comment의 parentId의 데이터를 가져와 연관맵핑 되어 있는 childcomment list에 넣어준다

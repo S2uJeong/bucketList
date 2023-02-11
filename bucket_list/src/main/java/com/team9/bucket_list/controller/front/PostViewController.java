@@ -2,8 +2,13 @@ package com.team9.bucket_list.controller.front;
 
 import com.team9.bucket_list.domain.dto.post.PostUpdateRequest;
 import com.team9.bucket_list.service.PostService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,4 +51,10 @@ public class PostViewController {
     @GetMapping
     public String postList() { return "post"; }
 
+
+    // 검색 기능
+    @GetMapping("/search")
+    public String searchPost( ) {
+        return "search";
+    }
 }

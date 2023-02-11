@@ -8,52 +8,35 @@ const urlSearch = new URL(window.location.href).search;
 console.log(urlSearch)
 let url_href = urlHref(urlSearch);  // 페이지 넘버의 href를 정할 수 있도록 "page="을 붙임
 
-// 버튼 클릭시 실행되는 부분
-$(document).on('click', 'div.myFeed>button.myFeedBtn', function() {
-    const myFeedName = $(this).text();
-    let postType;
+// 화면이 로딩되면 실행되는 부분
+const todosUrl = '/post/search/list' + urlSearch;
+console.log("todosUrl " + todosUrl)
+axios.get(todosUrl)
+    .then(res => {
+        page_info = res.data.result;
+        console.info(page_info);
+        post_list = res.data.result.content;
 
-    if(myFeedName == "작성한 버킷리스트"){
-        postType = "create";
-    } else if(myFeedName == "좋아요한 버킷리스트") {
-        postType = "likes";
-    } else if(myFeedName == "신청한 버킷리스트"){
-        postType = "apply";
-    } else if(myFeedName == "승낙받은 버킷리스트"){
-        postType = "consent";
-    } else {
-        postType = "complete";
-    }
-
-    const todosUrl = '/post/my/' + postType + urlSearch;
-    console.log("todosUrl " + todosUrl)
-    axios.get(todosUrl)
-        .then(res => {
-            page_info = res.data.result;
-            console.info(page_info);
-            post_list = res.data.result.content;
-
-            // pageable 사용으로 url의 page 번호 가져오기
-            setTable();
-            if (!urlSearch.includes("page=")) {
-                setPaging(1);
-            } else {
-                setPaging(Number(urlSearch.replace(url_href, "")) + 1);
-            }
-        })
-        .catch(err => console.error(err))
-        .then(() => {
-            // finally
-        });
-});
+        // pageable 사용으로 url의 page 번호 가져오기
+        setTable();
+        if(!urlSearch.includes("page=")){
+            setPaging(1);
+        } else{
+            setPaging(Number(urlSearch.replace(url_href, "")) + 1);
+        }
+    })
+    .catch(err => console.error(err))
+    .then(() => {
+        // finally
+    });
 
 /**
  * 데이터를 세팅합니다.
  */
 function setTable() {
-    let html = "<div class=\"col-md-6 col-xl-3 mb-5\">\n" +
+    let html = "<div class=\"col-md-6 col-xl-4 mb-5\">\n" +
         "            <div class=\"card card-hover\">\n" +
-        "              <a href=\"post/{포스트 아이디}\" class=\"position-relative\">\n" +
+        "              <a href=\"{포스트 아이디}\" class=\"position-relative\">\n" +
         "                <img class=\"card-img-top lazyestload\" data-src=\"{이미지 URL}\" src=\"{이미지 URL}\" alt=\"Card image cap\">\n" +
         "                <div class=\"card-img-overlay card-hover-overlay rounded-top d-flex flex-column\">\n" +
         "                  <div class=\"badge {배경색} badge-rounded-circle\">\n" +
@@ -64,7 +47,7 @@ function setTable() {
         "\n" +
         "              <div class=\"card-body px-4\">\n" +
         "                <h5>\n" +
-        "                  <a href=\"post/{포스트 아이디}\" class=\"card-title text-uppercase\">{제목}</a>\n" +
+        "                  <a href=\"{포스트 아이디}\" class=\"card-title text-uppercase\">{제목}</a>\n" +
         "                </h5>\n" +
         "                <h6 class=\"mt-n2\">\n" +
         "                  {주최자 이름}\n" +
@@ -97,7 +80,7 @@ function setTable() {
             .replace("{일정 시작 날짜}", post.eventStart)
             .replace("{일정 종료 날짜}", post.eventEnd)
             .replace("{모집 마감 날짜}", post.untilRecruit)
-            .replaceAll("{이미지 URL}", postImage);
+            .replace("{이미지 URL}", postImage);
 
         if (post.status === 'JOIN') {
             html_result = html_result.replace("{모집상태}", '모집중')
@@ -217,7 +200,7 @@ $(document).on('click', 'ul.pagination>li.page-item>a.page-link-i', function() {
     console.log("id" + id);
 
     if (id == 'first_page') {
-        window.location.href = "/post" + url_href + 0;
+        window.location.href = "/post/search" + url_href + 0;
     } else if (id == 'prev_page') {
         let arrPages = [];
         $('li.page-item>a.page-link').each(function(idx, item) {
@@ -225,7 +208,7 @@ $(document).on('click', 'ul.pagination>li.page-item>a.page-link-i', function() {
         });
         const prevPage = Math.min(...arrPages) - showPageCnt;
         console.log("prevPage" + prevPage);
-        window.location.href = "/post" + url_href + (prevPage - 1);
+        window.location.href = "/post/search" + url_href + (prevPage - 1);
     } else if (id == 'next_page') {
         let arrPages = [];
         $('li.page-item>a.page-link').each(function(idx, item) {
@@ -235,10 +218,10 @@ $(document).on('click', 'ul.pagination>li.page-item>a.page-link-i', function() {
 
         const nextPage = Math.max(...arrPages) + 1;
         console.log("nextPage" + nextPage);
-        window.location.href = "/post" + url_href + (nextPage - 1);
+        window.location.href = "/post/search" + url_href + (nextPage - 1);
     } else if (id == 'last_page') {
         const lastPage = Math.floor((totalPage - 1) / showPageCnt) * showPageCnt + 1;
         console.log("lastPage" + lastPage);
-        window.location.href = "/post" + url_href + (lastPage - 1);
+        window.location.href = "/post/search" + url_href + (lastPage - 1);
     }
 });
