@@ -1,8 +1,6 @@
 const lsAccessToken = localStorage.getItem("accessToken");
 const lsPayload = lsAccessToken.split('.')[1];
 const lsMemberId = JSON.parse(atob(lsPayload)).memberId;
-const lsUserName = JSON.parse(atob(lsPayload)).userName;
-
 
 // Get the modal
 var modal = document.getElementById("myModal");
