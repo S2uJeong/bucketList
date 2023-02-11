@@ -71,6 +71,8 @@ dependencies {
     // Image 추가를 위한 스프링 클라우드 의존성 추가
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
+    // 정적 파일 빌드 안하고 바로 반영할 수 있는 기능 추가
+    implementation 'org.springframework.boot:spring-boot-devtools:3.0.2'
 }
 
 tasks.named('test') {

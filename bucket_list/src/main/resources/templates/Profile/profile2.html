@@ -32,7 +32,7 @@
     <!-- CUSTOM CSS -->
     <link href="/assets/css/star.css" id="option_style" rel="stylesheet">
     <link href="/assets/css/custom.css" id="custom_style" rel="stylesheet">
-    <link href="/css/profile.css" id="profile_style" rel="stylesheet">
+    <link href="/css/profile.css" rel="stylesheet">
 
     <!-- FAVICON -->
     <link rel="shortcut icon" type="image/png" href="/assets/img/favicon.png"/>
@@ -181,11 +181,11 @@
                                     <div class="modal-container">
                                         <h2>Put your wonderful Image</h2>
                                         <form id ="file-form" name="form" method="post" action="/profile/{memberId}/edit" enctype="multipart/form-data">
-                                            <div class="form-group">
-                                                <input name="file" type="file" id="fileInput" multiple>
-                                                <div id="imagePreview"></div>
-                                                <br><br>
-                                            </div>
+                                        <div class="form-group">
+                                            <input name="file" type="file" id="fileInput" multiple>
+                                            <div id="imagePreview"></div>
+                                            <br><br>
+                                        </div>
                                             <button type="button" id="uploadBtn" onclick="uploadPic()">Upload</button>
                                         </form>
                                     </div>
@@ -219,31 +219,22 @@
 
                         </ul>
                     </div>
-
-                    <!-- Contact Section -->
-                    <div class="bg-smoke p-4" style="height: 100%; min-height: 570px">
-                        <div class="h-100" style="min-height: 500px">
-                            <h3 class="text-uppercase font-weight-bold mb-6">리뷰</h3>
-                            <div id="review_list">
-                                <!--          리뷰 리스트 부분-->
-                                <!--          리뷰 리스트 부분-->
-                                <!--          리뷰 리스트 부분-->
-                            </div>
+                    <!-- 리뷰 Section -->
+                    <div class="bg-smoke p-2 mb-7 mb-lg-9" style="height: 470px">
+                        <div class="mb-7 mb-lg-9 h-100">
+                            <h3 class="text-uppercase font-weight-bold mb-4">리뷰</h3>
+                            <p class="line-height-26 mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
+                                do
+                                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                                quis
+                                nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
+                                irure
+                                dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                                sintoccaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
+                                est
+                                laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem</p>
                         </div>
-
-                        <section class="pt-4 pt-md-4">
-                            <div class="container">
-                                <nav aria-label="Page navigation">
-                                    <ul class="pagination justify-content-center align-items-center">
-                                        <!--          페이징 부분-->
-                                        <!--          페이징 부분-->
-                                        <!--          페이징 부분-->
-                                    </ul>
-                                </nav>
-                            </div>
-                        </section>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -581,9 +572,6 @@ profile javaScript
 <script src="/js/axios.js"></script>
 <script src="/js/header.js"></script>
 <script src="/js/reviewAlarm.js"></script>
-<script src="/js/paging/profile.js"></script>
-
 </body>
 </html>
-
 

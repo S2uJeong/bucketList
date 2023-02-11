@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -63,19 +64,17 @@ public class MemberReviewService {
         return "true";
     }
 
-//    public void score (Long targetUserId) {
-//        MemberReview memberReview = memberReviewRepository.findByUserId(targetUserId)
-//                .orElseThrow(() -> new ApplicationException(ErrorCode.REVIEW_NOT_FOUND));
-//
-//        double avg = 0;
-//        List<MemberReview> memberReviewList = memberReviewRepository.findAllByUserId(targetUserId);
-//        for ( MemberReview m : memberReviewList) {
-//            avg += m.getRate();
-//        }
-//        avg = (avg / memberReviewList.size());
-//        avg = Math.round(avg*100)/100.0;
-//
-////        memberReviewRepository.findByUserId(targetUserId);
-//
-//    }
+    public double calaulateScore (Long memberId) {
+        MemberReview memberReview = memberReviewRepository.findByMember_Id(memberId)
+                .orElseThrow(() -> new ApplicationException(ErrorCode.REVIEW_NOT_FOUND));
+
+        double avg = 0;
+        List<MemberReview> memberReviewList = memberReviewRepository.findAllByMember_Id(memberId);
+        for ( MemberReview m : memberReviewList) {
+            avg += m.getRate();
+        }
+        avg = (avg / memberReviewList.size());
+        return Math.round(avg*10)/10.0;
+    }
+
 }

@@ -4,12 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
 
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Getter
-public class MyPageEditRequest {
-    private MultipartFile multipartFile;
+public class ProfileEditRequest {
+    private String image;
 }
