@@ -131,7 +131,7 @@ function setPaging(pageNum) {
     let start = Math.floor((currentPage - 1) / showPageCnt) * showPageCnt + 1;
     let sPagesHtml = '';
     sPagesHtml += "<li class=\"page-item\">\n" +
-    "    <a id=\"first_page\" class=\"page-link-i\">\n" +
+        "    <a id=\"first_page\" class=\"page-link-i\">\n" +
         "        <i class=\"fas fa-angle-double-left d-none d-md-inline-block me-md-1\"\n" +
         "           aria-hidden=\"true\"></i>\n" +
         "</a>\n" +
@@ -146,8 +146,8 @@ function setPaging(pageNum) {
     for (const end = start + showPageCnt; start < end && start <= totalPage; start++) {
         console.log("start : ", start, "currentPage : ", currentPage, start == currentPage)
         sPagesHtml += "<li class=\"page-item\">\n" +
-        "    <a class=\"page-link " + (start == currentPage ? 'active' : '') + "\" href='/post" + url_href + (start - 1) + "'>" + start + "</a>\n" +
-        "</li>\n";
+            "    <a class=\"page-link " + (start == currentPage ? 'active' : '') + "\" href='/post" + url_href + (start - 1) + "'>" + start + "</a>\n" +
+            "</li>\n";
     }
 
     sPagesHtml += "<li class=\"page-item\">\n" +
