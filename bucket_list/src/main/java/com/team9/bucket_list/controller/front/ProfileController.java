@@ -4,7 +4,6 @@ import com.team9.bucket_list.domain.entity.Member;
 import com.team9.bucket_list.service.ProfileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,7 +29,7 @@ public class ProfileController {
                 .rate(member.getRate())
                 .build();
         model.addAttribute("member", member);
-        return "Profile/profile2";
+        return "/Profile/profile";
     }
 
     //=== 프로필 수정 ===//
