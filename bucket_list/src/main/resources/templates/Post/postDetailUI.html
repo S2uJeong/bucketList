@@ -139,6 +139,7 @@
       let jsonApplicationState;
       let title;
       let userName;    //  => writer로 사용 유저 아이디이름
+      let userId;
       let content;
       let cost;
       var location;
@@ -191,7 +192,7 @@
                     "<div>\n"+
                     "<div id=\"parentId\" style='display: none'>{postId}</div>\n"+
                     "<div>\n"+
-                    "<p class=\"comment-username\" id=\"parentUsername\">{닉네임}</p>\n"+
+                    "<a href=\"{유저 아이디}\"><p class=\"comment-username\" id=\"parentUsername\">{닉네임}</p></a>\n"+
                     "</div>\n"+
                     "<div>\n"+
                     "<p class=\"comment-content\">{내용}</p>\n"+
@@ -221,7 +222,7 @@
                     "</ul>\n"+
                     "<div>\n"+
                     "<div>\n"+
-                    "<p class=\"comment-username\">{닉네임}</p>\n"+
+                    "<a href=\"{유저 아이디}\"><p class=\"comment-username\">{닉네임}</p></a>\n"+
                     "</div>\n"+
                     "<div>\n"+
                     "<p class=\"comment-content\">{내용}</p>\n"+
@@ -249,7 +250,8 @@
                       .replace("{댓글 노출}",'comment'+comment.id+'-'+comment.id)
                       .replace("{댓글 노출2}",'comment'+comment.id+'-'+comment.id)
                       .replace("{댓글 삭제}",comment.id)
-                      .replace("{대댓글 작성}",'replyComment'+comment.id);
+                      .replace("{대댓글 작성}",'replyComment'+comment.id)
+                      .replace("{유저 아이디}","/profile/"+comment.userId);
 
               let html_reply_result;
               if (comment.children.length != 0) {                     // 만약 대댓글이 있다면
@@ -261,7 +263,8 @@
                           .replace("{작성일자}", replycomment.createAt)
                           .replace("{내용}", replycomment.content)
                           .replace("{postId}",replycomment.parentId)
-                          .replace("{대댓글 삭제}",replycomment.id);
+                          .replace("{대댓글 삭제}",replycomment.id)
+                          .replace("{유저 아이디}","/profile/"+replycomment.userId);
                 });
 
                 let commentResult = document.getElementById('list_comment');          // 대댓글 html에 대댓글 갯수만큼 데이터를 넣어 저장한 후
@@ -321,6 +324,7 @@
 
             title = jsonResult.title;
             userName = jsonResult.userName;
+            userId = jsonResult.userId;
             content = jsonResult.content;
             cost = jsonResult.cost;
             location = jsonResult.location;
@@ -384,6 +388,7 @@
 
             var htmluserName = document.getElementById("writer");
             htmluserName.innerHTML = userName;
+            $('#writerProfileHref').attr("href", "/profile/" + userId);
 
             var htmluntil = document.getElementById("untilRecruit");
             htmluntil.innerHTML = "모집기간 : " + untilRecruit;
@@ -808,7 +813,7 @@
           </div>
           <div>
             <h2 class="text-uppercase mb-2" id="title"></h2>
-            <h4 class="text-uppercase mb-5" id="writer"></h4>
+            <a id="writerProfileHref"><h4 class="text-uppercase mb-5" id="writer"></h4></a>
 
             <div class="mb-5">
               <div class="row">

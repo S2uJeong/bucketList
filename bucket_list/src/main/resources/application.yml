@@ -21,6 +21,12 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB
+  # 정적 파일 빌드 없이 반영되게 하는 코드
+  devtools:
+    livereload:
+      enabled: true
+    thymeleaf:
+      cache: false
 
 
   mvc:

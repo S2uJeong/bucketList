@@ -32,7 +32,7 @@
     <!-- CUSTOM CSS -->
     <link href="/assets/css/star.css" id="option_style" rel="stylesheet">
     <link href="/assets/css/custom.css" id="custom_style" rel="stylesheet">
-    <link href="/css/profile.css" id="profile_style" rel="stylesheet">
+    <link href="/css/profile.css" rel="stylesheet">
 
     <!-- FAVICON -->
     <link rel="shortcut icon" type="image/png" href="/assets/img/favicon.png"/>
@@ -181,11 +181,11 @@
                                     <div class="modal-container">
                                         <h2>Put your wonderful Image</h2>
                                         <form id ="file-form" name="form" method="post" action="/profile/{memberId}/edit" enctype="multipart/form-data">
-                                            <div class="form-group">
-                                                <input name="file" type="file" id="fileInput" multiple>
-                                                <div id="imagePreview"></div>
-                                                <br><br>
-                                            </div>
+                                        <div class="form-group">
+                                            <input name="file" type="file" id="fileInput" multiple>
+                                            <div id="imagePreview"></div>
+                                            <br><br>
+                                        </div>
                                             <button type="button" id="uploadBtn" onclick="uploadPic()">Upload</button>
                                         </form>
                                     </div>
@@ -219,31 +219,22 @@
 
                         </ul>
                     </div>
-
-                    <!-- Contact Section -->
-                    <div class="bg-smoke p-4" style="height: 100%; min-height: 570px">
-                        <div class="h-100" style="min-height: 500px">
-                            <h3 class="text-uppercase font-weight-bold mb-6">리뷰</h3>
-                            <div id="review_list">
-                                <!--          리뷰 리스트 부분-->
-                                <!--          리뷰 리스트 부분-->
-                                <!--          리뷰 리스트 부분-->
-                            </div>
+                    <!-- 리뷰 Section -->
+                    <div class="bg-smoke p-2 mb-7 mb-lg-9" style="height: 470px">
+                        <div class="mb-7 mb-lg-9 h-100">
+                            <h3 class="text-uppercase font-weight-bold mb-4">리뷰</h3>
+                            <p class="line-height-26 mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
+                                do
+                                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                                quis
+                                nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
+                                irure
+                                dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                                sintoccaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
+                                est
+                                laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem</p>
                         </div>
-
-                        <section class="pt-4 pt-md-4">
-                            <div class="container">
-                                <nav aria-label="Page navigation">
-                                    <ul class="pagination justify-content-center align-items-center">
-                                        <!--          페이징 부분-->
-                                        <!--          페이징 부분-->
-                                        <!--          페이징 부분-->
-                                    </ul>
-                                </nav>
-                            </div>
-                        </section>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -260,33 +251,119 @@ profile javaScript
 ——— FOOTER SECTION
 ===================================== -->
 <footer class="footer">
-    <div class="footer-bg-color py-1">
+    <div class="footer-bg-color py-9">
         <div class="container">
-            <div class="mb-0 mt-1 mb-lg-0 mx-5">
-                <a class="d-inline-block" href="/">
-                    <img class="w-100 mb-6 lazyestload" data-src="/assets/img/logo-color-sm.png"
-                         src="/assets/img/logo-color-sm.png" alt="img">
-                </a>
-                <p class="mb-0">
-                    WEB(We arE Best) : 고관운, 배지원, 박은빈, 변지환, 정재현, 최수정 |
-                    프로젝트 깃랩 : <a class="text-secondary" href="https://gitlab.com/S2uJeong1/bucketlist" target="_blank">gitlab</a> |
-                    프로젝트 노션 : <a class="text-secondary" href="https://ringed-suggestion-46f.notion.site/ceff928e9f1f4e2482f07387b997f593" target="_blank">notion</a>
-                </p>
-                <p class="mt-2">
-                    버킷리스트를 주제로 모임을 개설할 수 있도록 도와주는 사이트입니다.
-                </p>
+            <div class="row">
+                <div class="col-md-6 col-lg-3 mb-5 mb-lg-0 mx-5">
+                    <a class="d-inline-block" href="index.html">
+                        <img class="w-100 mb-6 lazyestload" data-src="/assets/img/logo-color-sm.png"
+                             src="/assets/img/logo-color-sm.png" alt="img">
+                    </a>
+                    <p class="mb-0">멋쟁이 사자처럼 백엔드 스쿨 2기에서 진행한 팀프로젝트입니다.
+                        버킷리스트를 주제로 비슷한 목표를 가진 사람들이 모여 값진 경험을 할 수 있는 사이트를 구현했습니다.
+                        글을 작성하여 사람을 모집할 수 있으며 버킷리스트 개설자는 참가 신청한 참가자를 허가/거부할 수 있습니다.
+                        모집이 완료되면 채팅이 활성화되고 일정을 마친 후에 참가자는 버킷리스트와 호스트에 대해서 평가할 수 있습니다.
+                    </p>
+                </div>
+
+                <!--각자 깃랩 링크 걸건지?-->
+                <div class="col-md-6 col-lg-3 mt-md-4 mb-5 mb-lg-0 mx-7">
+                    <div class="title-tag">
+                        <h6>Team9 : WEB (WE are Best)</h6>
+                    </div>
+                    <ul class="list-unstyled mb-0">
+                        <li class="media mb-2">
+                            <div class="me-3">
+                                <i class="fa-regular fa-user"></i>
+                            </div>
+                            <div class="media-body">
+                                <a href="#" target="_blank">PM : 최수정</a>
+                            </div>
+                        </li>
+                        <li class="media mb-2">
+                            <div class="me-3">
+                                <i class="fa-regular fa-user"></i>
+                            </div>
+                            <div class="media-body">
+                                <a href="#" target="_blank">CTO : 정재현</a>
+                            </div>
+                        </li>
+
+                        <li class="media mb-2">
+                            <div class="me-3">
+                                <i class="fa-regular fa-user"></i>
+                            </div>
+                            <div class="media-body">
+                                <a href="#" target="_blank">개발 : 고관운</a>
+                            </div>
+                        </li>
+
+                        <li class="media mb-2">
+                            <div class="me-3">
+                                <i class="fa-regular fa-user"></i>
+                            </div>
+                            <div class="media-body">
+                                <a href="#" target="_blank">개발 : 박은빈</a>
+                            </div>
+                        </li>
+
+                        <li class="media mb-2">
+                            <div class="me-3">
+                                <i class="fa-regular fa-user"></i>
+                            </div>
+                            <div class="media-body">
+                                <a href="#" target="_blank">개발 : 배지원</a>
+                            </div>
+                        </li>
+
+                        <li class="media mb-2">
+                            <div class="me-3">
+                                <i class="fa-regular fa-user"></i>
+                            </div>
+                            <div class="media-body">
+                                <a href="#" target="_blank">개발 : 변지환</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col-md-6 col-lg-3 mt-md-4 mb-5 mb-lg-0 mx-5">
+                    <div class="title-tag">
+                        <h6>Contact us</h6>
+                    </div>
+                    <ul class="list-unstyled mb-0">
+                        <li class="media mb-2">
+                            <div class="me-3">
+                                <i class="fa-brands fa-gitlab"></i>
+                            </div>
+                            <div class="media-body">
+                                <a href="https://gitlab.com/S2uJeong1/bucketlist" target="_blank">team project
+                                    gitlab</a>
+                            </div>
+                        </li>
+
+                        <li class="media mb-2">
+                            <div class="me-3">
+                                <i class="fa-regular fa-file"></i>
+                            </div>
+                            <div class="media-body">
+                                <a href="https://ringed-suggestion-46f.notion.site/ceff928e9f1f4e2482f07387b997f593"
+                                   target="_blank">team project notion</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- 저작권 표시 -->
-    <div class="copyright py-1">
+    <div class="copyright py-6">
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-md-6 order-1 order-md-0">
                     <p class="mb-0 mb-md-0 text-md-start">Copyright &copy; <span id="copy-year"></span> All Rights
                         Reserved by
-                        <a class="text-secondary" href="http://www.iamabdus.com/" target="_blank">Abdus</a>
+                        <a href="http://www.iamabdus.com/" target="_blank">Abdus</a>
                     </p>
                 </div>
             </div>
@@ -495,9 +572,6 @@ profile javaScript
 <script src="/js/axios.js"></script>
 <script src="/js/header.js"></script>
 <script src="/js/reviewAlarm.js"></script>
-<script src="/js/paging/profile.js"></script>
-
 </body>
 </html>
-
 
