@@ -267,7 +267,7 @@ function getChatParticipant(roomId) {
                     html += `<div class="list-group-item-action chat-menu-participant-wrap" id="participant-${data[i].memberId}">
                             <p class="chat-menu-participant" data-bs-toggle="dropdown" aria-expanded="false">${data[i].userName}(나)</p>
                                 <ul class="dropdown-menu dropdown-menu-start chat-menu-participant-list">
-                                    <li><a class="dropdown-item" href="#" target="_blank">프로필 확인</a></li>
+                                    <li><a class="dropdown-item" href="/profile/${data[i].memberId}" target="_blank">프로필 확인</a></li>
                                 </ul>
                         </div>
                        `;
@@ -276,7 +276,7 @@ function getChatParticipant(roomId) {
                     html += `<div class="list-group-item-action chat-menu-participant-wrap" id="participant-${data[i].memberId}">
                             <p class="chat-menu-participant" data-bs-toggle="dropdown" aria-expanded="false">${data[i].userName}</p>
                                 <ul class="dropdown-menu dropdown-menu-start chat-menu-participant-list">
-                                    <li><a class="dropdown-item" href="#" target="_blank">프로필 확인</a></li>
+                                    <li><a class="dropdown-item" href="/profile/${data[i].memberId}" target="_blank">프로필 확인</a></li>
                                     ${out} 
                                 </ul>
                         </div>
