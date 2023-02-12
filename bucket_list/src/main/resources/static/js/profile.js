@@ -1,6 +1,10 @@
 const lsAccessToken = localStorage.getItem("accessToken");
 const lsPayload = lsAccessToken.split('.')[1];
 const lsMemberId = JSON.parse(atob(lsPayload)).memberId;
+let profileURL = window.location.pathname.split('/');
+let profileMemberId = profileURL[profileURL.length-1];
+
+console.log(`member id : ${profileMemberId}`);
 
 // Get the modal
 var modal = document.getElementById("myModal");
@@ -152,9 +156,13 @@ window.onload = function () {
     let profileData;
     $('#if').css("display","none");
 
+    if(profileMemberId != lsMemberId) {
+        $('#pic-btn').remove();
+    }
+
     axios({
         method:"GET",
-        url: `/profile/${lsMemberId}/json`,
+        url: `/profile/${profileMemberId}/json`,
     }).then((res)=> {
         profileData = res.data.result;
 
