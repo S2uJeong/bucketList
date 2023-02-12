@@ -1,11 +1,11 @@
 .pic-wrap {
     /* position: relative; */
-    background-image: url(https://bucketlist-post-image-bucket.s3.ap-northeast-2.amazonaws.com/postImage/00d60e84-80e0-4723-8902-021c8e0a56b3.png);
     background-size: cover;
     background-position: center;
     width: 190px;
     height: 190px;
     border-radius: 50%;
+    border : 1px solid #b8b8b8;
 }
 
 .pic-btn {
@@ -49,7 +49,7 @@
     /* 15% from the top and centered */
     padding: 20px;
     border: 1px solid #888;
-    width: 550px;
+    width: 800px;
     /* Could be more or less, depending on screen size */
 }
 
@@ -70,14 +70,30 @@
 
 /* !-- 모달창 내부 (파일 업로드) */
 .modal-container {
-    width: 50%;
     margin: 0 auto;
     text-align: center;
 }
 
-#imagePreview {
+.modal-form{
+    margin: 30px 0;
+}
 
-    margin-top: 20px;
+.put-your-img-text{
+    text-align: center;
+}
+
+.img-preview{
+    margin: 40px 0;
+    width: 240px;
+    height: 240px;
+    border: 1px solid #b8b8b8;
+    border-radius: 50%;
+    background-position: center;
+    background-size: cover;
+}
+
+#uploadBtn {
+    width: 200px;
 }
 
 .thumbnail {
