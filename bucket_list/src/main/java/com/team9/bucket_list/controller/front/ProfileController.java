@@ -21,7 +21,7 @@ public class ProfileController {
     //=== 프로필 조회 ===//
     @GetMapping("/{memberId}")
     public String readDetail(@PathVariable("memberId") Long memberId){
-        return "/Profile/profile";
+        return "Profile/profile";
     }
 
     //=== 프로필 수정 ===//
