@@ -41,9 +41,9 @@ window.onload = function () {
                 `<div id="chat-list-box-${data[i].roomId}"class="list-group-item list-group-item-action d-flex gap-3 py-3 border-bottom rounded-3 shadow-sm chat-list-box" aria-current="true" onclick="showChatRoom(${data[i].roomId},'${data[i].roomName}')">
                     <!-- <img src="https://github.com/twbs.png" alt="twbs" width="32" height="32" class="rounded-circle flex-shrink-0"> -->
                     <div class="d-flex gap-2 w-100 justify-content-between ">
-                        <div class="text-truncate">
-                        <h4 id="chat-list-room-name-${data[i].roomId}" class="mb-0 text-truncate">${data[i].roomName}</h4>
-                        <p class="d-block mb-0 opacity-75 text-truncate">${data[i].lastUserName}: ${data[i].lastMessage}</p>
+                        <div class="text-truncate chat-list-text-hidden-wrap">
+                        <h4 id="chat-list-room-name-${data[i].roomId}" class="mb-0 text-truncate chat-list-text-hidden">${data[i].roomName}</h4>
+                        <p class="d-block mb-0 opacity-75 text-truncate chat-list-text-hidden">${data[i].lastUserName}: ${data[i].lastMessage}</p>
                         </div>
                         <small class="opacity-50 text-nowrap">${getHoursMinTime(data[i].lastMessageTime)}</small>
                     </div>
