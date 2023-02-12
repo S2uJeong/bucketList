@@ -22,7 +22,11 @@ axios.get(todosUrl)
         if(!urlSearch.includes("page=")){
             setPaging(1);
         } else{
-            setPaging(Number(urlSearch.replace(url_href, "")) + 1);
+            let sch = location.search;                  // URL에 파라미터만 가져옴
+            let params = new URLSearchParams(sch);      // 객체 변환
+            let num = params.get('page');                         // 파라미터 page의 값을 가져옴
+
+            setPaging(Number(num) + 1);     //
         }
     })
     .catch(err => console.error(err))
@@ -143,10 +147,24 @@ function setPaging(pageNum) {
         "    </a>\n" +
         "</li>\n";
 
+    // for (const end = start + showPageCnt; start < end && start <= totalPage; start++) {
+    //     console.log("start : ", start, "currentPage : ", currentPage, start == currentPage)
+    //     sPagesHtml += "<li class=\"page-item\">\n" +
+    //         "    <a class=\"page-link " + (start == currentPage ? 'active' : '') + "\" href='/post" + url_href + (start - 1) + "'>" + start + "</a>\n" +
+    //         "</li>\n";
+    // }
+
     for (const end = start + showPageCnt; start < end && start <= totalPage; start++) {
+        let sch = location.search;                  // URL에 파라미터만 가져옴
+        let params = new URLSearchParams(sch);      // 객체 변환
+        params.set('page',(start - 1));                         // 파라미터 page의 값을 가져옴
+
+        let url = window.location.protocol + window.location.pathname;
+        let resulturl = url + "?"+params
+        console.log(resulturl);
         console.log("start : ", start, "currentPage : ", currentPage, start == currentPage)
         sPagesHtml += "<li class=\"page-item\">\n" +
-            "    <a class=\"page-link " + (start == currentPage ? 'active' : '') + "\" href='/post" + url_href + (start - 1) + "'>" + start + "</a>\n" +
+            "    <a class=\"page-link " + (start == currentPage ? 'active' : '') + "\" href='" + resulturl + "'>" + start + "</a>\n" +
             "</li>\n";
     }
 
@@ -197,7 +215,8 @@ function urlHref(urlSearch) {
     if (urlSearch == "" || urlSearch.startsWith("?page=")) {
         return "?page=";
     } else if (urlSearch.includes('&')) {
-        return urlSearch.split("&")[0] + "&page=";
+        return "/search"+urlSearch+ "&page=";
+        // return urlSearch.split("&")[0] + "&page=";
     } else if (urlSearch.startsWith("?category=")) {
         return urlSearch + "&page=";
     }
@@ -217,8 +236,19 @@ $(document).on('click', 'ul.pagination>li.page-item>a.page-link-i', function() {
     const id = $(this).attr('id');
     console.log("id" + id);
 
+
+    let sch = location.search;                  // URL에 파라미터만 가져옴
+    let params = new URLSearchParams(sch);      // 객체 변환
+
+
     if (id == 'first_page') {
-        window.location.href = "/post" + url_href + 0;
+        params.set('page',0);                         // 파라미터 page의 값을 가져옴
+
+        let url = window.location.protocol + window.location.pathname;
+        let resulturl = url + "?"+params
+
+        window.location.href = resulturl;
+        // window.location.href = "/post" + url_href + 0;
     } else if (id == 'prev_page') {
         let arrPages = [];
         $('li.page-item>a.page-link').each(function(idx, item) {
@@ -226,7 +256,14 @@ $(document).on('click', 'ul.pagination>li.page-item>a.page-link-i', function() {
         });
         const prevPage = Math.min(...arrPages) - showPageCnt;
         console.log("prevPage" + prevPage);
-        window.location.href = "/post" + url_href + (prevPage - 1);
+
+        params.set('page',(prevPage - 1));                         // 파라미터 page의 값을 가져옴
+
+        let url = window.location.protocol + window.location.pathname;
+        let resulturl = url + "?"+params
+
+        window.location.href =  resulturl;
+        // window.location.href = "/post" + url_href + (prevPage - 1);
     } else if (id == 'next_page') {
         let arrPages = [];
         $('li.page-item>a.page-link').each(function(idx, item) {
@@ -236,10 +273,24 @@ $(document).on('click', 'ul.pagination>li.page-item>a.page-link-i', function() {
 
         const nextPage = Math.max(...arrPages) + 1;
         console.log("nextPage" + nextPage);
-        window.location.href = "/post" + url_href + (nextPage - 1);
+
+        params.set('page',(nextPage - 1));                         // 파라미터 page의 값을 가져옴
+
+        let url = window.location.protocol + window.location.pathname;
+        let resulturl = url + "?"+params
+
+        window.location.href =  resulturl;
+        // window.location.href = "/post" + url_href + (nextPage - 1);
     } else if (id == 'last_page') {
         const lastPage = Math.floor((totalPage - 1) / showPageCnt) * showPageCnt + 1;
         console.log("lastPage" + lastPage);
-        window.location.href = "/post" + url_href + (lastPage - 1);
+
+        params.set('page',(lastPage - 1));                         // 파라미터 page의 값을 가져옴
+
+        let url = window.location.protocol + window.location.pathname;
+        let resulturl = url + "?"+params
+
+        window.location.href =  resulturl;
+        // window.location.href = "/post" + url_href + (lastPage - 1);
     }
 });
