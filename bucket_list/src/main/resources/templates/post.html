@@ -73,7 +73,7 @@
             const data = async () => {
                 try {
 
-                    if(urlSearch.includes("&eventEnd=") == true){
+                    if(urlSearch.includes("&eventEnd=") == true){     // 이미 필터링을 한 경우
                         let sch = location.search;    // 파라미터만 받아옴
                         console.log(sch);
 
@@ -88,24 +88,42 @@
                         // 변경한 파라미터를 다시 URL에 합해줌
                         let url = window.location.protocol + window.location.pathname;
 
-                        console.log(url);
-                        alert("확인");
+                        if(sch.includes("page")){
+                            params.set("page",0);
+                        }
                         let result = url+"?"+params;
                         // location.replace(url);
                         location.replace(result);
-                    }else {
+                    }else {                             // 필터링을 한번도 안한 경우(맨처음)
                         console.log(urlSearch);
 
-                        if (urlSearch.length == 0) {
-                            let url = "/post" + "?eventStart=" + arr[0] + "&eventEnd=" + arr[1] + "&lowCost=" + arr[2] + "&upCost=" + arr[3];
-                            console.log(url);
-                            alert("확인");
-                            window.location.replace(url);
-                        } else{
-                            let url = urlSearch + "&eventStart=" + arr[0] + "&eventEnd=" + arr[1] + "&lowCost=" + arr[2] + "&upCost=" + arr[3];
-                            console.log(url);
-                            alert("확인");
-                            window.location.replace(url);
+                        let sch = location.search;    // 파라미터만 받아옴
+                        let params = new URLSearchParams(sch);  // 객체 변환
+                        if(sch.includes("page")){
+                            params.set("page",0);
+                            if (urlSearch.includes("?category") == false) {                // all
+                                let url = "/post" +"?eventStart=" + arr[0] + "&eventEnd=" + arr[1] + "&lowCost=" + arr[2] + "&upCost=" + arr[3];
+                                console.log(url);
+                                alert("1");
+                                window.location.replace(url);
+                            } else{                                 // 카테고리 선택
+                                let url = "/post?"+ params +"&eventStart=" + arr[0] + "&eventEnd=" + arr[1] + "&lowCost=" + arr[2] + "&upCost=" + arr[3];
+                                console.log(url);
+                                alert("2");
+                                window.location.replace(url);
+                            }
+                        }else {
+                            if (urlSearch.length == 0) {                // all
+                                let url = "/post" + params + "?eventStart=" + arr[0] + "&eventEnd=" + arr[1] + "&lowCost=" + arr[2] + "&upCost=" + arr[3];
+                                console.log(url);
+                                alert("3");
+                                window.location.replace(url);
+                            } else {                                 // 카테고리 선택
+                                let url = "/post?" + params + "&eventStart=" + arr[0] + "&eventEnd=" + arr[1] + "&lowCost=" + arr[2] + "&upCost=" + arr[3];
+                                console.log(url);
+                                alert("4");
+                                window.location.replace(url);
+                            }
                         }
                     }
 
