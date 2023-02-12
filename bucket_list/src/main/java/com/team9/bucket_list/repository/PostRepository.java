@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -39,4 +40,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Page<Post> findByEventStartBetweenAndEventEndBetweenAndCostBetween(String eventStart, String eventmax, String eventmin, String eventEnd, Integer lowCost, Integer upCost,Pageable pageable);
 
     Page<Post> findByCategoryAndTitleContainingAndEventStartBetweenAndEventEndBetweenAndCostBetween( String category, String keyword, String eventStart, String eventmax, String eventmin, String eventEnd, Integer lowCost, Integer upCost,Pageable pageable);
+
+    List<Post> findByEventEnd(String eventEnt);
 }

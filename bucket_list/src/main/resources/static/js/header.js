@@ -24,6 +24,9 @@ window.onload = function () {
         let userName = JSON.parse(decodeURIComponent(escape(window.atob(payload)))).userName;
         console.log(userName);
         document.getElementById("userName").innerText = userName;
+
+        let userId = JSON.parse(decodeURIComponent(escape(window.atob(payload)))).memberId;
+        $('#profileHref').attr('href', "/profile/" + userId);
     }
 
 };
