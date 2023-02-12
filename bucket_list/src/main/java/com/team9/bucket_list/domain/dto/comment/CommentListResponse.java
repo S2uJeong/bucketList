@@ -20,15 +20,16 @@ public class CommentListResponse {
 
     private String createAt;
     private String userName;    // comment 작성자
+    private Long userId;
 
     private Long parentId;
 
     @Builder.Default
     private List<CommentListResponse> children = new ArrayList<>();
 
-    public static CommentListResponse EntityToDto(Comment comment,String userName){
+    public static CommentListResponse EntityToDto(Comment comment,String userName,Long userId){
         return comment.getDeletedAt() != null ?
                 CommentListResponse.builder().id(comment.getId()).content("삭제된 댓글").createAt(comment.getCreatedAt()).userName("").parentId(comment.getParent()!=null?comment.getParent().getId():null).build() :    // 삭제된 댓글일 경우
-                CommentListResponse.builder().id(comment.getId()).content(comment.getContent()).createAt(comment.getCreatedAt()).userName(userName).parentId(comment.getParent()!=null?comment.getParent().getId():null).build();
+                CommentListResponse.builder().id(comment.getId()).content(comment.getContent()).createAt(comment.getCreatedAt()).userName(userName).userId(userId).parentId(comment.getParent()!=null?comment.getParent().getId():null).build();
     }
 }

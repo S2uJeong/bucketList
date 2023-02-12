@@ -33,7 +33,7 @@ public class Member {
     private int postRemain;
     private double rate;
 
-    public void rateUpdate(double avg) {
+   /* public void rateUpdate(double avg) {
         rate = avg;
     }
 
@@ -45,7 +45,7 @@ public class Member {
 
     public void updateProfileImage(String postImageUrl) {
         this.postImageUrl = postImageUrl;
-    }
+    }*/
 
 
     /**
@@ -100,8 +100,8 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<Comment> comments = new ArrayList<>();
 
-    @OneToOne(mappedBy = "member")
-    private Profile profile;
+/*    @OneToOne(mappedBy = "member")
+    private Profile profile;*/
 
     public MemberDto toDto() {
         return MemberDto.builder()

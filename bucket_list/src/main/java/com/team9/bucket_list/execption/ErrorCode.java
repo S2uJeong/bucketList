@@ -25,16 +25,16 @@ public enum ErrorCode {
     BUCKETLIST_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 버킷리스트가 없습니다."),
     APPLICATION_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 신청서가 없습니다"),
     ALARM_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 알람이 없습니다."),
-    // POST 관련
+
     FILE_NOT_EXISTS(HttpStatus.NOT_FOUND, "빈 파일 입니다."),
     EXCEED_ENTRANT_NUM(HttpStatus.CONFLICT, "참가자 수를 초과하였습니다."),
 
     FILE_UPLOAD_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패했습니다."),
     WRONG_FILE_FORMAT(HttpStatus.BAD_REQUEST, "파일 형식이 틀립니다."),
-    CHAT_ROOM_NOT_FOUNT(HttpStatus.NOT_FOUND,"채팅방을 찾을 수 없습니다")
 
-    ;
+    PROFILE_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 프로필이 없습니다."),
 
+    CHAT_ROOM_NOT_FOUNT(HttpStatus.NOT_FOUND,"채팅방을 찾을 수 없습니다");
 
     private HttpStatus status;
     private String message;
