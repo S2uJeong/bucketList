@@ -54,7 +54,7 @@
 <header class="header" id="pageTop">
 
     <!-- Menu Zord -->
-    <nav class="nav-menuzord nav-menuzord-transparent navbar-sticky bg-dark-light">
+    <nav class="nav-menuzord navbar-sticky">
         <div class="container clearfix">
             <div id="menuzord" class="menuzord">
                 <a href="/" class="menuzord-logo-brand"></a>
@@ -70,7 +70,7 @@
                     <li class="alarm-btn-box-li">
                         <button class="alarm-btn-box" type="button" data-bs-toggle="dropdown" aria-expanded="false"
                                 onclick="getAlarmList()">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#262a2e"
                                  class="bi bi-bell-fill alarm-btn" viewBox="0 0 16 16">
                                 <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zm.995-14.901a1 1 0 1 0-1.99 0A5.002 5.002 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901z"/>
                             </svg>
@@ -152,14 +152,14 @@
     </nav>
 </header>
 
-<div class="main-wrapper home-main" style="padding-top: 100px">
+<div class="main-wrapper home-main">
 
-    <section class="py-9">
+    <section class="py-7">
         <div class="container">
             <div class="hover-profile mb-7 mb-lg-9">
                 <div class="row">
                     <!-- 사진 부분 -->
-                    <div class="col-md-6 col-lg-5 col-xl-4">
+                    <div class="col-md-6 col-lg-5 col-xl-3 mb-3">
                         <div class="mb-6 mb-md-0">
                             <!--사진 감싼 부분 -->
                             <div class="pic-wrap">
@@ -204,7 +204,7 @@
                         </div>
                     </div>
                     <!-- 멤버 정보 나오는 부분 -->
-                    <div class="col-md-6 col-lg-7 col-xl-8">
+                    <div class="col-md-6 col-lg-7 col-xl-8 mt-4">
                         <div class="d-flex justify-content-between align-items-baseline">
                             <div class="mb-6 mb-md-4 mb-lg-6">
                                 <h2 class="text-uppercase font-weight-bold" id="profile-username"></h2>
@@ -230,7 +230,7 @@
                         </ul>
                     </div>
                     <!-- Contact Section -->
-                    <div class="bg-smoke p-4" style="height: 100%; min-height: 570px">
+                    <div class="bg-smoke p-5" style="height: 100%; min-height: 570px; border-radius: 30px;">
                         <div class="h-100" style="min-height: 500px">
                             <h3 class="text-uppercase font-weight-bold mb-6">리뷰</h3>
                             <div id="review_list">
