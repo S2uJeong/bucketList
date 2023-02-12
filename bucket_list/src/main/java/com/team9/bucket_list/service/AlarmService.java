@@ -69,13 +69,18 @@ public class AlarmService {
             receiver = memberRepository.findById(getterId).orElseThrow( () -> new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED));
         }
 
-//        Alarm alarm = alarmRepository.findBySenderNameAndPostIdAndCategory(sender.getUserName(),getterId,category).orElseThrow(() -> new ApplicationException(ErrorCode.ALARM_NOT_FOUND));
-
-
-        if(category == (byte) 4)
-            alarmRepository.save(Alarm.save(category,receiver,null,null, sender.getUserName()));
-        else if(category == (byte) 5)
-            alarmRepository.save(Alarm.save(category,receiver,post.getId(), post.getTitle(), post.getMember().getUserName()));
+        if(category == (byte) 4) {
+            Optional<Alarm> optionalAlarm = alarmRepository.findBySenderNameAndMemberIdAndCategory(sender.getUserName(), getterId, category);
+            if(optionalAlarm.isEmpty()){
+                alarmRepository.save(Alarm.save(category, receiver, null, null, sender.getUserName()));
+            }
+        }
+        else if(category == (byte) 5) {
+            Optional<Alarm> optionalAlarm = alarmRepository.findByMemberIdAndPostIdAndCategory(senderId, getterId, category);
+            if(optionalAlarm.isEmpty()) {
+                alarmRepository.save(Alarm.save(category, receiver, post.getId(), post.getTitle(), post.getMember().getUserName()));
+            }
+        }
         else
             alarmRepository.save(Alarm.save(category,post.getMember(),post.getId(), post.getTitle(),sender.getUserName()));
     }

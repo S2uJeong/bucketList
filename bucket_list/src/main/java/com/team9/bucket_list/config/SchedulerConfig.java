@@ -27,8 +27,7 @@ public class SchedulerConfig {
     private final ApplicationRepository applicationRepository;
     private final AlarmService alarmService;
 
-//    @Scheduled(cron = "1 0 0 * * *")
-    @Scheduled(cron = "0 * * * * *")
+    @Scheduled(cron = "0 0 0 * * *")
     public void run() {
         LocalDate seoulNow = LocalDate.now(ZoneId.of("Asia/Seoul")).minusDays(1);
         List<String> seoulDate = List.of(seoulNow.toString().split("-"));
@@ -53,6 +52,6 @@ public class SchedulerConfig {
             }
         }
 
-        log.info("complete");
+        log.info("진행 완료 변경 및 리뷰 요청 알람 전송 complete");
     }
 }
