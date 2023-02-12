@@ -14,10 +14,12 @@ window.onload = function () {
     if (accessToken === null) {
         $("#login_li").show();
         $(".alarm-btn-box-li").hide();
+        $(".chat-room-box-li").hide();
         $("#user_li").hide();
     } else {
         $("#login_li").hide();
         $(".alarm-btn-box-li").show();
+        $(".chat-room-box-li").show();
         $("#user_li").show();
 
         const payload = accessToken.split('.')[1];
