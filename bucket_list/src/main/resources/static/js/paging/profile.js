@@ -36,7 +36,7 @@ axios.get(todosUrl)
  * 데이터를 세팅합니다.
  */
 function setTable() {
-    let html = "<div class=\"mb-5\">\n" +
+    let html = "<div class=\"mb-3\">\n" +
         "                <div>\n" +
         "                       <p class=\"review-username\">{리뷰 작성 유저}</p>\n" +
         "                       <p class=\"review-rate\">점수 : {점수}</p>\n" +
@@ -45,6 +45,7 @@ function setTable() {
         "                   <div>\n" +
         "                       <p class=\"review-content\">{내용}</p>\n" +
         "                   </div>\n" +
+        "<hr>\n" +
         "               </div>";
 
     let parent = document.getElementById('review_list');
@@ -150,7 +151,7 @@ $(document).on('click', 'ul.pagination>li.page-item>a.page-link-i', function() {
     console.log("id" + id);
 
     if (id == 'first_page') {
-        window.location.href = "/post" + url_href + 0;
+        window.location.href = "/profile/" + memberId + url_href + 0;
     } else if (id == 'prev_page') {
         let arrPages = [];
         $('li.page-item>a.page-link').each(function(idx, item) {
@@ -158,7 +159,7 @@ $(document).on('click', 'ul.pagination>li.page-item>a.page-link-i', function() {
         });
         const prevPage = Math.min(...arrPages) - showPageCnt;
         console.log("prevPage" + prevPage);
-        window.location.href = "/post" + url_href + (prevPage - 1);
+        window.location.href = "/profile/" + memberId + url_href + (prevPage - 1);
     } else if (id == 'next_page') {
         let arrPages = [];
         $('li.page-item>a.page-link').each(function(idx, item) {
@@ -168,10 +169,10 @@ $(document).on('click', 'ul.pagination>li.page-item>a.page-link-i', function() {
 
         const nextPage = Math.max(...arrPages) + 1;
         console.log("nextPage" + nextPage);
-        window.location.href = "/post" + url_href + (nextPage - 1);
+        window.location.href = "/profile/" + memberId + url_href + (nextPage - 1);
     } else if (id == 'last_page') {
         const lastPage = Math.floor((totalPage - 1) / showPageCnt) * showPageCnt + 1;
         console.log("lastPage" + lastPage);
-        window.location.href = "/post" + url_href + (lastPage - 1);
+        window.location.href = "/profile/" + memberId + url_href + (lastPage - 1);
     }
 });
