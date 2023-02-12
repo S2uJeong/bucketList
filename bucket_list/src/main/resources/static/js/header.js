@@ -311,7 +311,7 @@ function alarmHtml(data) {
     else if(data.category == 5) {
         text = data.postTitle+''+alarmArr[data.category];
         modal = `data-bs-toggle="modal" data-bs-target="#bucketReview"`;
-        onclick = `onclick="postReviewAlarm(${data.postTitle},${data.postId},${data.id})"`
+        onclick = `onclick="postReviewAlarm('${data.postTitle}',${data.postId},${data.id})"`
     } else {
         onclick = `onclick="readAlarm(${data.id},${data.postId})"`
         text = data.senderName+''+alarmArr[data.category];
