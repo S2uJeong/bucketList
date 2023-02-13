@@ -373,7 +373,8 @@ function readAllAlarm() {
             /*$('#alarm-list').children().remove();
             let html = `<div class="text-secondary alarm-none">알림이 없습니다</div>`;
             $("#alarm-list").append(html);*/
-            $("#alarm-list").load(window.location.href + "#alarm-list");
+            /*$("#alarm-list").load(window.location.href + "#alarm-list");*/
+            window.location.reload();
         }
     }).catch((error) => {
 
