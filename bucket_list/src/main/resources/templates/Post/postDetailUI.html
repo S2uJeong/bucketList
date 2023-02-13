@@ -154,7 +154,8 @@
       let category;
       let fileName;
       let permitNum;
-
+      let parentId = [];
+      let childrenId = [];
 
       const getdata = async()=>{
         try{
@@ -185,15 +186,15 @@
             let commenthtml=
                     "<li class=\"comment-item\" id=\"comment1\">\n"+
                     "<div style='display: none' data-id=\"{댓글 아이디}\"></div>\n"+
-                    "<a class=\"me-n4 comment-tool\" id=\"navbarDropdown\" href=\"#\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\">. . .</a>\n"+
-                    "<ul class=\"dropdown-menu droclassName-menu-end\" aria-labelledby=\"navbarDropdown\">\n" +
+                    "<a class=\"me-n4 comment-tool\" id=\"{댓글 삭제 링크}\" href=\"#\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\" style=\'display: none\'>. . .</a>\n"+
+                    "<ul class=\"dropdown-menu droclassName-menu-end\" aria-labelledby=\"{댓글 삭제 링크}\">\n" +
                     // "<li><a  class=\"dropdown-item\" hrclassName\">수정</a></li>\n"+
                     "<li><a data-id=\"{댓글 삭제}\" onclick=\'commentReplyDeleteButton(this)\' class=\"dropdown-item\" hrclassName\">삭제</a></li>\n"+
                     "</ul>\n"+
                     "<div>\n"+
                     "<div id=\"parentId\" style='display: none'>{postId}</div>\n"+
                     "<div>\n"+
-                    "<a href=\"{유저 아이디}\"><p class=\"comment-username\" id=\"parentUsername\">{닉네임}</p></a>\n"+
+                    "<p class=\"comment-username\" id=\"parentUsername\">{닉네임}</p>\n"+
                     "</div>\n"+
                     "<div>\n"+
                     "<p class=\"comment-content\">{내용}</p>\n"+
@@ -217,8 +218,8 @@
             let reply_commenthtml=
                     "<li class=\"comment-reply\" id=\"comment2\">\n"+
                     "<div style='display: none' ></div>\n"+
-                    "<a class=\"me-n4 comment-tool\" id=\"navbarDropdown\" href=\"#\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\">. . .</a>\n"+
-                    "<ul class=\"dropdown-menu droclassName-menu-end\" aria-labelledby=\"navbarDropdown\">\n" +
+                    "<a class=\"me-n4 comment-tool\" id=\"{대댓글 삭제 링크}\" href=\"#\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\" style=\'display: none\'>. . .</a>\n"+
+                    "<ul class=\"dropdown-menu droclassName-menu-end\" aria-labelledby=\"{대댓글 삭제 링크}\">\n" +
                     "<li><a data-id=\"{대댓글 삭제}\" onclick=\'commentReplyDeleteButton(this)\' class=\"dropdown-item\" hrclassName\">삭제</a></li>\n"+
                     "</ul>\n"+
                     "<div>\n"+
@@ -241,6 +242,7 @@
 
             console.log(comment_list);
             comment_list.forEach(function (comment){        // 댓글 갯수만큼 반복
+              parentId.push(comment.id);
               let comment_parent_id = comment.parentId;
               console.log(comment_parent_id);
               let html_result = commenthtml.replace("{닉네임}",comment.userName)     // DB에 저장되어 있는 내용을 덮어씌워줌
@@ -252,20 +254,23 @@
                       .replace("{댓글 노출2}",'comment'+comment.id+'-'+comment.id)
                       .replace("{댓글 삭제}",comment.id)
                       .replace("{대댓글 작성}",'replyComment'+comment.id)
-                      .replace("{유저 아이디}","/profile/"+comment.userId);
+                      .replace("{유저 아이디}","/profile/"+comment.userId)
+                      .replace("{댓글 삭제 링크}","navbarDropdown"+comment.id);
 
               let html_reply_result;
               if (comment.children.length != 0) {                     // 만약 대댓글이 있다면
                 let reply_comment_list = comment.children;      // 대댓글 리스트 저장
                 console.log(reply_comment_list);
                 reply_comment_list.forEach(function (replycomment) {      // 대댓글 갯수만큼 반복
+                  childrenId.push(replycomment.id);
                   console.log(replycomment.parentId);
                   html_reply_result += reply_commenthtml.replace("{닉네임}", replycomment.userName)
                           .replace("{작성일자}", replycomment.createAt)
                           .replace("{내용}", replycomment.content)
                           .replace("{postId}",replycomment.parentId)
                           .replace("{대댓글 삭제}",replycomment.id)
-                          .replace("{유저 아이디}","/profile/"+replycomment.userId);
+                          .replace("{유저 아이디}","/profile/"+replycomment.userId)
+                          .replace("{대댓글 삭제 링크}","navbarDropdown2"+replycomment.id);
                 });
 
                 let commentResult = document.getElementById('list_comment');          // 대댓글 html에 대댓글 갯수만큼 데이터를 넣어 저장한 후
@@ -303,7 +308,7 @@
                 try {
 
                   const response = await axios.post('/comment/'+postId, JSON.stringify(CommentData), axiosConfig);
-                  alert("전송 성공");
+                  // alert("전송 성공");
                   let url = "/post/" + postId;
                   window.location.replace(url);
                 } catch (error) {
@@ -345,8 +350,30 @@
             }
 
 
+
             <!-- 포스트 수정,삭제 버튼 게시물 작성자만 뜨도록 설정 -->
-            // window.onload = function () {
+            window.onload = function () {
+              for(var i=0; i<parentId.length; i++){
+                let commentLinkButton = document.getElementById("navbarDropdown"+parentId[i]);
+                console.log("navbarDropdown"+parentId[i]);
+                if (accessName == userName) {
+                  commentLinkButton.style.display = "block";
+                } else {
+                  commentLinkButton.style.display = "none";
+                }
+              }
+              for(var i=0; i<childrenId.length; i++){
+                let commentLinkButton = document.getElementById("navbarDropdown2"+childrenId[i]);
+                console.log("navbarDropdown2"+childrenId[i]);
+                if (accessName == userName) {
+                  commentLinkButton.style.display = "block";
+                } else {
+                  commentLinkButton.style.display = "none";
+                }
+              }
+            }
+            onload();
+
             let postUpdateButton = document.getElementById("postUpdateButton");
             let postDeleteButton = document.getElementById("postDeleteButton");
 
@@ -363,8 +390,7 @@
               postUpdateButton.style.display = "none";
               postDeleteButton.style.display = "none";
             }
-            // }
-            // onload();
+
 
 
             googlemap(lat, lng, location, title, content);
@@ -804,11 +830,11 @@
         try {
 
           const response = await axios.post('/comment/'+postId, JSON.stringify(CommentData), axiosConfig);
-          alert("전송 성공");
+          // alert("전송 성공");
           let url = "/post/" + postId;
           window.location.replace(url);
         } catch (error) {
-          alert("실패");
+          alert("404 페이지");
         }
       }
       sendData();
@@ -829,11 +855,11 @@
       const sendData = async () => {
         try {
           const response = await axios.delete('/comment/'+postId+'/comments/'+parentId);
-          alert("전송 성공");
+          // alert("전송 성공");
           let url = "/post/" + postId;
           window.location.replace(url);
         } catch (error) {
-          alert("실패");
+          alert("404 페이지");
         }
       }
       sendData();

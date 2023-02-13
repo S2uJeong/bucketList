@@ -20,16 +20,8 @@ public class ProfileController {
 
     //=== 프로필 조회 ===//
     @GetMapping("/{memberId}")
-    public String readDetail(@PathVariable("memberId") Long memberId, Model model){
-        // 조회하려는 대상이 존재하는 member인지 확인한다.
-        Member member = profileService.checkMember(memberId);
-        member = Member.builder()
-                .userName(member.getUserName())
-                .email(member.getEmail())
-                .rate(member.getRate())
-                .build();
-        model.addAttribute("member", member);
-        return "/Profile/profile";
+    public String readDetail(@PathVariable("memberId") Long memberId){
+        return "Profile/profile";
     }
 
     //=== 프로필 수정 ===//
