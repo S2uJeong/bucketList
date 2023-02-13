@@ -1,7 +1,7 @@
 const lsAccessToken = localStorage.getItem("accessToken");
 const lsPayload = lsAccessToken.split('.')[1];
 const lsMemberId = JSON.parse(atob(lsPayload)).memberId;
-const lsUserName = JSON.parse(atob(lsPayload)).userName;
+const lsUserName = JSON.parse(decodeURIComponent(escape(window.atob(lsPayload)))).userName;
 
 //서버 웹소켓 연결
 let socket = new SockJS('/ws');
