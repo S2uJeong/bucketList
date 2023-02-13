@@ -2,8 +2,7 @@ package com.team9.bucket_list.controller.rest;
 
 import com.team9.bucket_list.domain.Response;
 import com.team9.bucket_list.domain.dto.bucketlistReview.BucketlistReviewRequest;
-import com.team9.bucket_list.domain.dto.bucketlistReview.BucketlistReviewDto;
-import com.team9.bucket_list.domain.entity.BucketlistReview;
+import com.team9.bucket_list.domain.dto.bucketlistReview.BucketlistReviewResponse;
 import com.team9.bucket_list.service.BucketlistReviewService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -15,7 +14,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -27,12 +25,12 @@ public class BucketlistReviewController {
 
     private final BucketlistReviewService bucketlistReviewService;
 
-    @GetMapping("/{postId}/review")
+    @GetMapping("/{postId}")
     @Operation(summary = "리뷰 조회", description = "특정게시글의 리뷰를 pageable하여 출력합니다.")
-    public Page<BucketlistReview> reviewList(@Parameter(name = "postId", description = "게시글 id")  @PathVariable Long postId,
-                                             @Parameter(hidden = true) @PageableDefault(sort = "createdAt", size = 20, direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<BucketlistReview> bucketlistReviews =  bucketlistReviewService.list(postId, pageable);
-        return bucketlistReviews;
+    public Response<Page<BucketlistReviewResponse>> reviewList(@Parameter(name = "postId", description = "게시글 id")  @PathVariable Long postId,
+                                                     @Parameter(hidden = true) @PageableDefault(sort = "createdAt", size = 5, direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<BucketlistReviewResponse> bucketlistReviewResponses =  bucketlistReviewService.list(postId, pageable);
+        return Response.success(bucketlistReviewResponses);
     }
 
     @PostMapping()

@@ -27,6 +27,7 @@ public class ProfileRestController {
     @GetMapping("/{memberId}/json")
     @Operation(summary = "프로필 조회", description = "해당 멤버의 프로필을 출력합니다.")
     public Response<ProfileReadResponse> read(@Parameter(name = "memberId", description = "멤버 id") @PathVariable Long memberId) {
+        log.info("프로필 조회 컨트롤러 도착");
         ProfileReadResponse response = profileService.read(memberId);
         return Response.success(response);
     }

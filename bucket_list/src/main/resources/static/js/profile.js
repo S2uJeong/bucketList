@@ -1,6 +1,10 @@
 const lsAccessToken = localStorage.getItem("accessToken");
 const lsPayload = lsAccessToken.split('.')[1];
 const lsMemberId = JSON.parse(atob(lsPayload)).memberId;
+let profileURL = window.location.pathname.split('/');
+let profileMemberId = profileURL[profileURL.length-1];
+
+console.log(`member id : ${profileMemberId}`);
 
 // Get the modal
 var modal = document.getElementById("myModal");
@@ -28,7 +32,7 @@ window.onclick = function (event) {
     }
 }
 
-<!-- 이미지 파일 넣는 부분 (모달창 내부) -->
+/*<!-- 이미지 파일 넣는 부분 (모달창 내부) -->
 // Get elements
 var fileInput = document.getElementById("fileInput");
 var uploadBtn = document.getElementById("uploadBtn");
@@ -57,9 +61,17 @@ fileInput.addEventListener("change", function () {
         thumbnail.appendChild(image);
         imagePreview.appendChild(thumbnail);
     }
+});*/
+
+let fileInput = document.getElementById("fileInput");
+
+fileInput.addEventListener("change", function() {
+    const imageSrc = URL.createObjectURL(fileInput.files[0]);
+
+    $('.img-preview').css("background-image",`url(${imageSrc})`);
 });
 
-// Handle upload button click
+/*// Handle upload button click
 uploadBtn.addEventListener("click", function () {
     // Get selected files
     var files = fileInput.files;
@@ -78,7 +90,7 @@ uploadBtn.addEventListener("click", function () {
 
     // Clear preview
     imagePreview.innerHTML = "";
-});
+});*/
 
 function uploadPic() {
 /*    const FileElement = document.querySelector('#fileInput');
@@ -100,8 +112,36 @@ function uploadPic() {
             console.error(error);
         }
     }*/
-    $('#file-form').attr("action", `/profile/${lsMemberId}/edit`);
+    let form = $('#file-form')[0];
+
+    // Create an FormData object
+    let data = new FormData(form);
+    let editImgData;
+
+    axios({
+        method:"POST",
+        url: `/profile/${lsMemberId}/edit`,
+        data:data,
+        header:{"Content-Type": "multipart/form-data"},
+    }).then((res)=> {
+        editImgData = res.data.result;
+        console.log(res);
+
+        if(editImgData.uploadFileName == '기본사진.png')
+            $('.pic-wrap').css('backgroundImage',`url(${editImgData.awsS3FileName})`);
+        else
+            $('.pic-wrap').css('backgroundImage',`url(https://bucketlist-post-image-bucket.s3.ap-northeast-2.amazonaws.com/${editImgData.awsS3FileName})`);
+
+        modal.style.display = "none";
+    }).catch((error)=> {
+        console.log(error);
+    });
+
+
+    /*$('#file-form').attr("action", `/profile/${lsMemberId}/edit`);
     $('#file-form').submit();
+
+    alert("프로필 사진이 변경되었습니다");*/
 }
 
 /*
@@ -112,5 +152,31 @@ $('#fileInput').change(function (){
 */
 
 
+window.onload = function () {
+    let profileData;
+    $('#if').css("display","none");
+
+    if(profileMemberId != lsMemberId) {
+        $('#pic-btn').remove();
+    }
+
+    axios({
+        method:"GET",
+        url: `/profile/${profileMemberId}/json`,
+    }).then((res)=> {
+        profileData = res.data.result;
+
+        if(profileData.uploadFileName == '기본사진.png')
+            $('.pic-wrap').css('backgroundImage',`url(${profileData.awsS3FileName})`);
+        else
+            $('.pic-wrap').css('backgroundImage',`url(https://bucketlist-post-image-bucket.s3.ap-northeast-2.amazonaws.com/${profileData.awsS3FileName})`);
+
+        $('#profile-username').text(profileData.memberName);
+        $('#profile-email').text(profileData.email);
+        $('#profile-avg-rate').text(profileData.avgRate);
+    }).catch((error)=> {
+        console.log(error);
+    });
+}
 
 
