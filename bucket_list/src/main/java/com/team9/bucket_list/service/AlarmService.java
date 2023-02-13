@@ -58,17 +58,22 @@ public class AlarmService {
         Member sender = null;
         Member receiver = null;
 
-        if(category != (byte) 5)
-            sender = memberRepository.findById(senderId).orElseThrow( () -> new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED));
-        else
-            receiver = memberRepository.findById(senderId).orElseThrow( () -> new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED));
-
+        if(category != (byte) 3)
+            receiver = memberRepository.findById(getterId).orElseThrow( () -> new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED));
         if(category != (byte) 4)
             post = postRepository.findById(getterId).orElseThrow( () -> new ApplicationException(ErrorCode.POST_NOT_FOUND));
         else {
             receiver = memberRepository.findById(getterId).orElseThrow( () -> new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED));
         }
+        if(category != (byte) 5)
+            sender = memberRepository.findById(senderId).orElseThrow( () -> new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED));
+        else
+            receiver = memberRepository.findById(senderId).orElseThrow( () -> new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED));
 
+
+        if(category == (byte) 3) {
+            alarmRepository.save(Alarm.save(category,receiver,post.getId(), post.getTitle(),sender.getUserName()));
+        }
         if(category == (byte) 4) {
             Optional<Alarm> optionalAlarm = alarmRepository.findBySenderNameAndMemberIdAndCategory(sender.getUserName(), getterId, category);
             if(optionalAlarm.isEmpty()){
