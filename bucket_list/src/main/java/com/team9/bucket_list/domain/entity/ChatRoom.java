@@ -39,13 +39,13 @@ public class ChatRoom {
     private final List<ChatParticipant> chatParticipants = new ArrayList<>();
 
 
-    public static ChatRoom save(ChatRoomRequest chatRoomRequest, Post post) {
+    public static ChatRoom save(Post post) {
         return ChatRoom.builder()
-                .roomName(chatRoomRequest.getRoomName())
+                .roomName(post.getTitle())
                 .post(post)
-                .totalNum(chatRoomRequest.getTotalNum())
-                .lastMessage("")
-                .lastUserName("")
+                .totalNum(post.getEntrantNum())
+                .lastMessage(" ")
+                .lastUserName(" ")
                 .lastMessageTime(LocalDateTime.now())
                 .build();
     }
