@@ -95,6 +95,7 @@
         window.location.reload();
         return false;
       } catch (e) {
+        await axios.get('/404ErrorPage');
         console.log(e);
       }
     }
@@ -309,14 +310,14 @@
                   let url = "/post/" + postId;
                   window.location.replace(url);
                 } catch (error) {
-                  alert("404 페이지");
+                  window.location.replace('/404ErrorPage');
                 }
               }
               sendData();
             });
 
           }else {
-            alert("서버 반환값 Error임 404페이지 이동");
+            window.location.replace('/404ErrorPage');
             console.log("댓글 없음");
           }
 
@@ -685,11 +686,11 @@
                     application_box.innerHTML += application_html_result;
                   })
                 } else {
-                  console.log('asdasf');
+                  window.location.replace('/404ErrorPage');
                 }
               }
               catch (e) {
-
+                window.location.replace('/404ErrorPage');
               }
 
 
@@ -700,13 +701,12 @@
 
             console.log(location);
           } else {
-            alert("서버 반환값 Error임 404페이지 이동");
-            console.log("1개조회 실패")
+            window.location.replace('/404ErrorPage');
           }
 
 
         }catch (ERROR){
-          alert("404 에러");
+          window.location.replace('/404ErrorPage');
         }
       }
 
@@ -840,7 +840,7 @@
           let url = "/post/" + postId;
           window.location.replace(url);
         } catch (error) {
-          alert("404 페이지");
+          window.location.replace('/404ErrorPage');
         }
       }
       sendData();
@@ -865,7 +865,7 @@
           let url = "/post/" + postId;
           window.location.replace(url);
         } catch (error) {
-          alert("404 페이지");
+          window.location.replace('/404ErrorPage');
         }
       }
       sendData();
@@ -895,6 +895,7 @@
           let url = "/post";
           window.location.replace(url);
         }catch (e){
+          window.location.replace('/404ErrorPage');
         }
       }
 
