@@ -42,11 +42,22 @@ public class ChatService {
     }
 
     @Transactional
+    public ChatRoom createChatRoom(Post post) {
+        //postId로 post 엔티티 찾기
+        //Post post = postRepository.findById(postId).orElseThrow(() -> new ApplicationException(ErrorCode.POST_NOT_FOUND));
+
+        ChatRoom chatRoom = chatRoomRepository.save(ChatRoom.save(post));
+
+        //성공 리턴
+        return chatRoom;
+    }
+
+    @Transactional
     public ChatRoom createChatRoom(Long postId, ChatRoomRequest chatRoomRequest) {
         //postId로 post 엔티티 찾기
         Post post = postRepository.findById(postId).orElseThrow(() -> new ApplicationException(ErrorCode.POST_NOT_FOUND));
 
-        ChatRoom chatRoom = chatRoomRepository.save(ChatRoom.save(chatRoomRequest, post));
+        ChatRoom chatRoom = chatRoomRepository.save(ChatRoom.save(post));
 
         //성공 리턴
         return chatRoom;

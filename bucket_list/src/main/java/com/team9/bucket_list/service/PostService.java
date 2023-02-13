@@ -1,19 +1,14 @@
 package com.team9.bucket_list.service;
 
 import com.team9.bucket_list.domain.Response;
+import com.team9.bucket_list.domain.dto.chat.ChatRoomRequest;
 import com.team9.bucket_list.domain.dto.post.*;
-import com.team9.bucket_list.domain.entity.Application;
-import com.team9.bucket_list.domain.entity.Likes;
-import com.team9.bucket_list.domain.entity.Member;
-import com.team9.bucket_list.domain.entity.Post;
+import com.team9.bucket_list.domain.entity.*;
 import com.team9.bucket_list.domain.enumerate.MemberRole;
 import com.team9.bucket_list.domain.enumerate.PostStatus;
 import com.team9.bucket_list.execption.ApplicationException;
 import com.team9.bucket_list.execption.ErrorCode;
-import com.team9.bucket_list.repository.ApplicationRepository;
-import com.team9.bucket_list.repository.LikesRepository;
-import com.team9.bucket_list.repository.MemberRepository;
-import com.team9.bucket_list.repository.PostRepository;
+import com.team9.bucket_list.repository.*;
 import com.team9.bucket_list.utils.map.dto.GoogleMapResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,6 +40,8 @@ public class PostService {
     private final ApplicationRepository applicationRepository;
     private final AlarmService alarmService;
     private final MemberRepository memberRepository;
+    private final ChatService chatService;
+    private final ChatParticipantRepository chatParticipantRepository;
     // post에 파일 첨부하는 기능을 위한 의존성 주입
 
     // map
@@ -79,6 +76,15 @@ public class PostService {
         Post post = request.toEntity(member);
         // request를 통해 만들어진 post를 DB에 저장한다.
         Post savedPost = postRepository.save(post);
+
+        //채팅방 생성
+        //ChatRoomRequest chatRoomRequest = ChatRoomRequest.save(savedPost);
+        ChatRoom chatRoom = chatService.createChatRoom(savedPost);
+        if(chatRoom.getId() > 1) {
+            //채팅방에 자기 자신 초대
+            chatParticipantRepository.save(ChatParticipant.save(chatRoom,member));
+        }
+
         return PostCreateResponse.of(savedPost);
     }
 
@@ -336,6 +342,13 @@ public class PostService {
         // Entity
         Set<Application> applications = applicationRepository.findByMember_IdAndStatus(member.getId(), (byte) 1);
         Set<Long> postIds = applications.stream().map(Application::getPost).map(Post::getId).collect(Collectors.toSet());
+
+        // 자신이 작성한 진행완료인 post도 추가할 수 있도록
+        Set<Post> createPosts = postRepository.findByMember_Id(member.getId());
+        Set<Long> createPostIds = createPosts.stream().map(Post::getId).collect(Collectors.toSet());
+
+        postIds.addAll(createPostIds);
+
         Page<Post> completePosts = postRepository.findByIdInAndStatus(postIds, PostStatus.COMPLETE, pageable);
         // Dto
         Page<PostReadResponse> completePostReadResponses = PostReadResponse.listOf(completePosts);
@@ -391,8 +404,14 @@ public class PostService {
         lowtemp = lowCost.substring(1);                 // 제일 앞에 $ 삭제
         uppertemp = upCost.substring(1);
 
-        low = Integer.parseInt(lowtemp) * 1260;                 // 프론트에서는 달러로 입력받기 때문에 환율적용
-        upper = Integer.parseInt(uppertemp) * 1260;
+        lowtemp = lowCost.replaceAll("\\(만원\\)","");                 // (만원) 단위 삭제
+        uppertemp = upCost.replaceAll("\\(만원\\)","");
+
+        log.info(lowtemp);
+        log.info(uppertemp);
+
+        low = Integer.parseInt(lowtemp) * 10000;                 // 프론트에서는 달러로 입력받기 때문에 환율적용
+        upper = Integer.parseInt(uppertemp) * 10000;
 
 
         if((eventStart.equals("")&&(eventEnd.equals("")))){             //  비용만 필터링 했을경우(날짜는 모든 값이 출력되도록 설정)

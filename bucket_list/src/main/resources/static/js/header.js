@@ -68,10 +68,12 @@ async function checkEmail() {
 
         code = response.data.result;
         document.getElementById('error_email').style.display = 'none';
+        document.getElementById('send_email').style.display = 'block';
 
     } catch (error) {
         console.log(error);
         document.getElementById('error_email').style.display = 'block';
+        document.getElementById('send_email').style.display = 'none';
 
     }
 }
@@ -367,10 +369,12 @@ function readAllAlarm() {
     }).then((res) => {
         data = res.data.result;
         if(data >= 1) {
-            alert("모두 읽음 처리 되었습니다.")
-            $('#alarm-list').children().remove();
+            alert("모두 읽음 처리 되었습니다.");
+            /*$('#alarm-list').children().remove();
             let html = `<div class="text-secondary alarm-none">알림이 없습니다</div>`;
-            $("#alarm-list").append(html);
+            $("#alarm-list").append(html);*/
+            /*$("#alarm-list").load(window.location.href + "#alarm-list");*/
+            window.location.reload();
         }
     }).catch((error) => {
 

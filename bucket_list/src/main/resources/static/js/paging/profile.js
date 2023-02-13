@@ -2,7 +2,7 @@
 let review_list = [];
 let page_info = [];
 
-const showPageCnt = 5; // 화면에 보일 페이지 번호 개수
+const showPageCnt = 4; // 화면에 보일 페이지 번호 개수
 
 const urlSearch = new URL(window.location.href).search;
 console.log(urlSearch)
@@ -45,7 +45,7 @@ function setTable() {
         "                   <div>\n" +
         "                       <p class=\"review-content\">{내용}</p>\n" +
         "                   </div>\n" +
-        "<hr>\n" +
+        "<hr class=\"mt-3\" style=\"margin: 0px\">\n" +
         "               </div>";
 
     let parent = document.getElementById('review_list');

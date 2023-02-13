@@ -615,10 +615,10 @@
   if (nonLinearStepSlider) {
     noUiSlider.create(nonLinearStepSlider, {
       connect: true,
-      start: [0, 10000],
+      start: [0, 1000],
       range: {
         'min': [0],
-        'max': [10000]
+        'max': [1000]
       }
     });
   }
@@ -633,7 +633,7 @@
   var priceRange = document.getElementById('price-range');
   if (priceRange) {
     nonLinearStepSlider.noUiSlider.on('update', function (values, handle) {
-      sliderValue[handle].innerHTML = '$' + Math.floor(values[handle]);
+      sliderValue[handle].innerHTML = Math.floor(values[handle])+"(만원)";
     });
   }
 

@@ -42,4 +42,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Page<Post> findByCategoryAndTitleContainingAndEventStartBetweenAndEventEndBetweenAndCostBetween( String category, String keyword, String eventStart, String eventmax, String eventmin, String eventEnd, Integer lowCost, Integer upCost,Pageable pageable);
 
     List<Post> findByEventEnd(String eventEnt);
+
+    Set<Post> findByMember_Id(Long memberId);
 }

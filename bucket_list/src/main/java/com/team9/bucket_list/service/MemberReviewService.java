@@ -44,7 +44,10 @@ public class MemberReviewService {
     public Page<MemberReviewResponse> list (Long targetUserId, Pageable pageable) {
         Member member = checkMemberId(targetUserId);
         Page<MemberReviewResponse> memberReviews = memberReviewRepository.findAllByMember(member, pageable)
-                .map(memberReview -> MemberReviewResponse.response(memberReview, memberReview.getMember().getUserName()));
+                .map(memberReview -> {
+                    Member writerMember = checkMemberId(memberReview.getWriterId());
+                    return MemberReviewResponse.response(memberReview, writerMember.getUserName());
+                });
         return memberReviews;
     }
 
