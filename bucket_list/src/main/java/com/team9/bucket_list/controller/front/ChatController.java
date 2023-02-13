@@ -74,6 +74,10 @@ public class ChatController {
             ChatRequest chatResponse = ChatRequest.chatResponse(chatRequest);
             template.convertAndSend("/sub/chat/room/"+chatRequest.getRoomId(), chatResponse);
             log.info("메시지 구독자들에게 전송 완료");
+        } else if(chatRequest.getChatType().equals(ChatType.LEAVE)){
+            ChatRequest chatResponse = ChatRequest.chatResponse(chatRequest);
+            template.convertAndSend("/sub/chat/room/"+chatRequest.getRoomId(), chatResponse);
+            log.info("퇴장 메시지 전송 완료");
         }
     }
 }

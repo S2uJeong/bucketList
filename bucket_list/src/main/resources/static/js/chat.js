@@ -182,6 +182,10 @@ function onMessageReceived(payload) {
                     </div>
                 </div>`;
     } else if (message.chatType === 'LEAVE') {
+        if(message.memberId === lsMemberId) {
+            alert("채팅방에서 퇴장하셨습니다");
+            location.href='/';
+        }
         html += `<div class="d-flex flex-column justify-content-end message-box-wrap join-message-wrap">
                     <div class="alert alert-secondary join-message">
                         ${message.userName}님이 퇴장하셨습니다 
@@ -314,7 +318,7 @@ function roomOut(memberId,userName,roomId,num) {
             console.log(res);
             if(res.data.result == 1) {
                 if(num == 0) {
-                    alert("방을 퇴장하였습니다.");
+                    alert("채팅방에서 퇴장했습니다");
                     leaveMessage(roomId,memberId,userName);
                     location.href='/';
                 } else if(num == 1) {
