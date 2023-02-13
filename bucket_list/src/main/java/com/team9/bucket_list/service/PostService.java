@@ -404,8 +404,14 @@ public class PostService {
         lowtemp = lowCost.substring(1);                 // 제일 앞에 $ 삭제
         uppertemp = upCost.substring(1);
 
-        low = Integer.parseInt(lowtemp) * 1260;                 // 프론트에서는 달러로 입력받기 때문에 환율적용
-        upper = Integer.parseInt(uppertemp) * 1260;
+        lowtemp = lowCost.replaceAll("\\(만원\\)","");                 // (만원) 단위 삭제
+        uppertemp = upCost.replaceAll("\\(만원\\)","");
+
+        log.info(lowtemp);
+        log.info(uppertemp);
+
+        low = Integer.parseInt(lowtemp) * 10000;                 // 프론트에서는 달러로 입력받기 때문에 환율적용
+        upper = Integer.parseInt(uppertemp) * 10000;
 
 
         if((eventStart.equals("")&&(eventEnd.equals("")))){             //  비용만 필터링 했을경우(날짜는 모든 값이 출력되도록 설정)

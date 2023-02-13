@@ -105,24 +105,24 @@
                             if (urlSearch.includes("?category") == false) {                // all
                                 let url = "/post" +"?eventStart=" + arr[0] + "&eventEnd=" + arr[1] + "&lowCost=" + arr[2] + "&upCost=" + arr[3];
                                 console.log(url);
-                                alert("1");
+
                                 window.location.replace(url);
                             } else{                                 // 카테고리 선택
                                 let url = "/post?"+ params +"&eventStart=" + arr[0] + "&eventEnd=" + arr[1] + "&lowCost=" + arr[2] + "&upCost=" + arr[3];
                                 console.log(url);
-                                alert("2");
+
                                 window.location.replace(url);
                             }
                         }else {
                             if (urlSearch.length == 0) {                // all
                                 let url = "/post" + params + "?eventStart=" + arr[0] + "&eventEnd=" + arr[1] + "&lowCost=" + arr[2] + "&upCost=" + arr[3];
                                 console.log(url);
-                                alert("3");
+
                                 window.location.replace(url);
                             } else {                                 // 카테고리 선택
                                 let url = "/post?" + params + "&eventStart=" + arr[0] + "&eventEnd=" + arr[1] + "&lowCost=" + arr[2] + "&upCost=" + arr[3];
                                 console.log(url);
-                                alert("4");
+
                                 window.location.replace(url);
                             }
                         }

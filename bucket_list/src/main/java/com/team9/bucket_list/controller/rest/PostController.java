@@ -52,6 +52,8 @@ public class PostController {
             , @RequestParam(value = "eventStart", required = false) String eventStart, @RequestParam(value = "eventEnd", required = false) String eventEnd
             , @RequestParam(value = "lowCost", required = false) String lowCost, @RequestParam(value = "upCost", required = false) String upCost) {
 
+        log.info(lowCost);
+        log.info(upCost);
 
         Page<PostReadResponse> response = postService.search(pageable,category,keyword,eventStart,eventEnd,lowCost,upCost);
         return Response.success(response);
