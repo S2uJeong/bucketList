@@ -17,7 +17,14 @@
 .alarm-btn-box:hover .alarm-btn {
     color: #ff891f;
 }
-
+.alarm-btn-black{
+    background-color: transparent;
+    color: black;
+    transition: 0.3s;
+}
+.alarm-btn-box:hover .alarm-btn-black {
+    color: #ff891f;
+}
 .alarm-box{
     width: 300px;
     height: 350px;
