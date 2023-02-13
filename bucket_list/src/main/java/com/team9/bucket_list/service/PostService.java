@@ -266,7 +266,8 @@ public class PostService {
             likesRepository.save(likes);
 
             // 좋아요 됐을 경우, 알람 DB에 추가
-            alarmService.sendAlarm(member.getId(), post.getId(), (byte) 1);
+            alarmService.sendAlarm2(member.getId(),post.getMember().getId(),post.getId(),(byte) 1);
+            //alarmService.sendAlarm(member.getId(), post.getId(), (byte) 1);
             return 1;
         }else {
             likesRepository.deleteByPost_IdAndMember_Id(postId, member.getId());
