@@ -98,7 +98,6 @@
         window.location.reload();
         return false;
       } catch (e) {
-        await axios.get('/404ErrorPage');
         console.log(e);
       }
     }
@@ -320,7 +319,6 @@
             });
 
           }else {
-            window.location.replace('/404ErrorPage');
             console.log("댓글 없음");
           }
 
@@ -692,7 +690,7 @@
                 }
               }
               catch (e) {
-                window.location.replace('/404ErrorPage');
+                console.log(e);
               }
 
 
@@ -703,12 +701,12 @@
 
             console.log(location);
           } else {
-            window.location.replace('/404ErrorPage');
+          window.location.replace('/404ErrorPage');
           }
 
 
-        }catch (ERROR){
-          window.location.replace('/404ErrorPage');
+        }catch (e){
+         console.log(e);
         }
       }
 
