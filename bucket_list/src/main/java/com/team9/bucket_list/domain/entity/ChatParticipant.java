@@ -22,4 +22,11 @@ public class ChatParticipant {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    public static ChatParticipant save(ChatRoom chatRoom, Member member) {
+        return ChatParticipant.builder()
+                .chatRoom(chatRoom)
+                .member(member)
+                .build();
+    }
 }
