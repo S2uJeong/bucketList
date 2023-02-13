@@ -40,9 +40,9 @@ axios.get(todosUrl)
  */
 function setTable() {
     let html = "<div class=\"col-md-6 col-xl-4 mb-5\">\n" +
-        "            <div class=\"card card-hover\">\n" +
-        "              <a href=\"{포스트 아이디}\" class=\"position-relative\">\n" +
-        "                <img class=\"card-img-top lazyestload\" data-src=\"{이미지 URL}\" src=\"{이미지 URL}\" alt=\"Card image cap\">\n" +
+        "            <div class=\"card card-hover post-box-wrap\">\n" +
+        "              <a href=\"post/{포스트 아이디}\" class=\"position-relative img-box\" id='img-box-id-{id}'>\n" +
+        // "                <img class=\"card-img-top lazyestload\" data-src=\"{이미지 URL}\" src=\"{이미지 URL}\" alt=\"Card image cap\">\n" +
         "                <div class=\"card-img-overlay card-hover-overlay rounded-top d-flex flex-column\">\n" +
         "                  <div class=\"badge {배경색} badge-rounded-circle\">\n" +
         "                    <span class=\"d-block\">{모집상태}</span>\n" +
@@ -51,16 +51,16 @@ function setTable() {
         "              </a>\n" +
         "\n" +
         "              <div class=\"card-body px-4\">\n" +
-        "                <h5>\n" +
-        "                  <a href=\"{포스트 아이디}\" class=\"card-title text-uppercase\">{제목}</a>\n" +
+        "                <h5 class=\"post-list-title\">\n" +
+        "                  <a href=\"post/{포스트 아이디}\" class=\"card-title text-uppercase\">{제목}</a>\n" +
         "                </h5>\n" +
-        "                <h6 class=\"mt-n2\">\n" +
+        "                <h6 class=\"mt-n2 post-list-username\">\n" +
         "                  {주최자 이름}\n" +
         "                </h6>\n" +
         "                <p class=\"mb-1\">모집 기간 : ~ {모집 마감 날짜}</p>\n" +
         "                <p class=\"mb-1\">일정 : {일정 시작 날짜} ~ {일정 종료 날짜}</p>\n" +
         "                <p class=\"mb-1\">비용 : {비용}</p>\n" +
-        "                <p class=\"mb-1\">장소 : {장소}</p>\n" +
+        "                <p class=\"mb-1 post-list-place\">장소 : {장소}</p>\n" +
         "              </div>\n" +
         "            </div>\n" +
         "          </div>";
@@ -85,7 +85,8 @@ function setTable() {
             .replace("{일정 시작 날짜}", post.eventStart)
             .replace("{일정 종료 날짜}", post.eventEnd)
             .replace("{모집 마감 날짜}", post.untilRecruit)
-            .replace("{이미지 URL}", postImage);
+            .replace("{이미지 URL}", postImage)
+            .replace("{id}", post.postId);
 
         if (post.status === 'JOIN') {
             html_result = html_result.replace("{모집상태}", '모집중')
@@ -102,6 +103,7 @@ function setTable() {
         }
 
         parent.innerHTML += html_result;
+        $(`#img-box-id-${post.postId}`).css("backgroundImage", `url(${postImage})`);
     });
 }
 
