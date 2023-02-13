@@ -68,10 +68,12 @@ async function checkEmail() {
 
         code = response.data.result;
         document.getElementById('error_email').style.display = 'none';
+        document.getElementById('send_email').style.display = 'block';
 
     } catch (error) {
         console.log(error);
         document.getElementById('error_email').style.display = 'block';
+        document.getElementById('send_email').style.display = 'none';
 
     }
 }
