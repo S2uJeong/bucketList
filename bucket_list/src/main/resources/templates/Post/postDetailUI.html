@@ -410,7 +410,7 @@
               let review_list = [];
               let page_info = [];
 
-              const showPageCnt = 5; // 화면에 보일 페이지 번호 개수
+              const showPageCnt = 4; // 화면에 보일 페이지 번호 개수
 
               const urlSearch = new URL(window.location.href).search;
               console.log(urlSearch)
@@ -456,12 +456,20 @@
                         "               </div>";
 
                 let parent = document.getElementById('bucketReview-box');
-                parent.innerHTML = "<div class=\"bg-smoke p-5\" style=\"height: 100%; min-height: 570px; border-radius: 30px;\">\n" +
-                "  <div class=\"h-100\" style=\"min-height: 500px\">\n" +
+                parent.innerHTML = "<div class=\"bg-smoke p-5\" style=\"height: 100%; min-height: 50px; border-radius: 30px;\">\n" +
+                "  <div style=\"min-height: 430px\">\n" +
                 "    <h2 class=\"text-uppercase mb-6\">버킷리스트 리뷰</h2>\n" +
                 "    <div id=\"bucketReview-item\">\n" +
                 "    </div>\n" +
                 "  </div>\n" +
+                "        <section class=\"pt-4 pt-md-4\">\n" +
+                "          <div class=\"container\">\n" +
+                "            <nav aria-label=\"Page navigation\">\n" +
+                "              <ul class=\"pagination justify-content-center align-items-center\">\n" +
+                "              </ul>\n" +
+                "            </nav>\n" +
+                "          </div>\n" +
+                "        </section>\n" +
                 "</div>\n";
                 parent.className = "mb-7";
 
@@ -1495,7 +1503,6 @@
   <script src="/assets/js/star.js"></script>
 
   <script src="/js/header.js"></script>
-
 
 </body>
 </html>
