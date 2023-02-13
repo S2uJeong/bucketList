@@ -27,7 +27,6 @@ public class MemberJoinRequest {
                 .age(this.age)
                 .gender(Gender.valueOf(this.gender))
                 .memberRole(MemberRole.USER)
-                .postRemain(3)
                 .build();
     }
 }
