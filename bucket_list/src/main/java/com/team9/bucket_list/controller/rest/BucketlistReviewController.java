@@ -28,7 +28,7 @@ public class BucketlistReviewController {
     @GetMapping("/{postId}")
     @Operation(summary = "리뷰 조회", description = "특정게시글의 리뷰를 pageable하여 출력합니다.")
     public Response<Page<BucketlistReviewResponse>> reviewList(@Parameter(name = "postId", description = "게시글 id")  @PathVariable Long postId,
-                                                     @Parameter(hidden = true) @PageableDefault(sort = "createdAt", size = 5, direction = Sort.Direction.DESC) Pageable pageable) {
+                                                     @Parameter(hidden = true) @PageableDefault(sort = "createdAt", size = 4, direction = Sort.Direction.DESC) Pageable pageable) {
         Page<BucketlistReviewResponse> bucketlistReviewResponses =  bucketlistReviewService.list(postId, pageable);
         return Response.success(bucketlistReviewResponses);
     }
