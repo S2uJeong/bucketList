@@ -32,6 +32,8 @@ public class ProfileService {
     private final MemberRepository memberRepository;
     private final ProfileRepository profileRepository;
 
+    private final MemberReviewService memberReviewService;
+
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
@@ -64,7 +66,7 @@ public class ProfileService {
             return ProfileReadResponse.detailOf((profileRepository.findByMember_Id(memberId)).get());
         } else { // 기존 프로필이 없다면 기본프로필로 가져온다.
             log.info("🆘" + "프로필 없어요");
-            Profile profile = Profile.save("기본사진.png", "https://bucketlist-post-image-bucket.s3.ap-northeast-2.amazonaws.com/%EA%B8%B0%EB%B3%B8%EC%82%AC%EC%A7%84.png", 0, member);
+            Profile profile = Profile.save("기본사진.png", "https://bucketlist-post-image-bucket.s3.ap-northeast-2.amazonaws.com/%EA%B8%B0%EB%B3%B8%EC%82%AC%EC%A7%84.png", memberReviewService.calaulateScore(memberId), member);
             profileRepository.save(profile);
             return ProfileReadResponse.detailOf(profile);
         }
@@ -112,18 +114,6 @@ public class ProfileService {
         }
         // 이미지 조회 가능한 url 주소
         String fileUrl = amazonS3Client.getUrl(bucket, key).toString();
-
-        /*// 만약 멤버가 기존에 프로필이 있는 경우
-        profileRepository.findByMember_Id(member.getId())
-                .ifPresent(profile -> {
-                    // 기존 프로필 객체 가져오기
-                    String oldFileUrl = profile.getAwsS3FileName();
-                    String oldFilePath = oldFileUrl.substring(52);
-                    // 버킷에서 기존 프로필 삭제
-                    amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, oldFilePath));
-                    //db에서 삭제
-                    profileRepository.delete(profile);
-                });*/
 
         // 프로필 db에 저장하기
         Profile savedProfile = Profile.updateImage(uploadFileName, key, profile);
