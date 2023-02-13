@@ -71,13 +71,20 @@ public class ProfileService {
     }
 
     @Transactional
-    public ProfileEditResponse update(Long memberId, MultipartFile multipartFile) {
+    public ProfileEditResponse update(Long memberId, MultipartFile multipartFile, Long loginedMemberId) {
 
-        if (multipartFile.isEmpty()) {  // 요청으로 들어온 file이 존재한 지 확인
-            throw new ApplicationException(ErrorCode.FILE_NOT_EXISTS);
-        }
         Member member = checkMember(memberId); // 프로필을 가진 대상이 존재한지 확인
         Profile profile = profileRepository.findByMember_Id(memberId).get();
+
+        if (memberId != loginedMemberId) {
+            log.info("🆘 본인 프로필만 수정 가능합니다.");
+            throw new ApplicationException(ErrorCode.INVALID_PERMISSION);
+        }
+
+        if (multipartFile.isEmpty()) {  // 요청으로 들어온 file이 존재한 지 확인
+            log.info("🆘 파일이 존재하지 않습니다.");
+            throw new ApplicationException(ErrorCode.FILE_NOT_EXISTS);
+        }
 /**
          * Authentication 추가해서 유효성 검사 추가해야함
          * 1. 로그인 유저 존재하는지
