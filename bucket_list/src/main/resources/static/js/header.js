@@ -14,10 +14,12 @@ window.onload = function () {
     if (accessToken === null) {
         $("#login_li").show();
         $(".alarm-btn-box-li").hide();
+        $(".chat-room-box-li").hide();
         $("#user_li").hide();
     } else {
         $("#login_li").hide();
         $(".alarm-btn-box-li").show();
+        $(".chat-room-box-li").show();
         $("#user_li").show();
 
         const payload = accessToken.split('.')[1];
@@ -311,7 +313,7 @@ function alarmHtml(data) {
     else if(data.category == 5) {
         text = data.postTitle+''+alarmArr[data.category];
         modal = `data-bs-toggle="modal" data-bs-target="#bucketReview"`;
-        onclick = `onclick="postReviewAlarm(${data.postTitle},${data.postId},${data.id})"`
+        onclick = `onclick="postReviewAlarm('${data.postTitle}',${data.postId},${data.id})"`
     } else {
         onclick = `onclick="readAlarm(${data.id},${data.postId})"`
         text = data.senderName+''+alarmArr[data.category];

@@ -1,0 +1,31 @@
+.review-username{
+    margin-bottom: 2px;
+    font-weight: 600;
+    color: black;
+    display:inline-block;
+    font-size: 13px;
+    margin-right: 8px;
+}
+
+.review-content{
+    margin-bottom: 3px;
+    color: black;
+    font-size: 13px;
+    min-height: 42px;
+}
+
+.review-rate{
+    margin-bottom: 3px;
+    color: #ff891f;
+    display:inline-block;
+    font-size: 12px;
+    margin-right: 8px;
+}
+
+.review-date{
+    margin-bottom: 0px;
+    font-size: 10px;
+    color: #979797;
+    display:inline-block;
+    margin-right: 8px;
+}

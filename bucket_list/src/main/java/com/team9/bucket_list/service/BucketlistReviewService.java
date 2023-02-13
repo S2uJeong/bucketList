@@ -1,7 +1,7 @@
 package com.team9.bucket_list.service;
 
-import com.team9.bucket_list.domain.dto.bucketlistReview.BucketlistReviewDto;
 import com.team9.bucket_list.domain.dto.bucketlistReview.BucketlistReviewRequest;
+import com.team9.bucket_list.domain.dto.bucketlistReview.BucketlistReviewResponse;
 import com.team9.bucket_list.domain.entity.*;
 import com.team9.bucket_list.execption.ApplicationException;
 import com.team9.bucket_list.execption.ErrorCode;
@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -40,11 +39,16 @@ public class BucketlistReviewService {
 
 
     // list, create, update, delete
-    public Page<BucketlistReview> list(Long postId, Pageable pageable) {
-
+    public Page<BucketlistReviewResponse> list(Long postId, Pageable pageable) {
         Post post = checkPost(postId);
 
-        return bucketlistReviewRepository.findAllByPost(post, pageable);
+        Page<BucketlistReviewResponse> bucketReviews = bucketlistReviewRepository.findAllByPost(post, pageable)
+                .map(bucketReview -> {
+                    Member writerMember = checkMember(bucketReview.getWriterId());
+                    return BucketlistReviewResponse.response(bucketReview, writerMember.getUserName());
+                });
+
+        return bucketReviews;
     }
 
     public String create(Long memberId, BucketlistReviewRequest bucketlistReviewRequest) {

@@ -37,6 +37,7 @@
   <!-- CUSTOM CSS -->
   <link href="/assets/css/star.css" id="option_style" rel="stylesheet">
   <link href="/assets/css/custom.css" id="custom_style" rel="stylesheet">
+  <link href="/css/review.css" id="review_style" rel="stylesheet">
 
 
   <!-- FAVICON -->
@@ -139,6 +140,7 @@
       let jsonApplicationState;
       let title;
       let userName;    //  => writer로 사용 유저 아이디이름
+      let userId;
       let content;
       let cost;
       var location;
@@ -222,7 +224,7 @@
                     "</ul>\n"+
                     "<div>\n"+
                     "<div>\n"+
-                    "<p class=\"comment-username\">{닉네임}</p>\n"+
+                    "<a href=\"{유저 아이디}\"><p class=\"comment-username\">{닉네임}</p></a>\n"+
                     "</div>\n"+
                     "<div>\n"+
                     "<p class=\"comment-content\">{내용}</p>\n"+
@@ -234,6 +236,7 @@
                     "</li>";
 
             let comment_list = commentresponse.data.result;         // 부모 댓글 리스트
+
 
 
 
@@ -251,8 +254,8 @@
                       .replace("{댓글 노출2}",'comment'+comment.id+'-'+comment.id)
                       .replace("{댓글 삭제}",comment.id)
                       .replace("{대댓글 작성}",'replyComment'+comment.id)
+                      .replace("{유저 아이디}","/profile/"+comment.userId)
                       .replace("{댓글 삭제 링크}","navbarDropdown"+comment.id);
-
 
               let html_reply_result;
               if (comment.children.length != 0) {                     // 만약 대댓글이 있다면
@@ -266,6 +269,7 @@
                           .replace("{내용}", replycomment.content)
                           .replace("{postId}",replycomment.parentId)
                           .replace("{대댓글 삭제}",replycomment.id)
+                          .replace("{유저 아이디}","/profile/"+replycomment.userId)
                           .replace("{대댓글 삭제 링크}","navbarDropdown2"+replycomment.id);
                 });
 
@@ -326,6 +330,7 @@
 
             title = jsonResult.title;
             userName = jsonResult.userName;
+            userId = jsonResult.userId;
             content = jsonResult.content;
             cost = jsonResult.cost;
             location = jsonResult.location;
@@ -398,6 +403,186 @@
               htmlPostStatus.innerText = "모집중";
             } else if (status === "JOINCOMPLETE") {
               htmlPostStatus.innerText = "모집완료";
+            } else if (status === "COMPLETE") {
+              htmlPostStatus.innerText = "진행완료";
+
+              // 전역변수
+              let review_list = [];
+              let page_info = [];
+
+              const showPageCnt = 5; // 화면에 보일 페이지 번호 개수
+
+              const urlSearch = new URL(window.location.href).search;
+              console.log(urlSearch)
+              const postId = new URL(window.location.href).pathname.replace("/post/", "");
+              let url_href = "?page=";  // 페이지 넘버의 href를 정할 수 있도록 "page="을 붙임
+
+              // 화면이 로딩되면 실행되는 부분
+              const todosUrl = '/post/rating/' + postId + urlSearch;
+              console.log("todosUrl " + todosUrl)
+              axios.get(todosUrl)
+                      .then(res => {
+                        page_info = res.data.result;
+                        console.info(page_info);
+                        review_list = res.data.result.content;
+                        console.log(review_list);
+
+                        // pageable 사용으로 url의 page 번호 가져오기
+                        setTable();
+                        if(!urlSearch.includes("page=")){
+                          setPaging(1);
+                        } else{
+                          setPaging(Number(urlSearch.replace(url_href, "")) + 1);
+                        }
+                      })
+                      .catch(err => console.error(err))
+                      .then(() => {
+                        // finally
+                      });
+
+              /**
+               * 데이터를 세팅합니다.
+               */
+              function setTable() {
+                let html = "<div class=\"mb-5\">\n" +
+                        "                <div>\n" +
+                        "                       <p class=\"review-username\">{리뷰 작성 유저}</p>\n" +
+                        "                       <p class=\"review-rate\">점수 : {점수}</p>\n" +
+                        "                       <p class=\"review-date\">{작성일자}</p>\n" +
+                        "                   </div>\n" +
+                        "                   <div>\n" +
+                        "                       <p class=\"review-content\">{내용}</p>\n" +
+                        "                   </div>\n" +
+                        "               </div>";
+
+                let parent = document.getElementById('bucketReview-box');
+                parent.innerHTML = "";
+
+                review_list.forEach(function (review) {
+                  let html_result = html.replace("{리뷰 작성 유저}", review.writerName)
+                          .replaceAll("{점수}", review.rate)
+                          .replace("{작성일자}", review.createdAt)
+                          .replace("{내용}", review.content);
+
+                  parent.innerHTML += html_result;
+                });
+              }
+
+              /**
+               * 페이징 정보를 세팅합니다.
+               * @param {int} pageNum - Page Number
+               */
+              function setPaging(pageNum) {
+                const currentPage = pageNum;
+                const totalPage = page_info.totalPages;
+
+                // html에 페이지 번호를 세팅
+                let start = Math.floor((currentPage - 1) / showPageCnt) * showPageCnt + 1;
+                let sPagesHtml = '';
+                sPagesHtml += "<li class=\"page-item\">\n" +
+                        "    <a id=\"first_page\" class=\"page-link-i\">\n" +
+                        "        <i class=\"fas fa-angle-double-left d-none d-md-inline-block me-md-1\"\n" +
+                        "           aria-hidden=\"true\"></i>\n" +
+                        "</a>\n" +
+                        "</li>\n" +
+                        "\n" +
+                        "<li class=\"page-item\">\n" +
+                        "    <a id=\"prev_page\" class=\"page-link-i\">\n" +
+                        "        <i class=\"fas fa-angle-left d-none d-md-inline-block me-md-1\" aria-hidden=\"true\"></i>\n" +
+                        "    </a>\n" +
+                        "</li>\n";
+
+                for (const end = start + showPageCnt; start < end && start <= totalPage; start++) {
+                  console.log("start : ", start, "currentPage : ", currentPage, start == currentPage)
+                  sPagesHtml += "<li class=\"page-item\">\n" +
+                          "    <a class=\"page-link " + (start == currentPage ? 'active' : '') + "\" href='/post/" + postId + url_href + (start - 1) + "'>" + start + "</a>\n" +
+                          "</li>\n";
+                }
+
+                sPagesHtml += "<li class=\"page-item\">\n" +
+                        "    <a id=\"next_page\" class=\"page-link-i\">\n" +
+                        "        <i class=\"fas fa-angle-right d-none d-md-inline-block me-md-1\"\n" +
+                        "           aria-hidden=\"true\"></i>\n" +
+                        "</a>\n" +
+                        "</li>\n" +
+                        "\n" +
+                        "<li class=\"page-item\">\n" +
+                        "    <a id=\"last_page\" class=\"page-link-i\">\n" +
+                        "        <i class=\"fas fa-angle-double-right d-none d-md-inline-block me-md-1\" aria-hidden=\"true\"></i>\n" +
+                        "    </a>\n" +
+                        "</li>\n";
+
+                $('ul.pagination').html(sPagesHtml);
+
+                showAllIcon();
+
+                // 현재 페이지가 5(보여질 페이지번호 개수)보다 작은 경우
+                // 첫 페이지와 이전 페이지로 이동하는 Icon을 보여줄 필요가 없기 때문에 숨깁니다.
+                if (currentPage <= showPageCnt) {
+                  $('#first_page').hide();
+                  $('#prev_page').hide();
+                }
+                // 총 페이지 번호가 5(보여질 페이지번호 개수)보다 작거나
+                // 페이징 영역에 마지막 페이지 번호를 보여주고 있으면
+                // 마지막 페이지와 다음 페이지로 이동하는 Icon을 숨깁니다.
+                if (
+                        totalPage <= showPageCnt ||
+                        Math.floor((currentPage - 1) / showPageCnt) * showPageCnt + showPageCnt + 1 > totalPage
+                ) {
+                  $('#next_page').hide();
+                  $('#last_page').hide();
+                }
+              }
+
+// Icon(첫 페이지, 이전 페이지, 다음 페이지, 끝 페이지)을 모두 보여줍니다.
+              function showAllIcon() {
+                $('#first_page').show();
+                $('#prev_page').show();
+                $('#next_page').show();
+                $('#last_page').show();
+              }
+
+              $(document).on('click', 'ul.pagination>li.page-item>a', function() {
+                if (!$(this).hasClass('active')) {
+                  $(this).parent().parent().find('li.page-item>a.active').removeClass('active');
+                  $(this).addClass('active');
+                  console.log(Number($(this).text()));
+
+                  setTable();
+                }
+              });
+
+              $(document).on('click', 'ul.pagination>li.page-item>a.page-link-i', function() {
+                const totalPage = page_info.totalPages;
+                const id = $(this).attr('id');
+                console.log("id" + id);
+
+                if (id == 'first_page') {
+                  window.location.href = "/post" + url_href + 0;
+                } else if (id == 'prev_page') {
+                  let arrPages = [];
+                  $('li.page-item>a.page-link').each(function(idx, item) {
+                    arrPages.push(Number($(this).text()));
+                  });
+                  const prevPage = Math.min(...arrPages) - showPageCnt;
+                  console.log("prevPage" + prevPage);
+                  window.location.href = "/post" + url_href + (prevPage - 1);
+                } else if (id == 'next_page') {
+                  let arrPages = [];
+                  $('li.page-item>a.page-link').each(function(idx, item) {
+                    arrPages.push(Number($(this).text()));
+                  });
+                  console.log("next_page" + arrPages);
+
+                  const nextPage = Math.max(...arrPages) + 1;
+                  console.log("nextPage" + nextPage);
+                  window.location.href = "/post" + url_href + (nextPage - 1);
+                } else if (id == 'last_page') {
+                  const lastPage = Math.floor((totalPage - 1) / showPageCnt) * showPageCnt + 1;
+                  console.log("lastPage" + lastPage);
+                  window.location.href = "/post" + url_href + (lastPage - 1);
+                }
+              });
             }
 
 
@@ -410,6 +595,7 @@
 
             var htmluserName = document.getElementById("writer");
             htmluserName.innerHTML = userName;
+            $('#writerProfileHref').attr("href", "/profile/" + userId);
 
             var htmluntil = document.getElementById("untilRecruit");
             htmluntil.innerHTML = "모집기간 : " + untilRecruit;
@@ -450,6 +636,7 @@
                   console.log(applicationResponse);
 
                   let application_html =
+                          "<h2 class=\"text-uppercase mb-6\">신청 현황</h2>\n" +
                           "<form class=\"\">\n" +
                           "            <h3 class=\"text-uppercase mb-3\" >{닉네임} / {나이} / {성별}</h3>\n" +
                           "\n" +
@@ -834,7 +1021,7 @@
           </div>
           <div>
             <h2 class="text-uppercase mb-2" id="title"></h2>
-            <h4 class="text-uppercase mb-5" id="writer"></h4>
+            <a id="writerProfileHref"><h4 class="text-uppercase mb-5" id="writer"></h4></a>
 
             <div class="mb-5">
               <div class="row">
@@ -918,9 +1105,19 @@
 
         <!-- ----------------------- 신청서 출력 부분 ----------------------- -->
         <div id="application-box">
-          <h2 class="text-uppercase mb-6">신청 현황</h2>
           <!-- 신청서 리스트 출력 부분 -->
           <!-- 신청서 리스트 출력 부분 -->
+        </div>
+
+        <!-- ----------------------- 버킷리스트 리뷰 출력 부분 ----------------------- -->
+        <div class="bg-smoke p-5 mb-7" style="height: 100%; min-height: 570px; border-radius: 30px;">
+          <div class="h-100" style="min-height: 500px">
+            <h2 class="text-uppercase mb-6">버킷리스트 리뷰</h2>
+            <div id="bucketReview-box">
+              <!-- 버킷리스트 리뷰 리스트 출력 부분 -->
+              <!-- 버킷리스트 리뷰 리스트 출력 부분 -->
+            </div>
+          </div>
         </div>
 
         <!-- ----------------------- 댓글 출력 부분 ----------------------- -->
@@ -962,433 +1159,338 @@
 ——— FOOTER SECTION
 ===================================== -->
 <footer class="footer">
-  <div class="footer-bg-color py-9">
+  <div class="footer-bg-color py-1">
     <div class="container">
-      <div class="row">
-        <div class="col-md-6 col-lg-3 mb-5 mb-lg-0 mx-5">
-          <a class="d-inline-block" href="index.html">
-            <img class="w-100 mb-6 lazyestload" data-src="/assets/img/logo-color-sm.png"
-                 src="/assets/img/logo-color-sm.png" alt="img">
-          </a>
-          <p class="mb-0">멋쟁이 사자처럼 백엔드 스쿨 2기에서 진행한 팀프로젝트입니다.
-            버킷리스트를 주제로 비슷한 목표를 가진 사람들이 모여 값진 경험을 할 수 있는 사이트를 구현했습니다.
-            글을 작성하여 사람을 모집할 수 있으며 버킷리스트 개설자는 참가 신청한 참가자를 허가/거부할 수 있습니다.
-            모집이 완료되면 채팅이 활성화되고 일정을 마친 후에 참가자는 버킷리스트와 호스트에 대해서 평가할 수 있습니다.
-          </p>
-        </div>
-
-        <!--각자 깃랩 링크 걸건지?-->
-        <div class="col-md-6 col-lg-3 mt-md-4 mb-5 mb-lg-0 mx-7">
-          <div class="title-tag">
-            <h6>Team9 : WEB (WE are Best)</h6>
-          </div>
-          <ul class="list-unstyled mb-0">
-            <li class="media mb-2">
-              <div class="me-3">
-                <i class="fa-regular fa-user"></i>
-              </div>
-              <div class="media-body">
-                <a href="#" target="_blank">PM : 최수정</a>
-              </div>
-            </li>
-            <li class="media mb-2">
-              <div class="me-3">
-                <i class="fa-regular fa-user"></i>
-              </div>
-              <div class="media-body">
-                <a href="#" target="_blank">CTO : 정재현</a>
-              </div>
-            </li>
-
-            <li class="media mb-2">
-              <div class="me-3">
-                <i class="fa-regular fa-user"></i>
-              </div>
-              <div class="media-body">
-                <a href="#" target="_blank">개발 : 고관운</a>
-              </div>
-            </li>
-
-            <li class="media mb-2">
-              <div class="me-3">
-                <i class="fa-regular fa-user"></i>
-              </div>
-              <div class="media-body">
-                <a href="#" target="_blank">개발 : 박은빈</a>
-              </div>
-            </li>
-
-            <li class="media mb-2">
-              <div class="me-3">
-                <i class="fa-regular fa-user"></i>
-              </div>
-              <div class="media-body">
-                <a href="#" target="_blank">개발 : 배지원</a>
-              </div>
-            </li>
-
-            <li class="media mb-2">
-              <div class="me-3">
-                <i class="fa-regular fa-user"></i>
-              </div>
-              <div class="media-body">
-                <a href="#" target="_blank">개발 : 변지환</a>
-              </div>
-            </li>
-          </ul>
-        </div>
-
-        <div class="col-md-6 col-lg-3 mt-md-4 mb-5 mb-lg-0 mx-5">
-          <div class="title-tag">
-            <h6>Contact us</h6>
-          </div>
-          <ul class="list-unstyled mb-0">
-            <li class="media mb-2">
-              <div class="me-3">
-                <i class="fa-brands fa-gitlab"></i>
-              </div>
-              <div class="media-body">
-                <a href="https://gitlab.com/S2uJeong1/bucketlist" target="_blank">team project
-                  gitlab</a>
-              </div>
-            </li>
-
-            <li class="media mb-2">
-              <div class="me-3">
-                <i class="fa-regular fa-file"></i>
-              </div>
-              <div class="media-body">
-                <a href="https://ringed-suggestion-46f.notion.site/ceff928e9f1f4e2482f07387b997f593"
-                   target="_blank">team project notion</a>
-              </div>
-            </li>
-
-            <li class="media">
-              <div class="me-3">
-                <i class="far fa-envelope" aria-hidden="true"></i>
-              </div>
-              <!--                            <div class="media-body">-->
-              <!--                                <a href="mailTo:info@star-travel.com">이메일 넣을까 말까</a>-->
-              <!--                            </div>-->
-            </li>
-          </ul>
-        </div>
+      <div class="mb-0 mt-1 mb-lg-0 mx-5">
+        <a class="d-inline-block" href="/">
+          <img class="w-100 mb-6 lazyestload" data-src="/assets/img/logo-color-sm.png"
+               src="/assets/img/logo-color-sm.png" alt="img">
+        </a>
+        <p class="mb-0">
+          WEB(We arE Best) : 고관운, 배지원, 박은빈, 변지환, 정재현, 최수정 |
+          프로젝트 깃랩 : <a class="text-secondary" href="https://gitlab.com/S2uJeong1/bucketlist" target="_blank">gitlab</a> |
+          프로젝트 노션 : <a class="text-secondary" href="https://ringed-suggestion-46f.notion.site/ceff928e9f1f4e2482f07387b997f593" target="_blank">notion</a>
+        </p>
+        <p class="mt-2">
+          버킷리스트를 주제로 모임을 개설할 수 있도록 도와주는 사이트입니다.
+        </p>
       </div>
     </div>
   </div>
 
-  <div class="copyright py-6">
+  <!-- 저작권 표시 -->
+  <div class="copyright py-1">
     <div class="container">
       <div class="row align-items-center">
         <div class="col-md-6 order-1 order-md-0">
           <p class="mb-0 mb-md-0 text-md-start">Copyright &copy; <span id="copy-year"></span> All Rights
             Reserved by
-            <a href="http://www.iamabdus.com/" target="_blank">Abdus</a>
+            <a class="text-secondary" href="http://www.iamabdus.com/" target="_blank">Abdus</a>
           </p>
         </div>
       </div>
     </div>
   </div>
 </footer>
-<!-- ====================================
-——— MODAL SECTION
-===================================== -->
-<!-- Signup Modal -->
-<div class="modal fade" id="signup" tabindex="-1" role="dialog" aria-label="signupModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header rounded">
-        <h3 class="modal-title text-uppercase font-weight-bold">회원가입</h3>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
 
-      <div class="modal-body">
-        <form onsubmit="join(); return false;">
-          <div class="mb-3">
-            <div class="mb-3" style="display: flex">
-              <input type="text" id="form_userName" class="form-control bg-smoke" required="" placeholder="닉네임">
-              <button class="btn btn-facebook btn-block text-uppercase text-white" onclick="checkUserName()" style="width: 25%; padding: 0">중복확인</button>
+  <!-- ====================================
+  ——— MODAL SECTION
+  ===================================== -->
+  <!-- Signup Modal -->
+  <div class="modal fade" id="signup" tabindex="-1" role="dialog" aria-label="signupModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header rounded">
+          <h3 class="modal-title text-uppercase font-weight-bold">회원가입</h3>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body">
+          <form onsubmit="join(); return false;">
+            <div class="mb-3">
+              <div class="mb-3" style="display: flex">
+                <input type="text" id="form_userName" class="form-control bg-smoke" required="" placeholder="닉네임">
+                <button class="btn btn-facebook btn-block text-uppercase text-white" onclick="checkUserName()" style="width: 25%; padding: 0">중복확인</button>
+              </div>
+              <p id="able_userName" style="display: none">사용 가능한 닉네임 입니다.</p>
+              <p id="error_userName" style="display: none">중복되는 닉네임 입니다.</p>
             </div>
-            <p id="able_userName" style="display: none">사용 가능한 닉네임 입니다.</p>
-            <p id="error_userName" style="display: none">중복되는 닉네임 입니다.</p>
-          </div>
 
-          <div class="mb-3">
-            <input type="password" id="pw" class="form-control bg-smoke" required="" placeholder="비밀번호">
-            <input type="password" id="check_pw" onchange="checkPasswordCorrect()" class="form-control bg-smoke" required="" placeholder="비밀번호 확인">
-            <p id="error_passwordCorrect" style="display: none">일치하지 않습니다.</p>
-          </div>
-
-          <div class="mb-3">
-            <select id="form_gender" class="form-control bg-smoke">
-              <option value="">성별</option>
-              <option value="MAN">남자</option>
-              <option value="WOMAN">여자</option>
-            </select>
-            <p id="error_gender" style="display: none">성별을 선택 해주세요.</p>
-          </div>
-
-          <div class="mb-3">
-            <input type="number" id="age" class="form-control bg-smoke" required="" placeholder="나이">
-          </div>
-          <!--              <div class="mb-3" style="display: flex">-->
-          <!--                <input style="flex: 1;" id="birth_year" type="year" class="form-control bg-smoke" required="" placeholder="년(4자)">-->
-          <!--                <input style="flex: 1;" id="birth_month" type="month1" class="form-control bg-smoke" required="" placeholder="월">-->
-          <!--                <input style="flex: 1;" id="birth_day" type="day" class="form-control bg-smoke" required="" placeholder="일">-->
-          <!--              </div>-->
-
-          <div class="mb-3">
-            <div style="display: flex">
-              <input style="flex: auto;" type="email" class="form-control bg-smoke" required="" placeholder="이메일" id="form_email">
-              <button class="btn btn-facebook btn-block text-uppercase text-white" onclick="checkEmail()" style="width: 25%; padding: 0">인증요청</button>
+            <div class="mb-3">
+              <input type="password" id="pw" class="form-control bg-smoke" required="" placeholder="비밀번호">
+              <input type="password" id="check_pw" onchange="checkPasswordCorrect()" class="form-control bg-smoke" required="" placeholder="비밀번호 확인">
+              <p id="error_passwordCorrect" style="display: none">일치하지 않습니다.</p>
             </div>
-            <p id="error_email" style="display: none">중복된 이메일 입니다.</p>
-            <input type="emailCheck" id="code" class="form-control bg-smoke" required="" placeholder="인증번호">
-            <p id="error_code" style="display: none">인증 코드가 불일치 합니다.</p>
 
-          </div>
+            <div class="mb-3">
+              <select id="form_gender" class="form-control bg-smoke">
+                <option value="">성별</option>
+                <option value="MAN">남자</option>
+                <option value="WOMAN">여자</option>
+              </select>
+              <p id="error_gender" style="display: none">성별을 선택 해주세요.</p>
+            </div>
 
-          <div class="mb-3 form-check mb-0">
-            <input type="checkbox" class="form-check-input" id="exampleCheck4">
-            <label class="form-check-label text-gray-color mb-3" for="exampleCheck4">
-              I agree to the terms of use and privacy.
-            </label>
-          </div>
+            <div class="mb-3">
+              <input type="number" id="age" class="form-control bg-smoke" required="" placeholder="나이">
+            </div>
+            <!--              <div class="mb-3" style="display: flex">-->
+            <!--                <input style="flex: 1;" id="birth_year" type="year" class="form-control bg-smoke" required="" placeholder="년(4자)">-->
+            <!--                <input style="flex: 1;" id="birth_month" type="month1" class="form-control bg-smoke" required="" placeholder="월">-->
+            <!--                <input style="flex: 1;" id="birth_day" type="day" class="form-control bg-smoke" required="" placeholder="일">-->
+            <!--              </div>-->
 
-          <div class="d-grid">
-            <button type="submit" class="btn btn-primary btn-block text-uppercase">가입하기</button>
-          </div>
-        </form>
+            <div class="mb-3">
+              <div style="display: flex">
+                <input style="flex: auto;" type="email" class="form-control bg-smoke" required="" placeholder="이메일" id="form_email">
+                <button class="btn btn-facebook btn-block text-uppercase text-white" onclick="checkEmail()" style="width: 25%; padding: 0">인증요청</button>
+              </div>
+              <p id="error_email" style="display: none">중복된 이메일 입니다.</p>
+              <input type="emailCheck" id="code" class="form-control bg-smoke" required="" placeholder="인증번호">
+              <p id="error_code" style="display: none">인증 코드가 불일치 합니다.</p>
+
+            </div>
+
+            <div class="mb-3 form-check mb-0">
+              <input type="checkbox" class="form-check-input" id="exampleCheck4">
+              <label class="form-check-label text-gray-color mb-3" for="exampleCheck4">
+                I agree to the terms of use and privacy.
+              </label>
+            </div>
+
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary btn-block text-uppercase">가입하기</button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- Login Modal -->
-<div class="modal fade" id="login" tabindex="-1" role="dialog" aria-label="loginModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header rounded">
-        <h3 class="modal-title text-uppercase font-weight-bold">로그인</h3>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
+  <!-- Login Modal -->
+  <div class="modal fade" id="login" tabindex="-1" role="dialog" aria-label="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header rounded">
+          <h3 class="modal-title text-uppercase font-weight-bold">로그인</h3>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
 
-      <div class="modal-body">
-        <form class="" onsubmit="return false;">
-          <div class="mb-3">
-            <input type="email" id="email" class="form-control bg-smoke" required="" placeholder="이메일">
-          </div>
-
-          <div class="mb-3">
-            <input type="password" id="password" class="form-control bg-smoke" required="" placeholder="비밀번호">
-          </div>
-
-          <!--              <div class="mb-3 form-check mb-0">-->
-          <!--                <input type="checkbox" class="form-check-input" id="exampleCheck5">-->
-          <!--                <label class="form-check-label text-gray-color mb-3" for="exampleCheck5">-->
-          <!--                  Remember me-->
-          <!--                </label>-->
-          <!--                <a class="pull-right" href="javascript:void(0)">Fogot Password?</a>-->
-          <!--             </div>-->
-          <p id="login_error" style="display: none"></p>
-          <div class="d-grid">
-            <button class="btn btn-primary text-uppercase" onclick="login(); return false;">Login</button>
-          </div>
-
-          <div class="text-uppercase text-center py-3">Or</div>
-
-          <div style="display: flex;">
-            <div style="flex: 1;">
-              <a href="/login/google"><img src="/assets/img/google-button.png" style="width: 95%; margin-left: 5%"></a>
+        <div class="modal-body">
+          <form class="" onsubmit="return false;">
+            <div class="mb-3">
+              <input type="email" id="email" class="form-control bg-smoke" required="" placeholder="이메일">
             </div>
-            <div style="flex: 1;">
-              <a href="/login/naver"><img src="/assets/img/naver-button.png" style="width: 85%; float: right; margin-right: 10%"></a>
-            </div>
-          </div>
-        </form>
-      </div>
 
-      <div class="modal-footer justify-content-center">
-        <p class="mb-1">Don’t have an Account? <a href="javascript:void(0)" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#signup">Sign up</a></p>
+            <div class="mb-3">
+              <input type="password" id="password" class="form-control bg-smoke" required="" placeholder="비밀번호">
+            </div>
+
+            <!--              <div class="mb-3 form-check mb-0">-->
+            <!--                <input type="checkbox" class="form-check-input" id="exampleCheck5">-->
+            <!--                <label class="form-check-label text-gray-color mb-3" for="exampleCheck5">-->
+            <!--                  Remember me-->
+            <!--                </label>-->
+            <!--                <a class="pull-right" href="javascript:void(0)">Fogot Password?</a>-->
+            <!--             </div>-->
+            <p id="login_error" style="display: none"></p>
+            <div class="d-grid">
+              <button class="btn btn-primary text-uppercase" onclick="login(); return false;">Login</button>
+            </div>
+
+            <div class="text-uppercase text-center py-3">Or</div>
+
+            <div style="display: flex;">
+              <div style="flex: 1;">
+                <a href="/login/google"><img src="/assets/img/google-button.png" style="width: 95%; margin-left: 5%"></a>
+              </div>
+              <div style="flex: 1;">
+                <a href="/login/naver"><img src="/assets/img/naver-button.png" style="width: 85%; float: right; margin-right: 10%"></a>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <div class="modal-footer justify-content-center">
+          <p class="mb-1">Don’t have an Account? <a href="javascript:void(0)" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#signup">Sign up</a></p>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- INQUIRY IN MODAL -->
-<div class="modal fade" id="inquiry" tabindex="-1" role="dialog" aria-label="inquiryModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header rounded">
-        <h3 class="modal-title text-uppercase font-weight-bold">Inquiry about tour</h3>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
+  <!-- INQUIRY IN MODAL -->
+  <div class="modal fade" id="inquiry" tabindex="-1" role="dialog" aria-label="inquiryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header rounded">
+          <h3 class="modal-title text-uppercase font-weight-bold">Inquiry about tour</h3>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
 
-      <div class="modal-body pb-3">
-        <form class="" action="index.html" method="post">
-          <div class="mb-3">
-            <input type="text" class="form-control bg-smoke" required="" placeholder="Your Name">
-          </div>
+        <div class="modal-body pb-3">
+          <form class="" action="index.html" method="post">
+            <div class="mb-3">
+              <input type="text" class="form-control bg-smoke" required="" placeholder="Your Name">
+            </div>
 
-          <div class="mb-3">
-            <input type="email" class="form-control bg-smoke" required="" placeholder="Your Email">
-          </div>
+            <div class="mb-3">
+              <input type="email" class="form-control bg-smoke" required="" placeholder="Your Email">
+            </div>
 
-          <div class="mb-3">
-            <input type="number" class="form-control bg-smoke" required="" placeholder="Phone Number">
-          </div>
+            <div class="mb-3">
+              <input type="number" class="form-control bg-smoke" required="" placeholder="Phone Number">
+            </div>
 
-          <div class="mb-3">
-            <textarea class="form-control bg-smoke" rows="6" placeholder="Message"></textarea>
-          </div>
+            <div class="mb-3">
+              <textarea class="form-control bg-smoke" rows="6" placeholder="Message"></textarea>
+            </div>
 
-          <button type="submit" class="btn btn-primary text-uppercase">Submit</button>
-        </form>
+            <button type="submit" class="btn btn-primary text-uppercase">Submit</button>
+          </form>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- Javascript -->
-<script src="/assets/plugins/jquery/jquery-3.4.1.min.js"></script>
-<script src="/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="/assets/plugins/menuzord/js/menuzord.js"></script>
-
-
-
-<script src='/assets/plugins/fancybox/jquery.fancybox.min.js'></script>
-
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <!-- Javascript -->
+  <script src="/assets/plugins/jquery/jquery-3.4.1.min.js"></script>
+  <script src="/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="/assets/plugins/menuzord/js/menuzord.js"></script>
 
 
 
-<script>
-  //heart 좋아요 클릭시! 하트 뿅
-  $(function(){
-    var $likeBtn =$('.icon.heart');
+  <script src='/assets/plugins/fancybox/jquery.fancybox.min.js'></script>
 
-    $likeBtn.click(function(){
-      const postId = new URL(window.location.href).pathname.replace("/post/", "");
-      console.log(postId);
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
-      $likeBtn.toggleClass('active');
-      if($likeBtn.hasClass('active')){
-        axios.post('/post/' + postId + '/likes')
-                .then((res) => {
-                  console.log(res.data);
 
-                  $(this).find('img').attr({
-                    'src': '/assets/img/like/full-heart.png',
-                    alt:'찜하기 완료'
-                  });
 
-                  axios.get('/post/' + postId + '/likes')
-                          .then((res) => {
-                            console.log(res.data);
-                            let cntLike = res.data.result;
-                            document.getElementById("cntLike").innerText = cntLike;
-                          })
-                          .catch((err) => {
-                            console.log(err);
-                          })
-                })
-                .catch((err) => {
-                  console.log(err);
-                  alert("로그인 후 이용해주세요.")
-                })
-      }else{
-        axios.post('/post/' + postId + '/likes')
-                .then((res) => {
-                  console.log(res.data);
+  <script>
+    //heart 좋아요 클릭시! 하트 뿅
+    $(function(){
+      var $likeBtn =$('.icon.heart');
 
-                  $(this).find('i').removeClass('fas').addClass('far')
-                  $(this).find('img').attr({
-                    'src': '/assets/img/like/blank-heart.png',
-                    alt:"찜하기"
+      $likeBtn.click(function(){
+        const postId = new URL(window.location.href).pathname.replace("/post/", "");
+        console.log(postId);
+
+        $likeBtn.toggleClass('active');
+        if($likeBtn.hasClass('active')){
+          axios.post('/post/' + postId + '/likes')
+                  .then((res) => {
+                    console.log(res.data);
+
+                    $(this).find('img').attr({
+                      'src': '/assets/img/like/full-heart.png',
+                      alt:'찜하기 완료'
+                    });
+
+                    axios.get('/post/' + postId + '/likes')
+                            .then((res) => {
+                              console.log(res.data);
+                              let cntLike = res.data.result;
+                              document.getElementById("cntLike").innerText = cntLike;
+                            })
+                            .catch((err) => {
+                              console.log(err);
+                            })
                   })
+                  .catch((err) => {
+                    console.log(err);
+                    alert("로그인 후 이용해주세요.")
+                  })
+        }else{
+          axios.post('/post/' + postId + '/likes')
+                  .then((res) => {
+                    console.log(res.data);
 
-                  axios.get('/post/' + postId + '/likes')
-                          .then((res) => {
-                            console.log(res.data);
-                            let cntLike = res.data.result;
-                            document.getElementById("cntLike").innerText = cntLike;
-                          })
-                          .catch((err) => {
-                            console.log(err);
-                          })
-                })
-                .catch((err) => {
-                  console.log(err);
-                  alert("로그인 후 이용해주세요.")
-                })
-      }
+                    $(this).find('i').removeClass('fas').addClass('far')
+                    $(this).find('img').attr({
+                      'src': '/assets/img/like/blank-heart.png',
+                      alt:"찜하기"
+                    })
+
+                    axios.get('/post/' + postId + '/likes')
+                            .then((res) => {
+                              console.log(res.data);
+                              let cntLike = res.data.result;
+                              document.getElementById("cntLike").innerText = cntLike;
+                            })
+                            .catch((err) => {
+                              console.log(err);
+                            })
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                    alert("로그인 후 이용해주세요.")
+                  })
+        }
+      })
     })
-  })
 
-  function goToApplication() {
-    let accessToken = localStorage.getItem("accessToken")
-    if (accessToken === null) {
-      alert("로그인이 필요한 서비스 입니다.");
-      window.location.reload();
-    } else {
-      const postId = new URL(window.location.href).pathname.replace("/post/", "");
-      window.location.href = '/app/form/' + postId;
+    function goToApplication() {
+      let accessToken = localStorage.getItem("accessToken")
+      if (accessToken === null) {
+        alert("로그인이 필요한 서비스 입니다.");
+        window.location.reload();
+      } else {
+        const postId = new URL(window.location.href).pathname.replace("/post/", "");
+        window.location.href = '/app/form/' + postId;
+      }
     }
-  }
 
-  axios.interceptors.request.use(function(config) {
-    const accessToken = localStorage.getItem('accessToken');
-    if(accessToken) {
-      config.headers.Authorization = 'Bearer' + ' ' + accessToken
-    }
-    return config;
-  })
+    axios.interceptors.request.use(function(config) {
+      const accessToken = localStorage.getItem('accessToken');
+      if(accessToken) {
+        config.headers.Authorization = 'Bearer' + ' ' + accessToken
+      }
+      return config;
+    })
 
-  axios.interceptors.response.use(
-          success => success,
-          async(error) => {
-            console.log(error);
-            const status = error.response.status
+    axios.interceptors.response.use(
+            success => success,
+            async(error) => {
+              console.log(error);
+              const status = error.response.status
 
-            if(status === 401) {
-              const originRequest = error.config
+              if(status === 401) {
+                const originRequest = error.config
 
-              await axios.post('/reissue')
-                      .then(response => {
-                        console.log(response.data);
-                        localStorage.setItem("accessToken", response.data);
-                        originRequest.headers.authorization = 'Bearer ' + response.data;
-                        return axios(originRequest);
-                      })
-                      .catch(error => {
-                        console.log('재발급 실패, refresh token 만료');
-                        localStorage.removeItem('accessToken')
-                        window.location.href = '/';
-                      })
+                await axios.post('/reissue')
+                        .then(response => {
+                          console.log(response.data);
+                          localStorage.setItem("accessToken", response.data);
+                          originRequest.headers.authorization = 'Bearer ' + response.data;
+                          return axios(originRequest);
+                        })
+                        .catch(error => {
+                          console.log('재발급 실패, refresh token 만료');
+                          localStorage.removeItem('accessToken')
+                          window.location.href = '/';
+                        })
+                return Promise.reject(error);
+              }
               return Promise.reject(error);
             }
-            return Promise.reject(error);
-          }
-  )
-</script>
+    )
+  </script>
 
 
 
-<script src='/assets/plugins/rateyo/jquery.rateyo.min.js'></script>
-<script src="/assets/plugins/lazyestload/lazyestload.js"></script>
-
+  <script src='/assets/plugins/rateyo/jquery.rateyo.min.js'></script>
+  <script src="/assets/plugins/lazyestload/lazyestload.js"></script>
 
 
 
 
-<script src='/assets/plugins/owl-carousel/owl.carousel.min.js'></script>
+
+  <script src='/assets/plugins/owl-carousel/owl.carousel.min.js'></script>
 
 
-<script src="/assets/plugins/smoothscroll/SmoothScroll.js"></script>
-<script src="/assets/js/star.js"></script>
+  <script src="/assets/plugins/smoothscroll/SmoothScroll.js"></script>
+  <script src="/assets/js/star.js"></script>
 
-<script src="/assets/js/custom.js"></script>
-<script src="/js/header.js"></script>
+  <script src="/js/header.js"></script>
 
 
 </body>
