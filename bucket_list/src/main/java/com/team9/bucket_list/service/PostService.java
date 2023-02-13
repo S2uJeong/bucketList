@@ -342,6 +342,13 @@ public class PostService {
         // Entity
         Set<Application> applications = applicationRepository.findByMember_IdAndStatus(member.getId(), (byte) 1);
         Set<Long> postIds = applications.stream().map(Application::getPost).map(Post::getId).collect(Collectors.toSet());
+
+        // 자신이 작성한 진행완료인 post도 추가할 수 있도록
+        Set<Post> createPosts = postRepository.findByMember_Id(member.getId());
+        Set<Long> createPostIds = createPosts.stream().map(Post::getId).collect(Collectors.toSet());
+
+        postIds.addAll(createPostIds);
+
         Page<Post> completePosts = postRepository.findByIdInAndStatus(postIds, PostStatus.COMPLETE, pageable);
         // Dto
         Page<PostReadResponse> completePostReadResponses = PostReadResponse.listOf(completePosts);
