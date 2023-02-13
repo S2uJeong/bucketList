@@ -24,7 +24,7 @@ public interface AlarmRepository extends JpaRepository<Alarm, Long> {
     Optional<Alarm> findBySenderNameAndPostIdAndCategory(String senderName, Long postId, byte category);
 
     @Modifying(clearAutomatically = true)
-    @Query(value = "update alarm a set a.read_status = 1 where a.member_id = :memberId and a.read_status = 0;",nativeQuery = true)
+    @Query(value = "update alarm a set a.read_status = 1 where a.member_id = :memberId and a.read_status = 0 and a.category not between 4 and 5;",nativeQuery = true)
     int readAllAlarm(@Param("memberId") Long memberId);
 
     @Modifying(clearAutomatically = true)
