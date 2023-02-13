@@ -41,6 +41,7 @@ public class SchedulerConfig {
 
             Set<Application> applications = applicationRepository.findByPost_IdAndStatus(post.getId(), (byte) 1);
             Set<Long> joinMembersId = applications.stream().map(Application::getMember).map(Member::getId).collect(Collectors.toSet());
+            joinMembersId.add(post.getMember().getId());
             for (Long memberId1 : joinMembersId) {
                 for (Long memberId2 : joinMembersId) {
                     if(memberId1 == memberId2) {
