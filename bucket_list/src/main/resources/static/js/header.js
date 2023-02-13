@@ -369,10 +369,11 @@ function readAllAlarm() {
     }).then((res) => {
         data = res.data.result;
         if(data >= 1) {
-            alert("모두 읽음 처리 되었습니다.")
-            $('#alarm-list').children().remove();
+            alert("모두 읽음 처리 되었습니다.");
+            /*$('#alarm-list').children().remove();
             let html = `<div class="text-secondary alarm-none">알림이 없습니다</div>`;
-            $("#alarm-list").append(html);
+            $("#alarm-list").append(html);*/
+            $("#alarm-list").load(window.location.href + "#alarm-list");
         }
     }).catch((error) => {
 

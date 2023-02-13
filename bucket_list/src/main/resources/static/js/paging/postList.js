@@ -106,9 +106,6 @@ function setTable() {
             .replaceAll("{이미지 URL}", postImage)
             .replace("{id}", post.postId);
 
-        $(`#img-box-id-${post.postId}`).css("backgroundImage", `url(${postImage})`);
-
-
         if (post.status === 'JOIN') {
             html_result = html_result.replace("{모집상태}", '모집중')
                 .replace("{배경색}", 'bg-primary');
@@ -124,6 +121,8 @@ function setTable() {
         }
 
         parent.innerHTML += html_result;
+
+        $(`#img-box-id-${post.postId}`).css("backgroundImage", `url(${postImage})`);
     });
 }
 
