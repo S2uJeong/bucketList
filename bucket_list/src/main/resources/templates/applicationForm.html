@@ -215,7 +215,7 @@
       <div class="col-md-5 col-lg-4">
         <h3 class="mb-5">버킷리스트 정보</h3>
         <div class="card bg-smoke mb-6 mb-md-0">
-          <img class="card-img-top lazyestload" data-src="/assets/img/booking/booking.jpg" src="/assets/img/booking/booking.jpg" alt="Card image cap">
+          <img id="post_image" class="card-img-top lazyestload" data-src="/assets/img/booking/booking.jpg" src="/assets/img/booking/booking.jpg" alt="Card image cap">
           <div class="card-body">
             <h6 class="card-title text-dark" id="post_title">Maldives Tour</h6>
 
@@ -582,7 +582,14 @@
 
         const post_info = await axios.get(url);
         let result = post_info.data.result;
-        console.log(result);
+
+        <!-- 이미지 출력 경로 지정 -->
+        if(result.fileName == "noImage"){
+          document.getElementById("post_image").src = "/assets/img/noImage.png";
+        }else {
+          document.getElementById("post_image").src = 'https://bucketlist-post-image-bucket.s3.ap-northeast-2.amazonaws.com/' + result.fileName;
+        }
+
         document.getElementById('post_title').innerText = result.title;
         document.getElementById('post_eventStart').innerText = result.eventStart;
         document.getElementById('post_eventEnd').innerText = result.eventEnd;
