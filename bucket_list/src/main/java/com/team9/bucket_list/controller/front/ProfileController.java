@@ -1,6 +1,7 @@
 package com.team9.bucket_list.controller.front;
 
 import com.team9.bucket_list.domain.entity.Member;
+import com.team9.bucket_list.repository.MemberReviewRepository;
 import com.team9.bucket_list.service.ProfileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ProfileController {
 
     private final ProfileService profileService;
+
+    private final MemberReviewRepository memberReviewRepository;
 
     //=== 프로필 조회 ===//
     @GetMapping("/{memberId}")

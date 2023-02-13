@@ -45,9 +45,11 @@ public class SchedulerConfig {
             for (Long memberId1 : joinMembersId) {
                 for (Long memberId2 : joinMembersId) {
                     if(memberId1 == memberId2) {
-                        alarmService.sendAlarm(memberId1, post.getId(), (byte) 5);
+                        alarmService.sendBucketListReviewAlarm(memberId1,post.getId(),(byte) 5);
+                        //alarmService.sendAlarm(memberId1, post.getId(), (byte) 5);
                     } else{
-                        alarmService.sendAlarm(memberId1, memberId2, (byte) 4);
+                        alarmService.sendMemberReviewAlarm(memberId1,memberId2,(byte) 4);
+                        //alarmService.sendAlarm(memberId1, memberId2, (byte) 4);
                     }
                 }
             }

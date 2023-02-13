@@ -14,6 +14,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,6 +33,8 @@ public class ProfileService {
     private final AmazonS3Client amazonS3Client;
     private final MemberRepository memberRepository;
     private final ProfileRepository profileRepository;
+
+    private final MemberReviewService memberReviewService;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
@@ -56,28 +60,40 @@ public class ProfileService {
 
     // 상세조회
     public ProfileReadResponse read(Long memberId) {
-        // 유효성 검사
         Member member = checkMember(memberId); // 프로필을 가진 대상이 존재 한 지
-        Optional<Profile> savedProfile = profileRepository.findByMember_Id(memberId);
-        if (savedProfile.isPresent()) { // 이 member가 기존에 프로필이 있다면 가져온다.
-            log.info("🆘" + profileRepository.findByMember_Id(memberId).get().getId());
-            return ProfileReadResponse.detailOf((profileRepository.findByMember_Id(memberId)).get());
-        } else { // 기존 프로필이 없다면 기본프로필로 가져온다.
-            log.info("🆘" + "프로필 없어요");
-            Profile profile = Profile.save("기본사진.png", "https://bucketlist-post-image-bucket.s3.ap-northeast-2.amazonaws.com/%EA%B8%B0%EB%B3%B8%EC%82%AC%EC%A7%84.png", 0, member);
-            profileRepository.save(profile);
-            return ProfileReadResponse.detailOf(profile);
-        }
+        Profile profile = profileRepository.findByMember_Id(member.getId()).get();
+        double avgRate = memberReviewService.calaulateScore(memberId);
+        Profile savedProfile = Profile.updateRate(avgRate, profile);
+        return ProfileReadResponse.detailOf(savedProfile);
+    }
+
+
+    @Async
+    public ProfileReadResponse create(Long memberId) {
+        // 유효성 검사
+        Member member = checkMember(memberId); // 프로필을 가질 대상이 존재 한 지
+        log.info("🔵 프로필 없어요");
+        Profile profile = Profile.save("기본사진.png", "https://bucketlist-post-image-bucket.s3.ap-northeast-2.amazonaws.com/%EA%B8%B0%EB%B3%B8%EC%82%AC%EC%A7%84.png", 0, member);
+        profileRepository.save(profile);
+        log.info("🔵 프로필 만들었어요!");
+        return ProfileReadResponse.detailOf(profile);
     }
 
     @Transactional
-    public ProfileEditResponse update(Long memberId, MultipartFile multipartFile) {
+    public ProfileEditResponse update(Long memberId, MultipartFile multipartFile, Long loginedMemberId) {
 
-        if (multipartFile.isEmpty()) {  // 요청으로 들어온 file이 존재한 지 확인
-            throw new ApplicationException(ErrorCode.FILE_NOT_EXISTS);
-        }
         Member member = checkMember(memberId); // 프로필을 가진 대상이 존재한지 확인
         Profile profile = profileRepository.findByMember_Id(memberId).get();
+
+        if (memberId != loginedMemberId) {
+            log.info("🆘 본인 프로필만 수정 가능합니다.");
+            throw new ApplicationException(ErrorCode.INVALID_PERMISSION);
+        }
+
+        if (multipartFile.isEmpty()) {  // 요청으로 들어온 file이 존재한 지 확인
+            log.info("🆘 파일이 존재하지 않습니다.");
+            throw new ApplicationException(ErrorCode.FILE_NOT_EXISTS);
+        }
 /**
          * Authentication 추가해서 유효성 검사 추가해야함
          * 1. 로그인 유저 존재하는지
@@ -112,18 +128,6 @@ public class ProfileService {
         }
         // 이미지 조회 가능한 url 주소
         String fileUrl = amazonS3Client.getUrl(bucket, key).toString();
-
-        /*// 만약 멤버가 기존에 프로필이 있는 경우
-        profileRepository.findByMember_Id(member.getId())
-                .ifPresent(profile -> {
-                    // 기존 프로필 객체 가져오기
-                    String oldFileUrl = profile.getAwsS3FileName();
-                    String oldFilePath = oldFileUrl.substring(52);
-                    // 버킷에서 기존 프로필 삭제
-                    amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, oldFilePath));
-                    //db에서 삭제
-                    profileRepository.delete(profile);
-                });*/
 
         // 프로필 db에 저장하기
         Profile savedProfile = Profile.updateImage(uploadFileName, key, profile);

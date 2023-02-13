@@ -68,7 +68,7 @@ public class MemberReviewService {
     }
 
     public double calaulateScore (Long memberId) {
-        MemberReview memberReview = memberReviewRepository.findByMember_Id(memberId)
+/*        MemberReview memberReview = memberReviewRepository.findByMember_Id(memberId)
                 .orElseThrow(() -> new ApplicationException(ErrorCode.REVIEW_NOT_FOUND));
 
         double avg = 0;
@@ -77,7 +77,9 @@ public class MemberReviewService {
             avg += m.getRate();
         }
         avg = (avg / memberReviewList.size());
-        return Math.round(avg*10)/10.0;
+        return Math.round(avg*10)/10.0;*/
+
+        return memberReviewRepository.averageByMemberId(memberId);
     }
 
 }
