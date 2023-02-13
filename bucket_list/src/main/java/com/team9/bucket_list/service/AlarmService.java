@@ -53,13 +53,29 @@ public class AlarmService {
     * */
 //    @Async
     @Transactional
-    public void sendAlarm2(Long senderId, Long getterId, Long postId, byte category) {
-        if (category == (byte) 3) {
+    public void sendAlarm2(Long senderId, Long receiverId, Long postId, byte category) {
+        if (senderId != receiverId) {
             Member sender = memberRepository.findById(senderId).orElseThrow(() -> new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED));
-            Member receiver = memberRepository.findById(getterId).orElseThrow(() -> new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED));
+            Member receiver = memberRepository.findById(receiverId).orElseThrow(() -> new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED));
             Post post = postRepository.findById(postId).orElseThrow( () -> new ApplicationException(ErrorCode.POST_NOT_FOUND));
             alarmRepository.save(Alarm.save(category, receiver, post.getId(), post.getTitle(), sender.getUserName()));
         }
+    }
+
+    @Transactional
+    public void sendMemberReviewAlarm(Long senderId, Long receiverId, byte category) {
+        if (senderId != receiverId) {
+            Member sender = memberRepository.findById(senderId).orElseThrow(() -> new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED));
+            Member receiver = memberRepository.findById(receiverId).orElseThrow(() -> new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED));
+            alarmRepository.save(Alarm.save(category, receiver, null, null, sender.getUserName()));
+        }
+    }
+
+    @Transactional
+    public void sendBucketListReviewAlarm(Long receiverId, Long postId, byte category) {
+        Member receiver = memberRepository.findById(receiverId).orElseThrow(() -> new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED));
+        Post post = postRepository.findById(postId).orElseThrow( () -> new ApplicationException(ErrorCode.POST_NOT_FOUND));
+        alarmRepository.save(Alarm.save(category, receiver, post.getId(), post.getTitle(), post.getMember().getUserName()));
     }
 
 

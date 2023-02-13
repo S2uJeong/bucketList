@@ -86,7 +86,8 @@ public class CommentService {
 
         CommentCreateResponse response = new CommentCreateResponse(comment,member.getUserName());
 
-        alarmService.sendAlarm(memberId,postId, (byte) 0);
+        alarmService.sendAlarm2(memberId,post.getMember().getId(),postId,(byte) 0);
+        //alarmService.sendAlarm(memberId,postId, (byte) 0);
 
         return response;
     }
