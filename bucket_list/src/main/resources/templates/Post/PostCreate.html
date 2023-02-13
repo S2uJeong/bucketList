@@ -677,7 +677,6 @@
 
       console.log(arr);
 
-      alert("test");
 
       $('textarea[name="post"]').each(function(index,item){ // textarea태그의 모든 값 배열에 저장
         var html = $(item).val().replace(/(?:\r\n|\r|\n)/g, '<br />');
@@ -730,7 +729,7 @@
             let url = "/post/" + post_id;
             window.location.replace(url);
           } catch (error) {
-            alert("실패");
+            alert("404페이지")
           }
         }
         data();
@@ -781,7 +780,7 @@
             let url = "/post/" + post_id;
             window.location.replace(url);
           }catch (error){
-            alert("실패");
+            alert("404페이지")
           }
         }
 
