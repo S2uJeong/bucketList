@@ -97,7 +97,7 @@ public class ApplicationService {
 
         //알람 발생
         if(applicationDecisionRequest.getStatus() == (byte)1)
-            alarmService.sendAlarm(memberId,application.getMember().getId(), (byte)3);
+            alarmService.sendAlarm2(memberId,application.getMember().getId(),post.getId(), (byte)3);
 
         return 1;
     }
