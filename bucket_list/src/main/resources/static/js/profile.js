@@ -165,6 +165,7 @@ window.onload = function () {
         url: `/profile/${profileMemberId}/json`,
     }).then((res)=> {
         profileData = res.data.result;
+        let averageRate = Math.ceil(profileData.avgRate * 10) / 10;
 
         if(profileData.uploadFileName == '기본사진.png')
             $('.pic-wrap').css('backgroundImage',`url(${profileData.awsS3FileName})`);
@@ -173,7 +174,7 @@ window.onload = function () {
 
         $('#profile-username').text(profileData.memberName);
         $('#profile-email').text(profileData.email);
-        $('#profile-avg-rate').text(profileData.avgRate);
+        $('#profile-avg-rate').text(averageRate);
     }).catch((error)=> {
         console.log(error);
     });

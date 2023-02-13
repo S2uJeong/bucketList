@@ -14,6 +14,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -58,18 +60,23 @@ public class ProfileService {
 
     // 상세조회
     public ProfileReadResponse read(Long memberId) {
-        // 유효성 검사
         Member member = checkMember(memberId); // 프로필을 가진 대상이 존재 한 지
-        Optional<Profile> savedProfile = profileRepository.findByMember_Id(memberId);
-        if (savedProfile.isPresent()) { // 이 member가 기존에 프로필이 있다면 가져온다.
-            log.info("🆘" + profileRepository.findByMember_Id(memberId).get().getId());
-            return ProfileReadResponse.detailOf((profileRepository.findByMember_Id(memberId)).get());
-        } else { // 기존 프로필이 없다면 기본프로필로 가져온다.
-            log.info("🆘" + "프로필 없어요");
-            Profile profile = Profile.save("기본사진.png", "https://bucketlist-post-image-bucket.s3.ap-northeast-2.amazonaws.com/%EA%B8%B0%EB%B3%B8%EC%82%AC%EC%A7%84.png", memberReviewService.calaulateScore(memberId), member);
-            profileRepository.save(profile);
-            return ProfileReadResponse.detailOf(profile);
-        }
+        Profile profile = profileRepository.findByMember_Id(member.getId()).get();
+        double avgRate = memberReviewService.calaulateScore(memberId);
+        Profile savedProfile = Profile.updateRate(avgRate, profile);
+        return ProfileReadResponse.detailOf(savedProfile);
+    }
+
+
+    @Async
+    public ProfileReadResponse create(Long memberId) {
+        // 유효성 검사
+        Member member = checkMember(memberId); // 프로필을 가질 대상이 존재 한 지
+        log.info("🔵 프로필 없어요");
+        Profile profile = Profile.save("기본사진.png", "https://bucketlist-post-image-bucket.s3.ap-northeast-2.amazonaws.com/%EA%B8%B0%EB%B3%B8%EC%82%AC%EC%A7%84.png", 0, member);
+        profileRepository.save(profile);
+        log.info("🔵 프로필 만들었어요!");
+        return ProfileReadResponse.detailOf(profile);
     }
 
     @Transactional
