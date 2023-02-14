@@ -18,10 +18,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +38,29 @@ public class ApplicationService {
     private final MemberRepository memberRepository;
     private final PostRepository postRepository;
     private final AlarmService alarmService;
+
+    public boolean canWriteApplication(Authentication authentication, Long postId) throws ParseException {
+        Long memberId = Long.parseLong(authentication.getName());
+        List<Application> optionalApplication = applicationRepository.findAllByMemberIdAndPostId(memberId, postId);
+
+        //ddd
+        Post post = postRepository.findById(postId).get();
+        String untilRecruit = post.getUntilRecruit();
+        log.info("마감 날짜 = {}",untilRecruit); //mm/dd/yyyy
+        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+        Date endDate = formatter.parse(untilRecruit);
+        Date now = new Date();
+        if (now.before(endDate)) {
+            //모집 마감일 전
+            log.info("참");
+        } else {
+            //모집 마감일 후
+            log.info("거짓");
+        }
+        ///
+
+        return optionalApplication.isEmpty();
+    }
 
     public void getApplication(ApplicationRequest applicationRequest,Long memberId) {
         Post post = findPostById(applicationRequest.getPostId());
