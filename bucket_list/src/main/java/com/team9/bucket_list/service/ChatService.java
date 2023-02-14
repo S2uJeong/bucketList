@@ -53,7 +53,7 @@ public class ChatService {
     }
 
     @Transactional
-    public ChatRoom createChatRoom(Long postId, ChatRoomRequest chatRoomRequest) {
+    public ChatRoom createChatRoom(Long postId) {
         //postId로 post 엔티티 찾기
         Post post = postRepository.findById(postId).orElseThrow(() -> new ApplicationException(ErrorCode.POST_NOT_FOUND));
 
