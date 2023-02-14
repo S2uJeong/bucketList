@@ -6,6 +6,7 @@ import com.team9.bucket_list.domain.enumerate.PostStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -44,4 +45,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findByEventEnd(String eventEnt);
 
     Set<Post> findByMember_Id(Long memberId);
+
+    @Modifying(clearAutomatically = true)
+    @Query(value = "UPDATE post p set p.status = 'JOIN' WHERE p.post_id = :postId", nativeQuery = true)
+    void updateStatusJoin(Long postId);
 }

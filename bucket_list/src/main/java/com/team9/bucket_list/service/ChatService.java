@@ -153,7 +153,7 @@ public class ChatService {
 
         if (now.before(recruitEndDate)) {
             //모집 마감일 전
-            post.setPostStatusJoin();
+            postRepository.updateStatusJoin(post.getId());
         }
 
         return 1;
