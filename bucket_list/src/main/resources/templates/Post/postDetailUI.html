@@ -116,6 +116,9 @@
         const payload = accessToken.split('.')[1];
         accessName = JSON.parse(decodeURIComponent(escape(window.atob(payload)))).userName;
         document.getElementById("userName").innerText = accessName;
+
+        let member_id = JSON.parse(decodeURIComponent(escape(window.atob(payload)))).memberId;
+        document.getElementById("profileHref").href = "/profile/" + member_id;
       }
 
 
@@ -607,6 +610,7 @@
                 const applicationResponse = await axios.get('/application-rest/' + postId);
                 jsonApplicationState = applicationResponse.data.resultCode;
                 document.getElementById("application_button").style.display = 'none';
+                document.getElementById("application_status").style.display = 'block';
 
                 if (jsonApplicationState === "SUCCESS") {
 
@@ -651,6 +655,8 @@
               }
 
 
+            } else {
+              document.getElementById("application_status").style.display = 'none';
             }
             // }
             //
@@ -711,7 +717,7 @@
       getdata();
 
       <!-- 좋아요 -->
-      axios.get('/post/' + postId + '/likes/check')
+      axios.get('/post/' + postId + '/likes/check', config)
               .then((res) => {
                 let likeCheck = res.data.result;
                 let $likeBtn =$('.icon.heart');
@@ -1167,11 +1173,11 @@
         </div>
 
         <div class="mb-5" style="display: flex; justify-content: center">
-          <button id="application_button" type="button" class="btn btn-primary mb-2" onclick="goToApplication()">참가하기</button>
+          <button id="application_button" style="display: block" type="button" class="btn btn-primary mb-2" onclick="goToApplication()">참가하기</button>
         </div>
 
         <!-- ----------------------- 신청서 출력 부분 ----------------------- -->
-        <h2 class="text-uppercase mb-6">신청 현황</h2>
+        <h2 class="text-uppercase mb-6" id="application_status" style="display: none">신청 현황</h2>
         <div id="application-box">
           <!-- 신청서 리스트 출력 부분 -->
           <!-- 신청서 리스트 출력 부분 -->
@@ -1273,7 +1279,7 @@
         <form onsubmit="join(); return false;">
           <div class="mb-3">
             <div class="mb-3" style="display: flex">
-              <input type="text" id="form_userName" class="form-control bg-smoke" required="" placeholder="닉네임">
+              <input type="text" id="form_userName" class="form-control bg-smoke height-50" required="" placeholder="닉네임">
               <button class="btn btn-facebook btn-block text-uppercase text-white" onclick="checkUserName()" style="width: 25%; padding: 0">중복확인</button>
             </div>
             <p id="able_userName" style="display: none">사용 가능한 닉네임 입니다.</p>
@@ -1281,13 +1287,13 @@
           </div>
 
           <div class="mb-3">
-            <input type="password" id="pw" class="form-control bg-smoke" required="" placeholder="비밀번호">
-            <input type="password" id="check_pw" onchange="checkPasswordCorrect()" class="form-control bg-smoke" required="" placeholder="비밀번호 확인">
+            <input type="password" id="pw" class="form-control bg-smoke height-50" required="" placeholder="비밀번호">
+            <input type="password" id="check_pw" onchange="checkPasswordCorrect()" class="form-control bg-smoke height-50" required="" placeholder="비밀번호 확인">
             <p id="error_passwordCorrect" style="display: none">일치하지 않습니다.</p>
           </div>
 
           <div class="mb-3">
-            <select id="form_gender" class="form-control bg-smoke">
+            <select id="form_gender" class="form-control bg-smoke height-50">
               <option value="">성별</option>
               <option value="MAN">남자</option>
               <option value="WOMAN">여자</option>
@@ -1296,17 +1302,17 @@
           </div>
 
           <div class="mb-3">
-            <input type="number" id="age" class="form-control bg-smoke" required="" placeholder="나이">
+            <input type="number" id="age" class="form-control bg-smoke height-50" required="" placeholder="나이">
           </div>
 
           <div class="mb-3">
             <div style="display: flex">
-              <input style="flex: auto;" type="email" class="form-control bg-smoke" required="" placeholder="이메일" id="form_email">
+              <input style="flex: auto;" type="email" class="form-control bg-smoke height-50" required="" placeholder="이메일" id="form_email">
               <button class="btn btn-facebook btn-block text-uppercase text-white" onclick="checkEmail()" style="width: 25%; padding: 0">인증요청</button>
             </div>
             <p id="error_email" style="display: none">중복된 이메일 입니다.</p>
             <p id="send_email" style="display: none">입력하신 이메일로 인증 코드를 전송하였습니다.</p>
-            <input type="emailCheck" id="code" class="form-control bg-smoke" required="" placeholder="인증번호">
+            <input type="emailCheck" id="code" class="form-control bg-smoke height-50" required="" placeholder="인증번호">
             <p id="error_code" style="display: none">인증 코드가 불일치 합니다.</p>
 
           </div>
@@ -1332,11 +1338,11 @@
       <div class="modal-body">
         <form class="" onsubmit="return false;">
           <div class="mb-3">
-            <input type="email" id="email" class="form-control bg-smoke" required="" placeholder="이메일">
+            <input type="email" id="email" class="form-control bg-smoke height-50" required="" placeholder="이메일">
           </div>
 
           <div class="mb-3">
-            <input type="password" id="password" class="form-control bg-smoke" required="" placeholder="비밀번호">
+            <input type="password" id="password" class="form-control bg-smoke height-50" required="" placeholder="비밀번호">
           </div>
 
           <!--              <div class="mb-3 form-check mb-0">-->
@@ -1540,18 +1546,23 @@
       })
     })
 
-    function goToApplication() {
+    async function goToApplication() {
       let accessToken = localStorage.getItem("accessToken")
       if (accessToken === null) {
         alert("로그인이 필요한 서비스 입니다.");
-        window.location.reload();
       } else {
-        const postId = new URL(window.location.href).pathname.replace("/post/", "");
-        window.location.href = '/app/form/' + postId;
+        try{
+          const res = await axios.get('/application-rest/check/'+postId, config);
+          console.log(res);
+          window.location.href = '/app/form/' + postId;
+        } catch (error) {
+          alert("이미 신청하셨습니다.");
+        }
       }
     }
 
     axios.interceptors.request.use(function(config) {
+      console.log("토큰추가");
       const accessToken = localStorage.getItem('accessToken');
       if(accessToken) {
         config.headers.Authorization = 'Bearer' + ' ' + accessToken
@@ -1582,6 +1593,122 @@
               return Promise.reject(error);
             }
     )
+
+    //로그인
+    async function login() {
+      let email = document.getElementById('email').value;
+      let pw = document.getElementById('password').value;
+
+      try {
+        data = {"email" : email, "password" : pw }
+        const login_response = await axios.post('/login', data, config);
+        localStorage.setItem("accessToken", login_response.data.result.accessToken);
+        window.location.reload();
+      } catch (e) {
+        const login_error_message = e.response.data.result.message;
+        document.getElementById("login_error").style.display = 'block';
+        document.getElementById("login_error").innerText = login_error_message;
+      }
+    }
+
+    //닉네임 중복 검사
+    async function checkUserName() {
+      let userName = document.getElementById('form_userName').value;
+
+      try {
+        const response = await axios.post(
+                '/join/checkUserName',
+                {'userName' : userName} ,
+                config);
+        if (response.status === 200) {
+          document.getElementById('error_userName').style.display = 'none';
+          document.getElementById('able_userName').style.display = 'block';
+          document.getElementById('form_userName').readOnly = true;
+        }
+      } catch (error) {
+        document.getElementById('error_userName').style.display = 'block';
+        document.getElementById('able_userName').style.display = 'none';
+      }
+    }
+
+    //이메일 인증
+    async function checkEmail() {
+      let email = document.getElementById('form_email').value;
+
+      try {
+        const response = await axios.post(
+                '/join/email',
+                {'email' : email} ,
+                config);
+
+        code = response.data.result;
+        document.getElementById('error_email').style.display = 'none';
+        document.getElementById('send_email').style.display = 'block';
+
+      } catch (error) {
+        document.getElementById('error_email').style.display = 'block';
+        document.getElementById('send_email').style.display = 'none';
+
+      }
+    }
+
+    //비밀번호-비밀번호확인 일치여부
+    function checkPasswordCorrect() {
+      let password_correct = document.getElementById('check_pw').value;
+      let password = document.getElementById('pw').value;
+
+      if (password_correct !== password) {
+        document.getElementById('error_passwordCorrect').style.display = 'block';
+      } else {
+        document.getElementById('error_passwordCorrect').style.display = 'none';
+      }
+    }
+
+    //회원가입 요청
+    async function join() {
+      let check_userName = document.getElementById("form_userName").readOnly
+      let userName = document.getElementById("form_userName").value;
+      let pw = document.getElementById("pw").value;
+      let check_pw = document.getElementById("check_pw").value;
+      let gender = document.getElementById("form_gender").value;
+      let age = document.getElementById("age").value;
+      let email = document.getElementById("form_email").value;
+      let input_code = document.getElementById("code").value;
+
+      let data = {
+        'userName' : userName,
+        'email' : email,
+        'password' : pw,
+        'passwordCorrect' : check_pw,
+        'age' : age,
+        'gender' : gender
+      }
+
+      if (code !== input_code) {
+        document.getElementById('error_code').style.display = 'block';
+      }
+
+      if (gender.length === 0) {
+        document.getElementById('error_gender').style.display = 'block';
+      }
+
+      if(check_userName && (code === input_code) && gender.length>0) {
+        document.getElementById('error_code').style.display = 'none';
+        try {
+          const res = await axios.post('/join', data, config);
+
+          alert('회원가입 완료')
+          window.location.href = '/';
+        } catch (e) {
+        }
+      }
+    }
+
+    function logout() {
+      localStorage.clear();
+      window.location.href = '/';
+    }
+
   </script>
 
 
@@ -1599,7 +1726,6 @@
   <script src="/assets/plugins/smoothscroll/SmoothScroll.js"></script>
   <script src="/assets/js/star.js"></script>
 
-<script src="/js/axios.js"></script>
 <script src="/js/header.js"></script>
 
 </body>

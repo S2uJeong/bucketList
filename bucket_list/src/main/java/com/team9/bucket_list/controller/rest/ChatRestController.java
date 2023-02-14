@@ -18,6 +18,7 @@ import org.springframework.data.web.SortDefault;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.List;
 
 @RestController
@@ -67,7 +68,7 @@ public class ChatRestController {
 
     @DeleteMapping("/out")
     @Operation(summary = "채팅방 나가기", description = "roomId와 memberId를 이용해 채팅방을 나갑니다")
-    public Response outChatRoom(@RequestBody ChatOutRequest chatOutRequest) {
+    public Response outChatRoom(@RequestBody ChatOutRequest chatOutRequest) throws ParseException {
         return Response.success(chatService.outChatRoom(chatOutRequest));
     }
 }
