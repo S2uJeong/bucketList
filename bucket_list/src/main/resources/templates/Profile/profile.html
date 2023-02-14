@@ -153,25 +153,18 @@
                     <div class="col-md-6 col-lg-5 col-xl-3 mb-3">
                         <div class="mb-6 mb-md-0">
                             <!--사진 감싼 부분 -->
-                            <div class="pic-wrap">
+                            <div id="profileUpdateButton" class="pic-wrap">
                                 <!-- 수정 버튼 -->
-                                <button id="pic-btn" class="pic-btn">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
-                                         class="bi bi-pencil-square" viewBox="0 0 16 16">
-                                        <path
-                                                d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-                                        <path fill-rule="evenodd"
-                                              d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
-                                    </svg>
-                                </button>
+                                <!-- 수정 버튼 -->
+                                <!-- 수정 버튼 -->
                             </div>
                             <!-- 실제로 수정이 이루어지는 모달 창 -->
-                            <div id="myModal" class="modal">
-                                <div class="modal-content">
+                            <div id="myModal" class="profile-modal">
+                                <div class="profile-modal-content">
                                     <span class="close">&times;</span>
-                                    <div class="modal-container">
+                                    <div class="profile-modal-container">
                                         <h2 class="put-your-img-text">Put your wonderful Image</h2>
-                                        <form class="modal-form d-flex flex-column justify-content-center align-items-center" id="file-form" method="post" action="/profile/0/edit" enctype="multipart/form-data" target="param">
+                                        <form class="profile-modal-form d-flex flex-column justify-content-center align-items-center" id="file-form" method="post" action="/profile/0/edit" enctype="multipart/form-data" target="param">
                                             <div class="mb-3">
                                                 <input class="form-control" type="file" id="fileInput" name="file">
                                             </div>
