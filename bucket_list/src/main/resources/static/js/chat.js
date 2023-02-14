@@ -29,33 +29,29 @@ function onConnected() {
 }
 
 //채팅방 리스트 받아오기
-window.onload = function () {
-    axios({
-        method:"GET",
-        url: '/chat',
-    }).then((res)=>{
-        let data = res.data.content;
-        let html, i;
-        for(i in data) {
-            html +=
-                `<div id="chat-list-box-${data[i].roomId}"class="list-group-item list-group-item-action d-flex gap-3 py-3 border-bottom rounded-3 shadow-sm chat-list-box" aria-current="true" onclick="showChatRoom(${data[i].roomId},'${data[i].roomName}')">
-                    <!-- <img src="https://github.com/twbs.png" alt="twbs" width="32" height="32" class="rounded-circle flex-shrink-0"> -->
-                    <div class="d-flex gap-2 w-100 justify-content-between ">
-                        <div class="text-truncate chat-list-text-hidden-wrap">
-                        <h4 id="chat-list-room-name-${data[i].roomId}" class="mb-0 text-truncate chat-list-text-hidden">${data[i].roomName}</h4>
-                        <p class="d-block mb-0 opacity-75 text-truncate chat-list-text-hidden">${data[i].lastUserName}: ${data[i].lastMessage}</p>
-                        </div>
-                        <small class="opacity-50 text-nowrap">${getHoursMinTime(data[i].lastMessageTime)}</small>
+axios({
+    method:"GET",
+    url: '/chat',
+}).then((res)=>{
+    let data = res.data.content;
+    let html, i;
+    for(i in data) {
+        html +=
+            `<div id="chat-list-box-${data[i].roomId}"class="list-group-item list-group-item-action d-flex gap-3 py-3 border-bottom rounded-3 shadow-sm chat-list-box" aria-current="true" onclick="showChatRoom(${data[i].roomId},'${data[i].roomName}')">
+                <!-- <img src="https://github.com/twbs.png" alt="twbs" width="32" height="32" class="rounded-circle flex-shrink-0"> -->
+                <div class="d-flex gap-2 w-100 justify-content-between ">
+                    <div class="text-truncate chat-list-text-hidden-wrap">
+                    <h4 id="chat-list-room-name-${data[i].roomId}" class="mb-0 text-truncate chat-list-text-hidden">${data[i].roomName}</h4>
+                    <p class="d-block mb-0 opacity-75 text-truncate chat-list-text-hidden">${data[i].lastUserName}: ${data[i].lastMessage}</p>
                     </div>
-                </div>`;
-        }
-        $('#chat-list-box-wrap').append(html.replace('undefined',''));
-        console.log(data);
-    }).catch(error=>{
-        console.log(error);
-        throw new Error(error);
-    });
-};
+                    <small class="opacity-50 text-nowrap">${getHoursMinTime(data[i].lastMessageTime)}</small>
+                </div>
+            </div>`;
+    }
+    $('#chat-list-box-wrap').append(html.replace('undefined',''));
+}).catch(error=>{
+    throw new Error(error);
+});
 
 //시간 변환
 function getHoursMinTime(time) {
@@ -87,7 +83,6 @@ function showChatRoom(roomId,roomName) {
         method:"GET",
         url: '/chat/messages/'+roomId,
     }).then((res)=> {
-        console.log(res);
         let data = res.data.result.content;
         let html, i, j;
 
@@ -118,7 +113,6 @@ function showChatRoom(roomId,roomName) {
         $('#chat-message-box-wrap').append(html.replace('undefined',''));
         $('#chat-message-box-wrap').scrollTop($('#chat-message-box-wrap')[0].scrollHeight);
     }).catch(error=>{
-        console.log(error);
         throw new Error(error);
     });
 
@@ -152,7 +146,6 @@ function onRoomListReceived(payload) {
     let roomName = $(`#chat-list-room-name-${data.roomId}`).text();
     $(`#chat-list-box-${data.roomId}`).remove();
 
-    console.log(data);
     let html;
 
     if(data.chatType === 'LIST') {
@@ -256,7 +249,6 @@ function getChatParticipant(roomId) {
             method:"GET",
             url: '/chat/participant/'+roomId,
         }).then((res)=> {
-            console.log(res);
             data = res.data.result;
             host = res.data.host;
 
@@ -315,7 +307,6 @@ function roomOut(memberId,userName,roomId,num) {
                 'roomId':roomId
             }
         }).then((res)=> {
-            console.log(res);
             if(res.data.result == 1) {
                 if(num == 0) {
                     alert("채팅방에서 퇴장했습니다");

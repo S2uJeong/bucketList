@@ -5,12 +5,10 @@ let page_info = [];
 const showPageCnt = 5; // 화면에 보일 페이지 번호 개수
 
 const urlSearch = new URL(window.location.href).search;
-console.log(urlSearch)
 let url_href = urlHref(urlSearch);  // 페이지 넘버의 href를 정할 수 있도록 "page="을 붙임
 
 // 화면이 로딩되면 실행되는 부분
 const todosUrl = '/post/search/list' + urlSearch;
-console.log("todosUrl " + todosUrl)
 axios.get(todosUrl)
     .then(res => {
         page_info = res.data.result;
@@ -25,7 +23,6 @@ axios.get(todosUrl)
             let sch = location.search;                  // URL에 파라미터만 가져옴
             let params = new URLSearchParams(sch);      // 객체 변환
             let num = params.get('page');                         // 파라미터 page의 값을 가져옴
-            console.log(params.get('page'));
 
             setPaging(Number(num) + 1);     //
         }
@@ -113,7 +110,6 @@ function setTable() {
  */
 function setPaging(pageNum) {
     const currentPage = pageNum;
-    console.log("currentPage:"+currentPage);
     const totalPage = page_info.totalPages;
 
     // html에 페이지 번호를 세팅
@@ -139,8 +135,6 @@ function setPaging(pageNum) {
 
         let url = window.location.protocol + window.location.pathname;
         let resulturl = url + "?"+params
-        console.log(resulturl);
-        console.log("start : ", start, "currentPage : ", currentPage, start == currentPage)
         sPagesHtml += "<li class=\"page-item\">\n" +
         "    <a class=\"page-link " + (start == currentPage ? 'active' : '') + "\" href='" + resulturl + "'>" + start + "</a>\n" +
         "</li>\n";
@@ -203,7 +197,6 @@ $(document).on('click', 'ul.pagination>li.page-item>a', function() {
     if (!$(this).hasClass('active')) {
         $(this).parent().parent().find('li.page-item>a.active').removeClass('active');
         $(this).addClass('active');
-        console.log(Number($(this).text()));
 
         setTable();
     }
@@ -212,7 +205,6 @@ $(document).on('click', 'ul.pagination>li.page-item>a', function() {
 $(document).on('click', 'ul.pagination>li.page-item>a.page-link-i', function() {
     const totalPage = page_info.totalPages;
     const id = $(this).attr('id');
-    console.log("id" + id);
 
     let sch = location.search;                  // URL에 파라미터만 가져옴
     let params = new URLSearchParams(sch);      // 객체 변환
@@ -231,7 +223,6 @@ $(document).on('click', 'ul.pagination>li.page-item>a.page-link-i', function() {
             arrPages.push(Number($(this).text()));
         });
         const prevPage = Math.min(...arrPages) - showPageCnt;
-        console.log("prevPage" + prevPage);
 
         params.set('page',(prevPage - 1));                         // 파라미터 page의 값을 가져옴
 
@@ -245,10 +236,8 @@ $(document).on('click', 'ul.pagination>li.page-item>a.page-link-i', function() {
         $('li.page-item>a.page-link').each(function(idx, item) {
             arrPages.push(Number($(this).text()));
         });
-        console.log("next_page" + arrPages);
 
         const nextPage = Math.max(...arrPages) + 1;
-        console.log("nextPage" + nextPage);
 
         params.set('page',(nextPage - 1));                         // 파라미터 page의 값을 가져옴
 
@@ -259,7 +248,6 @@ $(document).on('click', 'ul.pagination>li.page-item>a.page-link-i', function() {
 
     } else if (id == 'last_page') {
         const lastPage = Math.floor((totalPage - 1) / showPageCnt) * showPageCnt + 1;
-        console.log("lastPage" + lastPage);
 
         params.set('page',(lastPage - 1));                         // 파라미터 page의 값을 가져옴
 
