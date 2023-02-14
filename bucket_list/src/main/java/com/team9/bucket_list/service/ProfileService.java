@@ -61,7 +61,14 @@ public class ProfileService {
     // 상세조회
     public ProfileReadResponse read(Long memberId) {
         Member member = checkMember(memberId); // 프로필을 가진 대상이 존재 한 지
-        Profile profile = profileRepository.findByMember_Id(member.getId()).get();
+        Optional<Profile> optionalProfile = profileRepository.findByMember_Id(member.getId());
+        Profile profile;
+        if(optionalProfile.isEmpty()){     // 프로필에 정보가 없다면 기본 프로필 생성
+            profile = create(memberId);
+        } else{
+            profile = optionalProfile.get();
+        }
+        log.info(String.valueOf(profile));
         double avgRate = memberReviewService.calaulateScore(memberId);
         Profile savedProfile = Profile.updateRate(avgRate, profile);
         return ProfileReadResponse.detailOf(savedProfile);
@@ -69,14 +76,14 @@ public class ProfileService {
 
 
     @Async
-    public ProfileReadResponse create(Long memberId) {
+    public Profile create(Long memberId) {
         // 유효성 검사
         Member member = checkMember(memberId); // 프로필을 가질 대상이 존재 한 지
         log.info("🔵 프로필 없어요");
         Profile profile = Profile.save("기본사진.png", "https://bucketlist-post-image-bucket.s3.ap-northeast-2.amazonaws.com/%EA%B8%B0%EB%B3%B8%EC%82%AC%EC%A7%84.png", 0, member);
         profileRepository.save(profile);
         log.info("🔵 프로필 만들었어요!");
-        return ProfileReadResponse.detailOf(profile);
+        return profile;
     }
 
     @Transactional
