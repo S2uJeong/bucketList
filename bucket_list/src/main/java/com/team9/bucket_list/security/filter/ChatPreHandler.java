@@ -5,12 +5,14 @@ import com.team9.bucket_list.domain.enumerate.MemberRole;
 import com.team9.bucket_list.execption.ApplicationException;
 import com.team9.bucket_list.execption.ErrorCode;
 import com.team9.bucket_list.security.utils.JwtUtil;
+import io.jsonwebtoken.MalformedJwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.MessageDeliveryException;
 import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
@@ -41,15 +43,17 @@ public class ChatPreHandler implements ChannelInterceptor {
 
             log.info("stomp command : "+ command);
 
-            if(command.equals(StompCommand.UNSUBSCRIBE)) return message;
-            else if (command.equals(StompCommand.SEND)) return message;
-            else if (command.equals(StompCommand.MESSAGE)) return message;
+            if(command.equals(StompCommand.UNSUBSCRIBE) || command.equals(StompCommand.SEND) || command.equals(StompCommand.MESSAGE)) return message;
+            else if (command.equals(StompCommand.ERROR)) {
+                throw new MessageDeliveryException("error");
+            }
+
 
             log.info("jwt : " + authorizationHeader);
 
             if (authorizationHeader == null) {
                 log.info("chat header가 없는 요청입니다.");
-                throw new ApplicationException(ErrorCode.INVALID_TOKEN);
+                throw new MalformedJwtException("jwt");
             }
 
             //token 분리
@@ -59,13 +63,13 @@ public class ChatPreHandler implements ChannelInterceptor {
                 token = authorizationHeaderStr.replace("Bearer ", "");
             } else {
                 log.error("Authorization 헤더 형식이 틀립니다. : {}", authorizationHeader);
-                throw new ApplicationException(ErrorCode.INVALID_TOKEN);
+                throw new MalformedJwtException("jwt");
             }
 
             try {
                 memberId = JwtUtil.getMemberId(token);
             } catch (JsonProcessingException e) {
-                throw new ApplicationException(ErrorCode.INVALID_TOKEN);
+                throw new MalformedJwtException("jwt");
             }
 
             boolean isTokenValid = jwtUtil.validateToken(token);
@@ -73,9 +77,12 @@ public class ChatPreHandler implements ChannelInterceptor {
             if (isTokenValid) {
                 this.setAuthentication(message, headerAccessor);
             }
-        } catch (Exception e) {
+        } catch (ApplicationException e) {
             log.error("JWT에러");
-            throw new ApplicationException(ErrorCode.INVALID_TOKEN);
+            throw new MalformedJwtException("jwt");
+        } catch (MessageDeliveryException e) {
+            log.error("메시지 에러");
+            throw new MessageDeliveryException("error");
         }
         return message;
     }

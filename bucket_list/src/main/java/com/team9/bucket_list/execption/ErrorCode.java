@@ -34,7 +34,8 @@ public enum ErrorCode {
 
     PROFILE_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 프로필이 없습니다."),
 
-    CHAT_ROOM_NOT_FOUNT(HttpStatus.NOT_FOUND,"채팅방을 찾을 수 없습니다");
+    CHAT_ROOM_NOT_FOUND(HttpStatus.NOT_FOUND,"채팅방을 찾을 수 없습니다"),
+    INVALID_MESSAGE(HttpStatus.NOT_FOUND,"유효하지 않은 메시지입니다");
 
     private HttpStatus status;
     private String message;

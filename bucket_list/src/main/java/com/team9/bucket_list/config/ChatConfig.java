@@ -1,5 +1,6 @@
 package com.team9.bucket_list.config;
 
+import com.team9.bucket_list.security.filter.ChatErrorHandler;
 import com.team9.bucket_list.security.filter.ChatPreHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
@@ -15,11 +16,13 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 public class ChatConfig implements WebSocketMessageBrokerConfigurer {
 
     private final ChatPreHandler chatPreHandler;
+    private final ChatErrorHandler chatErrorHandler;
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         //stomp의 접속 주소
         registry.addEndpoint("/ws").setAllowedOriginPatterns("*").withSockJS();
+        registry.setErrorHandler(chatErrorHandler);
     }
 
     @Override

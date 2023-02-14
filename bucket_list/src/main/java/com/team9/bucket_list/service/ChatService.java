@@ -124,8 +124,8 @@ public class ChatService {
 
     @Transactional
     public int outChatRoom(ChatOutRequest chatOutRequest) {
-        ChatRoom chatRoom = chatRoomRepository.findById(chatOutRequest.getRoomId()).orElseThrow(() -> new ApplicationException(ErrorCode.CHAT_ROOM_NOT_FOUNT));
-        ChatParticipant chatParticipant = chatParticipantRepository.findByChatRoom_IdAndMember_Id(chatOutRequest.getRoomId(), chatOutRequest.getMemberId()).orElseThrow(() -> new ApplicationException(ErrorCode.CHAT_ROOM_NOT_FOUNT));
+        ChatRoom chatRoom = chatRoomRepository.findById(chatOutRequest.getRoomId()).orElseThrow(() -> new ApplicationException(ErrorCode.CHAT_ROOM_NOT_FOUND));
+        ChatParticipant chatParticipant = chatParticipantRepository.findByChatRoom_IdAndMember_Id(chatOutRequest.getRoomId(), chatOutRequest.getMemberId()).orElseThrow(() -> new ApplicationException(ErrorCode.CHAT_ROOM_NOT_FOUND));
         //Application application = applicationRepository.findByMember_IdAndPost_Id(chatOutRequest.getMemberId(), chatRoom.getPost().getId()).orElseThrow(() -> new ApplicationException(ErrorCode.APPLICATION_NOT_FOUND));
 
         //채팅방 퇴장
