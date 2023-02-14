@@ -22,7 +22,7 @@ public interface MemberReviewRepository extends JpaRepository<MemberReview, Long
 
     Optional<MemberReview> findByMember_IdAndWriterId(Long memberId, Long writerId);
 
-    @Query("select avg(mr.rate) from MemberReview mr where mr.member.id =:memberId")
+    @Query("select coalesce(avg(mr.rate),0) from MemberReview mr where mr.member.id =:memberId")
     double averageByMemberId(@Param("memberId") Long memberId);
 
 }
