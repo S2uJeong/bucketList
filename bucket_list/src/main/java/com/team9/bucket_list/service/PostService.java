@@ -132,7 +132,7 @@ public class PostService {
 
     // 수정
     @Transactional
-    public void update(PostUpdateRequest request, Long postId,Long userId) {
+    public PostUpdateResponse update(PostUpdateRequest request, Long postId,Long userId) {
     //    로그인 되어있는지 확인하고 아니면 에러던짐
         Member member = checkMember(userId);
         // postid에 해당하는 post가 DB에 없으면 에러던짐 - entity
@@ -173,6 +173,8 @@ public class PostService {
         log.info("🔴 post : {}", request.toString());
         // 수정 사항을 반영하여 변경한다.
         post.update(request,member,postStatus);
+
+        return PostUpdateResponse.fromPost(post);
     }
 
     // 삭제
