@@ -92,25 +92,26 @@ public class PostController {
 
     // 클라이언트에서 데이터 받아와서 수정
     @PutMapping(value = "/{postId}/update" ,produces = "application/json")
-    public void updatePost( @PathVariable Long postId, @RequestBody PostUpdateRequest request,Authentication authentication)  {
+    public Response<PostUpdateResponse> updatePost( @PathVariable Long postId, @RequestBody PostUpdateRequest request,Authentication authentication)  {
         // update 메서드를 통해 request 내용대로 수정해준다. 반환값 : post Entity
         Long userId = Long.valueOf(authentication.getName());
 //        Long userId = 1l;
         log.info(request.toString());
         log.info("postId:"+postId);
-        postService.update(request,postId,userId);
+        PostUpdateResponse response = postService.update(request,postId,userId);
         log.info("🔵 Post 수정 성공");
+        return Response.success(response);
     }
 
     //== 삭제 ==//
     @DeleteMapping("/{postId}")
     @Operation(summary = "게시글 삭제", description = "postId에 따라 게시글을 삭제합니다.")
-    public Long deletePost(@Parameter(name = "postId", description = "게시글 id") @PathVariable("postId") long postId,Authentication authentication) {
+    public Response<String> deletePost(@Parameter(name = "postId", description = "게시글 id") @PathVariable("postId") long postId,Authentication authentication) {
         Long userId = Long.valueOf(authentication.getName());
 //        Long userId = 1l;
         postService.delete(postId,userId);
         log.info("Post 삭제 성공");
-        return 1l;
+        return Response.success("삭제 완료");
     }
 
 
