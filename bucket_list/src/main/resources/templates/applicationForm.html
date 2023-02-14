@@ -35,6 +35,7 @@
 
     <!-- CUSTOM CSS -->
     <link href="/assets/css/star.css" id="option_style" rel="stylesheet">
+    <link href="/assets/css/custom.css" id="custom_style" rel="stylesheet">
 
 
     <!-- FAVICON -->
@@ -322,7 +323,7 @@
           <form onsubmit="join(); return false;">
             <div class="mb-3">
               <div class="mb-3" style="display: flex">
-                <input type="text" id="form_userName" class="form-control bg-smoke" required="" placeholder="닉네임">
+                <input type="text" id="form_userName" class="form-control bg-smoke height-50" required="" placeholder="닉네임">
                 <button class="btn btn-facebook btn-block text-uppercase text-white" onclick="checkUserName()" style="width: 25%; padding: 0">중복확인</button>
               </div>
               <p id="able_userName" style="display: none">사용 가능한 닉네임 입니다.</p>
@@ -330,13 +331,13 @@
             </div>
 
             <div class="mb-3">
-              <input type="password" id="pw" class="form-control bg-smoke" required="" placeholder="비밀번호">
-              <input type="password" id="check_pw" onchange="checkPasswordCorrect()" class="form-control bg-smoke" required="" placeholder="비밀번호 확인">
+              <input type="password" id="pw" class="form-control bg-smoke height-50" required="" placeholder="비밀번호">
+              <input type="password" id="check_pw" onchange="checkPasswordCorrect()" class="form-control bg-smoke height-50" required="" placeholder="비밀번호 확인">
               <p id="error_passwordCorrect" style="display: none">일치하지 않습니다.</p>
             </div>
 
             <div class="mb-3">
-              <select id="form_gender" class="form-control bg-smoke">
+              <select id="form_gender" class="form-control bg-smoke height-50">
                 <option value="">성별</option>
                 <option value="MAN">남자</option>
                 <option value="WOMAN">여자</option>
@@ -345,17 +346,17 @@
             </div>
 
             <div class="mb-3">
-              <input type="number" id="age" class="form-control bg-smoke" required="" placeholder="나이">
+              <input type="number" id="age" class="form-control bg-smoke height-50" required="" placeholder="나이">
             </div>
 
             <div class="mb-3">
               <div style="display: flex">
-                <input style="flex: auto;" type="email" class="form-control bg-smoke" required="" placeholder="이메일" id="form_email">
+                <input style="flex: auto;" type="email" class="form-control bg-smoke height-50" required="" placeholder="이메일" id="form_email">
                 <button class="btn btn-facebook btn-block text-uppercase text-white" onclick="checkEmail()" style="width: 25%; padding: 0">인증요청</button>
               </div>
               <p id="error_email" style="display: none">중복된 이메일 입니다.</p>
               <p id="send_email" style="display: none">입력하신 이메일로 인증 코드를 전송하였습니다.</p>
-              <input type="emailCheck" id="code" class="form-control bg-smoke" required="" placeholder="인증번호">
+              <input type="emailCheck" id="code" class="form-control bg-smoke height-50" required="" placeholder="인증번호">
               <p id="error_code" style="display: none">인증 코드가 불일치 합니다.</p>
 
             </div>
@@ -381,11 +382,11 @@
         <div class="modal-body">
           <form class="" onsubmit="return false;">
             <div class="mb-3">
-              <input type="email" id="email" class="form-control bg-smoke" required="" placeholder="이메일">
+              <input type="email" id="email" class="form-control bg-smoke height-50" required="" placeholder="이메일">
             </div>
 
             <div class="mb-3">
-              <input type="password" id="password" class="form-control bg-smoke" required="" placeholder="비밀번호">
+              <input type="password" id="password" class="form-control bg-smoke height-50" required="" placeholder="비밀번호">
             </div>
 
             <!--              <div class="mb-3 form-check mb-0">-->
