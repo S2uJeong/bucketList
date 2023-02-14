@@ -19,7 +19,6 @@ public class ProfileController {
 
     private final ProfileService profileService;
 
-    private final MemberReviewRepository memberReviewRepository;
 
     //=== 프로필 조회 ===//
     @GetMapping("/{memberId}")
