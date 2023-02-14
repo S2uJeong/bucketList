@@ -5,7 +5,6 @@ let page_info = [];
 const showPageCnt = 5; // 화면에 보일 페이지 번호 개수
 
 const urlSearch = new URL(window.location.href).search;
-console.log(urlSearch)
 let url_href = urlHref(urlSearch);  // 페이지 넘버의 href를 정할 수 있도록 "page="을 붙임
 
 // 버튼 클릭시 실행되는 부분
@@ -26,7 +25,6 @@ $(document).on('click', 'div.myFeed>button.myFeedBtn', function() {
     }
 
     const todosUrl = '/post/my/' + postType + urlSearch;
-    console.log("todosUrl " + todosUrl)
     axios.get(todosUrl)
         .then(res => {
             page_info = res.data.result;
@@ -145,7 +143,6 @@ function setPaging(pageNum) {
         "</li>\n";
 
     for (const end = start + showPageCnt; start < end && start <= totalPage; start++) {
-        console.log("start : ", start, "currentPage : ", currentPage, start == currentPage)
         sPagesHtml += "<li class=\"page-item\">\n" +
         "    <a class=\"page-link " + (start == currentPage ? 'active' : '') + "\" href='/post" + url_href + (start - 1) + "'>" + start + "</a>\n" +
         "</li>\n";
@@ -208,7 +205,6 @@ $(document).on('click', 'ul.pagination>li.page-item>a', function() {
     if (!$(this).hasClass('active')) {
         $(this).parent().parent().find('li.page-item>a.active').removeClass('active');
         $(this).addClass('active');
-        console.log(Number($(this).text()));
 
         setTable();
     }
@@ -217,7 +213,6 @@ $(document).on('click', 'ul.pagination>li.page-item>a', function() {
 $(document).on('click', 'ul.pagination>li.page-item>a.page-link-i', function() {
     const totalPage = page_info.totalPages;
     const id = $(this).attr('id');
-    console.log("id" + id);
 
     if (id == 'first_page') {
         window.location.href = "/post" + url_href + 0;
@@ -227,21 +222,17 @@ $(document).on('click', 'ul.pagination>li.page-item>a.page-link-i', function() {
             arrPages.push(Number($(this).text()));
         });
         const prevPage = Math.min(...arrPages) - showPageCnt;
-        console.log("prevPage" + prevPage);
         window.location.href = "/post" + url_href + (prevPage - 1);
     } else if (id == 'next_page') {
         let arrPages = [];
         $('li.page-item>a.page-link').each(function(idx, item) {
             arrPages.push(Number($(this).text()));
         });
-        console.log("next_page" + arrPages);
 
         const nextPage = Math.max(...arrPages) + 1;
-        console.log("nextPage" + nextPage);
         window.location.href = "/post" + url_href + (nextPage - 1);
     } else if (id == 'last_page') {
         const lastPage = Math.floor((totalPage - 1) / showPageCnt) * showPageCnt + 1;
-        console.log("lastPage" + lastPage);
         window.location.href = "/post" + url_href + (lastPage - 1);
     }
 });

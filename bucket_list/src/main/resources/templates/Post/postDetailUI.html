@@ -81,7 +81,6 @@
         window.location.reload();
         return false;
       } catch (e) {
-        console.log(e.response.data.result.errorCode);
         if (e.response.data.result.errorCode === "EXCEED_ENTRANT_NUM") {
           alert('참가 인원 수를 초과하였습니다.');
         }
@@ -98,7 +97,6 @@
         window.location.reload();
         return false;
       } catch (e) {
-        console.log(e);
       }
     }
   </script>
@@ -109,11 +107,9 @@
       let accessName;
 
       if (accessToken === null) {
-        console.log("accessToken === null")
         $("#login_li").show();
         $("#user_li").hide();
       } else {
-        console.log("accessToken !== null")
         $("#login_li").hide();
         $("#user_li").show();
 
@@ -121,7 +117,6 @@
         accessName = JSON.parse(decodeURIComponent(escape(window.atob(payload)))).userName;
         document.getElementById("userName").innerText = accessName;
       }
-      console.log(accessName);
 
 
 
@@ -129,7 +124,6 @@
 
       const postId = new URL(window.location.href).pathname.replace("/post/", "");
 
-      console.log(postId);
       // axios header에 넣을 데이터
       const axiosConfig = {
         headers:{
@@ -166,20 +160,15 @@
           const response = await axios.get('/post/'+postId+'/json');
           const commentresponse = await axios.get('/comment/'+postId+'/comments');
           // const applicationResponse = await axios.get('/application-rest/' + postId);
-          console.log(response);     // json 데이터 받아온거
 
 
           jsonState = response.data.resultCode;
           jsonCommentState = commentresponse.data.resultCode;
           // jsonApplicationState = applicationResponse.data.resultCode;
 
-          console.log(jsonState);
-          console.log(jsonCommentState);
-          console.log(jsonApplicationState);
 
 
           if(jsonCommentState == "SUCCESS") {
-            console.log(commentresponse);
 
             var htmlentrantNum = document.getElementById("commentCount");
             htmlentrantNum.innerHTML = "댓글 " + "("+commentresponse.data.result.length+")";
@@ -244,11 +233,9 @@
 
 
 
-            console.log(comment_list);
             comment_list.forEach(function (comment){        // 댓글 갯수만큼 반복
               parentId.push([comment.id,comment.userName]);
               let comment_parent_id = comment.parentId;
-              console.log(comment_parent_id);
               let html_result = commenthtml.replace("{닉네임}",comment.userName)     // DB에 저장되어 있는 내용을 덮어씌워줌
                       .replace("{작성일자}",comment.createAt)
                       .replace("{내용}",comment.content)
@@ -264,10 +251,8 @@
               let html_reply_result;
               if (comment.children.length != 0) {                     // 만약 대댓글이 있다면
                 let reply_comment_list = comment.children;      // 대댓글 리스트 저장
-                console.log(reply_comment_list);
                 reply_comment_list.forEach(function (replycomment) {      // 대댓글 갯수만큼 반복
                   childrenId.push([replycomment.id,replycomment.userName]);
-                  console.log(replycomment.parentId);
                   html_reply_result += reply_commenthtml.replace("{닉네임}", replycomment.userName)
                           .replace("{작성일자}", replycomment.createAt)
                           .replace("{내용}", replycomment.content)
@@ -295,7 +280,6 @@
                 "parentId" : null           // 일반 댓글은 부모댓글이 없으므로 null
               }
 
-              console.log(CommentData);
 
               // axios header에 넣을 데이터
               const axiosConfig = {
@@ -319,13 +303,11 @@
             });
 
           }else {
-            console.log("댓글 없음");
           }
 
           if (jsonState == "SUCCESS") {
 
             jsonResult = response.data.result;
-            console.log(jsonResult);
 
             title = jsonResult.title;
             userName = jsonResult.userName;
@@ -355,7 +337,6 @@
               for(var i=0; i<parentId.length; i++){
                 let commentLinkButton = document.getElementById("navbarDropdown"+parentId[i][0]);
 
-                console.log("navbarDropdown"+parentId[i][0]);
                 if (accessName == parentId[i][1]) {
                   commentLinkButton.style.display = "block";
                 } else {
@@ -364,7 +345,6 @@
               }
               for(var i=0; i<childrenId.length; i++){
                 let commentLinkButton = document.getElementById("navbarDropdown2"+childrenId[i][0]);
-                console.log("navbarDropdown2"+childrenId[i][0]);
                 if (accessName == childrenId[i][1]) {
                   commentLinkButton.style.display = "block";
                 } else {
@@ -377,12 +357,6 @@
             let postUpdateButton = document.getElementById("postUpdateButton");
             let postDeleteButton = document.getElementById("postDeleteButton");
 
-            console.log(postUpdateButton);
-            console.log(postDeleteButton);
-
-            console.log(accessName);
-            console.log(userName);
-            console.log(accessName == userName)
             if (accessName == userName) {
               postUpdateButton.style.display = "block";
               postDeleteButton.style.display = "block";
@@ -394,9 +368,6 @@
 
 
             googlemap(lat, lng, location, title, content);
-
-            console.log(lat);
-            console.log(lng);
 
             var htmlPostStatus = document.getElementById("postStatus");
             if (status === "JOIN") {
@@ -413,19 +384,15 @@
               const showPageCnt = 4; // 화면에 보일 페이지 번호 개수
 
               const urlSearch = new URL(window.location.href).search;
-              console.log(urlSearch)
               const postId = new URL(window.location.href).pathname.replace("/post/", "");
               let url_href = "?page=";  // 페이지 넘버의 href를 정할 수 있도록 "page="을 붙임
 
               // 화면이 로딩되면 실행되는 부분
               const todosUrl = '/post/rating/' + postId + urlSearch;
-              console.log("todosUrl " + todosUrl)
               axios.get(todosUrl)
                       .then(res => {
                         page_info = res.data.result;
-                        console.info(page_info);
                         review_list = res.data.result.content;
-                        console.log(review_list);
 
                         // pageable 사용으로 url의 page 번호 가져오기
                         setTable();
@@ -510,7 +477,6 @@
                         "</li>\n";
 
                 for (const end = start + showPageCnt; start < end && start <= totalPage; start++) {
-                  console.log("start : ", start, "currentPage : ", currentPage, start == currentPage)
                   sPagesHtml += "<li class=\"page-item\">\n" +
                           "    <a class=\"page-link " + (start == currentPage ? 'active' : '') + "\" href='/post/" + postId + url_href + (start - 1) + "'>" + start + "</a>\n" +
                           "</li>\n";
@@ -563,7 +529,6 @@
                 if (!$(this).hasClass('active')) {
                   $(this).parent().parent().find('li.page-item>a.active').removeClass('active');
                   $(this).addClass('active');
-                  console.log(Number($(this).text()));
 
                   setTable();
                 }
@@ -572,7 +537,6 @@
               $(document).on('click', 'ul.pagination>li.page-item>a.page-link-i', function() {
                 const totalPage = page_info.totalPages;
                 const id = $(this).attr('id');
-                console.log("id" + id);
 
                 if (id == 'first_page') {
                   window.location.href = "/post" + url_href + 0;
@@ -582,21 +546,17 @@
                     arrPages.push(Number($(this).text()));
                   });
                   const prevPage = Math.min(...arrPages) - showPageCnt;
-                  console.log("prevPage" + prevPage);
                   window.location.href = "/post" + url_href + (prevPage - 1);
                 } else if (id == 'next_page') {
                   let arrPages = [];
                   $('li.page-item>a.page-link').each(function(idx, item) {
                     arrPages.push(Number($(this).text()));
                   });
-                  console.log("next_page" + arrPages);
 
                   const nextPage = Math.max(...arrPages) + 1;
-                  console.log("nextPage" + nextPage);
                   window.location.href = "/post" + url_href + (nextPage - 1);
                 } else if (id == 'last_page') {
                   const lastPage = Math.floor((totalPage - 1) / showPageCnt) * showPageCnt + 1;
-                  console.log("lastPage" + lastPage);
                   window.location.href = "/post" + url_href + (lastPage - 1);
                 }
               });
@@ -630,7 +590,6 @@
             htmlcontent.innerHTML = content;
 
 
-            console.log(fileName);
 
             <!-- 이미지 출력 경로 지정 -->
             if(fileName == "noImage"){
@@ -650,7 +609,6 @@
                 document.getElementById("application_button").style.display = 'none';
 
                 if (jsonApplicationState === "SUCCESS") {
-                  console.log(applicationResponse);
 
                   let application_html =
                           "<form class=\"\">\n" +
@@ -690,7 +648,6 @@
                 }
               }
               catch (e) {
-                console.log(e);
               }
 
 
@@ -699,14 +656,12 @@
             //
             // onload();
 
-            console.log(location);
           } else {
           window.location.replace('/404ErrorPage');
           }
 
 
         }catch (e){
-         console.log(e);
         }
       }
 
@@ -756,10 +711,8 @@
       getdata();
 
       <!-- 좋아요 -->
-      console.log('getLike');
       axios.get('/post/' + postId + '/likes/check')
               .then((res) => {
-                console.log(res.data);
                 let likeCheck = res.data.result;
                 let $likeBtn =$('.icon.heart');
                 if (likeCheck == 1){
@@ -771,17 +724,15 @@
                 }
               })
               .catch((err) => {
-                console.log(err);
+
               });
 
       axios.get('/post/' + postId + '/likes')
               .then((res) => {
-                console.log(res.data);
                 let cntLike = res.data.result;
                 document.getElementById("cntLike").innerText = cntLike;
               })
               .catch((err) => {
-                console.log(err);
               });
     });
 
@@ -792,13 +743,9 @@
 
     <!-- 대댓글 댓글쓰기 누르면 댓글 작성창 띄움 -->
     function showCommentReply(commentReplyId) {
-      console.log(commentReplyId);
       const Id = $(commentReplyId).data('id')
-      console.log(Id);
       let search = document.getElementById(Id);
-      console.log(search);
       let check = search.style.display;
-      console.log(check);
       if(check == "none") {
         search.style.display="block";
       } else {
@@ -812,18 +759,14 @@
 
       let str = 'replyComment'+parentId;
       let name = document.getElementById(str);
-      console.log(name);
 
       let temp = $("#"+str).val();
 
-      console.log(temp);
-      console.log(parentId);
       const CommentData = {       // 서버로 보낼 데이터
         "content" : temp,         //  댓글 내용            comment
         "parentId" : parentId // 부모댓글 ID가 들어가야함
       }
 
-      console.log(CommentData);
 
       // axios header에 넣을 데이터
       const axiosConfig = {
@@ -850,7 +793,6 @@
     <!-- 대댓글 삭제 -->
     function commentReplyDeleteButton(comment){
       const parentId = $(comment).data('id')
-      console.log(parentId);
 
       const axiosConfig = {
         headers: {
@@ -916,9 +858,6 @@
     });
 
 
-    console.log(arr);
-    console.log(arr[0]);
-    console.log(arr[1]);
 
     const searchData = {       // 검색 값
       category: arr[0],       // 카테고리
@@ -951,11 +890,9 @@
     if(!check) {
       search.style.display="block";
       check = true;
-      console.log("1")
     } else {
       search.style.display="none";
       check = false;
-      console.log("2")
     }
   }
 </script>
@@ -969,20 +906,12 @@
   <nav class="nav-menuzord navbar-sticky">
     <div class="container clearfix">
       <div id="menuzord" class="menuzord">
-        <a href="/" class="menuzord-brand">
-          <img class="lazyestload" data-src="/assets/img/logo-color-big.png" src="/assets/img/logo-color-big.png" alt="logo-img">
-        </a>
-
-        <div class="nav-item dropdown nav-item-left me-0">
-          <button class="btn btn-xs btn-primary d-none d-lg-inline-block notify-toggler" onclick="showSearch()">
-            <i class="fa fa-search text-white me-0" aria-hidden="true"></i>
-          </button>
-        </div>
+        <a href="/" class="menuzord-logo-brand"></a>
 
         <ul class="menuzord-menu menuzord-right">
           <li class="alarm-btn-box-li">
             <button class="alarm-btn-box" type="button" data-bs-toggle="dropdown" aria-expanded="false" onclick="getAlarmList()">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-bell-fill alarm-btn-black" viewBox="0 0 16 16">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#262a2e" class="bi bi-bell-fill alarm-btn" viewBox="0 0 16 16">
                 <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zm.995-14.901a1 1 0 1 0-1.99 0A5.002 5.002 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901z"/>
               </svg>
             </button>
@@ -1056,6 +985,7 @@
               </li>
             </ul>
           </li>
+
         </ul>
       </div>
     </div>
@@ -1330,161 +1260,214 @@
   <!-- ====================================
   ——— MODAL SECTION
   ===================================== -->
-  <!-- Signup Modal -->
-  <div class="modal fade" id="signup" tabindex="-1" role="dialog" aria-label="signupModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header rounded">
-          <h3 class="modal-title text-uppercase font-weight-bold">회원가입</h3>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
+<!-- Signup Modal -->
+<div class="modal fade" id="signup" tabindex="-1" role="dialog" aria-label="signupModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header rounded">
+        <h3 class="modal-title text-uppercase font-weight-bold">회원가입</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
 
-        <div class="modal-body">
-          <form onsubmit="join(); return false;">
-            <div class="mb-3">
-              <div class="mb-3" style="display: flex">
-                <input type="text" id="form_userName" class="form-control bg-smoke" required="" placeholder="닉네임">
-                <button class="btn btn-facebook btn-block text-uppercase text-white" onclick="checkUserName()" style="width: 25%; padding: 0">중복확인</button>
-              </div>
-              <p id="able_userName" style="display: none">사용 가능한 닉네임 입니다.</p>
-              <p id="error_userName" style="display: none">중복되는 닉네임 입니다.</p>
+      <div class="modal-body">
+        <form onsubmit="join(); return false;">
+          <div class="mb-3">
+            <div class="mb-3" style="display: flex">
+              <input type="text" id="form_userName" class="form-control bg-smoke" required="" placeholder="닉네임">
+              <button class="btn btn-facebook btn-block text-uppercase text-white" onclick="checkUserName()" style="width: 25%; padding: 0">중복확인</button>
             </div>
+            <p id="able_userName" style="display: none">사용 가능한 닉네임 입니다.</p>
+            <p id="error_userName" style="display: none">중복되는 닉네임 입니다.</p>
+          </div>
 
-            <div class="mb-3">
-              <input type="password" id="pw" class="form-control bg-smoke" required="" placeholder="비밀번호">
-              <input type="password" id="check_pw" onchange="checkPasswordCorrect()" class="form-control bg-smoke" required="" placeholder="비밀번호 확인">
-              <p id="error_passwordCorrect" style="display: none">일치하지 않습니다.</p>
+          <div class="mb-3">
+            <input type="password" id="pw" class="form-control bg-smoke" required="" placeholder="비밀번호">
+            <input type="password" id="check_pw" onchange="checkPasswordCorrect()" class="form-control bg-smoke" required="" placeholder="비밀번호 확인">
+            <p id="error_passwordCorrect" style="display: none">일치하지 않습니다.</p>
+          </div>
+
+          <div class="mb-3">
+            <select id="form_gender" class="form-control bg-smoke">
+              <option value="">성별</option>
+              <option value="MAN">남자</option>
+              <option value="WOMAN">여자</option>
+            </select>
+            <p id="error_gender" style="display: none">성별을 선택 해주세요.</p>
+          </div>
+
+          <div class="mb-3">
+            <input type="number" id="age" class="form-control bg-smoke" required="" placeholder="나이">
+          </div>
+
+          <div class="mb-3">
+            <div style="display: flex">
+              <input style="flex: auto;" type="email" class="form-control bg-smoke" required="" placeholder="이메일" id="form_email">
+              <button class="btn btn-facebook btn-block text-uppercase text-white" onclick="checkEmail()" style="width: 25%; padding: 0">인증요청</button>
             </div>
+            <p id="error_email" style="display: none">중복된 이메일 입니다.</p>
+            <p id="send_email" style="display: none">입력하신 이메일로 인증 코드를 전송하였습니다.</p>
+            <input type="emailCheck" id="code" class="form-control bg-smoke" required="" placeholder="인증번호">
+            <p id="error_code" style="display: none">인증 코드가 불일치 합니다.</p>
 
-            <div class="mb-3">
-              <select id="form_gender" class="form-control bg-smoke">
-                <option value="">성별</option>
-                <option value="MAN">남자</option>
-                <option value="WOMAN">여자</option>
-              </select>
-              <p id="error_gender" style="display: none">성별을 선택 해주세요.</p>
-            </div>
+          </div>
 
-            <div class="mb-3">
-              <input type="number" id="age" class="form-control bg-smoke" required="" placeholder="나이">
-            </div>
-            <!--              <div class="mb-3" style="display: flex">-->
-            <!--                <input style="flex: 1;" id="birth_year" type="year" class="form-control bg-smoke" required="" placeholder="년(4자)">-->
-            <!--                <input style="flex: 1;" id="birth_month" type="month1" class="form-control bg-smoke" required="" placeholder="월">-->
-            <!--                <input style="flex: 1;" id="birth_day" type="day" class="form-control bg-smoke" required="" placeholder="일">-->
-            <!--              </div>-->
-
-            <div class="mb-3">
-              <div style="display: flex">
-                <input style="flex: auto;" type="email" class="form-control bg-smoke" required="" placeholder="이메일" id="form_email">
-                <button class="btn btn-facebook btn-block text-uppercase text-white" onclick="checkEmail()" style="width: 25%; padding: 0">인증요청</button>
-              </div>
-              <p id="error_email" style="display: none">중복된 이메일 입니다.</p>
-              <input type="emailCheck" id="code" class="form-control bg-smoke" required="" placeholder="인증번호">
-              <p id="error_code" style="display: none">인증 코드가 불일치 합니다.</p>
-
-            </div>
-
-            <div class="mb-3 form-check mb-0">
-              <input type="checkbox" class="form-check-input" id="exampleCheck4">
-              <label class="form-check-label text-gray-color mb-3" for="exampleCheck4">
-                I agree to the terms of use and privacy.
-              </label>
-            </div>
-
-            <div class="d-grid">
-              <button type="submit" class="btn btn-primary btn-block text-uppercase">가입하기</button>
-            </div>
-          </form>
-        </div>
+          <div class="d-grid">
+            <button type="submit" class="btn btn-primary btn-block text-uppercase">가입하기</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- Login Modal -->
-  <div class="modal fade" id="login" tabindex="-1" role="dialog" aria-label="loginModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header rounded">
-          <h3 class="modal-title text-uppercase font-weight-bold">로그인</h3>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
+<!-- Login Modal -->
+<div class="modal fade" id="login" tabindex="-1" role="dialog" aria-label="loginModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header rounded">
+        <h3 class="modal-title text-uppercase font-weight-bold">로그인</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
 
-        <div class="modal-body">
-          <form class="" onsubmit="return false;">
-            <div class="mb-3">
-              <input type="email" id="email" class="form-control bg-smoke" required="" placeholder="이메일">
+      <div class="modal-body">
+        <form class="" onsubmit="return false;">
+          <div class="mb-3">
+            <input type="email" id="email" class="form-control bg-smoke" required="" placeholder="이메일">
+          </div>
+
+          <div class="mb-3">
+            <input type="password" id="password" class="form-control bg-smoke" required="" placeholder="비밀번호">
+          </div>
+
+          <!--              <div class="mb-3 form-check mb-0">-->
+          <!--                <input type="checkbox" class="form-check-input" id="exampleCheck5">-->
+          <!--                <label class="form-check-label text-gray-color mb-3" for="exampleCheck5">-->
+          <!--                  Remember me-->
+          <!--                </label>-->
+          <!--                <a class="pull-right" href="javascript:void(0)">Fogot Password?</a>-->
+          <!--             </div>-->
+          <p id="login_error" style="display: none"></p>
+          <div class="d-grid">
+            <button class="btn btn-primary text-uppercase" onclick="login(); return false;">Login</button>
+          </div>
+
+          <div class="text-uppercase text-center py-3">Or</div>
+
+          <div style="display: flex;">
+            <div style="flex: 1;">
+              <a href="/login/google"><img src="/assets/img/google-button.png" style="width: 95%; margin-left: 5%"></a>
             </div>
-
-            <div class="mb-3">
-              <input type="password" id="password" class="form-control bg-smoke" required="" placeholder="비밀번호">
+            <div style="flex: 1;">
+              <a href="/login/naver"><img src="/assets/img/naver-button.png" style="width: 85%; float: right; margin-right: 10%"></a>
             </div>
+          </div>
+        </form>
+      </div>
 
-            <!--              <div class="mb-3 form-check mb-0">-->
-            <!--                <input type="checkbox" class="form-check-input" id="exampleCheck5">-->
-            <!--                <label class="form-check-label text-gray-color mb-3" for="exampleCheck5">-->
-            <!--                  Remember me-->
-            <!--                </label>-->
-            <!--                <a class="pull-right" href="javascript:void(0)">Fogot Password?</a>-->
-            <!--             </div>-->
-            <p id="login_error" style="display: none"></p>
-            <div class="d-grid">
-              <button class="btn btn-primary text-uppercase" onclick="login(); return false;">Login</button>
-            </div>
-
-            <div class="text-uppercase text-center py-3">Or</div>
-
-            <div style="display: flex;">
-              <div style="flex: 1;">
-                <a href="/login/google"><img src="/assets/img/google-button.png" style="width: 95%; margin-left: 5%"></a>
-              </div>
-              <div style="flex: 1;">
-                <a href="/login/naver"><img src="/assets/img/naver-button.png" style="width: 85%; float: right; margin-right: 10%"></a>
-              </div>
-            </div>
-          </form>
-        </div>
-
-        <div class="modal-footer justify-content-center">
-          <p class="mb-1">Don’t have an Account? <a href="javascript:void(0)" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#signup">Sign up</a></p>
-        </div>
+      <div class="modal-footer justify-content-center">
+        <p class="mb-1">Don’t have an Account? <a href="javascript:void(0)" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#signup">Sign up</a></p>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- INQUIRY IN MODAL -->
-  <div class="modal fade" id="inquiry" tabindex="-1" role="dialog" aria-label="inquiryModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header rounded">
-          <h3 class="modal-title text-uppercase font-weight-bold">Inquiry about tour</h3>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
+<!-- MemberReview Modal -->
+<div class="modal fade" id="memberReview" tabindex="-1" role="dialog" aria-label="loginModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header rounded">
+        <h3 class="modal-title text-uppercase font-weight-bold">멤버 리뷰</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
 
-        <div class="modal-body pb-3">
-          <form class="" action="index.html" method="post">
-            <div class="mb-3">
-              <input type="text" class="form-control bg-smoke" required="" placeholder="Your Name">
-            </div>
+      <div class="modal-body">
+        <div class="text-uppercase pb-3">멤버 : <span id="memberReview_id">4</span></div>
 
-            <div class="mb-3">
-              <input type="email" class="form-control bg-smoke" required="" placeholder="Your Email">
-            </div>
+        <form onsubmit="memberReviewSave(); return false;">
+          <div class="mb-3">
+            <input type="number" id="memberRate" class="form-control bg-smoke" required="" placeholder="0~10" min="0" max="10">
+          </div>
 
-            <div class="mb-3">
-              <input type="number" class="form-control bg-smoke" required="" placeholder="Phone Number">
-            </div>
+          <div class="mb-3">
+            <textarea id="memberReviewContent" class="form-control bg-smoke" required="" rows="5" placeholder="리뷰 내용"></textarea>
+            <div id="memberReviewContent_cnt">(0 / 100)</div>
+          </div>
 
-            <div class="mb-3">
-              <textarea class="form-control bg-smoke" rows="6" placeholder="Message"></textarea>
-            </div>
-
-            <button type="submit" class="btn btn-primary text-uppercase">Submit</button>
-          </form>
-        </div>
+          <div class="d-grid">
+            <button type="submit" class="btn btn-primary text-uppercase">제출</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
+</div>
+
+<!-- bucketReview Modal -->
+<div class="modal fade" id="bucketReview" tabindex="-1" role="dialog" aria-label="loginModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header rounded">
+        <h3 class="modal-title text-uppercase font-weight-bold">버킷리스트 리뷰</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <input id="memberReview_alarmId" type="hidden" value="">
+        <div class="text-uppercase pb-3">버킷리스트 : <span id="bucketReview_id" style="display: none;">3</span><span id="bucketReview_name">3번 버킷리스트명</span></div>
+
+        <form onsubmit="bucketReviewSave(); return false;">
+          <div class="mb-3">
+            <input type="number" id="bucketRate" class="form-control bg-smoke" required="" placeholder="0~10" min="0" max="10">
+          </div>
+
+          <div class="mb-3">
+            <textarea id="bucketReviewContent" class="form-control bg-smoke" required="" rows="5" placeholder="리뷰 내용"></textarea>
+            <div id="bucketReviewContent_cnt">(0 / 100)</div>
+          </div>
+
+          <div class="d-grid">
+            <button type="submit" class="btn btn-primary text-uppercase">제출</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- INQUIRY IN MODAL -->
+<div class="modal fade" id="inquiry" tabindex="-1" role="dialog" aria-label="inquiryModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header rounded">
+        <h3 class="modal-title text-uppercase font-weight-bold">Inquiry about tour</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body pb-3">
+        <input id="bucketReview_alarmId" type="hidden" value="">
+        <form class="" action="index.html" method="post">
+          <div class="mb-3">
+            <input type="text" class="form-control bg-smoke" required="" placeholder="Your Name">
+          </div>
+
+          <div class="mb-3">
+            <input type="email" class="form-control bg-smoke" required="" placeholder="Your Email">
+          </div>
+
+          <div class="mb-3">
+            <input type="number" class="form-control bg-smoke" required="" placeholder="Phone Number">
+          </div>
+
+          <div class="mb-3">
+            <textarea class="form-control bg-smoke" rows="6" placeholder="Message"></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary text-uppercase">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
   <!-- Javascript -->
   <script src="/assets/plugins/jquery/jquery-3.4.1.min.js"></script>
@@ -1506,13 +1489,11 @@
 
       $likeBtn.click(function(){
         const postId = new URL(window.location.href).pathname.replace("/post/", "");
-        console.log(postId);
 
         $likeBtn.toggleClass('active');
         if($likeBtn.hasClass('active')){
           axios.post('/post/' + postId + '/likes')
                   .then((res) => {
-                    console.log(res.data);
 
                     $(this).find('img').attr({
                       'src': '/assets/img/like/full-heart.png',
@@ -1521,22 +1502,20 @@
 
                     axios.get('/post/' + postId + '/likes')
                             .then((res) => {
-                              console.log(res.data);
                               let cntLike = res.data.result;
                               document.getElementById("cntLike").innerText = cntLike;
                             })
                             .catch((err) => {
-                              console.log(err);
+
                             })
                   })
                   .catch((err) => {
-                    console.log(err);
+
                     alert("로그인 후 이용해주세요.")
                   })
         }else{
           axios.post('/post/' + postId + '/likes')
                   .then((res) => {
-                    console.log(res.data);
 
                     $(this).find('i').removeClass('fas').addClass('far')
                     $(this).find('img').attr({
@@ -1546,16 +1525,15 @@
 
                     axios.get('/post/' + postId + '/likes')
                             .then((res) => {
-                              console.log(res.data);
                               let cntLike = res.data.result;
                               document.getElementById("cntLike").innerText = cntLike;
                             })
                             .catch((err) => {
-                              console.log(err);
+
                             })
                   })
                   .catch((err) => {
-                    console.log(err);
+
                     alert("로그인 후 이용해주세요.")
                   })
         }
@@ -1584,7 +1562,6 @@
     axios.interceptors.response.use(
             success => success,
             async(error) => {
-              console.log(error);
               const status = error.response.status
 
               if(status === 401) {
@@ -1592,13 +1569,11 @@
 
                 await axios.post('/reissue')
                         .then(response => {
-                          console.log(response.data);
                           localStorage.setItem("accessToken", response.data);
                           originRequest.headers.authorization = 'Bearer ' + response.data;
                           return axios(originRequest);
                         })
                         .catch(error => {
-                          console.log('재발급 실패, refresh token 만료');
                           localStorage.removeItem('accessToken')
                           window.location.href = '/';
                         })
@@ -1624,7 +1599,8 @@
   <script src="/assets/plugins/smoothscroll/SmoothScroll.js"></script>
   <script src="/assets/js/star.js"></script>
 
-  <script src="/js/header.js"></script>
+<script src="/js/axios.js"></script>
+<script src="/js/header.js"></script>
 
 </body>
 </html>

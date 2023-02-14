@@ -20,6 +20,8 @@ public interface MemberReviewRepository extends JpaRepository<MemberReview, Long
 
     Optional<MemberReview> findByMember_UserNameAndWriterId(String targetMemberName, Long fromMemberId);
 
+    Optional<MemberReview> findByMember_IdAndWriterId(Long memberId, Long writerId);
+
     @Query("select avg(mr.rate) from MemberReview mr where mr.member.id =:memberId")
     double averageByMemberId(@Param("memberId") Long memberId);
 

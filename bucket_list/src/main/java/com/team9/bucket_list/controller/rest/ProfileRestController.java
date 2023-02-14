@@ -37,7 +37,7 @@ public class ProfileRestController {
     @Operation(summary = "프로필 수정", description = "로그인된 멤버 본인의 프로필을 수정합니다.")
     public Response<ProfileEditResponse> update(@Parameter(name = "memberId", description = "멤버 id") @PathVariable Long memberId,
                                                             @RequestPart(value="file",required = false) @Valid @RequestParam("file") MultipartFile file, Authentication authentication) {
-         Long loginedMemberId =  Long.valueOf(authentication.getName());
+        Long loginedMemberId =  Long.valueOf(authentication.getName());
         log.info("🔵file.getName : " + file.getName());
         ProfileEditResponse profileEditResponse = profileService.update(memberId, file, loginedMemberId);
         return Response.success(profileEditResponse);

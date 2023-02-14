@@ -34,9 +34,11 @@
   <link href="/assets/css/custom.css" id="custom_style" rel="stylesheet">
   <link href="/css/chat.css" rel="stylesheet">
 
-
   <!-- FAVICON -->
   <link rel="shortcut icon" type="image/png" href="/assets/img/favicon.png"/>
+
+  <!-- alarm -->
+  <link href="/css/alarm.css" rel="stylesheet">
 
   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -57,13 +59,26 @@
   <nav class="nav-menuzord navbar-sticky">
     <div class="container clearfix">
       <div id="menuzord" class="menuzord">
-        <a href="/" class="menuzord-brand">
-          <img class="lazyestload" data-src="/assets/img/logo-color-big.png" src="/assets/img/logo-color-big.png" alt="logo-img">
-        </a>
+        <a href="/" class="menuzord-logo-brand"></a>
 
         <ul class="menuzord-menu menuzord-right">
-          <li class="">
-            <a class="" href="javascript:void(0)">멤버십</a>
+          <li class="alarm-btn-box-li">
+            <button class="alarm-btn-box" type="button" data-bs-toggle="dropdown" aria-expanded="false" onclick="getAlarmList()">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#262a2e" class="bi bi-bell-fill alarm-btn" viewBox="0 0 16 16">
+                <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zm.995-14.901a1 1 0 1 0-1.99 0A5.002 5.002 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901z"/>
+              </svg>
+            </button>
+            <div class="dropdown-menu dropdown-menu-end alarm-box shadow">
+              <div class="d-flex justify-content-end alarm-read-all-box">
+                <button class="alarm-read-all-btn opacity-50" onclick="readAllAlarm()">모두 읽기</button>
+              </div>
+              <div class="list-group list-group-flush" id="alarm-list">
+
+              </div>
+            </div>
+          </li>
+          <li class="chat-room-box-li">
+            <a class="" href="/chat/room">채팅방</a>
           </li>
 
           <li class="">
@@ -111,15 +126,11 @@
               </li>
 
               <li class="">
-                <a href="/my/likes">좋아요</a>
-              </li>
-
-              <li class="">
                 <a href="/my">마이 피드</a>
               </li>
 
               <li class="">
-                <a href="index-3.html">마이페이지</a>
+                <a id="profileHref" href="/profile">프로필</a>
               </li>
 
               <li class="">
@@ -285,11 +296,6 @@
           <div class="mb-3">
             <input type="number" id="age" class="form-control bg-smoke" required="" placeholder="나이">
           </div>
-          <!--              <div class="mb-3" style="display: flex">-->
-          <!--                <input style="flex: 1;" id="birth_year" type="year" class="form-control bg-smoke" required="" placeholder="년(4자)">-->
-          <!--                <input style="flex: 1;" id="birth_month" type="month1" class="form-control bg-smoke" required="" placeholder="월">-->
-          <!--                <input style="flex: 1;" id="birth_day" type="day" class="form-control bg-smoke" required="" placeholder="일">-->
-          <!--              </div>-->
 
           <div class="mb-3">
             <div style="display: flex">
@@ -297,16 +303,10 @@
               <button class="btn btn-facebook btn-block text-uppercase text-white" onclick="checkEmail()" style="width: 25%; padding: 0">인증요청</button>
             </div>
             <p id="error_email" style="display: none">중복된 이메일 입니다.</p>
+            <p id="send_email" style="display: none">입력하신 이메일로 인증 코드를 전송하였습니다.</p>
             <input type="emailCheck" id="code" class="form-control bg-smoke" required="" placeholder="인증번호">
             <p id="error_code" style="display: none">인증 코드가 불일치 합니다.</p>
 
-          </div>
-
-          <div class="mb-3 form-check mb-0">
-            <input type="checkbox" class="form-check-input" id="exampleCheck4">
-            <label class="form-check-label text-gray-color mb-3" for="exampleCheck4">
-              I agree to the terms of use and privacy.
-            </label>
           </div>
 
           <div class="d-grid">
@@ -369,6 +369,69 @@
   </div>
 </div>
 
+<!-- MemberReview Modal -->
+<div class="modal fade" id="memberReview" tabindex="-1" role="dialog" aria-label="loginModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header rounded">
+        <h3 class="modal-title text-uppercase font-weight-bold">멤버 리뷰</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="text-uppercase pb-3">멤버 : <span id="memberReview_id">4</span></div>
+
+        <form onsubmit="memberReviewSave(); return false;">
+          <div class="mb-3">
+            <input type="number" id="memberRate" class="form-control bg-smoke" required="" placeholder="0~10" min="0" max="10">
+          </div>
+
+          <div class="mb-3">
+            <textarea id="memberReviewContent" class="form-control bg-smoke" required="" rows="5" placeholder="리뷰 내용"></textarea>
+            <div id="memberReviewContent_cnt">(0 / 100)</div>
+          </div>
+
+          <div class="d-grid">
+            <button type="submit" class="btn btn-primary text-uppercase">제출</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- bucketReview Modal -->
+<div class="modal fade" id="bucketReview" tabindex="-1" role="dialog" aria-label="loginModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header rounded">
+        <h3 class="modal-title text-uppercase font-weight-bold">버킷리스트 리뷰</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <input id="memberReview_alarmId" type="hidden" value="">
+        <div class="text-uppercase pb-3">버킷리스트 : <span id="bucketReview_id" style="display: none;">3</span><span id="bucketReview_name">3번 버킷리스트명</span></div>
+
+        <form onsubmit="bucketReviewSave(); return false;">
+          <div class="mb-3">
+            <input type="number" id="bucketRate" class="form-control bg-smoke" required="" placeholder="0~10" min="0" max="10">
+          </div>
+
+          <div class="mb-3">
+            <textarea id="bucketReviewContent" class="form-control bg-smoke" required="" rows="5" placeholder="리뷰 내용"></textarea>
+            <div id="bucketReviewContent_cnt">(0 / 100)</div>
+          </div>
+
+          <div class="d-grid">
+            <button type="submit" class="btn btn-primary text-uppercase">제출</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- INQUIRY IN MODAL -->
 <div class="modal fade" id="inquiry" tabindex="-1" role="dialog" aria-label="inquiryModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
@@ -379,6 +442,7 @@
       </div>
 
       <div class="modal-body pb-3">
+        <input id="bucketReview_alarmId" type="hidden" value="">
         <form class="" action="index.html" method="post">
           <div class="mb-3">
             <input type="text" class="form-control bg-smoke" required="" placeholder="Your Name">

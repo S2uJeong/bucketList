@@ -28,7 +28,6 @@ let header = {
     Authorization : "Bearer " + localStorage.getItem("accessToken")
 };
 
-console.log("header" + header);
 
 stompClient.connect(header,onConnected,onError);
 
@@ -47,9 +46,7 @@ function onMessageReceived(payload) {
     let message = JSON.parse(payload.body);
 
     if(message.type === 'JOIN') {
-        console.log("입장");
     } else if (message.type === 'LEAVE') {
-        console.log("퇴장");
     } else {
         $('#messageArea').append(message.message);
     }

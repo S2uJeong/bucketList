@@ -2,9 +2,11 @@ package com.team9.bucket_list.config;
 
 import com.team9.bucket_list.domain.entity.Application;
 import com.team9.bucket_list.domain.entity.Member;
+import com.team9.bucket_list.domain.entity.MemberReview;
 import com.team9.bucket_list.domain.entity.Post;
 import com.team9.bucket_list.domain.enumerate.PostStatus;
 import com.team9.bucket_list.repository.ApplicationRepository;
+import com.team9.bucket_list.repository.MemberReviewRepository;
 import com.team9.bucket_list.repository.PostRepository;
 import com.team9.bucket_list.service.AlarmService;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -25,6 +28,7 @@ public class SchedulerConfig {
 
     private final PostRepository postRepository;
     private final ApplicationRepository applicationRepository;
+    private final MemberReviewRepository memberReviewRepository;
     private final AlarmService alarmService;
 
     @Scheduled(cron = "0 0 0 * * *")
@@ -44,11 +48,15 @@ public class SchedulerConfig {
             joinMembersId.add(post.getMember().getId());
             for (Long memberId1 : joinMembersId) {
                 for (Long memberId2 : joinMembersId) {
-                    if(memberId1 == memberId2) {
+                    if(memberId1 == memberId2) {    // 버킷 리뷰
                         alarmService.sendBucketListReviewAlarm(memberId1,post.getId(),(byte) 5);
                         //alarmService.sendAlarm(memberId1, post.getId(), (byte) 5);
-                    } else{
-                        alarmService.sendMemberReviewAlarm(memberId1,memberId2,(byte) 4);
+                    } else{                         // 멤버 리뷰
+                        // 이미 리뷰가 존재한다면 스킵
+                        Optional<MemberReview> memberReview = memberReviewRepository.findByMember_IdAndWriterId(memberId1, memberId2);
+                        if(memberReview.isEmpty()){
+                            alarmService.sendMemberReviewAlarm(memberId1,memberId2,(byte) 4);
+                        }
                         //alarmService.sendAlarm(memberId1, memberId2, (byte) 4);
                     }
                 }

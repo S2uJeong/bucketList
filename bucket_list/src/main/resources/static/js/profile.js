@@ -4,7 +4,6 @@ const lsMemberId = JSON.parse(atob(lsPayload)).memberId;
 let profileURL = window.location.pathname.split('/');
 let profileMemberId = profileURL[profileURL.length-1];
 
-console.log(`member id : ${profileMemberId}`);
 
 // Get the modal
 var modal = document.getElementById("myModal");
@@ -125,7 +124,6 @@ function uploadPic() {
         header:{"Content-Type": "multipart/form-data"},
     }).then((res)=> {
         editImgData = res.data.result;
-        console.log(res);
 
         if(editImgData.uploadFileName == '기본사진.png')
             $('.pic-wrap').css('backgroundImage',`url(${editImgData.awsS3FileName})`);
@@ -134,7 +132,6 @@ function uploadPic() {
 
         modal.style.display = "none";
     }).catch((error)=> {
-        console.log(error);
     });
 
 
@@ -152,32 +149,29 @@ $('#fileInput').change(function (){
 */
 
 
-window.onload = function () {
-    let profileData;
-    $('#if').css("display","none");
+let profileData;
+$('#if').css("display","none");
 
-    if(profileMemberId != lsMemberId) {
-        $('#pic-btn').remove();
-    }
-
-    axios({
-        method:"GET",
-        url: `/profile/${profileMemberId}/json`,
-    }).then((res)=> {
-        profileData = res.data.result;
-        let averageRate = Math.ceil(profileData.avgRate * 10) / 10;
-
-        if(profileData.uploadFileName == '기본사진.png')
-            $('.pic-wrap').css('backgroundImage',`url(${profileData.awsS3FileName})`);
-        else
-            $('.pic-wrap').css('backgroundImage',`url(https://bucketlist-post-image-bucket.s3.ap-northeast-2.amazonaws.com/${profileData.awsS3FileName})`);
-
-        $('#profile-username').text(profileData.memberName);
-        $('#profile-email').text(profileData.email);
-        $('#profile-avg-rate').text(averageRate);
-    }).catch((error)=> {
-        console.log(error);
-    });
+if(profileMemberId != lsMemberId) {
+    $('#pic-btn').remove();
 }
+
+axios({
+    method:"GET",
+    url: `/profile/${profileMemberId}/json`,
+}).then((res)=> {
+    profileData = res.data.result;
+    let averageRate = Math.ceil(profileData.avgRate * 10) / 10;
+
+    if(profileData.uploadFileName == '기본사진.png')
+        $('.pic-wrap').css('backgroundImage',`url(${profileData.awsS3FileName})`);
+    else
+        $('.pic-wrap').css('backgroundImage',`url(https://bucketlist-post-image-bucket.s3.ap-northeast-2.amazonaws.com/${profileData.awsS3FileName})`);
+
+    $('#profile-username').text(profileData.memberName);
+    $('#profile-email').text(profileData.email);
+    $('#profile-avg-rate').text(averageRate);
+}).catch((error)=> {
+});
 
 
