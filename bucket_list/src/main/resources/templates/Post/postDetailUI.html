@@ -647,10 +647,11 @@
             let token_userName = JSON.parse(decodeURIComponent(escape(window.atob(payload)))).userName;
 
             if (userName === token_userName) {
-              try{
+              try {
                 const applicationResponse = await axios.get('/application-rest/' + postId);
                 jsonApplicationState = applicationResponse.data.resultCode;
                 document.getElementById("application_button").style.display = 'none';
+                document.getElementById("application-status").style.display = 'block';
 
                 if (jsonApplicationState === "SUCCESS") {
                   console.log(applicationResponse);
@@ -691,13 +692,13 @@
                 } else {
                   console.log('asdasf');
                 }
-              }
-              catch (e) {
+              } catch (e) {
 
               }
-
-
+            } else {
+              document.getElementById("application-status").style.display = 'none';
             }
+
             // }
             //
             // onload();
@@ -1248,7 +1249,7 @@
         </div>
 
         <!-- ----------------------- 신청서 출력 부분 ----------------------- -->
-        <h2 class="text-uppercase mb-6">신청 현황</h2>
+        <h2 class="text-uppercase mb-6" id="application-status" style="display: none">신청 현황</h2>
         <div id="application-box">
           <!-- 신청서 리스트 출력 부분 -->
           <!-- 신청서 리스트 출력 부분 -->
@@ -1632,6 +1633,7 @@
   <script src="/assets/js/star.js"></script>
 
   <script src="/js/header.js"></script>
-
+  <script src="/js/reviewAlarm.js"></script>
+<script src="/js/profile.js"></script>
 </body>
 </html>

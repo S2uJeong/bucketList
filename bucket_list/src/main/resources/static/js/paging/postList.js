@@ -40,7 +40,7 @@ axios.get(todosUrl)
 function setTable() {
     let html = "<div class=\"col-md-6 col-xl-4 mb-5\">\n" +
         "            <div class=\"card card-hover post-box-wrap\">\n" +
-        "              <a href=\"post/{포스트 아이디}\" class=\"position-relative img-box\" id='img-box-id-{id}'>\n" +
+        "              <a data-id=\"{포스트 아이디}\" onclick='clickEvent(this)' class=\"position-relative img-box\" id='img-box-id-{id}'>\n" +
         // "                <img class=\"card-img-top lazyestload\" data-src=\"{이미지 URL}\" src=\"{이미지 URL}\" alt=\"Card image cap\">\n" +
         "                <div class=\"card-img-overlay card-hover-overlay rounded-top d-flex flex-column\">\n" +
         "                  <div class=\"badge {배경색} badge-rounded-circle\">\n" +
@@ -66,7 +66,6 @@ function setTable() {
 
     let parent = document.getElementById('list_container');
     parent.innerHTML = "";
-
 
 
     // js에서 css를 하기 위해서 만든 부분
@@ -126,6 +125,13 @@ function setTable() {
     });
 }
 
+function clickEvent(identifier) {
+    if (localStorage.getItem("accessToken") === null) {
+        alert('로그인이 필요한 서비스입니다.');
+    } else {
+        window.location.href = "/post/" + $(identifier).data('id');
+    }
+}
 /**
  * 페이징 정보를 세팅합니다.
  * @param {int} pageNum - Page Number
