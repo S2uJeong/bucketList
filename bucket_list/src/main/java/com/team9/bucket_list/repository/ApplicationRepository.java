@@ -1,6 +1,7 @@
 package com.team9.bucket_list.repository;
 
 import com.team9.bucket_list.domain.entity.Application;
+import com.team9.bucket_list.domain.entity.Member;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -34,5 +35,5 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
     @Query(value = "update application a set a.status = 2 where a.member_id = :memberId and a.post_id = :postId and a.status = 1 ;",nativeQuery = true)
     int updateRejectApplication(@Param("memberId") Long memberId, @Param("postId") Long postId);
 
-    Optional<Application> findByMember_IdAndPost_Id(Long memberId, Long postId);
+    Set<Application> findByPost_IdAndStatus(Long postId, byte status);
 }

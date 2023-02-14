@@ -43,7 +43,6 @@ async function memberReviewSave() {
             }).then((res) => {
                 data = res.data.result;
                 if(data >= 1) {
-                    console.log("읽음처리 완료");
                     $(`#alarm-${alarmId}`).remove();
                 }
             }).catch((error) => {
@@ -76,7 +75,6 @@ async function bucketReviewSave() {
             }).then((res) => {
                 data = res.data.result;
                 if(data >= 1) {
-                    console.log("읽음처리 완료");
                     $(`#alarm-${alarmId}`).remove();
                 }
             }).catch((error) => {

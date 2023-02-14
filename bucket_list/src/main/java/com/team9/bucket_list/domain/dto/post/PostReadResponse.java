@@ -20,6 +20,7 @@ public class PostReadResponse {
 
     private Long postId;
     private String userName;    // 유저 아이디이름
+    private Long userId;    // 유저 아이디
     private String title; //제목
     private String content; //내용
     private int cost; //비용
@@ -47,6 +48,7 @@ public class PostReadResponse {
         return PostReadResponse.builder()
                 .postId(post.getId())
                 .userName(post.getMember().getUserName())
+                .userId(post.getMember().getId())
                 .title(post.getTitle())
                 .content(post.getContent())
                 .cost(post.getCost())

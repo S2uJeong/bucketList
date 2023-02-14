@@ -76,4 +76,11 @@ public class ChatController {
             log.info("메시지 구독자들에게 전송 완료");
         }
     }
+
+    @MessageMapping("/chat/leave")
+    public void leave(@Payload ChatRequest chatRequest, SimpMessageHeaderAccessor headerAccessor) {
+        //채팅방에서 퇴장할때
+        log.info("퇴장합니다" + chatRequest.getUserName());
+        template.convertAndSend("/sub/chat/room/"+chatRequest.getRoomId(),chatRequest);
+    }
 }

@@ -14,16 +14,20 @@ window.onload = function () {
     if (accessToken === null) {
         $("#login_li").show();
         $(".alarm-btn-box-li").hide();
+        $(".chat-room-box-li").hide();
         $("#user_li").hide();
     } else {
         $("#login_li").hide();
         $(".alarm-btn-box-li").show();
+        $(".chat-room-box-li").show();
         $("#user_li").show();
 
         const payload = accessToken.split('.')[1];
         let userName = JSON.parse(decodeURIComponent(escape(window.atob(payload)))).userName;
-        console.log(userName);
         document.getElementById("userName").innerText = userName;
+
+        let userId = JSON.parse(decodeURIComponent(escape(window.atob(payload)))).memberId;
+        $('#profileHref').attr('href', "/profile/" + userId);
     }
 
 };
@@ -63,10 +67,11 @@ async function checkEmail() {
 
         code = response.data.result;
         document.getElementById('error_email').style.display = 'none';
+        document.getElementById('send_email').style.display = 'block';
 
     } catch (error) {
-        console.log(error);
         document.getElementById('error_email').style.display = 'block';
+        document.getElementById('send_email').style.display = 'none';
 
     }
 }
@@ -155,7 +160,6 @@ axios.interceptors.request.use(function(config) {
 axios.interceptors.response.use(
     success => success,
     async(error) => {
-        console.log(error);
         const status = error.response.status
 
         if(status === 401) {
@@ -163,13 +167,11 @@ axios.interceptors.response.use(
 
             await axios.post('/reissue')
                 .then(response => {
-                    console.log('interceptor error='+response.data);
                     localStorage.setItem("accessToken", response.data);
                     originRequest.headers.authorization = 'Bearer ' + response.data;
                     return axios(originRequest);
                 })
                 .catch(error => {
-                    console.log('재발급 실패, refresh token 만료');
                     localStorage.removeItem('accessToken')
                     window.location.href = '/';
                 })
@@ -308,7 +310,7 @@ function alarmHtml(data) {
     else if(data.category == 5) {
         text = data.postTitle+''+alarmArr[data.category];
         modal = `data-bs-toggle="modal" data-bs-target="#bucketReview"`;
-        onclick = `onclick="postReviewAlarm(${data.postTitle},${data.postId},${data.id})"`
+        onclick = `onclick="postReviewAlarm('${data.postTitle}',${data.postId},${data.id})"`
     } else {
         onclick = `onclick="readAlarm(${data.id},${data.postId})"`
         text = data.senderName+''+alarmArr[data.category];
@@ -321,13 +323,11 @@ function alarmHtml(data) {
 
 // 리뷰 modal 데이터 대체
 function memberReviewAlarm(senderName, alarmId) {
-    console.log("실행");
     $('#memberReview_id').text(senderName);
     $('#memberReview_alarmId').val(alarmId);
 }
 
 function postReviewAlarm(postTitle, postId, alarmId) {
-    console.log("실행2" + postTitle + " " + postId);
     $('#bucketReview_id').text(postId);
     $('#bucketReview_name').text(postTitle);
     $('#bucketReview_alarmId').val(alarmId);
@@ -344,7 +344,6 @@ function readAlarm(id,postId) {
     }).then((res) => {
         data = res.data.result;
         if(data >= 1) {
-            console.log("읽음처리 완료");
             location.href='/post/'+postId;
         }
     }).catch((error) => {
@@ -362,10 +361,12 @@ function readAllAlarm() {
     }).then((res) => {
         data = res.data.result;
         if(data >= 1) {
-            alert("모두 읽음 처리 되었습니다.")
-            $('#alarm-list').children().remove();
+            alert("모두 읽음 처리 되었습니다.");
+            /*$('#alarm-list').children().remove();
             let html = `<div class="text-secondary alarm-none">알림이 없습니다</div>`;
-            $("#alarm-list").append(html);
+            $("#alarm-list").append(html);*/
+            /*$("#alarm-list").load(window.location.href + "#alarm-list");*/
+            window.location.reload();
         }
     }).catch((error) => {
 

@@ -40,7 +40,8 @@ public class ApplicationService {
         applicationRepository.save(Application.save(applicationRequest,post,member));
 
         //알람 발생
-        alarmService.sendAlarm(member.getId(),post.getId(),(byte)2);
+        alarmService.sendAlarm2(member.getId(),post.getMember().getId(), post.getId(), (byte) 2);
+        //alarmService.sendAlarm(member.getId(),post.getId(),(byte)2);
     }
 
     public List<ApplicationListResponse> getNotDicisionList(Long postId, Long memberId) {
@@ -97,7 +98,7 @@ public class ApplicationService {
 
         //알람 발생
         if(applicationDecisionRequest.getStatus() == (byte)1)
-            alarmService.sendAlarm(memberId,post.getId(),(byte)3);
+            alarmService.sendAlarm2(memberId,application.getMember().getId(),post.getId(), (byte)3);
 
         return 1;
     }

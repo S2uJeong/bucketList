@@ -16,6 +16,7 @@ import java.util.List;
 @Entity
 @Builder
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
@@ -41,9 +42,6 @@ public class Post extends BaseTimeEntity{
     @Enumerated(value = EnumType.STRING)
     private PostStatus status;
 
-//    @Enumerated(value = EnumType.STRING)
-//    private PostCategory category;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
@@ -59,9 +57,6 @@ public class Post extends BaseTimeEntity{
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> commentList = new ArrayList<>();
-
-//    @OneToMany(mappedBy = "post")
-//    private List<BucketlistReview> bucketlistReviewList = new ArrayList<>();
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PostFile> postFileList = new ArrayList<>();
@@ -95,16 +90,6 @@ public class Post extends BaseTimeEntity{
 
     public void setRecruitComplete() {
         this.status = PostStatus.JOINCOMPLETE;
-    }
-
-    // ====== 지환님 필요 부분 ========
-    public void modifiedContent (String content){
-        this.content = content;
-    }
-
-    public void addComment(Comment comment) {        // CascadeType.ALL를 통해 CommentRepository에서 save를 안해주고 Post.commentList에 데이터를 넘겨줘 PostRepository에서 save해도 Comment Table에 자동 저장됨
-        this.commentList.add(comment);
-
     }
 
 }

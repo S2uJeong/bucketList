@@ -30,6 +30,7 @@ public class MemberService {
 
     private final RefreshTokenRepository refreshTokenRepository;
     private final MemberRepository memberRepository;
+    private final ProfileService profileService;
     private final BCryptPasswordEncoder encoder;
     private final JwtUtil jwtUtil;
 
@@ -79,6 +80,7 @@ public class MemberService {
         //정상 회원 저장 로직
         Member member = request.toEntity(encoder.encode(request.getPassword()));
         Member savedMember = memberRepository.save(member);
+
         return savedMember.toDto();
     }
 

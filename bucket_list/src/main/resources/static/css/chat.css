@@ -153,3 +153,12 @@
 .chat-out-btn:hover .chat-out-btn-img {
     color: #ff891f;
 }
+.chat-list-text-hidden-wrap{
+    width: 300px;
+}
+
+.chat-list-text-hidden {
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}

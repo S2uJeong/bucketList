@@ -229,7 +229,6 @@ window.dzsprx_index = 0;
                     var urlStart = url.indexOf("://") + 3;
                     var urlEnd = url.indexOf("/", urlStart);
                     var domain = url.substring(urlStart, urlEnd);
-                    //console.log(domain);
                     if (domain.indexOf('l') > -1 && domain.indexOf('c') > -1 && domain.indexOf('o') > -1 && domain.indexOf('l') > -1 && domain.indexOf('a') > -1 && domain.indexOf('h') > -1) {
                         allowed = true;
                     }
@@ -789,7 +788,6 @@ window.dzsprx_index = 0;
                     nh = _loadTarget.naturalHeight;
                     tw = nw/nh * ch;
 
-                    console.log(nw,nh,tw, ch);
                     if(_theTarget.hasClass('divimage')){
 
                     }
@@ -931,7 +929,6 @@ window.dzsprx_index = 0;
                 if(responsive_reference_width && responsive_optimal_height){
                     if(cw<responsive_reference_width){
                         var aux = cw/responsive_reference_width*responsive_optimal_height;
-                        // console.log('aux  ( calculate optimal ) - ',aux);
 
                         cthis.height(aux);
                     }else{
@@ -973,7 +970,6 @@ window.dzsprx_index = 0;
                 }
 
                 if(o.is_fullscreen=='on'){
-                    //console.log(_theTarget,_theTarget.height(), target_viy, ch, th, wh);
 
                     // -- trying to fix damage ..
                     //if(th + target_viy < wh){
@@ -985,13 +981,10 @@ window.dzsprx_index = 0;
                     //        backup_duration_viy = duration_viy;
                     //    }
                     //    duration_viy = 0;
-                    //    //console.log('yesyes', _theTarget,th, target_viy, ch, th, wh);
                     //    handle_scroll(null, {force_vi_y : vi_y});
                     //    setTimeout(function(){
-                    //        //console.info('WHAT', backup_duration_viy);
                     //        duration_viy = backup_duration_viy;
                     //    },50)
-                    //    //console.info(target_viy, th-_theTarget.height())
                     //}
                 }
             }
@@ -1043,9 +1036,7 @@ window.dzsprx_index = 0;
                         }
                     }else{
 
-                        //console.log(cthis, 'why do we do this ? ');
 
-                        // console.info(cthis.hasClass('do-not-set-js-height'));
                         if(o.settings_mode!='oneelement' && cthis.hasClass('do-not-set-js-height')==false && cthis.hasClass('height-is-based-on-content')==false){
 
                             // cthis.height(initialheight);
@@ -1378,7 +1369,6 @@ window.dzsprx_index = 0;
 
                                     vi_y = (1 - (st / (_scrollTop_is_another_element_top.height() - wh)) ) * (ch - th);
 
-                                    //console.log(st,_scrollTop_is_another_element_top.height(),wh,ch,th, vi_y);
                                     //vi_y = st / ( - wh)  * (ch-th);
 
                                 }
@@ -1396,7 +1386,6 @@ window.dzsprx_index = 0;
                         cthis_ot = -parseInt(_scrollTop_is_another_element_top.css('top'), 10);
                     }
 
-                    // console.log(st, cthis_ot, wh, ch);
                     var auxer5 = (st - (cthis_ot - wh)) / ((cthis_ot + ch) - (cthis_ot - wh));
 
 
@@ -1636,7 +1625,6 @@ window.dzsprx_index = 0;
                     }
                     ;
 
-                    //console.log(vi_y);
 
 
                     if (margs.force_vi_y) {
@@ -1745,7 +1733,6 @@ window.dzsprx_index = 0;
                 }
 
                 if(debug_var){
-                    //console.log('animation running');
                     debug_var=false;
                 }
 
@@ -1781,8 +1768,6 @@ window.dzsprx_index = 0;
                 change_bo = finish_bo - begin_bo;
 
 
-                //console.info(finish_viy, begin_viy, change_viy);
-                //console.log(duration_viy);
 
                 if(o.easing=='easeIn'){
                     if(o.scroll_axis_y=='on') {
@@ -1823,9 +1808,6 @@ window.dzsprx_index = 0;
                 }
 
 
-                //console.log(begin_viy, change_viy, target_viy);
-
-                // console.info('DURATION VIY = many', duration_viy, vi_y, target_viy)
 
                 if(cthis.hasClass('simple-parallax')){
 

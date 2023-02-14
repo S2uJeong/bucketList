@@ -27,13 +27,12 @@ public class MemeberReviewController {
 
     private final MemberReviewService memberReviewService;
 
-    @GetMapping("/{targerUserId}")
+    @GetMapping("/{targetUserId}")
     @Operation(summary = "평가 조회", description = "특정 id의 멤버에 대한 평가를 조회합니다.")
-    public Page<MemberReviewResponse> list(@Parameter(name = "targetMemberName", description = "평가 대상 멤버의 name") @PathVariable String targerUserName,
-                                           @Parameter(hidden = true) @PageableDefault(sort = "createdAt", size = 10, direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<MemberReviewResponse> memberReviewResponses = memberReviewService.list(targerUserName, pageable)
-                .map(memberReview -> MemberReviewResponse.response(memberReview));
-        return memberReviewResponses;
+    public Response<Page<MemberReviewResponse>> list(@Parameter(name = "targetUserId", description = "평가 대상 멤버의 id") @PathVariable Long targetUserId,
+                                           @Parameter(hidden = true) @PageableDefault(sort = "createdAt", size = 4, direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<MemberReviewResponse> memberReviewResponses = memberReviewService.list(targetUserId, pageable);
+        return Response.success(memberReviewResponses);
     }
 
     @PostMapping()

@@ -41,20 +41,43 @@ public class PostController {
         return Response.success(postid);
     }
 
+
+        //== 검색 기능 ==//
+    // 검색 데이터 전송하고 반환
+    @GetMapping("/search/list")
+    @ResponseBody
+    @Operation(summary = "검색 기능", description = "카테고리, 날짜, 키워드를 입력받아 검색합니다.")
+    public Response<Page<PostReadResponse>> searchPost(@Parameter(hidden = true) @PageableDefault(size = 15, sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable,
+                                                       @RequestParam(value = "category", required = false) String category, @RequestParam(value = "keyword", required = false) String keyword
+            , @RequestParam(value = "eventStart", required = false) String eventStart, @RequestParam(value = "eventEnd", required = false) String eventEnd
+            , @RequestParam(value = "lowCost", required = false) String lowCost, @RequestParam(value = "upCost", required = false) String upCost) {
+
+        log.info(lowCost);
+        log.info(upCost);
+
+        Page<PostReadResponse> response = postService.search(pageable,category,keyword,eventStart,eventEnd,lowCost,upCost);
+        return Response.success(response);
+    }
+
     //== 전체조회 ==//
     @GetMapping("/list")
     @ResponseBody
     @Operation(summary = "게시글 조회", description = "카테고리 별로 게시글 리스트를 출력합니다.")
     public Response<Page<PostReadResponse>> readAllPost(@Parameter(hidden = true) @PageableDefault(size = 15, sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable,
-                                                        @RequestParam(value = "category", required = false) String category) {
-        if(category == null){
-            Page<PostReadResponse> postReadResponses = postService.readAll(pageable);
-            log.info("PostList 보기 성공");
-            return Response.success(postReadResponses);
-        } else{
-            Page<PostReadResponse> filterPosts = postService.filter(category, pageable);
-            return Response.success(filterPosts);
-        }
+                                                        @RequestParam(value = "category", required = false) String category,
+             @RequestParam(value = "eventStart", required = false) String eventStart, @RequestParam(value = "eventEnd", required = false) String eventEnd
+            , @RequestParam(value = "lowCost", required = false) String lowCost, @RequestParam(value = "upCost", required = false) String upCost) {
+
+        //        if(category == null){
+//            Page<PostReadResponse> postReadResponses = postService.readAll(pageable);
+//            log.info("PostList 보기 성공");
+//            return Response.success(postReadResponses);
+//        } else{
+//            Page<PostReadResponse> filterPosts = postService.filter(category, pageable);
+//            return Response.success(filterPosts);
+//        }
+        Page<PostReadResponse> response = postService.postList(pageable,category,eventStart,eventEnd,lowCost,upCost);
+        return Response.success(response);
     }
 
 
@@ -69,25 +92,26 @@ public class PostController {
 
     // 클라이언트에서 데이터 받아와서 수정
     @PutMapping(value = "/{postId}/update" ,produces = "application/json")
-    public void updatePost( @PathVariable Long postId, @RequestBody PostUpdateRequest request,Authentication authentication)  {
+    public Response<PostUpdateResponse> updatePost( @PathVariable Long postId, @RequestBody PostUpdateRequest request,Authentication authentication)  {
         // update 메서드를 통해 request 내용대로 수정해준다. 반환값 : post Entity
         Long userId = Long.valueOf(authentication.getName());
 //        Long userId = 1l;
         log.info(request.toString());
         log.info("postId:"+postId);
-        postService.update(request,postId,userId);
+        PostUpdateResponse response = postService.update(request,postId,userId);
         log.info("🔵 Post 수정 성공");
+        return Response.success(response);
     }
 
     //== 삭제 ==//
     @DeleteMapping("/{postId}")
     @Operation(summary = "게시글 삭제", description = "postId에 따라 게시글을 삭제합니다.")
-    public Long deletePost(@Parameter(name = "postId", description = "게시글 id") @PathVariable("postId") long postId,Authentication authentication) {
+    public Response<String> deletePost(@Parameter(name = "postId", description = "게시글 id") @PathVariable("postId") long postId,Authentication authentication) {
         Long userId = Long.valueOf(authentication.getName());
 //        Long userId = 1l;
         postService.delete(postId,userId);
         log.info("Post 삭제 성공");
-        return 1l;
+        return Response.success("삭제 완료");
     }
 
 
