@@ -3,6 +3,7 @@ package com.team9.bucket_list.service;
 import com.team9.bucket_list.domain.dto.application.ApplicationDecisionRequest;
 import com.team9.bucket_list.domain.dto.chat.*;
 import com.team9.bucket_list.domain.entity.*;
+import com.team9.bucket_list.domain.enumerate.PostStatus;
 import com.team9.bucket_list.execption.ApplicationException;
 import com.team9.bucket_list.execption.ErrorCode;
 import com.team9.bucket_list.repository.*;
@@ -16,6 +17,8 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -123,7 +126,7 @@ public class ChatService {
     }
 
     @Transactional
-    public int outChatRoom(ChatOutRequest chatOutRequest) {
+    public int outChatRoom(ChatOutRequest chatOutRequest) throws ParseException {
         ChatRoom chatRoom = chatRoomRepository.findById(chatOutRequest.getRoomId()).orElseThrow(() -> new ApplicationException(ErrorCode.CHAT_ROOM_NOT_FOUND));
         ChatParticipant chatParticipant = chatParticipantRepository.findByChatRoom_IdAndMember_Id(chatOutRequest.getRoomId(), chatOutRequest.getMemberId()).orElseThrow(() -> new ApplicationException(ErrorCode.CHAT_ROOM_NOT_FOUND));
         //Application application = applicationRepository.findByMember_IdAndPost_Id(chatOutRequest.getMemberId(), chatRoom.getPost().getId()).orElseThrow(() -> new ApplicationException(ErrorCode.APPLICATION_NOT_FOUND));
@@ -138,6 +141,20 @@ public class ChatService {
         /*ApplicationDecisionRequest applicationDecisionRequest = ApplicationDecisionRequest.builder().status((byte) 2).build();
         applicationRepository.save(Application.updateStatus(application,applicationDecisionRequest));*/
         applicationRepository.updateRejectApplication(chatOutRequest.getMemberId(), chatRoom.getPost().getId());
+
+        //현재 시각이 모집 마감일 전이면 모집중으로 변경
+        Post post = chatRoom.getPost();
+
+        String untilRecruit = post.getUntilRecruit();
+
+        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+        Date recruitEndDate = formatter.parse(untilRecruit);
+        Date now = new Date();
+
+        if (now.before(recruitEndDate)) {
+            //모집 마감일 전
+            post.setPostStatusJoin();
+        }
 
         return 1;
     }

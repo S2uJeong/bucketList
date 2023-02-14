@@ -15,6 +15,8 @@ import java.util.Set;
 
 public interface ApplicationRepository extends JpaRepository<Application, Long> {
 
+    List<Application> findAllByMemberIdAndPostId(Long memberId, Long postId);
+
     @Query(value = "SELECT application " +
             "FROM Application application " +
             "WHERE application.status = 0 " +

@@ -10,6 +10,7 @@ public enum ErrorCode {
     DUPLICATED_EMAIL(HttpStatus.CONFLICT, "Email이 중복됩니다."),
     DUPLICATED_USERNAME(HttpStatus.CONFLICT, "userName 이 중복됩니다."),
     DUPLICATED_ALARM(HttpStatus.CONFLICT, "알람이 중복됩니다."),
+    DUPLICATED_APPLICATION(HttpStatus.CONFLICT, "이미 신청하였습니다."),
     INCORRECT_PASSWORD_CORRECT(HttpStatus.CONFLICT, "Email이 중복됩니다."),
     INVALID_PASSWORD(HttpStatus.NOT_FOUND, "패스워드가 잘못되었습니다."),
     USERNAME_NOT_FOUNDED(HttpStatus.NOT_FOUND, "해당 사용자는 없습니다."),

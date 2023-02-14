@@ -92,4 +92,7 @@ public class Post extends BaseTimeEntity{
         this.status = PostStatus.JOINCOMPLETE;
     }
 
+    public void setPostStatusJoin() {
+        this.status = PostStatus.JOIN;
+    }
 }
