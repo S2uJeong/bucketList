@@ -68,7 +68,7 @@ public class ChatController {
                 List<ChatParticipant> chatParticipants = chatService.getChatParticipant(chatListResponse.getRoomId());
 
                 chatParticipants.stream().forEach(chatParticipant ->
-                        template.convertAndSend("/sub/list/chat/room/" + chatParticipant.getId(), chatListResponse));
+                        template.convertAndSend("/sub/list/chat/room/" + chatParticipant.getMember().getId(), chatListResponse));
             });
 
             ChatRequest chatResponse = ChatRequest.chatResponse(chatRequest);
