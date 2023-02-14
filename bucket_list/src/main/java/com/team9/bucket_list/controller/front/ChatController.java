@@ -74,10 +74,13 @@ public class ChatController {
             ChatRequest chatResponse = ChatRequest.chatResponse(chatRequest);
             template.convertAndSend("/sub/chat/room/"+chatRequest.getRoomId(), chatResponse);
             log.info("메시지 구독자들에게 전송 완료");
-        } else if(chatRequest.getChatType().equals(ChatType.LEAVE)){
-            ChatRequest chatResponse = ChatRequest.chatResponse(chatRequest);
-            template.convertAndSend("/sub/chat/room/"+chatRequest.getRoomId(), chatResponse);
-            log.info("퇴장 메시지 전송 완료");
         }
+    }
+
+    @MessageMapping("/chat/leave")
+    public void leave(@Payload ChatRequest chatRequest, SimpMessageHeaderAccessor headerAccessor) {
+        //채팅방에서 퇴장할때
+        log.info("퇴장합니다" + chatRequest.getUserName());
+        template.convertAndSend("/sub/chat/room/"+chatRequest.getRoomId(),chatRequest);
     }
 }

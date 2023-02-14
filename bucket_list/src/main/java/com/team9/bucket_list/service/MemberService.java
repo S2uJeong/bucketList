@@ -80,7 +80,7 @@ public class MemberService {
         //정상 회원 저장 로직
         Member member = request.toEntity(encoder.encode(request.getPassword()));
         Member savedMember = memberRepository.save(member);
-        profileService.create(savedMember.getId());
+
         return savedMember.toDto();
     }
 
