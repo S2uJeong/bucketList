@@ -41,7 +41,7 @@ axios.get(todosUrl)
 function setTable() {
     let html = "<div class=\"col-md-6 col-xl-4 mb-5\">\n" +
         "            <div class=\"card card-hover post-box-wrap\">\n" +
-        "              <a href=\"post/{포스트 아이디}\" class=\"position-relative img-box\" id='img-box-id-{id}'>\n" +
+        "              <a href=\"/post/{포스트 아이디}\" class=\"position-relative img-box\" id='img-box-id-{id}'>\n" +
         // "                <img class=\"card-img-top lazyestload\" data-src=\"{이미지 URL}\" src=\"{이미지 URL}\" alt=\"Card image cap\">\n" +
         "                <div class=\"card-img-overlay card-hover-overlay rounded-top d-flex flex-column\">\n" +
         "                  <div class=\"badge {배경색} badge-rounded-circle\">\n" +
