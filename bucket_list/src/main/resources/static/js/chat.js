@@ -182,13 +182,14 @@ function onMessageReceived(payload) {
                     </div>
                 </div>`;
     } else if (message.chatType === 'LEAVE') {
+        console.log("채팅방 퇴장")
         if(message.memberId === lsMemberId) {
             alert("채팅방에서 퇴장하셨습니다");
             location.href='/';
         }
         html += `<div class="d-flex flex-column justify-content-end message-box-wrap join-message-wrap">
                     <div class="alert alert-secondary join-message">
-                        ${message.userName}님이 퇴장하셨습니다 
+                        ${message.userName}님이 퇴장하셨습니다
                     </div>
                 </div>`;
     } else if (message.chatType === 'LIST') {
@@ -223,7 +224,7 @@ function sendMessage() {
             'roomId':roomId,
             'memberId':lsMemberId,
             'userName':lsUserName,
-            'message': messageContent,
+            'message': messageContent.replace("\n",""),
             chatType: 'CHAT'
         };
         stompClient.send("/pub/chat/sendMessage", messageHeader, JSON.stringify(chatMessage));
@@ -338,8 +339,8 @@ function leaveMessage(roomId,memberId,userName) {
         'roomId':roomId,
         'memberId':memberId,
         'userName':userName,
-        'message':'',
+        'message':'퇴장',
         chatType: 'LEAVE'
     };
-    stompClient.send("/pub/chat/sendMessage", messageHeader, JSON.stringify(chatMessage));
+    stompClient.send("/pub/chat/leave", messageHeader, JSON.stringify(chatMessage));
 }
