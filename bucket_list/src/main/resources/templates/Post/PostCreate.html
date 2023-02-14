@@ -266,7 +266,7 @@
               </div>
 
               <div class="form-group mb-5">
-                <label>주소</label>
+                <label>주소(필수 입력)</label>
                 <input type="text"  id="address_kakao" name="post" class="form-control border-0" readonly>
               </div>
             </div>
@@ -348,7 +348,7 @@
               </div>
 
               <div class="form-group mb-5">
-                <label>영문 주소</label>
+                <label>영문 주소(필수 입력)</label>
                 <input type="text" name="post" id="address" class="form-control border-0" placeholder="5 Avenue Anatole France, 75007 Paris, France">
               </div>
             </div>
@@ -729,7 +729,7 @@
             let url = "/post/" + post_id;
             window.location.replace(url);
           } catch (error) {
-            alert("404페이지")
+            window.location.replace('/404ErrorPage');
           }
         }
         data();
@@ -780,7 +780,7 @@
             let url = "/post/" + post_id;
             window.location.replace(url);
           }catch (error){
-            alert("404페이지")
+            window.location.replace('/404ErrorPage');
           }
         }
 

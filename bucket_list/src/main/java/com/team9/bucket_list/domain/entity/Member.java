@@ -30,23 +30,6 @@ public class Member {
     private String password;
     private String userName;
     private int age;
-    private int postRemain;
-    private double rate;
-
-   /* public void rateUpdate(double avg) {
-        rate = avg;
-    }
-
-
-    // 프로필 사진
-    // 사진을 서버의 특정 폴더에 저장
-    @Column(name = "post_image_url")
-    private String postImageUrl;
-
-    public void updateProfileImage(String postImageUrl) {
-        this.postImageUrl = postImageUrl;
-    }*/
-
 
     /**
      * OAuth2 적용
@@ -72,9 +55,6 @@ public class Member {
 
     @Enumerated(value = EnumType.STRING)
     private MemberRole memberRole;
-
-    @Enumerated(value = EnumType.STRING)
-    private Membership membership;
 
     @OneToMany(mappedBy = "member")
     private List<Post> postList = new ArrayList<>();
@@ -110,10 +90,8 @@ public class Member {
                 .password(password)
                 .userName(userName)
                 .age(age)
-                .postRemain(postRemain)
                 .gender(gender)
                 .memberRole(memberRole)
-                .membership(membership)
                 .postList(postList)
                 .applicationList(applicationList)
                 .likesList(likesList)

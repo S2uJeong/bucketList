@@ -50,4 +50,15 @@ public class Profile {
                 .build();
     }
 
+    public static Profile updateRate(double avgRate, Profile profile) {
+        return  Profile.builder()
+                .id(profile.getId())
+                .uploadFileName(profile.getUploadFileName())
+                .awsS3FileName(profile.getAwsS3FileName())
+                .member(profile.getMember())
+                .email(profile.getEmail())
+                .avgRate(avgRate)
+                .build();
+    }
+
 }
