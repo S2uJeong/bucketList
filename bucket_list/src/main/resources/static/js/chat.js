@@ -256,7 +256,7 @@ let participantCnt = 0;
 function getChatParticipant(roomId) {
     if(roomId == '') return;
 
-    let html = '', i = 0, out = '';
+    let html = '', i = 0, out = '', hostName = '';
     let data, host;
 
     if(participantCnt == 0) {
@@ -273,10 +273,12 @@ function getChatParticipant(roomId) {
                 if(host.userName === lsUserName ) {
                     out = `<li><a class="dropdown-item" onclick="roomOut(${data[i].memberId},'${data[i].userName}',${roomId},${1})">강제퇴장</a></li>`;
                 }
+                if(host.userName === data[i].userName) hostName = '(관리자)';
+                else hostName = '';
 
                 if(data[i].memberId === lsMemberId) {
                     html += `<div class="list-group-item-action chat-menu-participant-wrap" id="participant-${data[i].memberId}">
-                            <p class="chat-menu-participant" data-bs-toggle="dropdown" aria-expanded="false">${data[i].userName}(나)</p>
+                            <p class="chat-menu-participant" data-bs-toggle="dropdown" aria-expanded="false">${data[i].userName}(나)${hostName}</p>
                                 <ul class="dropdown-menu dropdown-menu-start chat-menu-participant-list">
                                     <li><a class="dropdown-item" href="/profile/${data[i].memberId}" target="_blank">프로필 확인</a></li>
                                 </ul>
@@ -285,7 +287,7 @@ function getChatParticipant(roomId) {
                 } else {
 
                     html += `<div class="list-group-item-action chat-menu-participant-wrap" id="participant-${data[i].memberId}">
-                            <p class="chat-menu-participant" data-bs-toggle="dropdown" aria-expanded="false">${data[i].userName}</p>
+                            <p class="chat-menu-participant" data-bs-toggle="dropdown" aria-expanded="false">${data[i].userName}${hostName}</p>
                                 <ul class="dropdown-menu dropdown-menu-start chat-menu-participant-list">
                                     <li><a class="dropdown-item" href="/profile/${data[i].memberId}" target="_blank">프로필 확인</a></li>
                                     ${out} 

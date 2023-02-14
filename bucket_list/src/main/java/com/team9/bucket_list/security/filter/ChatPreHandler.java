@@ -53,7 +53,7 @@ public class ChatPreHandler implements ChannelInterceptor {
 
             if (authorizationHeader == null) {
                 log.info("chat header가 없는 요청입니다.");
-                throw new ApplicationException(ErrorCode.INVALID_TOKEN);
+                throw new MalformedJwtException("jwt");
             }
 
             //token 분리
@@ -63,13 +63,13 @@ public class ChatPreHandler implements ChannelInterceptor {
                 token = authorizationHeaderStr.replace("Bearer ", "");
             } else {
                 log.error("Authorization 헤더 형식이 틀립니다. : {}", authorizationHeader);
-                throw new ApplicationException(ErrorCode.INVALID_TOKEN);
+                throw new MalformedJwtException("jwt");
             }
 
             try {
                 memberId = JwtUtil.getMemberId(token);
             } catch (JsonProcessingException e) {
-                throw new ApplicationException(ErrorCode.INVALID_TOKEN);
+                throw new MalformedJwtException("jwt");
             }
 
             boolean isTokenValid = jwtUtil.validateToken(token);
