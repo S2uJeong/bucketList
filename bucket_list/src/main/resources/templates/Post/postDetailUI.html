@@ -116,6 +116,9 @@
         const payload = accessToken.split('.')[1];
         accessName = JSON.parse(decodeURIComponent(escape(window.atob(payload)))).userName;
         document.getElementById("userName").innerText = accessName;
+
+        let member_id = JSON.parse(decodeURIComponent(escape(window.atob(payload)))).memberId;
+        document.getElementById("profileHref").href = "/profile/" + member_id;
       }
 
 
@@ -1590,6 +1593,122 @@
               return Promise.reject(error);
             }
     )
+
+    //로그인
+    async function login() {
+      let email = document.getElementById('email').value;
+      let pw = document.getElementById('password').value;
+
+      try {
+        data = {"email" : email, "password" : pw }
+        const login_response = await axios.post('/login', data, config);
+        localStorage.setItem("accessToken", login_response.data.result.accessToken);
+        window.location.reload();
+      } catch (e) {
+        const login_error_message = e.response.data.result.message;
+        document.getElementById("login_error").style.display = 'block';
+        document.getElementById("login_error").innerText = login_error_message;
+      }
+    }
+
+    //닉네임 중복 검사
+    async function checkUserName() {
+      let userName = document.getElementById('form_userName').value;
+
+      try {
+        const response = await axios.post(
+                '/join/checkUserName',
+                {'userName' : userName} ,
+                config);
+        if (response.status === 200) {
+          document.getElementById('error_userName').style.display = 'none';
+          document.getElementById('able_userName').style.display = 'block';
+          document.getElementById('form_userName').readOnly = true;
+        }
+      } catch (error) {
+        document.getElementById('error_userName').style.display = 'block';
+        document.getElementById('able_userName').style.display = 'none';
+      }
+    }
+
+    //이메일 인증
+    async function checkEmail() {
+      let email = document.getElementById('form_email').value;
+
+      try {
+        const response = await axios.post(
+                '/join/email',
+                {'email' : email} ,
+                config);
+
+        code = response.data.result;
+        document.getElementById('error_email').style.display = 'none';
+        document.getElementById('send_email').style.display = 'block';
+
+      } catch (error) {
+        document.getElementById('error_email').style.display = 'block';
+        document.getElementById('send_email').style.display = 'none';
+
+      }
+    }
+
+    //비밀번호-비밀번호확인 일치여부
+    function checkPasswordCorrect() {
+      let password_correct = document.getElementById('check_pw').value;
+      let password = document.getElementById('pw').value;
+
+      if (password_correct !== password) {
+        document.getElementById('error_passwordCorrect').style.display = 'block';
+      } else {
+        document.getElementById('error_passwordCorrect').style.display = 'none';
+      }
+    }
+
+    //회원가입 요청
+    async function join() {
+      let check_userName = document.getElementById("form_userName").readOnly
+      let userName = document.getElementById("form_userName").value;
+      let pw = document.getElementById("pw").value;
+      let check_pw = document.getElementById("check_pw").value;
+      let gender = document.getElementById("form_gender").value;
+      let age = document.getElementById("age").value;
+      let email = document.getElementById("form_email").value;
+      let input_code = document.getElementById("code").value;
+
+      let data = {
+        'userName' : userName,
+        'email' : email,
+        'password' : pw,
+        'passwordCorrect' : check_pw,
+        'age' : age,
+        'gender' : gender
+      }
+
+      if (code !== input_code) {
+        document.getElementById('error_code').style.display = 'block';
+      }
+
+      if (gender.length === 0) {
+        document.getElementById('error_gender').style.display = 'block';
+      }
+
+      if(check_userName && (code === input_code) && gender.length>0) {
+        document.getElementById('error_code').style.display = 'none';
+        try {
+          const res = await axios.post('/join', data, config);
+
+          alert('회원가입 완료')
+          window.location.href = '/';
+        } catch (e) {
+        }
+      }
+    }
+
+    function logout() {
+      localStorage.clear();
+      window.location.href = '/';
+    }
+
   </script>
 
 
