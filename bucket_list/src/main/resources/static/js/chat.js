@@ -182,14 +182,28 @@ function onMessageReceived(payload) {
                     </div>
                 </div>`;
     } else if (message.chatType === 'LEAVE') {
-        console.log("채팅방 퇴장")
-        if(message.memberId === lsMemberId) {
-            alert("채팅방에서 퇴장하셨습니다");
-            location.href='/';
+        $(`#participant-${message.memberId}`).remove();
+        let leaveChatMessage = '';
+        let leaveMessage = '';
+
+        if(message.message == 0) {
+            leaveChatMessage = `${message.userName}님이 퇴장하셨습니다`;
+            leaveMessage = "채팅방에서 퇴장하셨습니다";
         }
+        else if(message.message == 1) {
+            leaveChatMessage = `관리자님이 ${message.userName}님을 강제퇴장 시켰습니다`;
+            leaveMessage = "채팅방에서 강제퇴장 당하셨습니다";
+        }
+
+        console.log("채팅방 퇴장");
+        if(message.memberId === lsMemberId) {
+            alert(leaveMessage);
+            location.href = '/';
+        }
+
         html += `<div class="d-flex flex-column justify-content-end message-box-wrap join-message-wrap">
                     <div class="alert alert-secondary join-message">
-                        ${message.userName}님이 퇴장하셨습니다
+                        ${leaveChatMessage} 
                     </div>
                 </div>`;
     } else if (message.chatType === 'LIST') {
@@ -319,13 +333,10 @@ function roomOut(memberId,userName,roomId,num) {
             console.log(res);
             if(res.data.result == 1) {
                 if(num == 0) {
-                    alert("채팅방에서 퇴장했습니다");
-                    leaveMessage(roomId,memberId,userName);
-                    location.href='/';
+                    leaveMessage(roomId,memberId,userName,0);
                 } else if(num == 1) {
                     alert("성공적으로 퇴장시켰습니다.");
-                    $(`#participant-${memberId}`).remove();
-                    leaveMessage(roomId,memberId,userName);
+                    leaveMessage(roomId,memberId,userName,1);
                 }
             }
         }).catch(error => {
@@ -334,12 +345,12 @@ function roomOut(memberId,userName,roomId,num) {
     }
 }
 
-function leaveMessage(roomId,memberId,userName) {
+function leaveMessage(roomId,memberId,userName,num) {
     let chatMessage = {
         'roomId':roomId,
         'memberId':memberId,
         'userName':userName,
-        'message':'퇴장',
+        'message':''+num+'',
         chatType: 'LEAVE'
     };
     stompClient.send("/pub/chat/leave", messageHeader, JSON.stringify(chatMessage));

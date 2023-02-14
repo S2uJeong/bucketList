@@ -81,7 +81,6 @@ public class ChatController {
     public void leave(@Payload ChatRequest chatRequest, SimpMessageHeaderAccessor headerAccessor) {
         //채팅방에서 퇴장할때
         log.info("퇴장합니다" + chatRequest.getUserName());
-        chatService.checkParticipant(chatRequest);
         template.convertAndSend("/sub/chat/room/"+chatRequest.getRoomId(),chatRequest);
     }
 }
