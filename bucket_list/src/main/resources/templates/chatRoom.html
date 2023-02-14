@@ -71,10 +71,8 @@
 
     function onMessageReceived2(payload) {
         let data = JSON.parse(payload.body);
-        console.log("채팅 리스트"+data)
     }
 
-    console.log(`header : ${header}`);*/
 
     stompClient.connect(header,onConnected,onError);
 
@@ -95,19 +93,14 @@
 
     function onMessageReceived2(payload) {
         let data = JSON.parse(payload.body);
-        console.log("on message received2 : "+payload);
-        console.log("채팅 리스트"+data)
     }
 
     function onMessageReceived(payload) {
         let message = JSON.parse(payload.body);
 
         if(message.type === 'JOIN') {
-            console.log("입장");
         } else if (message.type === 'LEAVE') {
-            console.log("퇴장");
         } else if (message.type === 'LIST') {
-            console.log("채팅방 리스트 업데이트")
         } else {
             if(!(message.memberId === memberId))
                 $('#messageArea').append(message.message);
