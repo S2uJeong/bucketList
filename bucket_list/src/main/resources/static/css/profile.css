@@ -22,7 +22,7 @@
     color: #ff891f;
 }
 
-.modal {
+.profile-modal {
     display: none;
     /* Hidden by default */
     position: fixed;
@@ -44,7 +44,7 @@
 }
 
 /* Modal Content */
-.modal-content {
+.profile-modal-content {
     background-color: #fefefe;
     margin: 15% auto;
     /* 15% from the top and centered */
@@ -70,12 +70,12 @@
 }
 
 /* !-- 모달창 내부 (파일 업로드) */
-.modal-container {
+.profile-modal-container {
     margin: 0 auto;
     text-align: center;
 }
 
-.modal-form{
+.profile-modal-form{
     margin: 30px 0;
 }
 
