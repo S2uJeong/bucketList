@@ -18,6 +18,7 @@ import org.springframework.data.web.SortDefault;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.List;
 
 @RestController
@@ -30,7 +31,6 @@ public class ChatRestController {
     private final ChatService chatService;
 
     //유저 채팅목록
-    //auth 나중에 추가
     @GetMapping
     @Operation(summary = "채팅목록 조회", description = "memberId에 해당하는 채팅방 리스트를 출력합니다.")
     public Page<ChatRoomResponse> getChatList(@Parameter(hidden = true) @PageableDefault(size = 20) @SortDefault(sort = "lastMessageTime", direction = Sort.Direction.DESC) Pageable pageable, Authentication authentication) {
@@ -41,8 +41,8 @@ public class ChatRestController {
     //채팅방 생성
     @PostMapping("/create-room/{postId}")
     @Operation(summary = "채팅방 생성", description = "채팅방을 생성합니다.")
-    public Response<ChatRoom> createChatRoom(@Parameter(name = "postId", description = "게시글 id") @PathVariable Long postId, ChatRoomRequest chatRoomRequest) {
-        return Response.success(chatService.createChatRoom(postId, chatRoomRequest));
+    public Response<ChatRoom> createChatRoom(@Parameter(name = "postId", description = "게시글 id") @PathVariable Long postId) {
+        return Response.success(chatService.createChatRoom(postId));
     }
 
     //유저 초대
@@ -68,7 +68,7 @@ public class ChatRestController {
 
     @DeleteMapping("/out")
     @Operation(summary = "채팅방 나가기", description = "roomId와 memberId를 이용해 채팅방을 나갑니다")
-    public Response outChatRoom(@RequestBody ChatOutRequest chatOutRequest) {
+    public Response outChatRoom(@RequestBody ChatOutRequest chatOutRequest) throws ParseException {
         return Response.success(chatService.outChatRoom(chatOutRequest));
     }
 }

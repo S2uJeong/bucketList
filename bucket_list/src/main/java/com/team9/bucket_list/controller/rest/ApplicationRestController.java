@@ -5,6 +5,8 @@ import com.team9.bucket_list.domain.dto.application.ApplicationDecisionRequest;
 import com.team9.bucket_list.domain.dto.application.ApplicationFindAllResponse;
 import com.team9.bucket_list.domain.dto.application.ApplicationListResponse;
 import com.team9.bucket_list.domain.dto.application.ApplicationRequest;
+import com.team9.bucket_list.execption.ApplicationException;
+import com.team9.bucket_list.execption.ErrorCode;
 import com.team9.bucket_list.service.ApplicationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -17,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.List;
 
 @RestController
@@ -27,6 +30,17 @@ import java.util.List;
 public class ApplicationRestController {
 
     private final ApplicationService applicationService;
+
+    @GetMapping("/check/{postId}")
+    @Operation(summary = "신청서", description = "참가 신청서를 작성할 수 있는 유저인지 판별합니다.")
+    public Response<String> checkApplication(Authentication authentication, @PathVariable Long postId) throws ParseException {
+        log.info("asdfasdf");
+        if (applicationService.canWriteApplication(authentication, postId)) {
+            return Response.success("가능합니다.");
+        } else {
+            throw new ApplicationException(ErrorCode.DUPLICATED_APPLICATION);
+        }
+    }
 
     //신청서 제출
     @PostMapping

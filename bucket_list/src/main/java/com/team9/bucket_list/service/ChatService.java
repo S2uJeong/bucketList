@@ -3,6 +3,7 @@ package com.team9.bucket_list.service;
 import com.team9.bucket_list.domain.dto.application.ApplicationDecisionRequest;
 import com.team9.bucket_list.domain.dto.chat.*;
 import com.team9.bucket_list.domain.entity.*;
+import com.team9.bucket_list.domain.enumerate.PostStatus;
 import com.team9.bucket_list.execption.ApplicationException;
 import com.team9.bucket_list.execption.ErrorCode;
 import com.team9.bucket_list.repository.*;
@@ -16,14 +17,17 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
-@EnableAsync
+//@EnableAsync
 @Transactional(readOnly = true)
 public class ChatService {
 
@@ -53,7 +57,7 @@ public class ChatService {
     }
 
     @Transactional
-    public ChatRoom createChatRoom(Long postId, ChatRoomRequest chatRoomRequest) {
+    public ChatRoom createChatRoom(Long postId) {
         //postId로 post 엔티티 찾기
         Post post = postRepository.findById(postId).orElseThrow(() -> new ApplicationException(ErrorCode.POST_NOT_FOUND));
 
@@ -96,17 +100,22 @@ public class ChatService {
     @Async
     @Transactional
     public CompletableFuture<ChatRequest> updateMessage(ChatRequest chatRequest) {
-        log.info(chatRequest.toString());
-        //채팅방이 존재하는지, 멤버가 존재하는지 확인
-        ChatRoom chatRoom = chatRoomRepository.findById(chatRequest.getRoomId()).orElseThrow(() -> new ApplicationException(ErrorCode.INVALID_PERMISSION));
-        Member member = memberRepository.findById(chatRequest.getMemberId()).orElseThrow(() -> new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED));
+        try {
+            log.info(chatRequest.toString());
+            //채팅방이 존재하는지, 멤버가 존재하는지 확인
+            ChatRoom chatRoom = chatRoomRepository.findById(chatRequest.getRoomId()).orElseThrow(() -> new ApplicationException(ErrorCode.INVALID_PERMISSION));
+            Member member = memberRepository.findById(chatRequest.getMemberId()).orElseThrow(() -> new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED));
 
-        //채팅저장및 채팅방 업데이트 시간 저장
-        chatRepository.save(Chat.save(chatRequest,chatRoom,member));
-        ChatRoom savedChatRoom = chatRoomRepository.save(ChatRoom.messageTimeUpdate(chatRoom,chatRequest));
-        log.info("채팅 저장 완료");
+            //채팅저장및 채팅방 업데이트 시간 저장
+            chatRepository.save(Chat.save(chatRequest,chatRoom,member));
+            ChatRoom savedChatRoom = chatRoomRepository.save(ChatRoom.messageTimeUpdate(chatRoom,chatRequest));
+            log.info("채팅 저장 완료");
 
-        return CompletableFuture.completedFuture(ChatRequest.chatListResponse(savedChatRoom));
+            return CompletableFuture.completedFuture(ChatRequest.chatListResponse(savedChatRoom));
+        } catch (RejectedExecutionException chatThreadEx) {
+            throw chatThreadEx;
+        }
+
     }
 
     @Transactional
@@ -123,9 +132,9 @@ public class ChatService {
     }
 
     @Transactional
-    public int outChatRoom(ChatOutRequest chatOutRequest) {
-        ChatRoom chatRoom = chatRoomRepository.findById(chatOutRequest.getRoomId()).orElseThrow(() -> new ApplicationException(ErrorCode.CHAT_ROOM_NOT_FOUNT));
-        ChatParticipant chatParticipant = chatParticipantRepository.findByChatRoom_IdAndMember_Id(chatOutRequest.getRoomId(), chatOutRequest.getMemberId()).orElseThrow(() -> new ApplicationException(ErrorCode.CHAT_ROOM_NOT_FOUNT));
+    public int outChatRoom(ChatOutRequest chatOutRequest) throws ParseException {
+        ChatRoom chatRoom = chatRoomRepository.findById(chatOutRequest.getRoomId()).orElseThrow(() -> new ApplicationException(ErrorCode.CHAT_ROOM_NOT_FOUND));
+        ChatParticipant chatParticipant = chatParticipantRepository.findByChatRoom_IdAndMember_Id(chatOutRequest.getRoomId(), chatOutRequest.getMemberId()).orElseThrow(() -> new ApplicationException(ErrorCode.CHAT_ROOM_NOT_FOUND));
         //Application application = applicationRepository.findByMember_IdAndPost_Id(chatOutRequest.getMemberId(), chatRoom.getPost().getId()).orElseThrow(() -> new ApplicationException(ErrorCode.APPLICATION_NOT_FOUND));
 
         //채팅방 퇴장
@@ -138,6 +147,20 @@ public class ChatService {
         /*ApplicationDecisionRequest applicationDecisionRequest = ApplicationDecisionRequest.builder().status((byte) 2).build();
         applicationRepository.save(Application.updateStatus(application,applicationDecisionRequest));*/
         applicationRepository.updateRejectApplication(chatOutRequest.getMemberId(), chatRoom.getPost().getId());
+
+        //현재 시각이 모집 마감일 전이면 모집중으로 변경
+        Post post = chatRoom.getPost();
+
+        String untilRecruit = post.getUntilRecruit();
+
+        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+        Date recruitEndDate = formatter.parse(untilRecruit);
+        Date now = new Date();
+
+        if (now.before(recruitEndDate)) {
+            //모집 마감일 전
+            postRepository.updateStatusJoin(post.getId());
+        }
 
         return 1;
     }

@@ -1,8 +1,8 @@
 package com.team9.bucket_list.fixture;
 
 
-import com.team9.bucket_list.domain.entity.Member;
 import com.team9.bucket_list.domain.entity.Post;
+import com.team9.bucket_list.domain.entity.Member;
 import com.team9.bucket_list.domain.enumerate.PostStatus;
 import lombok.Builder;
 
@@ -39,7 +39,7 @@ public class PostFixture {
                 .eventEnd("03/01/2023")
                 .category("TRAVEL")
                 .status(PostStatus.JOIN)
-                .member(member)
+                .member(MemberFixture.get("email","passwrd","name"))
                 .build();
     }
 
