@@ -21,12 +21,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
-@EnableAsync
+//@EnableAsync
 @Transactional(readOnly = true)
 public class ChatService {
 
@@ -99,17 +100,22 @@ public class ChatService {
     @Async
     @Transactional
     public CompletableFuture<ChatRequest> updateMessage(ChatRequest chatRequest) {
-        log.info(chatRequest.toString());
-        //채팅방이 존재하는지, 멤버가 존재하는지 확인
-        ChatRoom chatRoom = chatRoomRepository.findById(chatRequest.getRoomId()).orElseThrow(() -> new ApplicationException(ErrorCode.INVALID_PERMISSION));
-        Member member = memberRepository.findById(chatRequest.getMemberId()).orElseThrow(() -> new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED));
+        try {
+            log.info(chatRequest.toString());
+            //채팅방이 존재하는지, 멤버가 존재하는지 확인
+            ChatRoom chatRoom = chatRoomRepository.findById(chatRequest.getRoomId()).orElseThrow(() -> new ApplicationException(ErrorCode.INVALID_PERMISSION));
+            Member member = memberRepository.findById(chatRequest.getMemberId()).orElseThrow(() -> new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED));
 
-        //채팅저장및 채팅방 업데이트 시간 저장
-        chatRepository.save(Chat.save(chatRequest,chatRoom,member));
-        ChatRoom savedChatRoom = chatRoomRepository.save(ChatRoom.messageTimeUpdate(chatRoom,chatRequest));
-        log.info("채팅 저장 완료");
+            //채팅저장및 채팅방 업데이트 시간 저장
+            chatRepository.save(Chat.save(chatRequest,chatRoom,member));
+            ChatRoom savedChatRoom = chatRoomRepository.save(ChatRoom.messageTimeUpdate(chatRoom,chatRequest));
+            log.info("채팅 저장 완료");
 
-        return CompletableFuture.completedFuture(ChatRequest.chatListResponse(savedChatRoom));
+            return CompletableFuture.completedFuture(ChatRequest.chatListResponse(savedChatRoom));
+        } catch (RejectedExecutionException chatThreadEx) {
+            throw chatThreadEx;
+        }
+
     }
 
     @Transactional
