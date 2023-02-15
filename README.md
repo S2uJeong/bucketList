@@ -1,4 +1,9 @@
-![waving](https://capsule-render.vercel.app/api?type=waving&height=200&text=Bucketlist!&fontAlign=80&fontAlignY=40&color=gradient)
+<div align="center">
+    ![waving](https://capsule-render.vercel.app/api?type=waving&height=200&text=Bucketlist!&fontAlign=80&fontAlignY=40&color=gradient)
+</div>
+
+<center>![waving](https://capsule-render.vercel.app/api?type=waving&height=200&text=Bucketlist!&fontAlign=80&fontAlignY=40&color=gradient)</center>
+
 <p align='center'> Web(We arE Best) : 최수정(PM), 정재현(CTO), 고관운, 박은빈, 배지원, 변지환 </p>
 <p align='center'>
   <a href="http://ec2-13-125-143-78.ap-northeast-2.compute.amazonaws.com:8080/swagger-ui/index.html">
@@ -162,7 +167,9 @@ dependencies {
     - 참가 인원이 달성되거나 모집기간이 만료되면 해당 게시글에 참여 신청이 마감
     - 버킷리스트 이행이 완료되면 참가자와 버킷리스트에 대한 평점을 작성
 - [x]  채팅방
-    - 참여 승인을 받은 버킷리스트의 모집기간이 만료되면 자동으로 생성
+    - 채팅에 jwt인증, 에러핸들링
+    - 게시글 작성시 채팅방 자동 생성
+    - 버킷리스트 신청서가 수락될 경우 채팅방에 자동 초대
     - 채팅방 나가기와 강퇴 기능
 - [x]  마이피드
     - 본인만 확인 가능
