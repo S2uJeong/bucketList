@@ -4,8 +4,8 @@
 
 <div align="center">
 <p align='center'>
-    <a href="http://ec2-13-125-143-78.ap-northeast-2.compute.amazonaws.com:8080/swagger-ui/index.html">
-     <img src="https://img.shields.io/badge/Bucketlist Swagger-85EA2D?style=flat&logo=Swagger&logoColor=white"/>
+    <a href="https://www.ourbucketlist.link/swagger-ui/index.html">
+     <img src="https://img.shields.io/badge/Swagger-85EA2D?style=flat&logo=Swagger&logoColor=white"/>
   </a> | 
 
   <a href="https://www.ourbucketlist.link">
@@ -27,26 +27,20 @@
 
 ## WEB(We arE Best) 팀원
 
-- 최수정(PM)
-- 정재현(CTO)
-- 고관운
-- 박은빈
-- 배지원 변지환
+| 역할 | 이름 |
+| --- | --- |
+| PM | 최수정 |
+| CTO | 정재현 |
+| Developer | 고관운 |
+| Server Developer | 박은빈 |
+| PD | 배지원 |
+| Developer | 변지환 |
 
 ## EndPoint
 [🔗 EndPoint_Notion](https://www.notion.so/endpoint-681884ecf7fe4f37b658c5fcbb1a6ed3)
 
+
 ## 개발환경
-
-- JAVA 17
-- Build : Gradle 6.8
-- DB : MySql 8.0, AWS RDS
-- Server : AWS EC2, S3, Docker
-- CI&CD : GitLab
-- IDE : Intellij Ultimate
-- Front-End : JS, HTML, CSS, JQuery, Axios
-
-## 개발환경(꾸민.ver)
 
 - JAVA 17
 - Build : <img src="https://img.shields.io/badge/Gradle 6.8-02303A?style=flat-square&logo=Gradle&logoColor=white"/>
@@ -117,74 +111,83 @@ dependencies {
 }
 ```
 
-## GIT FLOW
-**추가 할 예정**
+## 인프라 아키텍처
+![bucketlist-아키텍처-최종](https://user-images.githubusercontent.com/114675855/218972182-5c32cb0f-f735-414f-b88f-7743b615acd7.jpg)
 
 
-## ERD(재현님이랑 상의해서 다시 짜야됨)
-**추가 할 예정**
+## ERD
+📎 ERD-CLOUD
+![버킷리스트 (2)](https://user-images.githubusercontent.com/114675855/218972725-8c5115e6-944d-49aa-ad2e-ee32dca716fd.png)
 
 
 ## ERROR CODE
+| 도메인 | 에러코드 | 설명 |
+| --- | --- | --- |
+| 공통 | DUPLICATED_EMAIL | 중복됩니다. |
+|  | DUPLICATED_USERNAME | userName이 중복됩니다. |
+|  | DUPLICATED_ALARM | 알람이 중복됩니다. |
+|  | INCORRECT_PASSWORD_CORRECT | Email이 중복됩니다. |
+|  | INVALID_PASSWORD | 패스워드가 잘못되었습니다. |
+|  | USERNAME_NOT_FOUNDED | 해당 사용자는 없습니다. |
+|  | INVALID_PERMISSION | 사용자가 권한이 없습니다. |
+|  | DATABASE_ERROR | DB에러 |
+|  | ALARM_NOT_FOUND | 해당 알람이 없습니다. |
+| 포스트 | POST_NOT_FOUND | 해당 포스트가 없습니다. |
+|  | DUPLICATED_LIKE | 같은 글에 좋아요를 두 번 눌렀습니다. |
+|  | APPLICATION_NOT_FOUND | 해당 신청서가 없습니다. |
+|  | EXCEED_ENTRANT_NUM | 참가자 수를 초과하였습니다. |
+| 로그인 | INVALID_TOKEN | 잘못된 토큰입니다. |
+|  | REFRESH_TOKEN_NOT_FOUNDED | 해당 사용자에 대한 리프레시 토큰이 없습니다. |
+|  | INVALID_REFRESH_TOKEN | refresh token 만료 |
+| 파일 | FILE_NOT_EXISTS | 빈 파일입니다. |
+|  | FILE_UPLOAD_ERROR | 파일 업로드에 실패했습니다. |
+|  | WRONG_FILE_FORMAT | 파일 형식이 틀립니다. |
+| 댓글 | COMMENT_NOT_FOUND | 해당 댓글이 없습니다. |
+| 프로필 | PROFILE_NOT_FOUND | 해당 프로필이 없습니다. |
+| 리뷰 | REVIEW_NOT_FOUND | 해당 리뷰가 없습니다. |
+| 채팅 | CHAT_ROOM_NOT_FOUND | 채팅방을 찾을 수 없습니다. |
 
-| 에러코드 | 설명 |
-| --- | --- |
-| DUPLICATED_EMAIL | 중복됩니다. |
-| DUPLICATED_USERNAME | userName이 중복됩니다. |
-| DUPLICATED_ALARM | 알람이 중복됩니다. |
-| INCORRECT_PASSWORD_CORRECT | Email이 중복됩니다. |
-| INVALID_PASSWORD | 패스워드가 잘못되었습니다. |
-| USERNAME_NOT_FOUNDED | 해당 사용자는 없습니다. |
-| REFRESH_TOKEN_NOT_FOUNDED | 해당 사용자에 대한 리프레시 토큰이 없습니다. |
-| INVALID_TOKEN | 잘못된 토큰입니다. |
-| INVALID_REFRESH_TOKEN | refresh token 만료 |
-| INVALID_PERMISSION | 사용자가 권한이 없습니다. |
-| POST_NOT_FOUND | 해당 포스트가 없습니다. |
-| COMMENT_NOT_FOUND | 해당 댓글이 없습니다. |
-| DUPLICATED_LIKE | 같은 글에 좋아요를 두 번 눌렀습니다. |
-| DATABASE_ERROR | DB에러 |
-| REVIEW_NOT_FOUND | 해당 리뷰가 없습니다. |
-| BUCKETLIST_NOT_FOUND | 해당 버킷리스트가 없습니다. |
-| APPLICATION_NOT_FOUND | 해당 신청서가 없습니다. |
-| ALARM_NOT_FOUND | 해당 알람이 없습니다. |
-| FILE_NOT_EXISTS | 빈 파일입니다. |
-| EXCEED_ENTRANT_NUM | 참가자 수를 초과하였습니다. |
-| FILE_UPLOAD_ERROR | 파일 업로드에 실패했습니다. |
-| WRONG_FILE_FORMAT | 파일 형식이 틀립니다. |
-| PROFILE_NOT_FOUND | 해당 프로필이 없습니다. |
-| CHAT_ROOM_NOT_FOUNT | 채팅방을 찾을 수 없습니다. |
 
 ## 기능리스트
 
 - [x]  게시글
     - 전체 게시글, 카테고리별 게시글 확인 가능
     - 폼을 통해 버킷리스트를 작성하고 날짜, 지도(카카오맵 API), 이미지 추가
-    - 버킷리스트 게시글에서 댓글과 대댓글, 참가 신청이 가능
+    - 버킷리스트 게시글에서 댓글과 대댓글, 참가 신청, 좋아요 기능
     - 호스트는 참가 신청서를 보고 참가자를 선택
-    - 참가 인원이 달성되거나 모집기간이 만료되면 해당 게시글에 참여 신청이 마감
+    - 참가 인원이 달성되거나 모집기간이 만료되면 해당 게시글에 참여 신청이 마감(중복 신청 방지)
     - 버킷리스트 이행이 완료되면 참가자와 버킷리스트에 대한 평점을 작성
+    - 버킷리스트 리뷰 출력
+    - 포스트 업로드 사진 용량 제한
 - [x]  채팅방
+    - 그룹 채팅
     - 채팅에 jwt인증, 에러핸들링
     - 게시글 작성시 채팅방 자동 생성
     - 버킷리스트 신청서가 수락될 경우 채팅방에 자동 초대
-    - 채팅방 나가기와 강퇴 기능
+    - 채팅방 나가기, 호스트의 팀원 강퇴 기능
 - [x]  마이피드
     - 본인만 확인 가능
     - 작성, 좋아요, 신청, 승낙, 완료한 버킷리스트가 출력
 - [x]  프로필
     - 본인 외 로그인하지 않은 사용자까지 확인 가능
     - 프로필 사진, 이메일, 평점, 리뷰가 출력
-    - 프로필 사진은 프로필 주인일 경우만 수정이 가능
+    - 프로필 사진은 본인 프로필인 경우만 수정 가능
+    - 프로필 업로드 사진 용량 제한
     - 프로필 주인의 평점과 리뷰를 확인
 - [x]  회원가입, 로그인
+    - Email 인증
     - 네이버, 구글 API를 사용한 로그인
+    - 일반, sns회원 중복 회원가입 방지
 - [x]  알람
-    - 신규 댓글, 버킷리스트 참가 신청, 리뷰 실시간 알림
+    - 신규 댓글, 버킷리스트 참가 신청, 좋아요, 리뷰 실시간 알림
+    - 모두 읽음 처리
 - [x]  검색/필터링
     - 검색 기능
     - 일정, 가격 필터링 기능
 - [x]  테스트 코드
-    - 테스트
+    - 컨트롤러 테스트
+
+
 
 ## UI 개발
 
@@ -239,16 +242,12 @@ dependencies {
 
 ## WEEKLY LOG
 
-🔗 [1주차 위클리](https://gitlab.com/S2uJeong1/bucketlist/-/tree/main/Weekly_Log)
+🔗 [1주차 위클리](https://gitlab.com/S2uJeong1/bucketlist/-/blob/main/Weekly_Log/%5B1%EC%A3%BC%EC%B0%A8%5Didea_9%ED%8C%80_%EC%A7%84%ED%96%89%EC%83%81%ED%99%A9_%EA%B3%B5%EC%9C%A0.md)
 
-🔗 [2주차 위클리](https://gitlab.com/S2uJeong1/bucketlist/-/tree/main/Weekly_Log)
+🔗 [2주차 위클리](https://gitlab.com/S2uJeong1/bucketlist/-/blob/main/Weekly_Log/%5B2%EC%A3%BC%EC%B0%A8%5Didea_9%ED%8C%80_%EC%A7%84%ED%96%89%EC%83%81%ED%99%A9_%EA%B3%B5%EC%9C%A0.md)
 
 🔗 [3주차 위클리](https://gitlab.com/S2uJeong1/bucketlist/-/blob/main/Weekly_Log/%5B3%EC%A3%BC%EC%B0%A8%5Didea_9%ED%8C%80_%EC%A7%84%ED%96%89%EC%83%81%ED%99%A9_%EA%B3%B5%EC%9C%A0.md)
 
 🔗 [4주차 위클리](https://gitlab.com/S2uJeong1/bucketlist/-/blob/main/Weekly_Log/%5B4%EC%A3%BC%EC%B0%A8%5Didea_9%ED%8C%80_%EC%A7%84%ED%96%89%EC%83%81%ED%99%A9_%EA%B3%B5%EC%9C%A0.md)
 
 🔗 5주차 위클리
-
-<div align="center>
-    ![Footer](https://capsule-render.vercel.app/api?type=waving&color=auto&height=200&section=footer)
-</div>
