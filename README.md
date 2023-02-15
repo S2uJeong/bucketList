@@ -32,8 +32,7 @@
 | 2023년 2월 17일 | 데모데이(수료) |
 
 ## EndPoint
-
-[endpoint](https://www.notion.so/endpoint-681884ecf7fe4f37b658c5fcbb1a6ed3)
+[🔗 EndPoint_Notion](https://www.notion.so/endpoint-681884ecf7fe4f37b658c5fcbb1a6ed3)
 
 ## 개발환경
 
@@ -117,85 +116,75 @@ dependencies {
 ```
 
 ## GIT FLOW
+**추가 할 예정**
 
-### 인프라(이 부분을 어쩌면 좋을까 🤔)
-
-- [ ]  AWS 서버
-    - 
-- [ ]  Swagger
-    - API 문서 자동화 용이 및 API 테스트 기능
-- [ ]  GitLab CI&CD pipeline 구축
-    - 소프트웨어 버전 관리 및 테스트 기능
-    - git의 project가 업데이트 되었다면, 현재 컨테이너 제거 후 재실행 하도록 [deploy.sh](http://deploy.sh) 작성
-    - docker file을 통해 build
-    - crontab 기능으로 정정기적으로 [deploy.sh](http://deploy.sh) 실행
 
 ## ERD(재현님이랑 상의해서 다시 짜야됨)
+**추가 할 예정**
 
-![erd01.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/1a20b0e7-2661-4b8e-b0d6-b757ce63abcc/erd01.png)
 
 ## ERROR CODE
 
-| 도메인 | 에러코드 | 설명 |
-| --- | --- | --- |
-|  | DUPLICATED_EMAIL | 중복됩니다. |
-|  | DUPLICATED_USERNAME | userName이 중복됩니다. |
-|  | DUPLICATED_ALARM | 알람이 중복됩니다. |
-|  | INCORRECT_PASSWORD_CORRECT | Email이 중복됩니다. |
-|  | INVALID_PASSWORD | 패스워드가 잘못되었습니다. |
-|  | USERNAME_NOT_FOUNDED | 해당 사용자는 없습니다. |
-|  | REFRESH_TOKEN_NOT_FOUNDED | 해당 사용자에 대한 리프레시 토큰이 없습니다. |
-|  | INVALID_TOKEN | 잘못된 토큰입니다. |
-|  | INVALID_REFRESH_TOKEN | refresh token 만료 |
-|  | INVALID_PERMISSION | 사용자가 권한이 없습니다. |
-|  | POST_NOT_FOUND | 해당 포스트가 없습니다. |
-|  | COMMENT_NOT_FOUND | 해당 댓글이 없습니다. |
-|  | DUPLICATED_LIKE | 같은 글에 좋아요를 두 번 눌렀습니다. |
-|  | DATABASE_ERROR | DB에러 |
-|  | REVIEW_NOT_FOUND | 해당 리뷰가 없습니다. |
-|  | BUCKETLIST_NOT_FOUND | 해당 버킷리스트가 없습니다. |
-|  | APPLICATION_NOT_FOUND | 해당 신청서가 없습니다. |
-|  | ALARM_NOT_FOUND | 해당 알람이 없습니다. |
-|  | FILE_NOT_EXISTS | 빈 파일입니다. |
-|  | EXCEED_ENTRANT_NUM | 참가자 수를 초과하였습니다. |
-|  | FILE_UPLOAD_ERROR | 파일 업로드에 실패했습니다. |
-|  | WRONG_FILE_FORMAT | 파일 형식이 틀립니다. |
-|  | PROFILE_NOT_FOUND | 해당 프로필이 없습니다. |
-|  | CHAT_ROOM_NOT_FOUNT | 채팅방을 찾을 수 없습니다. |
+| 에러코드 | 설명 |
+| --- | --- |
+| DUPLICATED_EMAIL | 중복됩니다. |
+| DUPLICATED_USERNAME | userName이 중복됩니다. |
+| DUPLICATED_ALARM | 알람이 중복됩니다. |
+| INCORRECT_PASSWORD_CORRECT | Email이 중복됩니다. |
+| INVALID_PASSWORD | 패스워드가 잘못되었습니다. |
+| USERNAME_NOT_FOUNDED | 해당 사용자는 없습니다. |
+| REFRESH_TOKEN_NOT_FOUNDED | 해당 사용자에 대한 리프레시 토큰이 없습니다. |
+| INVALID_TOKEN | 잘못된 토큰입니다. |
+| INVALID_REFRESH_TOKEN | refresh token 만료 |
+| INVALID_PERMISSION | 사용자가 권한이 없습니다. |
+| POST_NOT_FOUND | 해당 포스트가 없습니다. |
+| COMMENT_NOT_FOUND | 해당 댓글이 없습니다. |
+| DUPLICATED_LIKE | 같은 글에 좋아요를 두 번 눌렀습니다. |
+| DATABASE_ERROR | DB에러 |
+| REVIEW_NOT_FOUND | 해당 리뷰가 없습니다. |
+| BUCKETLIST_NOT_FOUND | 해당 버킷리스트가 없습니다. |
+| APPLICATION_NOT_FOUND | 해당 신청서가 없습니다. |
+| ALARM_NOT_FOUND | 해당 알람이 없습니다. |
+| FILE_NOT_EXISTS | 빈 파일입니다. |
+| EXCEED_ENTRANT_NUM | 참가자 수를 초과하였습니다. |
+| FILE_UPLOAD_ERROR | 파일 업로드에 실패했습니다. |
+| WRONG_FILE_FORMAT | 파일 형식이 틀립니다. |
+| PROFILE_NOT_FOUND | 해당 프로필이 없습니다. |
+| CHAT_ROOM_NOT_FOUNT | 채팅방을 찾을 수 없습니다. |
 
 ## 기능리스트
 
-- [ ]  게시글
+- [x]  게시글
     - 전체 게시글, 카테고리별 게시글 확인 가능
     - 폼을 통해 버킷리스트를 작성하고 날짜, 지도(카카오맵 API), 이미지 추가
     - 버킷리스트 게시글에서 댓글과 대댓글, 참가 신청이 가능
     - 호스트는 참가 신청서를 보고 참가자를 선택
     - 참가 인원이 달성되거나 모집기간이 만료되면 해당 게시글에 참여 신청이 마감
     - 버킷리스트 이행이 완료되면 참가자와 버킷리스트에 대한 평점을 작성
-- [ ]  채팅방
+- [x]  채팅방
     - 참여 승인을 받은 버킷리스트의 모집기간이 만료되면 자동으로 생성
     - 채팅방 나가기와 강퇴 기능
-- [ ]  마이피드
+- [x]  마이피드
     - 본인만 확인 가능
     - 작성, 좋아요, 신청, 승낙, 완료한 버킷리스트가 출력
-- [ ]  프로필
+- [x]  프로필
     - 본인 외 로그인하지 않은 사용자까지 확인 가능
     - 프로필 사진, 이메일, 평점, 리뷰가 출력
     - 프로필 사진은 프로필 주인일 경우만 수정이 가능
     - 프로필 주인의 평점과 리뷰를 확인
-- [ ]  회원가입, 로그인
+- [x]  회원가입, 로그인
     - 네이버, 구글 API를 사용한 로그인
-- [ ]  알람
+- [x]  알람
     - 신규 댓글, 버킷리스트 참가 신청, 리뷰 실시간 알림
-- [ ]  검색/필터링
+- [x]  검색/필터링
     - 검색 기능
     - 일정, 가격 필터링 기능
-- [ ]  테스트 코드
+- [x]  테스트 코드
     - 테스트
 
 ## UI 개발
 
-- [ ]  홈
+- [x]  홈
     - 홈 화면으로 이동하는 로고, 채팅방 회원가입, 로그인, 검색 기능이 포함된 헤더와 푸터
     - 회원가입, 로그인 모달
     - 홈화면 카테고리
@@ -204,12 +193,12 @@ dependencies {
 
     ![screencapture-ourbucketlist-link-2023-02-14-15_06_59](https://user-images.githubusercontent.com/114675855/218782554-356c766f-1dc7-46b6-b679-d4052bf47846.png)
     
-- [ ]  버킷리스트
+- [x]  버킷리스트
     - 날짜, 가격 별로 필터링
     
     ![버킷리스트](https://user-images.githubusercontent.com/114675855/218782894-b1c55173-5d2d-4551-b4c3-332e1a780521.jpg)
     
-- [ ]  포스트
+- [x]  포스트
     - 폼을 통한 게시글 작성
     - 제목, 일자, 위치 등 버킷리스트 정보, 지도, 사진
     - 버킷리스트 참가 신청, 댓글 작성
@@ -218,39 +207,40 @@ dependencies {
 
     ![screencapture-ourbucketlist-link-post-88-2023-02-14-15_09_51](https://user-images.githubusercontent.com/114675855/218782968-ca07daa6-5411-46ec-9907-cad2292faba5.png)
     
-- [ ]  채팅
+- [x]  채팅
     - 버킷리스트 호스트와 참여자에게 자동 생성되는 채팅방
     
     ![screencapture-ourbucketlist-link-chat-room-2023-02-14-16_19_20](https://user-images.githubusercontent.com/114675855/218783293-a93c5069-c424-456b-9168-996d7fa2d921.png)
     
 
-- [ ]  알람
+- [x]  알람
     - 로그인하면 댓글, 게시물 상태에 따른 알림 확인 가능
     
     ![알림 - 복사본](https://user-images.githubusercontent.com/114675855/218783323-f554b2df-f911-44e2-808f-d356d804577e.jpg)
     
 
-- [ ]  마이피드
+- [x]  마이피드
     - 작성한, 좋아요한, 신청한, 승낙받은, 완료한 버킷리스트 확인
     
     ![screencapture-ourbucketlist-link-my-2023-02-14-17_06_44](https://user-images.githubusercontent.com/114675855/218783361-f4801887-e023-4c01-8a71-c54ca34737ef.png)
     
     신청한 버킷리스트 클릭한 모습
     
-- [ ]  마이페이지
+- [x]  마이페이지
     - 프로필 사진, 유저 이름, 유저 이메일, 평점, 리뷰 출력
     
     ![리뷰](https://user-images.githubusercontent.com/114675855/218783337-8df9e8e5-eac3-45b0-b897-bc8bc390bdfb.jpg)
     
 
-## 개선해야할 부분
 
 ## WEEKLY LOG
 
-| 회차 | 주소 |
-| --- | --- |
-| 1주차 | https://gitlab.com/S2uJeong1/bucketlist/-/tree/main/Weekly_Log |
-| 2주차 | https://gitlab.com/S2uJeong1/bucketlist/-/tree/main/Weekly_Log |
-| 3주차 | https://gitlab.com/S2uJeong1/bucketlist/-/blob/main/Weekly_Log/%5B3%EC%A3%BC%EC%B0%A8%5Didea_9%ED%8C%80_%EC%A7%84%ED%96%89%EC%83%81%ED%99%A9_%EA%B3%B5%EC%9C%A0.md |
-| 4주차 | https://gitlab.com/S2uJeong1/bucketlist/-/blob/main/Weekly_Log/%5B4%EC%A3%BC%EC%B0%A8%5Didea_9%ED%8C%80_%EC%A7%84%ED%96%89%EC%83%81%ED%99%A9_%EA%B3%B5%EC%9C%A0.md |
-| 5주차 |  |
+🔗 [1주차 위클리](https://gitlab.com/S2uJeong1/bucketlist/-/tree/main/Weekly_Log)
+
+🔗 [2주차 위클리](https://gitlab.com/S2uJeong1/bucketlist/-/tree/main/Weekly_Log)
+
+🔗 [3주차 위클리](https://gitlab.com/S2uJeong1/bucketlist/-/blob/main/Weekly_Log/%5B3%EC%A3%BC%EC%B0%A8%5Didea_9%ED%8C%80_%EC%A7%84%ED%96%89%EC%83%81%ED%99%A9_%EA%B3%B5%EC%9C%A0.md)
+
+🔗 [4주차 위클리](https://gitlab.com/S2uJeong1/bucketlist/-/blob/main/Weekly_Log/%5B4%EC%A3%BC%EC%B0%A8%5Didea_9%ED%8C%80_%EC%A7%84%ED%96%89%EC%83%81%ED%99%A9_%EA%B3%B5%EC%9C%A0.md)
+
+🔗 5주차 위클리
