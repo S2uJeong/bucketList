@@ -1,17 +1,19 @@
-<div align="center">
+<div align="center" style="width=500px">
     ![waving](https://capsule-render.vercel.app/api?type=waving&height=200&text=Bucketlist!&fontAlign=80&fontAlignY=40&color=gradient)
 </div>
 
 <div align="center">
 <p align='center'>
-  <a href="http://ec2-13-125-143-78.ap-northeast-2.compute.amazonaws.com:8080/swagger-ui/index.html">
+    <a href="http://ec2-13-125-143-78.ap-northeast-2.compute.amazonaws.com:8080/swagger-ui/index.html">
      <img src="https://img.shields.io/badge/Bucketlist Swagger-85EA2D?style=flat&logo=Swagger&logoColor=white"/>
-  </a>
-  <a href="https://ringed-suggestion-46f.notion.site/ceff928e9f1f4e2482f07387b997f593">
-      <img src="https://img.shields.io/badge/Notion-000000?style=flat&logo=Notion&logoColor=white"/>
-  </a>
+  </a> | 
+
   <a href="https://www.ourbucketlist.link">
     <img src="https://img.shields.io/badge/link-Bucketlist-green?logo=data">
+  </a> | 
+
+<a href="https://ringed-suggestion-46f.notion.site/ceff928e9f1f4e2482f07387b997f593">
+      <img src="https://img.shields.io/badge/Notion-000000?style=flat&logo=Notion&logoColor=white"/>
   </a>
 </p>
 </div>
