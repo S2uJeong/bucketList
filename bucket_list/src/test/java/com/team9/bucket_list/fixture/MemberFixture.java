@@ -1,9 +1,11 @@
 package com.team9.bucket_list.fixture;
 
+
 import com.team9.bucket_list.domain.entity.Member;
 import com.team9.bucket_list.domain.enumerate.Gender;
 import com.team9.bucket_list.domain.enumerate.MemberRole;
 
+// 임의 Entity Response 값
 public class MemberFixture {
     public static Member get(String email, String password, String userName) {
         Member entity = Member.builder()
@@ -19,4 +21,5 @@ public class MemberFixture {
 
         return entity;
     }
+
 }
