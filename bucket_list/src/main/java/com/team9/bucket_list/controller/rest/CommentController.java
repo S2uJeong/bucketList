@@ -19,7 +19,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/comment")
+@RequestMapping("/api/v1/comment")
 @Tag(name = "버킷리스트 댓글", description = "작성한 버킷리스트 게시글에 댓글을 작성할 수 있습니다.")
 public class CommentController {
 
@@ -38,7 +38,7 @@ public class CommentController {
     }
 
     // 댓글 리스트 전체 출력
-    @GetMapping("/{postId}/comments")
+    @GetMapping("/{postId}/list")
     @Operation(summary = "댓글 리스트 조회", description = "특정 게시글의 댓글 리스트를 출력합니다.")
     public Response<List<CommentListResponse>> commentList(@Parameter(name = "postId", description = "게시글 id") @PathVariable(name = "postId") Long id){
         List<CommentListResponse> commentList = commentService.commentList(id);
@@ -46,7 +46,7 @@ public class CommentController {
     }
 
     // 댓글 수정
-    @PutMapping("/{postId}/comments/{commentId}")
+    @PutMapping("/{postId}/update/{commentId}")
     @Operation(summary = "댓글 수정", description = "댓글을 수정합니다.")
     public Response<List<CommentListResponse>> commentUpdate(@Parameter(name = "postId", description = "게시글 id") @PathVariable(name = "postId")Long postid,
                                                              @Parameter(name = "commentId", description = "댓글 id") @PathVariable(name="commentId")Long id,
@@ -58,7 +58,7 @@ public class CommentController {
     }
 
     // 댓글 삭제
-    @DeleteMapping("{postId}/comments/{commentId}")
+    @DeleteMapping("{postId}/delete/{commentId}")
     @ResponseBody
     public Response<List<CommentListResponse>> commentDelete(@Parameter(name = "postId", description = "게시글 id") @PathVariable(name = "postId")Long postid,
                                                              @Parameter(name = "commentId", description = "댓글 id") @PathVariable(name="commentId")Long id

@@ -46,7 +46,7 @@ public class SecurityConfig {
                         .shouldFilterAllDispatcherTypes(false)
                         .requestMatchers("/**")
                         .permitAll()
-                        .requestMatchers("/","/post/list","/post/{postId}/json","/comment/**","/post/search")
+                        .requestMatchers("/","/api/v1/post/list","/api/v1/post/{postId}/data","/api/v1/comment/**","/post/search")
                         .permitAll()
                         .anyRequest()
                         .authenticated())

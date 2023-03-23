@@ -593,7 +593,7 @@
   $(window).ready(async function () {
     try {
       post_id = window.location.pathname.replace("/app/form/", "").replace("/complete", "");
-      const url = '/post/' + post_id + '/json';
+      const url = '/api/v1/post/' + post_id + '/data';
 
       const post_info = await axios.get(url);
       let result = post_info.data.result;

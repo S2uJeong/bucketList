@@ -19,21 +19,21 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/post")
+@RequestMapping("/api/v1/post")
 @Tag(name = "버킷리스트(게시글)", description = "게시글 CRUD 기능을 수행합니다. 좋아요, 신청서 수락/거절 기능을 포함합니다.")
-public class PostController {
+public class PostRestController {
 
     private final PostService postService;
 
     // 게시글 폼에서 데이터 받아오기(Ajax 사용하여 받아옴)
-    @PostMapping(value = "/detailpost" ,produces = "application/json")
+    @PostMapping(value = "/data" ,produces = "application/json")
     @ResponseBody
     @Operation(summary = "게시글 작성", description = "게시글을 작성합니다.")
     public Response<PostIdResponse> getData(@RequestBody PostCreateRequest request,Authentication authentication){
         Long userId = Long.valueOf(authentication.getName());
 //        Long userId = 1l;
 
-        log.info("detailpost");
+        log.info("data");
         String userName = "test";
         PostCreateResponse response = postService.create(request,userId);       // DB에 데이터 저장
         log.info("postId():"+response.getPostId());
@@ -81,7 +81,7 @@ public class PostController {
     }
 
 
-    @GetMapping(value = "/{postId}/json", produces = "application/json")
+    @GetMapping(value = "/{postId}/data", produces = "application/json")
     @ResponseBody
     @Operation(summary = "특정 게시글 조회", description = "게시글 id를 통해 조회하여 게시글을 출력합니다.")
     public Response<PostReadResponse> jsonreadPost(@Parameter(name = "postId", description = "게시글 id") @PathVariable(value = "postId") Long postId){

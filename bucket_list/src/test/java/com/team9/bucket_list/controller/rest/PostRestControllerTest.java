@@ -34,10 +34,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(PostController.class)
-class PostControllerTest {
+@WebMvcTest(PostRestController.class)
+class PostRestControllerTest {
 
-    Logger log = (Logger) LoggerFactory.getLogger(PostControllerTest.class);    // Junit에서 log찍기 위해 선언(Junit에서는 @Slf4j 어노테이션 사용 불가능)
+    Logger log = (Logger) LoggerFactory.getLogger(PostRestControllerTest.class);    // Junit에서 log찍기 위해 선언(Junit에서는 @Slf4j 어노테이션 사용 불가능)
 
     @Autowired
     MockMvc mockMvc;
@@ -72,7 +72,7 @@ class PostControllerTest {
             given(postService.create(any(),any()))
                     .willReturn(createResponse);
 
-            mockMvc.perform(post("/post/detailpost")
+            mockMvc.perform(post("/api/v1/post/data")
                             .with(csrf())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsBytes(request)))
@@ -93,7 +93,7 @@ class PostControllerTest {
             given(postService.create(any(), any()))
                     .willThrow(new ApplicationException(ErrorCode.INVALID_PERMISSION));
 
-            mockMvc.perform(post("/post/detailpost")
+            mockMvc.perform(post("/api/v1/post/data")
                             .with(csrf())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsBytes(request)))
@@ -122,7 +122,7 @@ class PostControllerTest {
             given(postService.read(1l))
                     .willReturn(response);
 
-            mockMvc.perform(get("/post/1/json")
+            mockMvc.perform(get("/api/v1/post/1/data")
                             .with(csrf()))
                     .andDo(print())
                     .andExpect(jsonPath("$..userName").value("test"))
@@ -138,7 +138,7 @@ class PostControllerTest {
             given(postService.read(any()))
                     .willThrow(new ApplicationException(ErrorCode.POST_NOT_FOUND));
 
-            mockMvc.perform(get("/post/1/json")
+            mockMvc.perform(get("/api/v1/post/1/data")
                             .with(csrf()))
                     .andDo(print())
                     .andExpect(status().isNotFound());
@@ -158,7 +158,7 @@ class PostControllerTest {
             given(postService.update(any(),any(),any()))
                     .willReturn(response);
 
-            mockMvc.perform(put("/post/1/update")
+            mockMvc.perform(put("/api/v1/post/1/update")
                             .with(csrf())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsBytes(request)))
@@ -180,7 +180,7 @@ class PostControllerTest {
             given(postService.update(any(), any(), any()))
                     .willThrow(new ApplicationException(ErrorCode.POST_NOT_FOUND));
 
-            mockMvc.perform(put("/post/1/update")
+            mockMvc.perform(put("/api/v1/post/1/update")
                             .with(csrf())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsBytes(request)))
@@ -201,7 +201,7 @@ class PostControllerTest {
             given(postService.update(any(), any(), any()))
                     .willThrow(new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED));
 
-            mockMvc.perform(put("/post/1/update")
+            mockMvc.perform(put("/api/v1/post/1/update")
                             .with(csrf())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsBytes(request)))

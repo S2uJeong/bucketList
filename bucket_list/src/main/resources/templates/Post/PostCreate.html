@@ -385,7 +385,7 @@
             <!--              <script>-->
             <!--                //fileDropzone dropzone 설정할 태그의 id로 지정-->
             <!--                Dropzone.options.fileDropzone = {-->
-            <!--                  url: 'http://localhost:8080/post/detailpost', //🔴 업로드할 url (ex)컨트롤러) 어디에 연결해야하지?-->
+            <!--                  url: 'http://localhost:8080/api/v1/post/data', //🔴 업로드할 url (ex)컨트롤러) 어디에 연결해야하지?-->
             <!--                  method: 'post', // 기본 post로 request 감. put으로도 할수있음-->
             <!--                  // headers: {-->
             <!--                  //     Authorization: `Bearer` + token, // 🔴 Dropzone의 기본 설정은 파일을 올리는 순간 서버로 보내기에 header에 토큰을 붙여 보내야한다.-->
@@ -801,7 +801,7 @@
         }
         const data = async () => {
           try {
-            const response = await axios.post('/post/detailpost', JSON.stringify(WorldData), axiosConfig);
+            const response = await axios.post('/api/v1/post/data', JSON.stringify(WorldData), axiosConfig);
             const post_id = response.data.result.postId;
 
             <!-- 사진 저장 -->
@@ -851,7 +851,7 @@
 
         const data = async()=>{
           try{
-            const response = await axios.post('/post/detailpost',JSON.stringify(KoreaData),axiosConfig);
+            const response = await axios.post('/api/v1/assets/css',JSON.stringify(KoreaData),axiosConfig);
             const post_id = response.data.result.postId;
 
             let frm = new FormData();

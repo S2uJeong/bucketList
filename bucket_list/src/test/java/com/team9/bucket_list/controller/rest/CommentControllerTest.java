@@ -87,7 +87,7 @@ class CommentControllerTest {
             given(commentService.commentCreate(any(),any(),any()))
                     .willReturn(response);
 
-            mockMvc.perform(post("/comment/1")
+            mockMvc.perform(post("/api/v1/comment/1")
                             .with(csrf())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsBytes(request)))
@@ -122,7 +122,7 @@ class CommentControllerTest {
             given(commentService.commentCreate(any(),any(),any()))
                     .willReturn(response);
 
-            mockMvc.perform(post("/comment/1")
+            mockMvc.perform(post("/api/v1/comment/1")
                             .with(csrf())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsBytes(request)))
@@ -150,7 +150,7 @@ class CommentControllerTest {
                         .willThrow(new ApplicationException(ErrorCode.POST_NOT_FOUND));
 
 
-            mockMvc.perform(post("/comment/1")
+            mockMvc.perform(post("/api/v1/comment/1")
                             .with(csrf())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsBytes(request)))
@@ -174,7 +174,7 @@ class CommentControllerTest {
                     .willThrow(new ApplicationException(ErrorCode.USERNAME_NOT_FOUNDED));
 
 
-            mockMvc.perform(post("/comment/1")
+            mockMvc.perform(post("/api/v1/comment/1")
                             .with(csrf())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsBytes(request)))
@@ -184,14 +184,6 @@ class CommentControllerTest {
             verify(commentService).commentCreate(any(),any(),any());
         }
 
-
-        // 댓글 리스트 전체 출력
-        @GetMapping("/{postId}/comments")
-        @Operation(summary = "댓글 리스트 조회", description = "특정 게시글의 댓글 리스트를 출력합니다.")
-        public Response<List<CommentListResponse>> commentList(@Parameter(name = "postId", description = "게시글 id") @PathVariable(name = "postId") Long id){
-            List<CommentListResponse> commentList = commentService.commentList(id);
-            return Response.success(commentList);
-        }
 
         @Test
         @DisplayName("댓글 리스트 호출 성공")
@@ -221,7 +213,7 @@ class CommentControllerTest {
             given(commentService.commentList(any()))
                     .willReturn(responses);
 
-            mockMvc.perform(get("/comment/1/comments")
+            mockMvc.perform(get("/api/v1/comment/1/list")
                             .with(csrf())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsBytes(request)))
@@ -233,17 +225,6 @@ class CommentControllerTest {
         }
 
 
-        // 댓글 수정
-        @PutMapping("/{postId}/comments/{commentId}")
-        @Operation(summary = "댓글 수정", description = "댓글을 수정합니다.")
-        public Response<List<CommentListResponse>> commentUpdate(@Parameter(name = "postId", description = "게시글 id") @PathVariable(name = "postId")Long postid,
-                                                                 @Parameter(name = "commentId", description = "댓글 id") @PathVariable(name="commentId")Long id,
-                                                                 @RequestBody CommentCreateRequest request,Authentication authentication){
-            Long memberId = Long.valueOf(authentication.getName());
-//        Long memberId = 1l;
-            List<CommentListResponse> commentList = commentService.updateComment(postid,id,request,memberId);
-            return Response.success(commentList);
-        }
 
         @Test
         @DisplayName("댓글 수정 성공")
@@ -267,7 +248,7 @@ class CommentControllerTest {
             given(commentService.updateComment(any(),any(),any(),any()))
                     .willReturn(responses);
 
-            mockMvc.perform(put("/comment/1/comments/1")
+            mockMvc.perform(put("/api/v1/comment/1/update/1")
                             .with(csrf())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsBytes(request)))
@@ -291,7 +272,7 @@ class CommentControllerTest {
             given(commentService.updateComment(any(),any(),any(),any()))
                     .willThrow(new ApplicationException(ErrorCode.POST_NOT_FOUND));
 
-            mockMvc.perform(put("/comment/1/comments/1")
+            mockMvc.perform(put("/api/v1/comment/1/update/1")
                             .with(csrf())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsBytes(request)))
@@ -330,7 +311,7 @@ class CommentControllerTest {
             }
 
 
-            mockMvc.perform(put("/comment/1/comments/1")
+            mockMvc.perform(put("/api/v1/comment/1/update/1")
                             .with(csrf())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsBytes(request)))
@@ -344,7 +325,7 @@ class CommentControllerTest {
         @DisplayName("댓글 삭제 성공")
         @WithMockUser(username = "1")
         void deleteComment_success() throws Exception {
-            mockMvc.perform(delete("/comment/1/comments/1")
+            mockMvc.perform(delete("/api/v1/comment/1/update/1")
                             .with(csrf())
                             .contentType(MediaType.APPLICATION_JSON))
                     .andDo(print())
