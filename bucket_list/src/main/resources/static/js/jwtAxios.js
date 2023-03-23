@@ -14,7 +14,7 @@ axios.interceptors.response.use(
         if(status === 401) {
             const originRequest = error.config
 
-            await axios.post('/reissue')
+            await axios.post('/api/v1/login/reissue')
                 .then(response => {
                     localStorage.setItem("accessToken", response.data);
                     originRequest.headers.authorization = 'Bearer ' + response.data;

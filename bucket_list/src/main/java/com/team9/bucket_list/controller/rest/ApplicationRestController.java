@@ -25,16 +25,15 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/application-rest")
+@RequestMapping("/api/v1/application")
 @Tag(name = "버킷리스트 참가신청서", description = "버킷리스트(게시글)에 참가신청을 합니다.")
 public class ApplicationRestController {
 
     private final ApplicationService applicationService;
 
-    @GetMapping("/check/{postId}")
+    @GetMapping("/{postId}/members/validation")
     @Operation(summary = "신청서", description = "참가 신청서를 작성할 수 있는 유저인지 판별합니다.")
     public Response<String> checkApplication(Authentication authentication, @PathVariable Long postId) throws ParseException {
-        log.info("asdfasdf");
         if (applicationService.canWriteApplication(authentication, postId)) {
             return Response.success("가능합니다.");
         } else {
@@ -75,14 +74,6 @@ public class ApplicationRestController {
         return applicationService.applicationList(postId, memberId, statusCode, pageable);
     }
 
-    //특정 포스트의 승낙된 신청서 리스트, 글쓴이만 확인 가능
-/*    @GetMapping("/{postId}/accept")
-    public Page<ApplicationListResponse> applicationAcceptList(@PathVariable Long postId) {
-        //memberId는 jwt에서 가져옴
-        Long memberId = 1L;
-        return applicationService.applicationList(postId, memberId, (byte) 1);
-    }*/
-
     //특정포스트의 신청서 수락 or 거절하기
     @PutMapping("/{postId}")
     @Operation(summary = "신청서 수락/거절", description = "게시글 작성자가 신청서를 수락/거절합니다.")
@@ -95,7 +86,7 @@ public class ApplicationRestController {
     }
 
     //승낙된 인원 조회
-    @GetMapping("/{postId}/count")
+    @GetMapping("/{postId}/members/count")
     @Operation(summary = "수락된 인원 조회", description = "버킷리스트 작성자가 수락된 참가신청서 수를 조회합니다.")
     public Response applicationAcceptCount(@Parameter(name = "postId", description = "게시글 id", in = ParameterIn.PATH) @PathVariable Long postId) {
         return Response.success(applicationService.applicationAcceptCount(postId));
