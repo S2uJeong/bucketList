@@ -22,7 +22,7 @@ import java.text.ParseException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/chats")
+@RequestMapping("/api/v1/chats")
 @RequiredArgsConstructor
 @Slf4j
 @Tag(name = "채팅", description = "버킷리스트를 함께하는 사람들끼리 채팅방을 통해 소통할 수 있습니다.")

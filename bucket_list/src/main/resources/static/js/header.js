@@ -194,7 +194,7 @@ function getAlarmList() {
     if(alarmCnt === 1 || checkAlarmCnt === 1) {
         axios({
             method:"GET",
-            url: '/alarms',
+            url: '/api/v1/alarms',
         }).then((res) => {
             data = res.data.result.content;
             if(data.length == 0) {
@@ -224,7 +224,7 @@ function getAlarmList() {
 
         axios({
             method:"GET",
-            url: '/alarms/new',
+            url: '/api/v1/alarms/new',
             params:{'id':firstId}
         }).then((newRes) => {
             data = newRes.data.result.content;
@@ -282,7 +282,7 @@ function newScrollAlarm() {
 
     axios({
         method:"GET",
-        url: '/alarms/new/scroll',
+        url: '/api/v1/alarms/new/scroll',
         params:{'id':lastId}
     }).then((res) => {
         data = res.data.result.content;
@@ -339,7 +339,7 @@ function readAlarm(id,postId) {
 
     axios({
         method:"POST",
-        url: '/alarms',
+        url: '/api/v1/alarms',
         params: {'alarmId':id}
     }).then((res) => {
         data = res.data.result;
@@ -357,7 +357,7 @@ function readAllAlarm() {
 
     axios({
         method:"POST",
-        url: '/alarms/all',
+        url: '/api/v1/alarms/all',
     }).then((res) => {
         data = res.data.result;
         if(data >= 1) {

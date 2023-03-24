@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("alarms")
+@RequestMapping("/api/v1/alarms")
 @Slf4j
 @Tag(name = "알람", description = "게시글에 신청서가 오거나 좋아요가 눌리면 member에게 알람이 갑니다.")
 public class AlarmRestController {
