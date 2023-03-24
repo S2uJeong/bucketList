@@ -9,7 +9,7 @@ const memberId = new URL(window.location.href).pathname.replace("/profile/", "")
 let url_href = "?page=";  // 페이지 넘버의 href를 정할 수 있도록 "page="을 붙임
 
 // 화면이 로딩되면 실행되는 부분
-const todosUrl = '/api/v1/members/' + memberId + '/ratings' + urlSearch;
+const todosUrl = '/member/rating/' + memberId + urlSearch;
 axios.get(todosUrl)
     .then(res => {
         page_info = res.data.result;

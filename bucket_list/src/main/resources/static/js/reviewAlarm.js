@@ -27,7 +27,7 @@ async function memberReviewSave() {
 
     try {
         data = {"targetMemberName" : targetMemberName, "rate" : rate, "content" : content};
-        let memberReviewRes = await axios.post('/api/v1/members/ratings', data, config);
+        let memberReviewRes = await axios.post('/member/rating', data, config);
         if(memberReviewRes.data.result == "duplicated"){
             alert("이미 작성된 리뷰입니다.");
         } else{
@@ -60,7 +60,7 @@ async function bucketReviewSave() {
 
     try {
         data = {"targetPostId" : targetPostId, "rate" : rate, "content" : content};
-        let bucketReviewRes = await axios.post('/api/v1/posts/reviews', data, config);
+        let bucketReviewRes = await axios.post('/post/rating', data, config);
         if(bucketReviewRes.data.result == "duplicated"){
             alert("이미 작성된 리뷰입니다.");
         } else{

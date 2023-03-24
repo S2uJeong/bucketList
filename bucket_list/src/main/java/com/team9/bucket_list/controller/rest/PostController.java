@@ -1,10 +1,7 @@
 package com.team9.bucket_list.controller.rest;
 
 import com.team9.bucket_list.domain.Response;
-import com.team9.bucket_list.domain.dto.bucketlistReview.BucketlistReviewRequest;
-import com.team9.bucket_list.domain.dto.bucketlistReview.BucketlistReviewResponse;
 import com.team9.bucket_list.domain.dto.post.*;
-import com.team9.bucket_list.service.BucketlistReviewService;
 import com.team9.bucket_list.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -22,12 +19,11 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/posts")
+@RequestMapping("/post")
 @Tag(name = "버킷리스트(게시글)", description = "게시글 CRUD 기능을 수행합니다. 좋아요, 신청서 수락/거절 기능을 포함합니다.")
-public class PostRestController {
+public class PostController {
 
     private final PostService postService;
-    private final BucketlistReviewService bucketlistReviewService;
 
     // 게시글 폼에서 데이터 받아오기(Ajax 사용하여 받아옴)
     @PostMapping(value = "/detailpost" ,produces = "application/json")
@@ -120,7 +116,7 @@ public class PostRestController {
 
 
     //== 좋아요 확인 ==//
-    @GetMapping("/{postId}/likes")
+    @GetMapping("/{postId}/likes/check")
     @Operation(summary = "좋아요 - 좋아요 여부 확인", description = "로그인 되어 있는 member가 해당 게시글에 좋아요를 눌렀는지 확인합니다. UI에서 좋아요 버튼이 눌려있는것을 표현하기 위해 구현했습니다.")
     public Response<Integer> checkLike(@Parameter(name = "postId", description = "게시글 id") @PathVariable("postId") long postId,
                                        Authentication authentication) {
@@ -129,7 +125,7 @@ public class PostRestController {
     }
 
     //== 좋아요 개수 ==//
-    @GetMapping("/{postId}/likes/count")
+    @GetMapping("/{postId}/likes")
     @Operation(summary = "좋아요 - 좋아요 갯수 확인", description = "해당 게시글에 눌린 좋아요 개수를 출력합니다.")
     public Response<Long> countLike(@Parameter(name = "postId", description = "게시글 id") @PathVariable Long postId) {
         Long cntLike = postService.countLike(postId);
@@ -145,20 +141,49 @@ public class PostRestController {
         return Response.success(result);
     }
 
-    // 버킷리스트 리뷰
-    @GetMapping("/{postId}/reviews")
-    @Operation(summary = "리뷰 조회", description = "특정게시글의 리뷰를 pageable하여 출력합니다.")
-    public Response<Page<BucketlistReviewResponse>> reviewList(@Parameter(name = "postId", description = "게시글 id")  @PathVariable Long postId,
-                                                               @Parameter(hidden = true) @PageableDefault(sort = "createdAt", size = 4, direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<BucketlistReviewResponse> bucketlistReviewResponses =  bucketlistReviewService.list(postId, pageable);
-        return Response.success(bucketlistReviewResponses);
+    //== 마이피드 ==//
+    // 좋아요한
+    @GetMapping("/my/likes")
+    @Operation(summary = "마이피드 - 좋아요한 글 조회", description = "로그인 되어 있는 멤버가 좋아요한 Post 리스트를 출력합니다.")
+    public Response<Page<PostReadResponse>> myFeedLike(@Parameter(hidden = true) @PageableDefault(size = 16, sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable,
+                                                       Authentication authentication) {
+        Page<PostReadResponse> likePosts = postService.myFeedLike(pageable, Long.valueOf(authentication.getName()));
+        return Response.success(likePosts);
     }
 
-    @PostMapping("/reviews")
-    @Operation(summary = "리뷰 작성", description = "특정게시글에 리뷰를 작성합니다.")
-    public Response<String> reviewCreate(Authentication authentication, @RequestBody BucketlistReviewRequest bucketlistReviewRequest) {
-        Long memberId = Long.valueOf(authentication.getName());
-        String result = bucketlistReviewService.create(memberId, bucketlistReviewRequest);
-        return Response.success(result);
+    // 작성한
+    @GetMapping("/my/create")
+    @Operation(summary = "마이피드 - 작성한 글 조회", description = "로그인 되어 있는 멤버가 작성한 Post 리스트를 출력합니다.")
+    public Response<Page<PostReadResponse>> myFeedCreate(@Parameter(hidden = true) @PageableDefault(size = 16, sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable,
+                                                         Authentication authentication) {
+        Page<PostReadResponse> createPosts = postService.myFeedCreate(pageable, Long.valueOf(authentication.getName()));
+        return Response.success(createPosts);
+    }
+
+    // 신청한
+    @GetMapping("/my/apply")
+    @Operation(summary = "마이피드 - 참가 신청한 글 조회", description = "로그인 되어 있는 멤버가 참가 신청한 Post 리스트를 출력합니다.")
+    public Response<Page<PostReadResponse>> myFeedApply(@Parameter(hidden = true) @PageableDefault(size = 16, sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable,
+                                                        Authentication authentication) {
+        Page<PostReadResponse> applyPosts = postService.myFeedApply(pageable, Long.valueOf(authentication.getName()));
+        return Response.success(applyPosts);
+    }
+
+    // 승낙받은
+    @GetMapping("/my/consent")
+    @Operation(summary = "마이피드 - 승낙 받은 글 조회", description = "로그인 되어 있는 멤버가 승낙 받은 Post 리스트를 출력합니다.")
+    public Response<Page<PostReadResponse>> myFeedConsent(@Parameter(hidden = true) @PageableDefault(size = 16, sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable,
+                                                        Authentication authentication) {
+        Page<PostReadResponse> consentPosts = postService.myFeedConsent(pageable, Long.valueOf(authentication.getName()));
+        return Response.success(consentPosts);
+    }
+
+    // 완료한
+    @GetMapping("/my/complete")
+    @Operation(summary = "마이피드 - 잔행 완료된 글 조회", description = "로그인 되어 있는 멤버가 완료한 Post 리스트를 출력합니다.")
+    public Response<Page<PostReadResponse>> myFeedComplete(@Parameter(hidden = true) @PageableDefault(size = 16, sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable,
+                                                        Authentication authentication) {
+        Page<PostReadResponse> completePosts = postService.myFeedComplete(pageable, Long.valueOf(authentication.getName()));
+        return Response.success(completePosts);
     }
 }
