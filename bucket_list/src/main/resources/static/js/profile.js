@@ -6,7 +6,7 @@ $('#if').css("display","none");
 
 axios({
     method:"GET",
-    url: `/profile/${profileMemberId}/json`,
+    url: `/api/v1/members/${profileMemberId}/profiles`,
 }).then((res)=> {
     profileData = res.data.result;
     let averageRate = Math.ceil(profileData.avgRate * 10) / 10;
@@ -164,7 +164,7 @@ function uploadPic() {
 
     axios({
         method:"POST",
-        url: `/profile/${lsMemberId}/edit`,
+        url: `/api/v1/members/${lsMemberId}/profiles`,
         data:data,
         header:{"Content-Type": "multipart/form-data"},
     }).then((res)=> {
