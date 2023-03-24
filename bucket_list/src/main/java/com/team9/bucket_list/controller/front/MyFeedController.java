@@ -10,7 +10,4 @@ public class MyFeedController {
 
     @GetMapping
     public String myFeedList() { return "myFeed"; }
-
-    @GetMapping("/likes")
-    public String myFeedLikeList() { return "myFeedLike"; }
 }
