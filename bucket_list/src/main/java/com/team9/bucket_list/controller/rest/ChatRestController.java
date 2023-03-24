@@ -22,7 +22,7 @@ import java.text.ParseException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/chat")
+@RequestMapping("/api/v1/chats")
 @RequiredArgsConstructor
 @Slf4j
 @Tag(name = "채팅", description = "버킷리스트를 함께하는 사람들끼리 채팅방을 통해 소통할 수 있습니다.")
@@ -39,14 +39,14 @@ public class ChatRestController {
     }
 
     //채팅방 생성
-    @PostMapping("/create-room/{postId}")
+    @PostMapping
     @Operation(summary = "채팅방 생성", description = "채팅방을 생성합니다.")
     public Response<ChatRoom> createChatRoom(@Parameter(name = "postId", description = "게시글 id") @PathVariable Long postId) {
         return Response.success(chatService.createChatRoom(postId));
     }
 
     //유저 초대
-    @PostMapping("/{roomId}")
+    @PostMapping("/members/{roomId}")
     @Operation(summary = "멤버 초대", description = "roomId를 이용하여 멤버를 초대합니다.")
     public Response<List<ChatParticipant>> inviteMember(@Parameter(name = "roomId", description = "채팅방 id") @PathVariable Long roomId, ChatInviteRequest chatInviteRequest) {
         return Response.success(chatService.inviteMember(roomId, chatInviteRequest));
@@ -59,7 +59,7 @@ public class ChatRestController {
         return Response.success(chatService.messages(roomId, pageable));
     }
 
-    @GetMapping("/participant/{roomId}")
+    @GetMapping("/members/{roomId}")
     @Operation(summary = "채팅방 참가자 조회", description = "roomId로 조회한 메시지 리스트를 출력합니다.")
     public ChatParticipantResponseSuccess getChatParticipant(@Parameter(name = "roomId", description = "채팅방 id") @PathVariable Long roomId) {
         List<ChatParticipant> participants = chatService.getChatParticipant(roomId);
