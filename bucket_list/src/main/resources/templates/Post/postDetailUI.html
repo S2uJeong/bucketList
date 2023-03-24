@@ -76,7 +76,7 @@
         const application_id = $(identifier).data('id')
         let body = {"applicationId" : application_id, "status" : 1}
 
-        await axios.put('/application-rest/' + post_id, body, config);
+        await axios.put('/api/v1/application/' + post_id, body, config);
 
         window.location.reload();
         return false;
@@ -92,7 +92,7 @@
         const application_id = $(identifier).data('id')
         let body = {"applicationId" : application_id, "status" : 2}
 
-        await axios.put('/application-rest/' + post_id, body, config);
+        await axios.put('/api/v1/application/' + post_id, body, config);
 
         window.location.reload();
         return false;
@@ -162,7 +162,6 @@
         try{
           const response = await axios.get('/post/'+postId+'/json');
           const commentresponse = await axios.get('/comment/'+postId+'/comments');
-          // const applicationResponse = await axios.get('/application-rest/' + postId);
 
 
           jsonState = response.data.resultCode;
@@ -607,7 +606,7 @@
 
             if (userName === token_userName) {
               try{
-                const applicationResponse = await axios.get('/application-rest/' + postId);
+                const applicationResponse = await axios.get('/api/v1/application/' + postId);
                 jsonApplicationState = applicationResponse.data.resultCode;
                 document.getElementById("application_button").style.display = 'none';
                 document.getElementById("application_status").style.display = 'block';
@@ -1552,7 +1551,7 @@
         alert("로그인이 필요한 서비스 입니다.");
       } else {
         try{
-          const res = await axios.get('/application-rest/check/'+postId, config);
+          const res = await axios.get('/api/v1/application/'+postId+'/members/validation', config);
           console.log(res);
           window.location.href = '/app/form/' + postId;
         } catch (error) {
@@ -1578,7 +1577,7 @@
               if(status === 401) {
                 const originRequest = error.config
 
-                await axios.post('/reissue')
+                await axios.post('/api/v1/login/reissue')
                         .then(response => {
                           localStorage.setItem("accessToken", response.data);
                           originRequest.headers.authorization = 'Bearer ' + response.data;
@@ -1601,7 +1600,7 @@
 
       try {
         data = {"email" : email, "password" : pw }
-        const login_response = await axios.post('/login', data, config);
+        const login_response = await axios.post('/api/v1/login', data, config);
         localStorage.setItem("accessToken", login_response.data.result.accessToken);
         window.location.reload();
       } catch (e) {
@@ -1617,7 +1616,7 @@
 
       try {
         const response = await axios.post(
-                '/join/checkUserName',
+                '/api/v1/signup/validation/nickname',
                 {'userName' : userName} ,
                 config);
         if (response.status === 200) {
@@ -1637,7 +1636,7 @@
 
       try {
         const response = await axios.post(
-                '/join/email',
+                '/api/v1/signup/validation/mail',
                 {'email' : email} ,
                 config);
 
@@ -1695,7 +1694,7 @@
       if(check_userName && (code === input_code) && gender.length>0) {
         document.getElementById('error_code').style.display = 'none';
         try {
-          const res = await axios.post('/join', data, config);
+          const res = await axios.post('/api/v1/signup', data, config);
 
           alert('회원가입 완료')
           window.location.href = '/';

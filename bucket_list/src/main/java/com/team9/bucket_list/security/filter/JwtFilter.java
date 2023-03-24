@@ -35,7 +35,7 @@ public class JwtFilter extends OncePerRequestFilter {
         try {
             String path = request.getServletPath();
 
-            if (path.startsWith("/reissue")) {
+            if (path.startsWith("/api/v1/login/reissue")) {
                 filterChain.doFilter(request, response);
             } else {
                 //헤더에서 토큰 꺼내기

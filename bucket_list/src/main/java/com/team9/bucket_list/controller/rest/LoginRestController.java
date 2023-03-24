@@ -10,7 +10,6 @@ import com.team9.bucket_list.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,12 +21,12 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping
 @Tag(name = "로그인", description = "로그인을 합니다.")
-public class LoginController {
+public class LoginRestController {
 
     private final MemberService memberService;
 
     //== 로그인 요청 ==//
-    @PostMapping("/login")
+    @PostMapping("/api/v1/login")
     @Operation(summary = "로그인 요청", description = "email과 비밀번호를 입력해 로그인 합니다.")
     public Response<MemberLoginResponse> login(@RequestBody MemberLoginRequest memberLoginRequest,
                                                HttpServletRequest request) {
@@ -46,9 +45,9 @@ public class LoginController {
     }
 
     //== 재발급 요청 ==//
-    @PostMapping("/reissue")
+    @PostMapping("/api/v1/login/reissue")
     @Operation(summary = "토큰 재발급 요청", description = "토큰을 재발급합니다.")
-    public String reissue(HttpServletRequest request, HttpServletResponse response) throws JsonProcessingException {
+    public String reissue(HttpServletRequest request) throws JsonProcessingException {
         log.info("재발급 요청 토큰 = {}", request.getHeader("Authorization"));
         try {
             TokenDto reissue = memberService.reissue(request);
