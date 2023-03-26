@@ -50,7 +50,7 @@
 //        when(bucketlistReviewService.create(any(), any(), any()))
 //                .thenReturn(mock(String.class));
 //
-//        mockMvc.perform(post("/api/v1/post/1/review")
+//        mockMvc.perform(post("/api/v1/posts/1/review")
 ////                .with(csrf())
 //                .contentType(MediaType.APPLICATION_JSON)
 //                .content(objectMapper.writeValueAsBytes(bucketlistReviewRequest))

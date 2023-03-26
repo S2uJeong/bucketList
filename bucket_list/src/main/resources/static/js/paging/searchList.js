@@ -8,7 +8,7 @@ const urlSearch = new URL(window.location.href).search;
 let url_href = urlHref(urlSearch);  // 페이지 넘버의 href를 정할 수 있도록 "page="을 붙임
 
 // 화면이 로딩되면 실행되는 부분
-const todosUrl = '/post/search/list' + urlSearch;
+const todosUrl = '/api/v1/posts/search' + urlSearch;
 axios.get(todosUrl)
     .then(res => {
         page_info = res.data.result;
