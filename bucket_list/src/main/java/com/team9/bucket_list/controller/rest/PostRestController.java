@@ -3,10 +3,14 @@ package com.team9.bucket_list.controller.rest;
 import com.team9.bucket_list.domain.Response;
 import com.team9.bucket_list.domain.dto.bucketlistReview.BucketlistReviewRequest;
 import com.team9.bucket_list.domain.dto.bucketlistReview.BucketlistReviewResponse;
+import com.team9.bucket_list.domain.dto.comment.CommentCreateRequest;
+import com.team9.bucket_list.domain.dto.comment.CommentCreateResponse;
+import com.team9.bucket_list.domain.dto.comment.CommentListResponse;
 import com.team9.bucket_list.domain.dto.post.*;
 import com.team9.bucket_list.domain.dto.postFile.DeleteFileResponse;
 import com.team9.bucket_list.domain.dto.postFile.UploadFileResponse;
 import com.team9.bucket_list.service.BucketlistReviewService;
+import com.team9.bucket_list.service.CommentService;
 import com.team9.bucket_list.service.PostFileService;
 import com.team9.bucket_list.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 
 @Slf4j
@@ -37,8 +42,10 @@ public class PostRestController {
     private final BucketlistReviewService bucketlistReviewService;
     private final PostFileService postFileService;
 
+    private final CommentService commentService;
+
     // 게시글 폼에서 데이터 받아오기(Ajax 사용하여 받아옴)
-    @PostMapping(value = "/data" ,produces = "application/json")
+    @PostMapping(value = "" ,produces = "application/json")
     @ResponseBody
     @Operation(summary = "게시글 작성", description = "게시글을 작성합니다.")
     public Response<PostIdResponse> getData(@RequestBody PostCreateRequest request, Authentication authentication) {
@@ -56,7 +63,7 @@ public class PostRestController {
 
     //== 검색 기능 ==//
     // 검색 데이터 전송하고 반환
-    @GetMapping("/search/list")
+    @GetMapping("/search")
     @ResponseBody
     @Operation(summary = "검색 기능", description = "카테고리, 날짜, 키워드를 입력받아 검색합니다.")
     public Response<Page<PostReadResponse>> searchPost(@Parameter(hidden = true) @PageableDefault(size = 15, sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable,
@@ -72,7 +79,7 @@ public class PostRestController {
     }
 
     //== 전체조회 ==//
-    @GetMapping("/list")
+    @GetMapping("")
     @ResponseBody
     @Operation(summary = "게시글 조회", description = "카테고리 별로 게시글 리스트를 출력합니다.")
     public Response<Page<PostReadResponse>> readAllPost(@Parameter(hidden = true) @PageableDefault(size = 15, sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable,
@@ -93,7 +100,7 @@ public class PostRestController {
     }
 
 
-    @GetMapping(value = "/{postId}/data", produces = "application/json")
+    @GetMapping(value = "/{postId}", produces = "application/json")
     @ResponseBody
     @Operation(summary = "특정 게시글 조회", description = "게시글 id를 통해 조회하여 게시글을 출력합니다.")
     public Response<PostReadResponse> jsonreadPost(@Parameter(name = "postId", description = "게시글 id") @PathVariable(value = "postId") Long postId) {
@@ -103,7 +110,7 @@ public class PostRestController {
     }
 
     // 클라이언트에서 데이터 받아와서 수정
-    @PutMapping(value = "/{postId}/update", produces = "application/json")
+    @PutMapping(value = "/{postId}", produces = "application/json")
     public Response<PostUpdateResponse> updatePost(@PathVariable Long postId, @RequestBody PostUpdateRequest request, Authentication authentication) {
         // update 메서드를 통해 request 내용대로 수정해준다. 반환값 : post Entity
         Long userId = Long.valueOf(authentication.getName());
@@ -187,6 +194,54 @@ public class PostRestController {
                                                @Parameter(name = "postFileId", description = "파일 id") @PathVariable("postFileId") Long postFileId) {
         DeleteFileResponse response = postFileService.delete(postId, postFileId);
         return Response.success(response);
+    }
+
+
+    // 댓글
+
+
+    // 댓글 작성
+    @PostMapping("/{postId}/comments")
+    @Operation(summary = "댓글 작성", description = "id를 이용하여 user 레코드를 조회합니다.")
+    public Response<CommentCreateResponse> commentCreate(@Parameter(name = "postId", description = "게시글 id") @PathVariable(name = "postId")Long id,
+                                                         @RequestBody CommentCreateRequest request, Authentication authentication){
+        Long userId = Long.valueOf(authentication.getName());
+//        Long userId = 1l;
+        log.info("댓글작성 username :"+userId);
+        return Response.success(commentService.commentCreate(id,request,userId));
+    }
+
+    // 댓글 리스트 전체 출력
+    @GetMapping("/{postId}/comments")
+    @Operation(summary = "댓글 리스트 조회", description = "특정 게시글의 댓글 리스트를 출력합니다.")
+    public Response<List<CommentListResponse>> commentList(@Parameter(name = "postId", description = "게시글 id") @PathVariable(name = "postId") Long id){
+        List<CommentListResponse> commentList = commentService.commentList(id);
+        return Response.success(commentList);
+    }
+
+    // 댓글 수정
+    @PutMapping("/{postId}/comments/{commentId}")
+    @Operation(summary = "댓글 수정", description = "댓글을 수정합니다.")
+    public Response<List<CommentListResponse>> commentUpdate(@Parameter(name = "postId", description = "게시글 id") @PathVariable(name = "postId")Long postid,
+                                                             @Parameter(name = "commentId", description = "댓글 id") @PathVariable(name="commentId")Long id,
+                                                             @RequestBody CommentCreateRequest request,Authentication authentication){
+        Long memberId = Long.valueOf(authentication.getName());
+//        Long memberId = 1l;
+        List<CommentListResponse> commentList = commentService.updateComment(postid,id,request,memberId);
+        return Response.success(commentList);
+    }
+
+    // 댓글 삭제
+    @DeleteMapping("{postId}/comments/{commentId}")
+    @ResponseBody
+    public Response<List<CommentListResponse>> commentDelete(@Parameter(name = "postId", description = "게시글 id") @PathVariable(name = "postId")Long postid,
+                                                             @Parameter(name = "commentId", description = "댓글 id") @PathVariable(name="commentId")Long id
+            ,Authentication authentication){
+        log.info("댓글 삭제");
+        Long memberId = Long.valueOf(authentication.getName());
+//        Long memberId = 1l;
+        List<CommentListResponse> commentList = commentService.deleteComment(postid,id,memberId);
+        return Response.success(commentList);
     }
 
 }

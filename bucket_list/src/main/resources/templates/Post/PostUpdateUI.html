@@ -763,7 +763,7 @@
 
     const getdata = async()=>{
       try {
-        const response = await axios.get('/api/v1/post/' + postId + '/data');
+        const response = await axios.get('/api/v1/posts/' + postId );
 
         jsonState = response.data.resultCode;
 
@@ -925,7 +925,7 @@
 
         const data = async () => {
           try {
-            let posturl = "/api/v1/post/"+postId+"/update";
+            let posturl = "/api/v1/posts/"+postId;
             await axios.put(posturl, JSON.stringify(WorldData), axiosConfig);
             let url = "/post/" + postId;
 
@@ -983,7 +983,7 @@
 
         const data = async () => {
           try {
-            let posturl = "/api/v1/post/"+postId+"/update";
+            let posturl = "/api/v1/posts/"+postId;
             await axios.put(posturl, JSON.stringify(KoreaData), axiosConfig);
             let url = "/post/" + postId;
 

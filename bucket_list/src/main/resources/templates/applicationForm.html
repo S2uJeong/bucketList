@@ -556,7 +556,7 @@
       }
       try {
         post_id = window.location.pathname.replace("/app/form/", "");
-        const url = '/api/v1/post/' + post_id + '/data';
+        const url = '/api/v1/post/' + post_id;
 
         const post_info = await axios.get(url);
         let result = post_info.data.result;

@@ -160,8 +160,8 @@
 
       const getdata = async()=>{
         try{
-          const response = await axios.get('/api/v1/post/'+postId+'/data');
-          const commentresponse = await axios.get('/api/v1/comment/'+postId+'/list');
+          const response = await axios.get('/api/v1/posts/'+postId);
+          const commentresponse = await axios.get('/api/v1/posts/'+postId+'/comments');
           // const applicationResponse = await axios.get('/application-rest/' + postId);
 
 
@@ -294,7 +294,7 @@
               const sendData = async () => {
                 try {
 
-                  const response = await axios.post('/api/v1/comment/'+postId, JSON.stringify(CommentData), axiosConfig);
+                  const response = await axios.post('/api/v1/posts/'+postId+'/comments', JSON.stringify(CommentData), axiosConfig);
                   // alert("전송 성공");
                   let url = "/post/" + postId;
                   window.location.replace(url);
@@ -784,7 +784,7 @@
       const sendData = async () => {
         try {
 
-          const response = await axios.post('/api/v1/comment/'+postId, JSON.stringify(CommentData), axiosConfig);
+          const response = await axios.post('/api/v1/posts/'+postId+'/comments', JSON.stringify(CommentData), axiosConfig);
           // alert("전송 성공");
           let url = "/post/" + postId;
           window.location.replace(url);
@@ -808,7 +808,7 @@
 
       const sendData = async () => {
         try {
-          const response = await axios.delete('/api/v1/comment/'+postId+'/delete/'+parentId);
+          const response = await axios.delete('/api/v1/posts/'+postId+'/comments/'+parentId);
           // alert("전송 성공");
           let url = "/post/" + postId;
           window.location.replace(url);
@@ -839,7 +839,7 @@
     function deletePost() {
       const postDelete = async() => {
         try {
-          await axios.delete('/api/v1/post/' + postId);
+          await axios.delete('/api/v1/posts/' + postId);
           let url = "/post";
           window.location.replace(url);
         }catch (e){
