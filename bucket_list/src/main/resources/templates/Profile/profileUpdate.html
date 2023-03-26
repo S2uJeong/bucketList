@@ -113,7 +113,7 @@
         let email = document.getElementById("email").value;
         let password = document.getElementById("password").value;
 
-        return fetch('/login', {
+        return fetch('/api/v1/login', {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -469,7 +469,7 @@
                         <div class="mb-6 mb-md-0">
                             <!-- 수정 버튼 -->
                             <div class="icon-setting pb-2">
-                                <a th:href="@{/profile/{memberId}/edit (memberId=${memberId})}">
+                                <a th:href="@{/api/v1/members/{memberId}/profiles (memberId=${memberId})}">
                                     <i class="fas fa-pencil-alt" aria-hidden="true"></i>
                                 </a>
                             </div>
@@ -954,7 +954,7 @@
         let email = document.getElementById('email').value;
         let pw = document.getElementById('password').value;
 
-        return fetch('/login', {
+        return fetch('/api/v1/login', {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -992,7 +992,7 @@
             if (status === 401) {
                 const originRequest = error.config
 
-                await axios.post('/reissue')
+                await axios.post('/api/v1/login/reissue')
                     .then(response => {
                         localStorage.setItem("accessToken", response.data);
                         originRequest.headers.authorization = 'Bearer ' + response.data;

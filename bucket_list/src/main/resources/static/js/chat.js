@@ -31,7 +31,7 @@ function onConnected() {
 //채팅방 리스트 받아오기
 axios({
     method:"GET",
-    url: '/chat',
+    url: '/api/v1/chats',
 }).then((res)=>{
     let data = res.data.content;
     let html, i;
@@ -81,7 +81,7 @@ function showChatRoom(roomId,roomName) {
 
     axios({
         method:"GET",
-        url: '/chat/messages/'+roomId,
+        url: '/api/v1/chats/messages/'+roomId,
     }).then((res)=> {
         let data = res.data.result.content;
         let html, i, j;
@@ -264,7 +264,7 @@ function getChatParticipant(roomId) {
     if(participantCnt == 0) {
         axios({
             method:"GET",
-            url: '/chat/participant/'+roomId,
+            url: '/api/v1/chats/members/'+roomId,
         }).then((res)=> {
             data = res.data.result;
             host = res.data.host;
@@ -320,7 +320,7 @@ function roomOut(memberId,userName,roomId,num) {
     if(val == true) {
         axios({
             method:"DELETE",
-            url: '/chat/out',
+            url: '/api/v1/chats/out',
             data: {
                 'memberId':memberId,
                 'roomId':roomId

@@ -579,7 +579,7 @@
 
     async function sendApplication() {
       const content = document.getElementById('application_content').value;
-      const res = await axios.post('/application-rest',
+      const res = await axios.post('/api/v1/application',
               {'content' : content, 'postId' : post_id},
               {'Content-Type' : 'application/json'});
       window.location.href = '/app/form/' + post_id + '/complete';

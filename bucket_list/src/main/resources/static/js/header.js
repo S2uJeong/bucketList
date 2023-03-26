@@ -41,7 +41,7 @@ async function checkUserName() {
 
     try {
         const response = await axios.post(
-            '/join/checkUserName',
+            '/api/v1/signup/validation/nickname',
             {'userName' : userName} ,
             config);
         if (response.status === 200) {
@@ -61,7 +61,7 @@ async function checkEmail() {
 
     try {
         const response = await axios.post(
-            '/join/email',
+            '/api/v1/signup/validation/mail',
             {'email' : email} ,
             config);
 
@@ -119,7 +119,7 @@ async function join() {
     if(check_userName && (code === input_code) && gender.length>0) {
         document.getElementById('error_code').style.display = 'none';
         try {
-            const res = await axios.post('/join', data, config);
+            const res = await axios.post('/api/v1/signup', data, config);
 
             alert('회원가입 완료')
             window.location.href = '/';
@@ -139,7 +139,7 @@ async function login() {
 
     try {
         data = {"email" : email, "password" : pw }
-        const login_response = await axios.post('/login', data, config);
+        const login_response = await axios.post('/api/v1/login', data, config);
         localStorage.setItem("accessToken", login_response.data.result.accessToken);
         window.location.reload();
     } catch (e) {
@@ -165,7 +165,7 @@ axios.interceptors.response.use(
         if(status === 401) {
             const originRequest = error.config
 
-            await axios.post('/reissue')
+            await axios.post('/api/v1/login/reissue')
                 .then(response => {
                     localStorage.setItem("accessToken", response.data);
                     originRequest.headers.authorization = 'Bearer ' + response.data;
@@ -194,7 +194,7 @@ function getAlarmList() {
     if(alarmCnt === 1 || checkAlarmCnt === 1) {
         axios({
             method:"GET",
-            url: '/alarm',
+            url: '/api/v1/alarms',
         }).then((res) => {
             data = res.data.result.content;
             if(data.length == 0) {
@@ -224,7 +224,7 @@ function getAlarmList() {
 
         axios({
             method:"GET",
-            url: '/alarm/new',
+            url: '/api/v1/alarms/new',
             params:{'id':firstId}
         }).then((newRes) => {
             data = newRes.data.result.content;
@@ -282,7 +282,7 @@ function newScrollAlarm() {
 
     axios({
         method:"GET",
-        url: '/alarm/new/scroll',
+        url: '/api/v1/alarms/new/scroll',
         params:{'id':lastId}
     }).then((res) => {
         data = res.data.result.content;
@@ -339,7 +339,7 @@ function readAlarm(id,postId) {
 
     axios({
         method:"POST",
-        url: '/alarm/read',
+        url: '/api/v1/alarms',
         params: {'alarmId':id}
     }).then((res) => {
         data = res.data.result;
@@ -357,7 +357,7 @@ function readAllAlarm() {
 
     axios({
         method:"POST",
-        url: '/alarm/read-all',
+        url: '/api/v1/alarms/all',
     }).then((res) => {
         data = res.data.result;
         if(data >= 1) {

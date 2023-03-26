@@ -4,7 +4,6 @@ import com.team9.bucket_list.domain.Response;
 import com.team9.bucket_list.service.AlarmService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,10 +16,10 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("alarm")
+@RequestMapping("/api/v1/alarms")
 @Slf4j
 @Tag(name = "알람", description = "게시글에 신청서가 오거나 좋아요가 눌리면 member에게 알람이 갑니다.")
-public class AlarmController {
+public class AlarmRestController {
 
     private final AlarmService alarmService;
 
@@ -40,7 +39,7 @@ public class AlarmController {
     }
 
     //알람을 읽었을때
-    @PostMapping("/read")
+    @PostMapping
     @Operation(summary = "알람 읽음 처리", description = "알람 id를 이용하여 조회합니다.")
     public Response alarmRead(@RequestParam Long alarmId, Authentication authentication) {
         return Response.success(alarmService.alarmRead(Long.valueOf(authentication.getName()), alarmId));
@@ -61,7 +60,7 @@ public class AlarmController {
     }
 
     //알람 전부 읽기
-    @PostMapping("/read-all")
+    @PostMapping("/all")
     @Operation(summary = "알람 모두 읽기", description = "memberId를 이용하여 수정합니다.")
     public Response realAllAlarm(Authentication authentication) {
         return Response.success(alarmService.realAllAlarm(Long.valueOf(authentication.getName())));

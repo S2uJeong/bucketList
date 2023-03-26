@@ -22,14 +22,14 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/join")
+@RequestMapping("/api/v1/signup")
 @Tag(name = "회원가입", description = "회원가입을 합니다.")
-public class JoinController {
+public class SignUpRestController {
 
     private final MemberService memberService;
     private final MailService mailService;
 
-    @PostMapping("/checkUserName")
+    @PostMapping("/validation/nickname")
     @Operation(summary = "닉네임 중복 검사", description = "UserName이 중복되는지 확인합니다.")
     public Response<Boolean> checkUserName(@RequestBody MemberCheckUserNameRequest request) {
         log.info("닉네임 중복 검사 요청 = {}", request.getUserName());
@@ -46,7 +46,7 @@ public class JoinController {
     }
 
     //== 이메일 인증코드 전송 요청 ==//
-    @PostMapping("/email")
+    @PostMapping("/validation/mail")
     @Operation(summary = "이메일 인증코드 전송 요청", description = "회원가입 시, 입력한 이메일로 보내진 인증코드를 기입해야 가입 가능합니다.")
     public Response<String> sendCode(@RequestBody Map<String, String> emailMap) throws Exception {
         String email = emailMap.get("email");
