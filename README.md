@@ -1,7 +1,3 @@
-<div align="center" style="width=500px">
-    ![waving](https://capsule-render.vercel.app/api?type=waving&height=200&text=Bucketlist!&fontAlign=80&fontAlignY=40&color=gradient)
-</div>
-
 <div align="center">
 <p align='center'>
     <a href="https://www.ourbucketlist.link/swagger-ui/index.html">
